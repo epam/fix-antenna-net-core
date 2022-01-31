@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+    <case name="21_RepeatingGroupSpecifierWithValueOfZero.def">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_ECHO_APP;
+
+        <!--# @expected Process the message-->
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+
+            <!--# logon message and response-->
+
+            <send>8=FIX.4.2#9=123#35=A#34=1#49=TW#52=20031027-14:29:11#56=ISLD#98=0#108=2#10=000#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=A#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#98=0#108=2#10=\d{3}#
+            </expect>
+
+            <!--#========================-->
+
+            <!--# begin message exchange-->
+
+            <!--#========================-->
+
+            <!--# Receive a Security Definition message with repeating group specifiers set to zero (tags 393 and 146)-->
+
+            <send>
+                8=FIX.4.2#9=123#35=d#34=2#49=TW#56=ISLD#52=20031027-14:29:11#320=JCD1091-20021011#322=1034356488676#323=6#55=TBS#22=8#167=CS#336=ONE_MAIN#58=No
+                Products found for this Class Symbol#393=0#10=000#
+            </send>
+            <!--# expect the message to be processed-->
+
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=d#34=2#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#22=8#55=TBS#58=[\w\s\p{P}]*#167=CS#320=JCD1091-20021011#322=1034356488676#323=6#336=ONE_MAIN#393=0#10=\d{3}#
+            </expect>
+
+            <!--#========================-->
+
+            <!--# end message exchange-->
+
+            <!--#========================-->
+
+            <!--# logout message and response-->
+
+            <send>8=FIX.4.2#9=123#35=5#34=3#49=TW#52=20031027-14:29:11#56=ISLD#10=000#</send>
+            <expect>8=FIX\.4\.2#9=\d{1,3}#35=5#34=3#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

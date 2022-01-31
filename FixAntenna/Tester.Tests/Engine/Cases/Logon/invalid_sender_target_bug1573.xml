@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../Engine/Entities/definitions.inc">
+        %content; ]>
+
+<cases>
+    <case name="Logon with invalid sender and target">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            &SESSION_UP;
+            &RECEIVE_LOGON;
+            <send>8=FIX.4.2#9=0#35=A#49=&YOU;#56=&ME;#34=1#52=00000000-00:00:00#98=0#108=30#10=000#</send>
+
+            <expect>8=FIX\.4\.2#9=\d*#35=3#34=\d*#49=&YOU;#56=&ME;#52=&DATETIMEMS;#58=[\w\s\p{P}]*#10=\d{3}#
+            </expect>
+
+            &SESSION_DOWN;
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "misc/cases.dtd" [
+        <!ENTITY % content SYSTEM "misc/entity/definitions.inc">
+        %content; ]>
+
+
+<cases>
+    <case name="Start session-end session, and then start again...">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            &SESSION_UP;
+            <!-- Hadnshake: Exchange with logons -->
+            &RECEIVE_LOGON;
+            &SEND_LOGON;
+            <send>8=FIX.4.2#9=12#35=5#49=&ME;#56=&YOU;#34=2#52=20031012-12:10:22#58=123#10=123#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=&YOU;#56=&ME;#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}#58=[\w\s\p{P}]*#10=\d{3}#</expect>
+            <expect></expect>
+        </transport>
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            &SESSION_UP;
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=&YOU;#56=&ME;#34=3#52=&DATETIMEMS;#98=0#108=5#10=\d{3}#</expect>
+            <send>8=FIX.4.2#9=57#35=A#49=&ME;#56=&YOU;#34=3#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <send>8=FIX.4.2#9=12#35=5#49=&ME;#56=&YOU;#34=4#52=20031012-12:10:22#58=123#10=123#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=&YOU;#56=&ME;#34=4#52=&DATETIMEMS;#58=[\w\s\p{P}]*#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

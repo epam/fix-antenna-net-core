@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<task className="FixEngine.SendMessage">
+    <param name="sessionIdName">sessionId</param>
+    <param name="message">11=ORD:1019746829718#38=2#54=1#55=ES#60=20040409-12:20:53.765#21=1#40=2#</param>
+    <param name="messageType">D</param>
+</task>

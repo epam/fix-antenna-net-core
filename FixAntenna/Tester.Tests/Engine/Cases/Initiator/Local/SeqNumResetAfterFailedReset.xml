@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+    <case name="Resetting sequences via Logon (if before was detected a gap/seq num too high/)">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=0#35=A#49=Tester#56=B2B#34=95#52=20031027-14:29:11#98=0#108=3#141=Y#10=126#</send>
+            <expect>8=FIX\.4\.4#9=\d*#35=3#49=B2B#56=Tester#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{3}#</expect>
+            <expect>8=FIX\.4\.4#9=\d*#35=5#49=B2B#56=Tester#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{3}#</expect>
+            <send>8=FIX.4.4#9=0#35=5#49=Tester#56=B2B#34=96#52=20031027-14:29:11#58=The first message is not a logon.#10=213#</send>
+        </transport>
+
+        <task className="FixEngine.Delay">
+            <param name="timeInMilis">5000</param>
+        </task>
+        &ENGINE_DOWN;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=0#35=A#49=Tester#56=B2B#34=1#52=20031027-14:29:11#98=0#108=3#141=Y#10=126#</send>
+            <!--<expect>8=FIX\.4\.4#9=\d*#35=A#49=B2B#56=Tester#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=5#141=Y#10=\d{3}#</expect>-->
+            <expect>8=FIX\.4\.4#9=\d*#35=A#49=B2B#56=Tester#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#141=Y#10=\d{3}#</expect>
+            <send>8=FIX.4.4#9=0#35=0#49=Tester#56=B2B#34=2#52=20031027-14:29:11#10=126#</send>
+            <expect>8=FIX\.4\.4#9=\d*#35=0#49=B2B#56=Tester#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

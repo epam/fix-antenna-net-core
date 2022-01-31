@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FixAntenna.TagsGen": {
+      "commandName": "Project",
+      "commandLineArgs": "--in C:\\Users\\Sergey_Matveev\\Downloads\\fixdict11_of_with_new9089tag_Update.xml --out C:\\Users\\Sergey_Matveev\\source\\repos\\tg\\gen -y"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fixdic xmlns="http://www.b2bits.com/FIXProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.b2bits.com/FIXProtocol fixdic.xsd"
+        id="FIXT11" fixversion="T1.1" title="FIXT 1.1" version="1.5.48" date="2017-03-28">
+  <typelist>
+  </typelist>
+  <fielddic>
+  </fielddic>
+  <msgdic>
+  </msgdic>
+</fixdic>

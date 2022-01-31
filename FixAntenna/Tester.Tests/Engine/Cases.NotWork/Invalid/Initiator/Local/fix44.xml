@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "misc/cases.dtd" [
+        <!ENTITY % content SYSTEM "misc/entity/definitions.inc">
+        %content; ]>
+<cases>
+    <!--
+        Accepts FIX connection, receives Logon(A) message and sends valid Logon(A) message in response.
+    -->
+    <case name="Acception FIX connection then successfull logon exchange">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=SUN#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=A#49=B2B#56=SUN#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Accepts FIX connection, receives Logon(A) message with empty field value of some field from the message body,
+        then sends valid Logout(5) message in response.
+    -->
+    <case name="Initiating FIX connection then invalid logon sending">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=SUN#56=B2B#34=1#52=20031027-14:29:11#98=#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=3#49=B2B#56=SUN#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#58=[^\x01]+#10=\d{3}#
+            </expect>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=5#49=B2B#56=SUN#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#58=[^\x01]+#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <case
+            name="Message format and logon test FIX44. LOGON(A) message. No response when SenderCompID and TargetCompID are EMPTY">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect/>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+</cases>

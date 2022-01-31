@@ -1,0 +1,10 @@
+<fix major="4" minor="4">
+    <messages>
+        <message name="NewOrderSingle" msgtype="D" msgcat="app">
+            <field name="Test" required="Y"/>
+        </message>
+    </messages>
+    <fields>
+        <field number="9701" name="Test" type="STRING"/>
+    </fields>
+</fix>

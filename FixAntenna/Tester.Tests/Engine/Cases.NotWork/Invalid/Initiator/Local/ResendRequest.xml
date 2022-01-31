@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "misc/cases.dtd" [
+        <!ENTITY % content SYSTEM "misc/entity/definitions.inc">
+        %content; ]>
+
+
+<!--- This is scenario to check engine do logoff and reconnect if receive no answer after 2 test requests -->
+<cases>
+    <case name="Sequence Reset - Reset">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            &SEND_LOGON;
+            &RECEIVE_LOGON;
+
+            <!-- Exchange with test request to ensure sequences is ok-->
+            <send>8=FIX.4.2#9=57#35=1#49=&ME;#56=&YOU;#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=&YOU;#56=&ME;#34=2#112=test01#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+            <!-- Send test request with msg seq num too high, expect resend request -->
+            <send>8=FIX.4.2#9=57#35=1#49=&ME;#56=&YOU;#34=4#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX.4.2#9=\d*#35=2#49=&YOU;#56=&ME;#34=3#52=&DATETIMEMS;#7=3#16=0#10=\d{3}#</expect>
+
+            <!-- Send sequence reset reset with incorrect number -->
+            <send>8=FIX.4.2#9=57#35=4#49=&ME;#56=&YOU;#34=8#52=20031027-14:29:11#36=9#10=126#</send>
+
+            <!-- logout -->
+            <send>8=FIX.4.2#9=57#35=5#49=&ME;#56=&YOU;#34=9#52=20031027-14:29:11#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=&YOU;#56=&ME;#34=4#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

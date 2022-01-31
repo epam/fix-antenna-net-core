@@ -1,0 +1,539 @@
+<Commands>
+    <SessionsList>
+        <Description>Subscription request to get list of sessions</Description>
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID attribute</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+        <Parameter>
+            <Name>SubscriptionRequestType</Name>
+            <IsRequired>true</IsRequired>
+            <Values>
+                <Value>0</Value>
+                <Value>1</Value>
+                <Value>2</Value>
+                <Value>3</Value>
+            </Values>
+        </Parameter>
+    </SessionsList>
+
+    <SessionStatus>
+        <Description>Request to get status of session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </SessionStatus>
+
+    <SessionStat>
+        <Description>Request to get statistical information about session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </SessionStat>
+
+    <SessionParams>
+        <Description>Request to get detailed information about session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+    </SessionParams>
+
+    <GeneralSessionsStat>
+        <Description>Request to get statistical information about the current state of FIX Engine</Description>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </GeneralSessionsStat>
+
+    <ReceivedStat>
+        <Description>Request to get received message amount</Description>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </ReceivedStat>
+
+    <SentStat>
+        <Description>Request to get sent message amount</Description>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </SentStat>
+
+    <ProceedStat>
+        <Description>Request to get proceed message amount</Description>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </ProceedStat>
+
+    <Delete>
+        <Description>Request to delete FIX session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the Sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the Target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>SendLogout</Name>
+            <Description>Defines whether logout must be sent</Description>
+            <IsRequired>false</IsRequired>
+            <DefaultValue>false</DefaultValue>
+        </Parameter>
+
+        <Parameter>
+            <Name>LogoutReason</Name>
+            <Description>Disconnect reason</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </Delete>
+
+    <ToBackup>
+        <Description>Request to switch FIX session to backup connection</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </ToBackup>
+
+    <ToPrimary>
+        <Description>Request to switch FIX session back to primary connection</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </ToPrimary>
+
+    <ChangeSeqNum>
+        <Description>Request to change session sequence number</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>InSeqNum</Name>
+            <Description>the new input sequence number</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>OutSeqNum</Name>
+            <Description>the new output sequence number</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </ChangeSeqNum>
+
+    <ResetSeqNum>
+        <Description>Request to reset session sequence number</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </ResetSeqNum>
+
+    <TestRequest>
+        <Description>Request to send Test Request message to session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TestReqID</Name>
+            <Description>Test Request message id</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </TestRequest>
+
+    <Heartbeat>
+        <Description>Request to send Heartbeat message to session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </Heartbeat>
+
+    <SendMessage>
+        <Description>Request to send message to session</Description>
+
+        <Parameter>
+            <Name>SenderCompID</Name>
+            <Description>the sender ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>TargetCompID</Name>
+            <Description>the target ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>Message</Name>
+            <Description>the message</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </SendMessage>
+
+    <DeleteAll>
+        <Description>Request to delete all FIX sessions</Description>
+
+        <Parameter>
+            <Name>SendLogout</Name>
+            <Description>Defines whether logout must be sent</Description>
+            <IsRequired>false</IsRequired>
+            <DefaultValue>false</DefaultValue>
+        </Parameter>
+
+        <Parameter>
+            <Name>LogoutReason</Name>
+            <Description>Disconnect reason</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>Exclude</Name>
+            <Description>Exclude type</Description>
+            <IsRequired>false</IsRequired>
+            <Value>CURRENT_ADMIN_SESSION</Value>
+            <Value>ALL_ADMIN_SESSIONS</Value>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>false</IsRequired>
+        </Parameter>
+    </DeleteAll>
+
+    <CreateInitiator>
+        <Description>Request to create FIX session with initiator role</Description>
+
+        <Parameter>
+            <Name>Version</Name>
+            <Description>Defines FIX version</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RemoteHost</Name>
+            <Description>Defines host</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>RemotePort</Name>
+            <Description>Defines port</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+
+        <Parameter>
+            <Name>Backup</Name>
+            <Description>Defines backup host</Description>
+            <IsRequired>false</IsRequired>
+
+            <Parameter>
+                <Name>RemoteHost</Name>
+                <Description>Defines host</Description>
+                <IsRequired>true</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>RemotePort</Name>
+                <Description>Defines port</Description>
+                <IsRequired>true</IsRequired>
+            </Parameter>
+        </Parameter>
+
+        <Parameter>
+            <Name>ExtraSessionParams</Name>
+            <Description>Extra session parameters</Description>
+            <IsRequired>false</IsRequired>
+
+            <Parameter>
+                <Name>SenderSubID</Name>
+                <Description>Defines sender sub id</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>TargetSubID</Name>
+                <Description>Defines target sub id</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>SenderLocationID</Name>
+                <Description>Defines sender location id</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>TargetLocationID</Name>
+                <Description>Defines target location id</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>HBI</Name>
+                <Description>Defines hbi interval</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>StorageType</Name>
+                <Description>Defines storage type</Description>
+                <IsRequired>false</IsRequired>
+                <Value>TRANSIENT</Value>
+                <Value>PERSISTENT</Value>
+            </Parameter>
+
+            <Parameter>
+                <Name>InSeqNum</Name>
+                <Description>Defines incoming seq number</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>OutSeqNum</Name>
+                <Description>Defines outgoing seq number</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>Username</Name>
+                <Description>Defines user name</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>Password</Name>
+                <Description>Defines user password</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>CustomLogon</Name>
+                <Description>Defines custom logon</Description>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>EnableAutoSwitchToBackupConnection</Name>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+
+            <Parameter>
+                <Name>EnableAutoSwitchToBackupConnection</Name>
+                <IsRequired>false</IsRequired>
+            </Parameter>
+        </Parameter>
+
+        <Parameter>
+            <Name>RequestID</Name>
+            <Description>Request ID</Description>
+            <IsRequired>true</IsRequired>
+        </Parameter>
+    </CreateInitiator>
+
+    <SessionsSnapshot>
+        <Description>Request to get detailed information about list of sessions</Description>
+
+        <Parameter>
+            <Name>View</Name>
+            <IsRequired>true</IsRequired>
+            <Value>STATUS</Value>
+            <Value>STATUS_PARAMS</Value>
+            <Value>STATUS_PARAMS_STAT</Value>
+        </Parameter>
+
+        <Parameters>
+            <Parameter>
+                <Name>SessionView</Name>
+                <IsRequired>false</IsRequired>
+                <Parameter>
+                    <Name>SenderCompID</Name>
+                    <Description>the sender ID</Description>
+                    <IsRequired>true</IsRequired>
+                </Parameter>
+
+                <Parameter>
+                    <Name>TargetCompID</Name>
+                    <Description>the target ID</Description>
+                    <IsRequired>true</IsRequired>
+                </Parameter>
+
+                <Parameter>
+                    <Name>View</Name>
+                    <IsRequired>true</IsRequired>
+                    <Value>STATUS</Value>
+                    <Value>STATUS_PARAMS</Value>
+                    <Value>STATUS_PARAMS_STAT</Value>
+                </Parameter>
+            </Parameter>
+        </Parameters>
+    </SessionsSnapshot>
+
+</Commands>

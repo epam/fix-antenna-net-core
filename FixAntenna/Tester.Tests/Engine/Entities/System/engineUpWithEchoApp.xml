@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<task className="FixEngine.EngineUpWithEchoApp">
+    <param name="port">&ENGINE_PORT;</param>
+    <param name="name">SERVER</param>
+    <param name="global_resendRequestNumberOfMessagesLimit">0</param>
+</task>

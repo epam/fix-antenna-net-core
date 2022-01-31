@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+
+    <!-- Simple test performs login (expects login response)-logout (expects logout response)-->
+
+
+    <case name="Logon: main flow (optimistic scenario)">
+
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <send>8=FIX.4.1#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <send>8=FIX.4.1#9=136#35=5#49=123#56=B2B#34=2#52=20031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.1#9=56#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=5#10=\d{3}#
+            </expect>
+            <expect>8=FIX\.4\.1#9=\d*#35=5#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+    <!-- Invalid logon (expecting logout with descriptive information) -->
+
+
+    <case name="Logon: (Invalid logon MsgSeqNum=0)">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=0#52=20031027-14:29:11#98=0#108=5#10=123#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#58=[a-zA-Z0-9\.:,\s]*#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+    <!-- Invalid logon (expecting logout with descriptive information) -->
+
+
+    <case name="Logon: garbled logon message" updater="DefaultUpdater">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=0#52=20031027-14:29:11#98=0#108=5#10=123#</send>
+            <expect/>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+    <!-- Other than logon message on session start (expecting immediate disconnection) -->
+
+
+    <case name="Logon: other than logon message">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#10=123#</send>
+            <expect/>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+    <!-- Seq number is less then expected (expecting logout with explanation) -->
+
+    <case name="Seq number is less than expected">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=5#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=1#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#58=[a-zA-Z0-9\.:,\s]*#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=2#52=50031027-14:29:11#10=213#</send>
+            <expect/>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+    <!-- Gracefully handle situation with two same messages one with PossDup flag (expecting _no_ respond to second) -->
+
+    <case name="posDup flag and same message">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=5#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <send>
+                8=FIX.4.2#9=57#35=1#43=Y#49=123#56=B2B#34=2#52=20031027-14:29:11#122=20031027-14:29:11#112=test01#10=126#
+            </send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=B2B#56=123#34=2#112=test01#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+    <!-- Garbled message (should not increase seq number -->
+
+    <case name="Garbled message (should not increase seqNumber">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=5#10=\d{3}#
+            </expect>
+            <send>9=FIX.4.2#9=57#35=asdf#49=123#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=B2B#56=123#34=2#112=test01#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+
+
+    </case>
+
+
+    <!-- Gracefully handle situation with two same messages one with PossDup flag (expecting _no_ respond to second) -->
+
+    <case name="Duplicate messages (last with PossDupFlag) ">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=5#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <send>
+                8=FIX.4.2#9=57#35=1#43=Y#49=123#56=B2B#34=2#52=20031027-14:29:11#122=20031027-14:29:11#112=test01#10=126#
+            </send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=B2B#56=123#34=2#112=test01#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+
+
+    <!-- Simulate resend request and send message without OrigSendingTime -->
+
+    <case name="Resend without OrigSendingTime">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+
+            <!-- logon exchange -->
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=2#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=2#10=\d{3}#
+            </expect>
+            <!-- simulate message gap -->
+            <send>8=FIX.4.2#9=57#35=0#49=123#56=B2B#34=3#52=20031027-14:29:11#10=126#</send>
+            <!-- expects resend request -->
+            <expect>8=FIX\.4\.2#9=\d*#35=2#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#7=2#16=[20]#10=\d{3}#
+            </expect>
+            <!-- resend gap -->
+            <send>8=FIX.4.2#9=57#35=0#43=Y#49=123#56=B2B#34=2#52=20031027-14:29:11#10=126#</send>
+            <!-- reject because OrigSendingTime -->
+            <expect>8=FIX\.4\.2#9=\d*#35=3#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#</expect>
+
+
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+
+
+    <!-- Simulate resend request and send message with incorrect OrigSendingTime -->
+
+    <case name="Resend with incorrect OrigSendingTime">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <!-- logon exchange -->
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=2#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=2#10=\d{3}#
+            </expect>
+            <!-- simulate message gap -->
+            <send>8=FIX.4.2#9=57#35=0#49=123#56=B2B#34=3#52=20031027-14:29:11#10=126#</send>
+            <!-- expects resend request -->
+            <expect>8=FIX\.4\.2#9=\d*#35=2#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#7=2#16=[20]#10=\d{3}#
+            </expect>
+
+
+            <!-- resend gap -->
+            <send>
+                8=FIX.4.2#9=57#35=0#43=Y#49=123#56=B2B#34=2#122=30031028-14:29:11#52=20031027-14:29:11#10=126#
+            </send>
+            <!-- reject because OrigSendingTime not specified -->
+            <expect>8=FIX\.4\.2#9=\d*#35=3#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+
+
+    <!-- Message with illegal begin string (not same with login) -->
+
+    <case name="Begin string (protocol version) changed during session">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <!-- logon exchange -->
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=2#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=2#10=\d{3}#
+            </expect>
+
+
+            <send>8=FIX.4.1#9=57#35=1#49=123#56=B2B#34=2#112=test02#52=20031027-14:29:11#10=126#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#58=[\w\s\p{P}]*#10=\d{3}#
+            </expect>
+
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+
+    <!-- Message with illegal CompId strings (not same with login) -->
+
+    <case name="SenderCompID changed during the session">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <!-- logon exchange -->
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=2#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=2#10=\d{3}#
+            </expect>
+
+
+            <!-- simulate incorrect CompIDs -->
+            <send>8=FIX.4.2#9=57#35=1#49=1234#56=B2B#34=2#52=20031027-14:29:11#112=test02#10=126#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=3#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#45=2#372=\d*#373=\d*#10=\d{3}#
+            </expect>
+
+
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#58=[a-zA-Z0-9\.:,\s]*#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+
+
+    </case>
+
+
+    <!-- Message with illegal CompId strings (not same with login) -->
+
+    <case name="TargetCompID changed during the session">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <!-- logon exchange -->
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=2#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=2#10=\d{3}#
+            </expect>
+
+
+            <!-- simulate incorrect CompIDs -->
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B2#34=2#52=20031027-14:29:11#112=test02#10=126#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=3#49=B2B#56=123#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#45=2#372=\d*#373=\d*#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#58=[a-zA-Z0-9\.:,\s]*#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <!-- Test request - hearbeat test -->
+    <case name="Test request test">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+
+            <send>8=FIX.4.1#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <send>8=FIX.4.1#9=57#35=1#49=123#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <send>8=FIX.4.1#9=136#35=5#49=123#56=B2B#34=3#52=20031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.1#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=5#10=\d{3}#
+            </expect>
+            <expect>8=FIX\.4\.1#9=\d*#35=0#49=B2B#56=123#34=2#112=test01#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{3}#
+            </expect>
+            <expect>8=FIX\.4\.1#9=\d*#35=5#49=B2B#56=123#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+
+
+    <!-- Sequence reset -->
+
+
+    <case name="Sequence reset-reset test">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#98=0#108=5#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=B2B#56=123#34=2#112=test01#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=57#35=4#49=123#56=B2B#34=1#52=20031027-14:29:11#123=N#36=5#10=126#</send>
+            <send>8=FIX.4.2#9=57#35=1#49=123#56=B2B#34=5#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=B2B#56=123#34=3#112=test01#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=136#35=5#49=123#56=B2B#34=6#52=20031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=4#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#10=\d{3}#</expect>
+
+        </transport>
+        &ENGINE_DOWN;
+
+
+    </case>
+
+
+</cases>

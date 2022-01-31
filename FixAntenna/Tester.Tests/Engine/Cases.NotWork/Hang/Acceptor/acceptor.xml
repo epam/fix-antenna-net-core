@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "misc/cases.dtd" [
+        <!ENTITY % content SYSTEM "misc/entity/definitions.inc">
+        %content; ]>
+
+<cases>
+    <!-- this test depends on optional task, a way different for every engine -->
+    <case name="Acceptor">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            &SESSION_UP;
+            <expect>8=FIX\.4\.2#9=\d*#35=A#49=Engine#56=Tester#34=1#52=&DATETIMEWITHOUTMS;#98=0#108=5#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.2#9=57#35=A#49=Tester#56=Engine#34=1#52=20031027-14:29:11#98=0#108=5#10=126#</send>
+            &SESSION_DOWN;
+
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=Engine#56=Tester#34=2#52=&DATETIMEWITHOUTMS;#58=[\w\s\p{P}]*#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=136#35=5#49=Tester#56=Engine#34=2#52=20031027-14:29:11#10=213#</send>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+</cases>

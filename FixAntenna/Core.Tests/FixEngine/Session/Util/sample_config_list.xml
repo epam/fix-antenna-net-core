@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<config>
+		<sessionIDs>sessionID1,sessionID2</sessionIDs>
+		<sessions>
+				<default>
+						<!--Main session parameters-->
+						<host>localhost</host>
+						<port>1234</port>
+						<senderCompID>SenderCompID</senderCompID>
+						<senderSubID>SenderSubID</senderSubID>
+						<senderLocationID>SenderLocationID</senderLocationID>
+						<targetCompID>TargetCompID</targetCompID>
+						<targetSubID>TargetSubID</targetSubID>
+						<targetLocationID>TargetLocationID</targetLocationID>
+						<appVersion>6</appVersion>
+						<fixVersion>FIXT.1.1</fixVersion>
+						<incomingSequenceNumber>1</incomingSequenceNumber>
+						<outgoingSequenceNumber>1</outgoingSequenceNumber>
+						<processedIncomingSequenceNumber>1</processedIncomingSequenceNumber>
+						<heartbeatInterval>30</heartbeatInterval>
+						<lastSeqNumResetTimestamp>1</lastSeqNumResetTimestamp>
+						<!-- use RawFixUtil.GetFixMessage(...) for next Field List params -->
+						<fixMessage></fixMessage>
+						<incomingLoginFixMessage></incomingLoginFixMessage>
+						<outgoingLoginFixMessage></outgoingLoginFixMessage>
+
+						<!-- Name of the custom package for admin command processing
+																		This property is using for the extending the count of admin-commands.
+																		By default package is null, but if custom commands is present this property should be initialized,
+																		for example (autostart.acceptor.commands.package=Epam.FixAntenna.Admin.Commands). -->
+						<!--autostart.acceptor.targetIds=admin,admin1-->
+						<!-- Storage type, supported values: Transient or Persistent
+																	 Default values: Transient -->
+						<autostart>
+								<acceptor>
+										<commands>
+												<package></package>
+										</commands>
+										<admin>
+												<login>admin</login>
+												<password>admin</password>
+												<ip>*</ip>
+												<fixServerListener>FixAntenna.AdminTool.AdminTool</fixServerListener>
+												<storageType>Transient</storageType>
+										</admin>
+										<admin1>
+												<login>admin1</login>
+												<password>admin1</password>
+												<ip>*</ip>
+												<fixServerListener>FixAntenna.AdminTool.AdminTool</fixServerListener>
+										</admin1>
+								</acceptor>
+						</autostart>
+
+						<!-- Raw tags. List all tags here engine should treat as raw. Raw tag may contain SOH symbol inside it
+																		and it should be preceided by rawTagLength field. -->
+						<rawTags>96, 91, 213, 349, 351, 353, 355, 357, 359, 361, 363, 365, 446, 619, 622</rawTags>
+
+						<!-- Limits maximum number of messages during the resend request
+																		Parameter must be integer and not negative.
+																		Otherwise the default value for this parameter will be used. -->
+						<resendRequestNumberOfMessagesLimit>0</resendRequestNumberOfMessagesLimit>
+
+						<!-- The max requested messages in block. This parameter defines how many messages
+																		will be request in one block.
+																		The value must be integer and not less than 0. -->
+						<maxRequestResendInBlock>0</maxRequestResendInBlock>
+
+						<!-- The pause before sending application messages from outgoing queue in milliseconds after receiving Logon.
+																		This pause is need to handle possible incoming ResendRequest. In other case a bunch of messages with
+																		invalid sequence can be sent.
+																		The value must be integer and not less than 0. -->
+						<maxDelayToSendAfterLogon>50</maxDelayToSendAfterLogon>
+
+						<!-- Engine's local IP address to send from. It can be used on a multi-homed host
+																		for a FIX Engine that will only send IP datagrams from one of its addresses.
+																		If this parameter is commented, the engine will send IP datagrams from any/all
+																		local addresses.
+																	 connectAddress=192.168.0.1 -->
+
+						<!-- Reset sequences on switch to backup -->
+						<resetOnSwitchToBackup>false</resetOnSwitchToBackup>
+
+						<!-- Reset sequences on switch back to primary connection -->
+						<resetOnSwitchToPrimary>false</resetOnSwitchToPrimary>
+
+						<!-- Enable switch to primary connection, default value true -->
+						<cyclicSwitchBackupConnection>true</cyclicSwitchBackupConnection>
+
+						<!-- Enable auto switch to backup connection, default value true -->
+						<enableAutoSwitchToBackupConnection>true</enableAutoSwitchToBackupConnection>
+
+						<!-- Sets disconnect timeout in seconds for Logout ack only when waiting for
+																		Logout ack from the counterparty caused due incoming sequence number is less then expected.
+																		Parameter must be integer and not negative. Otherwise the default value for this parameter will be used. -->
+						<forcedLogoffTimeout>2</forcedLogoffTimeout>
+
+						<!-- Specifies delay between autoreconnect attempts in milliseconds, default value is 1000ms
+																		Parameter must be integer and not negative. Otherwise the default value for this parameter will be used. -->
+						<autoreconnectDelayInMs>1000</autoreconnectDelayInMs>
+
+						<!-- Specifies number of autoreconnect attempts before give up:
+																		negative number = no reconnects,
+																		0 - infinite number of reconnects,
+																		positive number = number of reconnect attempts
+																		Please use 0 wisely - it means reconnect infinitely -->
+						<autoreconnectAttempts>-1</autoreconnectAttempts>
+
+						<!-- Maximum message size supported by this FIX engine instance.
+																		Parameter must be integer and not negative. Otherwise the default value for this parameter will be used.
+																		Maximum message size supported by this FIX engine instance
+																		should be greater than expected by approximately 1-5%
+																		0 - any size messages available (not recommended, could lead to OutOfMemoryError if counterparty will send invalid stream)
+																		default value - 1 Mb -->
+						<maxMessageSize>1048576</maxMessageSize>
+
+						<!-- Sends reject if user application is not available. If false and client applicaiton isn't available
+																		acts like a "black hole" - accepts and ignores all valid messages. -->
+						<sendRejectIfApplicationIsNotAvailable>true</sendRejectIfApplicationIsNotAvailable>
+
+						<!-- Sets queue mode. Set to "false" for persistent queue (slower but no messages will be lost),
+																		"true" for in memory queue (faster but less safe, some messages may be lost) -->
+						<inMemoryQueue>false</inMemoryQueue>
+
+						<!-- Sets timeout interval after which connected acceptor session will
+																		be timed out and disposed if logon wasn't received for this session.
+																		Parameter must be integer and not negative. Otherwise the default value for this parameter will be used. -->
+						<loginWaitTimeout>5000</loginWaitTimeout>
+
+						<!-- This parameter specifies "some reasonable transmission time" of
+																		FIX specification, measured in milliseconds.
+																		Valid values: positive integer
+																		Default value: 200 -->
+						<heartbeatReasonableTransmissionTime>200</heartbeatReasonableTransmissionTime>
+
+						<!-- Include last processed sequence 369 tag in every message for FIX versions>4.2 -->
+						<includeLastProcessed>false</includeLastProcessed>
+
+						<!-- Maximum number of messages in a queue before we pause pumper thread to let queued message to be sent out.
+																		Set rather high for max performance set 1 or pretty low for realtime experience
+																		0 - disable queue control, do not pause pumper thread.
+																		Parameter must be integer and not negative. Otherwise the default value for this parameter will be used. -->
+						<queueThresholdSize>0</queueThresholdSize>
+
+						<!-- The maximum number of messages in buffer before we
+																		write message to transport.
+																		Default value is 10 -->
+						<maxMessagesToSendInBatch>10</maxMessagesToSendInBatch>
+
+						<!-- Outgoing storage index.
+																		True to support resend request, false to never resend messages and always send gap fill -->
+						<outgoingStorageIndexed>true</outgoingStorageIndexed>
+
+						<!-- Allows user to replace storage factory with user own implementation
+																	 storageFactory=Epam.FixAntenna.NetCore.FixEngine.Storage.InMemoryStorageFactory -->
+
+						<!-- Enable/disable message rejecting, default value false -->
+						<enableMessageRejecting>false</enableMessageRejecting>
+
+						<!-- Enable/Disable force sequence number reset.
+																		Supported values: Always, OneTime, Never
+																		Default value is : Never
+																		NOTE:  This option does not affect sessions which use version 4.0 of the FIX protocol -->
+						<forceSeqNumReset>Never</forceSeqNumReset>
+
+						<!-- Sets path to fa.home. -->
+						<fa>
+								<home>.</home>
+						</fa>
+						<!-- Storage directory could be either absolute path (like /tmp/logs or c:\fixengine\logs)
+																		or relative path e.g. logs (this one is relative to the application start directory).
+																		If fa.home is not defined the value was taking from system environment. -->
+						<storageDirectory>${fa.home}/logs</storageDirectory>
+
+						<!-- This parameter specifies cleaning mode for message storage of closed sessions.
+																		Valid values: None | Backup | Delete
+																		Default value: None -->
+						<storageCleanupMode>None</storageCleanupMode>
+
+						<!-- This parameter specifies back-up directory for message logs
+																		of closed sessions when storageCleanupMode=backup.
+																		Valid values: existent directory name (relative or absolute path)
+																		Default value not defined
+																		See ${fa.home} description in the Configuration section of the
+																		FIX Antenna .NET Core User and Developer Manual. -->
+						<storageBackupDir>${fa.home}/logs/backup</storageBackupDir>
+
+						<!-- Enable/disable storage grow.
+																		Default value: false.
+																		This parameter and maxStorageGrowSize works only with persistent session.
+																	 storageGrowSize=true -->
+
+						<!-- Sets the maximum storage grow size in bytes.
+																		Parameter must be integer and not negative.
+																		Default value: 1Mb.
+																	 maxStorageGrowSize=12000000 -->
+
+
+						<!-- Ability to write timestamps in the log files.
+																		Default value: true. -->
+						<timestampsInLogs>true</timestampsInLogs>
+
+						<!-- Specifies the time zone and affects on the time stamp prefix in the FIX in/out logs.
+																		The parameter should has the following format GMT[±]HH[:MM] or full name America/Los_Angeles.
+																		For sample logFilesTimeZone=UTC
+																	 logFilesTimeZone=UTC -->
+
+						<!-- This parameter specifies whether to reset sequence number at
+																		time defined in resetSequenceTime.
+																		Valid values: false | true
+																		Default value: false -->
+						<performResetSeqNumTime>false</performResetSeqNumTime>
+
+						<!-- This parameter specifies GMT time when the FIX Engine initiates the reset
+																		of sequence numbers.
+																		Valid values: HH:MM:SS time format
+																		Default value: 00:00:00 -->
+						<resetSequenceTime>00:00:00</resetSequenceTime>
+
+						<!-- Time zone di for resetSequenceTime property.
+																		Default value: UTC -->
+						<resetSequenceTimeZone>UTC</resetSequenceTimeZone>
+
+						<!-- This parameter specifies whether to reset sequence number after session is closed.
+																		Valid values: true | false
+																		Default value: false -->
+						<intraDaySeqNumReset>false</intraDaySeqNumReset>
+
+
+						<!-- Incoming log filename template. {0} will be replaced with actual SenderCompID {1} with actual TargetCompID -->
+						<incomingLogFile>{0}-{1}.in</incomingLogFile>
+
+						<!-- Outgoing log filename template. {0} will be replaced with actual SenderCompID {1} with actual TargetCompID -->
+						<outgoingLogFile>{0}-{1}.out</outgoingLogFile>
+
+						<!-- Backup incoming log filename template. {0} will be replaced with actual SenderCompID {1} with actual TargetCompID -->
+						<backupIncomingLogFile>{0}-{1}-{2}.in</backupIncomingLogFile>
+
+						<!-- Backup outgoing log filename template. {0} will be replaced with actual SenderCompID {1} with actual TargetCompID -->
+						<backupOutgoingLogFile>{0}-{1}-{2}.out</backupOutgoingLogFile>
+
+						<!-- Info filename template. {0} will be replaced with actual SenderCompID {1} with actual TargetCompID -->
+						<sessionInfoFile>{0}-{1}.properties</sessionInfoFile>
+
+						<!-- Out queue file template.{0} will be replaced with actual SenderCompID {1} with actual TargetCompID -->
+						<outgoingQueueFile>{0}-{1}.outq</outgoingQueueFile>
+
+						<!-- Enables SSL transport for all initiator sessions
+																		For individual session control set this parameter in session configuration -->
+						<enableSSL>false</enableSSL>
+
+						<!-- Disable/enable Nagle's algorithm for Tcp sockets, default value is true (for better throughput) -->
+						<enableNagle>true</enableNagle>
+
+						<!-- Sets global/per message handler(s), handler will be called upon each and every incoming message.
+																		NOTE: Handler numbers should be unique and sequential
+																		NOTE: Handler could prevent further message processing
+																	 system.messagehandler.3=Epam.FixAntenna.Custom.RejectMessageHandler
+																	 system.messagehandler.global.1=Epam.FixAntenna.NetCore.FixEngine.Custom.GlobalMessageHandler
+																	 system.messagehandler.global.2=Epam.FixAntenna.NetCore.FixEngine.Custom.GlobalMessageHandler2 -->
+
+						<!-- User supplied handlers
+																		User DeliverToCompId message handler, used for 3rd Party Message routing, please enable if needed
+																	 user.messagehandler.global.0=Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global.DeliverToCompIdMessageHandler
+																	 user.messagehandler.global.1=Epam.FixAntenna.NetCore.FixEngine.Custom.GlobalMessageHandler2 -->
+
+						<!-- Toggle on/off check of sending time accuracy for received messages -->
+						<checkSendingTimeAccuracy>true</checkSendingTimeAccuracy>
+
+						<!-- Sending time accuracy 2 minutes (120000 ms).
+																		Parameter must be integer and not negative.
+																		Otherwise the default value for this parameter will be used.. -->
+						<reasonableDelayInMs>120000</reasonableDelayInMs>
+
+						<!-- Parameter must be integer and not negative. Otherwise the default value for this parameter will be used. -->
+						<measurementAccuracyInMs>1</measurementAccuracyInMs>
+
+						<!-- Toggle on/off validation of incoming messages according to base of custom dictionaries
+																		Following parameters with the Validation suffix works only if this property set to true -->
+						<validation>true</validation>
+
+						<!-- This parameter contains name of the XML file with extensions of the FIX protocols.
+																	 validation.FIX42.additionalDictionaryFileName=./ilink_fixdic42.xml -->
+						<!-- This parameter defined if replace or not dictionary.
+																		Default value is true
+																	 validation.FIX42.additionalDictionaryUpdate=true -->
+
+						<!-- This parameter specifies whether to check the OrigSendingTime(122) field
+																		value for incoming possible duplicated messages (PossDupFlag(43) = 'Y').
+																		Valid values: true | false
+																		Default value: true -->
+						<origSendingTimeChecking>true</origSendingTimeChecking>
+
+						<!-- Toggle on/off validation values of fields with 8, 9, 35 & 10 tags -->
+						<wellformenessValidation>true</wellformenessValidation>
+
+						<!-- Toggle on/off validation if fields are allowed in the message -->
+						<allowedFieldsValidation>true</allowedFieldsValidation>
+
+						<!-- Toggle on/off validation if all required fields presents in the message -->
+						<requiredFieldsValidation>true</requiredFieldsValidation>
+
+						<!-- Toggle on/off validation of order in which fields appears in the message -->
+						<fieldOrderValidation>true</fieldOrderValidation>
+
+						<!-- Toggle on/off validation of duplicated fields in the message -->
+						<duplicateFieldsValidation>true</duplicateFieldsValidation>
+
+						<!-- Toggle on/off validation of field values according defined data types -->
+						<fieldTypeValidation>true</fieldTypeValidation>
+
+						<!-- Toggle on/off validation of repeating group fields -->
+						<groupValidation>true</groupValidation>
+
+						<!-- Conditional validation is very much time consuming - use with care -->
+						<conditionalValidation>true</conditionalValidation>
+
+						<!-- This parameter specifies encryption config file name.
+																		Valid values: existent valid config file name (relative or absolute path)
+																		Default value not defined
+																		See ${fa.home} description. -->
+						<encryptionConfig>${fa.home}/encryption/encryption.cfg</encryptionConfig>
+
+						<!-- This parameter specifies the default value of encryptionMode.
+																		Valid values: None | Des | PgpDesMd5
+																		Default value: None -->
+						<encryptionMode>None</encryptionMode>
+						<!-- Masked tags. List all tags here engine should hide value with asterisks in logs. -->
+						<maskedTags>554, 925</maskedTags>
+				</default>
+				<session id="sessionID1">
+						<!--This session uses default session-->
+				</session>
+				<!-- Session ID2 config-->
+				<session id="sessionID2">
+						<host>localhost2</host>
+						<port>1234</port>
+						<senderCompID>SenderCompID2</senderCompID>
+						<senderSubID>SenderSubID2</senderSubID>
+						<senderLocationID>SenderLocationID2</senderLocationID>
+						<targetCompID>TargetCompID2</targetCompID>
+						<targetSubID>TargetSubID2</targetSubID>
+						<targetLocationID>TargetLocationID2</targetLocationID>
+						<sessionID>sessionID2</sessionID>
+						<appVersion>FIX.5.0SP1</appVersion>
+						<fixVersion>FIXT.1.1</fixVersion>
+						<incomingSequenceNumber>1</incomingSequenceNumber>
+						<outgoingSequenceNumber>1</outgoingSequenceNumber>
+						<processedIncomingSequenceNumber>1</processedIncomingSequenceNumber>
+						<heartbeatInterval>30</heartbeatInterval>
+						<lastSeqNumResetTimestamp>1</lastSeqNumResetTimestamp>
+						<fixMessage></fixMessage>
+						<incomingLoginFixMessage></incomingLoginFixMessage>
+						<outgoingLoginFixMessage></outgoingLoginFixMessage>
+						<autostart>
+								<acceptor>
+										<commands>
+												<package></package>
+										</commands>
+										<admin>
+												<login>admin</login>
+												<password>admin</password>
+												<ip>*</ip>
+												<fixServerListener>FixAntenna.AdminTool.AdminTool</fixServerListener>
+												<storageType>Transient</storageType>
+										</admin>
+										<admin1>
+												<login>admin1</login>
+												<password>admin1</password>
+												<ip>*</ip>
+												<fixServerListener>FixAntenna.AdminTool.AdminTool</fixServerListener>
+										</admin1>
+								</acceptor>
+						</autostart>
+						<rawTags>96, 91, 213, 349, 351, 353, 355, 357, 359, 361, 363, 365, 446, 619, 622</rawTags>
+						<resendRequestNumberOfMessagesLimit>0</resendRequestNumberOfMessagesLimit>
+						<maxRequestResendInBlock>10</maxRequestResendInBlock>
+						<maxDelayToSendAfterLogon>50</maxDelayToSendAfterLogon>
+						<resetOnSwitchToBackup>false</resetOnSwitchToBackup>
+						<resetOnSwitchToPrimary>false</resetOnSwitchToPrimary>
+						<cyclicSwitchBackupConnection>true</cyclicSwitchBackupConnection>
+						<enableAutoSwitchToBackupConnection>true</enableAutoSwitchToBackupConnection>
+						<forcedLogoffTimeout>2</forcedLogoffTimeout>
+						<autoreconnectDelayInMs>1000</autoreconnectDelayInMs>
+						<autoreconnectAttempts>-1</autoreconnectAttempts>
+						<maxMessageSize>1048576</maxMessageSize>
+						<sendRejectIfApplicationIsNotAvailable>true</sendRejectIfApplicationIsNotAvailable>
+						<inMemoryQueue>false</inMemoryQueue>
+						<loginWaitTimeout>5000</loginWaitTimeout>
+						<heartbeatReasonableTransmissionTime>200</heartbeatReasonableTransmissionTime>
+						<includeLastProcessed>false</includeLastProcessed>
+						<queueThresholdSize>0</queueThresholdSize>
+						<maxMessagesToSendInBatch>10</maxMessagesToSendInBatch>
+						<outgoingStorageIndexed>true</outgoingStorageIndexed>
+						<enableMessageRejecting>false</enableMessageRejecting>
+						<fa>
+								<home>.</home>
+						</fa>
+						<storageDirectory>${fa.home}/logs</storageDirectory>
+						<storageCleanupMode>None</storageCleanupMode>
+						<storageBackupDir>${fa.home}/logs/backup</storageBackupDir>
+						<timestampsInLogs>true</timestampsInLogs>
+						<performResetSeqNumTime>false</performResetSeqNumTime>
+						<resetSequenceTime>00:00:00</resetSequenceTime>
+						<resetSequenceTimeZone>UTC</resetSequenceTimeZone>
+						<intraDaySeqNumReset>false</intraDaySeqNumReset>
+						<incomingLogFile>{0}-{1}.in</incomingLogFile>
+						<outgoingLogFile>{0}-{1}.out</outgoingLogFile>
+						<backupIncomingLogFile>{0}-{1}-{2}.in</backupIncomingLogFile>
+						<backupOutgoingLogFile>{0}-{1}-{2}.out</backupOutgoingLogFile>
+						<sessionInfoFile>{0}-{1}.properties</sessionInfoFile>
+						<outgoingQueueFile>{0}-{1}.outq</outgoingQueueFile>
+						<enableSSL>false</enableSSL>
+						<enableNagle>true</enableNagle>
+						<checkSendingTimeAccuracy>true</checkSendingTimeAccuracy>
+						<reasonableDelayInMs>120000</reasonableDelayInMs>
+						<measurementAccuracyInMs>1</measurementAccuracyInMs>
+						<validation>true</validation>
+						<origSendingTimeChecking>true</origSendingTimeChecking>
+						<wellformenessValidation>true</wellformenessValidation>
+						<allowedFieldsValidation>true</allowedFieldsValidation>
+						<requiredFieldsValidation>true</requiredFieldsValidation>
+						<fieldOrderValidation>true</fieldOrderValidation>
+						<duplicateFieldsValidation>true</duplicateFieldsValidation>
+						<fieldTypeValidation>true</fieldTypeValidation>
+						<groupValidation>true</groupValidation>
+						<conditionalValidation>true</conditionalValidation>
+						<encryptionConfig>${fa.home}/encryption/encryption.cfg</encryptionConfig>
+						<encryptionMode>None</encryptionMode>
+						<username>username</username>
+						<password>password</password>
+						<maskedTags>554, 925</maskedTags>
+				</session>
+		</sessions>
+</config>

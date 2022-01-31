@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../Engine/Entities/definitions.inc">
+        <!ENTITY HBT "120">
+        %content; ]>
+
+
+<!--
+- BBP-12204 issue -  FIXAJ: Resend request issue after initiator session reconnect
+-->
+
+<cases>
+    <case name="Normal.def">
+        &CLEAN_LOGS;
+        <task className="FixEngine.EngineUp">
+            <param name="port">&ENGINE_PORT;</param>
+            <param name="name">SERVER</param>
+            <param name="global_loginWaitTimeout">1000</param>
+        </task>
+
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            <task className="FixEngine.SessionUpTask">
+                <param name="FixVersion">FIX.4.2</param>
+                <param name="host">&HOST;</param>
+                <param name="port">&PORT;</param>
+                <param name="SenderCompID">Engine</param>
+                <param name="TargetCompID">Tester</param>
+                <param name="sessionIdName">sessionId</param>
+                <param name="hbtInterval">&HBT;</param>
+            </task>
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=A#34=1#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#56=Tester#98=0#108=&HBT;#10=\d{3}#
+            </expect>
+
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=5#34=2#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#56=Tester#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=123#35=A#34=10#49=Tester#52=20031027-14:29:11#56=Engine#98=0#108=&HBT;#10=000#</send>
+
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=2#34=3#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=Tester#7=1#16=0#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=123#35=5#34=11#49=Tester#52=20031027-14:29:11#56=Engine#10=126#</send>
+             &SESSION_WAIT_DOWN;
+        </transport>
+        &ENGINE_DOWN;
+
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            <task className="FixEngine.SessionUpTask">
+                <param name="FixVersion">FIX.4.2</param>
+                <param name="host">&HOST;</param>
+                <param name="port">&PORT;</param>
+                <param name="SenderCompID">Engine</param>
+                <param name="TargetCompID">Tester</param>
+                <param name="sessionIdName">sessionId</param>
+                <param name="hbtInterval">&HBT;</param>
+            </task>
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=A#34=4#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#56=Tester#98=0#108=&HBT;#10=\d{3}#
+            </expect>
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=5#34=5#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#56=Tester#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=123#35=A#34=20#49=Tester#52=20031027-14:29:11#56=Engine#98=0#108=&HBT;#10=000#</send>
+            <!--
+                FIXAJ still have to request messages started from 34=3 (7=3) bat due to bug BBP-12204 it requested 7=4
+             -->
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=2#34=6#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=Tester#7=1#16=0#10=\d{3}#
+            </expect>
+
+            <send>
+                8=FIX.4.2#9=0#35=4#34=3#49=Tester#52=20031027-14:29:11#56=Engine#43=Y#122=20031027-14:29:11#123=Y#36=21#10=000#
+            </send>
+
+            <send>8=FIX.4.2#9=123#35=5#34=21#49=Tester#52=20031027-14:29:11#56=Engine#10=126#</send>
+            &SESSION_DOWN;
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

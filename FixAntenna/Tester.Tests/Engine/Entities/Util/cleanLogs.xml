@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tasksList>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.in</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.out</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.properties</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.out\.idx</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.outq</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.ind</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.seq</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.que</param>
+  </task>
+
+  <task className="RemoveMatchedFilesFromDir">
+    <param name="logs">logs</param>
+    <param name="match">.*\.key</param>
+  </task>
+</tasksList>

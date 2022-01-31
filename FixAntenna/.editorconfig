@@ -1,0 +1,31 @@
+﻿[*.cs]
+
+# IDE0073: The file header is missing or not located at the top of the file
+dotnet_diagnostic.IDE0073.severity = error
+
+# CS0114: Member hides inherited member; missing override keyword
+dotnet_diagnostic.CS0114.severity = error
+
+# CS0472: The result of the expression is always 'true' since a value is never equal to 'null'
+dotnet_diagnostic.CS0472.severity = error
+
+# CA2241: Providing correct arguments to formatting methods
+dotnet_diagnostic.CA2241.severity = error
+
+# CA1816: Change method to call GC.SuppressFinalize(object). This will prevent derived types that introduce a finalizer from needing to re-implement 'IDisposable' to call it.
+dotnet_diagnostic.CA1816.severity = error
+
+# CA2000: Dispose objects before losing scope
+dotnet_diagnostic.CA2000.severity = error
+
+# CA2213: Disposable fields should be disposed
+dotnet_diagnostic.CA2213.severity = error
+
+# CA1063: Implement IDisposable correctly
+dotnet_diagnostic.CA1063.severity = error
+
+# CA2214: Do not call overridable methods in constructors
+dotnet_diagnostic.CA2214.severity = error
+
+[**/Generated/*.cs]
+dotnet_diagnostic.CS1591.severity = none

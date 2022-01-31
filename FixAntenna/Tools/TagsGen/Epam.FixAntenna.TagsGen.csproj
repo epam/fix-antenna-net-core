@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+		<AssemblyName>TagsGen</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile></DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\NetCore\Common\Xml\IFindable.cs" Link="Xml\IFindable.cs" />
+		<Compile Include="..\..\NetCore\Common\Xml\IType.cs" Link="Xml\IType.cs" />
+		<Compile Include="..\..\NetCore\Helpers\EqualsHelpers.cs" Link="Helpers\EqualsHelpers.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\A.cs" Link="Entities\A.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Block.cs" Link="Entities\Block.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Blockdef.cs" Link="Entities\Blockdef.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Blockref.cs" Link="Entities\Blockref.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Comment.cs" Link="Entities\Comment.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Dd.cs" Link="Entities\Dd.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Descr.cs" Link="Entities\Descr.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Dl.cs" Link="Entities\Dl.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Dt.cs" Link="Entities\Dt.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Field.cs" Link="Entities\Field.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Fielddef.cs" Link="Entities\Fielddef.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Fielddic.cs" Link="Entities\Fielddic.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Fieldref.cs" Link="Entities\Fieldref.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Fixdic.cs" Link="Entities\Fixdic.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\FixTDic.cs" Link="Entities\FixTDic.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\GenericElement.cs" Link="Entities\GenericElement.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Group.cs" Link="Entities\Group.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Item.cs" Link="Entities\Item.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Li.cs" Link="Entities\Li.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Msgdef.cs" Link="Entities\Msgdef.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Msgdic.cs" Link="Entities\Msgdic.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Msgref.cs" Link="Entities\Msgref.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Multi.cs" Link="Entities\Multi.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Ol.cs" Link="Entities\Ol.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\P.cs" Link="Entities\P.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Range.cs" Link="Entities\Range.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Table.cs" Link="Entities\Table.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Td.cs" Link="Entities\Td.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Th.cs" Link="Entities\Th.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Tr.cs" Link="Entities\Tr.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Typedef.cs" Link="Entities\Typedef.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Typelist.cs" Link="Entities\Typelist.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Ul.cs" Link="Entities\Ul.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Valblock.cs" Link="Entities\Valblock.cs" />
+		<Compile Include="..\..\NetCore\Validation\Entities\Valblockdef.cs" Link="Entities\Valblockdef.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.8.0" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="MinVer" Version="2.5.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Helpers\" />
+		<Folder Include="Entities\" />
+		<Folder Include="Xml\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="..\..\NetCore\Dictionaries\qfix2fixdic.xsl" Link="qfix2fixdic.xsl" />
+	</ItemGroup>
+
+</Project>

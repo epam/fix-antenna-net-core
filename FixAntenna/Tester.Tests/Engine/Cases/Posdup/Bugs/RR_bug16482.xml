@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+    <case name="bug16482">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_ECHO_APP;
+
+        <!--Steps:-->
+
+        <!--
+                1. Start Sample Application, start TCP Client, create FIX.4.4 session
+                SNDR-TRGT between them. Session created and established.
+        -->
+
+        <!--
+                2. Using TCP Client, send SeqReset-GapFill message:
+                8=FIX.4.49=8535=449=SNDR56=TRGT34=143=Y52=20081225-18:32:15122=20081225-18:32:15123=Y36=610=211
+        -->
+
+        <!--
+                Expected:
+                This message should be recorded in the incoming FIX log and message stating
+                that "Message was received with SeqNum that was proceed earlier. Message was
+                skipped." must be recorded in fixaj.log.
+        -->
+
+
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+            <send>8=FIX.4.4#9=123#35=A#34=1#49=TW#52=20031027-14:29:11#56=ISLD#98=0#108=5#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=4#34=1#49=TW#52=20031027-14:29:11#43=Y#122=20031027-14:29:11#56=ISLD#123=Y#36=6#10=000#
+            </send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=0#34=2#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=0#34=2#49=TW#52=20031027-14:29:11#56=ISLD#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=0#34=3#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+
+            <!--<send>8=FIX.4.4#9=123#35=5#34=11#49=TW#52=20031027-14:29:11#56=ISLD#10=000#</send>-->
+            <!--<expect>8=FIX\.4\.4#9=\d{1,3}#35=5#34=6#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#</expect>-->
+
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

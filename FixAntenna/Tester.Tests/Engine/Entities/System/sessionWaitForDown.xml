@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task className="FixEngine.SessionAwaitDisconnectTask">
+    <param name="sessionIdName">sessionId</param>
+</task>

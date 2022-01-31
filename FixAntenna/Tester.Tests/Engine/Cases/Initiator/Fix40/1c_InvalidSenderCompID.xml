@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+    <case name="1c_InvalidSenderCompID.def" comparator="RegExpUnorderedComparator">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_ECHO_APP;
+
+        <!--# If a bad SenderCompID is used, we must disconnect-->
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+            <send>8=FIX.4.0#9=123#35=A#34=1#49=#52=20031027-14:29:11#56=TW#98=0#108=5#10=000#</send>
+            <expect></expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

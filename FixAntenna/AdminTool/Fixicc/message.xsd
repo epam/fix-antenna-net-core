@@ -1,0 +1,2029 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
+
+    <xs:annotation>
+        <xs:appinfo>
+          <jaxb:globalBindings fixedAttributeAsConstantProperty="true" />
+      </xs:appinfo>
+      <xs:documentation>Version ${project.version}</xs:documentation>
+  </xs:annotation>
+
+  <!-- Engine monitoring & administration commands -->
+
+<xs:element name="CalendarsList">
+    <xs:annotation>
+        <xs:documentation>Subscription request to get list of calendars</xs:documentation>
+        <xs:documentation>Since 3.2.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SubscriptionRequest"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ServerInformation">
+    <xs:annotation>
+        <xs:documentation>Since 3.5.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:complexType name="ServerInformationData">
+    <xs:annotation>
+        <xs:documentation>Since 3.5.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Version" type="ServerVersion"/>
+                <xs:element name="FeaturesMap" minOccurs="0" maxOccurs="1" type="Map"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:element name="SessionsList">
+    <xs:annotation>
+        <xs:documentation>Subscription request to get list of sessions</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SubscriptionRequest"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SessionsParametersSubscription">
+    <xs:annotation>
+        <xs:documentation>Subscription request to list of sessions parameters</xs:documentation>
+        <xs:documentation>Since 2.0.3 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SubscriptionRequest"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SessionsSnapshot">
+    <xs:annotation>
+        <xs:documentation>Request to get detailed information about list of sessions</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="View" type="View"/>
+                    <xs:element name="SessionView" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="SenderCompID" type="SenderCompID"/>
+                                <xs:element name="TargetCompID" type="TargetCompID"/>
+                                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                                <xs:element name="View" type="View"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SessionParams">
+    <xs:annotation>
+        <xs:documentation>Request to get detailed information about session</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SessionStat">
+    <xs:annotation>
+        <xs:documentation>Request to get statistical information about session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SessionStatus">
+    <xs:annotation>
+        <xs:documentation>Request to get status of session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="GeneralSessionsStat">
+    <xs:annotation>
+        <xs:documentation>Request to get statistical information about the current state of FIX Engine
+        </xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="MeasurementPointList">
+    <xs:annotation>
+        <xs:documentation>Request to get list of measurement point</xs:documentation>
+        <xs:documentation>Since 2.0.6 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="MeasurementPointStatistic">
+    <xs:annotation>
+        <xs:documentation>Request to get statistical information about the measurement point</xs:documentation>
+        <xs:documentation>Since 2.0.6 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="PointID" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="LatencyAlertSubscription">
+    <xs:annotation>
+        <xs:documentation>Subscription request on limit excess latency</xs:documentation>
+        <xs:documentation>Since 2.0.6 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SubscriptionRequest">
+                <xs:sequence>
+                    <xs:element name="LatencyRules" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="PointID" type="xs:string"/>
+                                <xs:element name="Limit" type="xs:long"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="AverageReceivedStat">
+    <xs:annotation>
+        <xs:documentation>Request to get average handling time for received messages</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Version" type="Version"/>
+                    <xs:element name="Type" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="AverageSentStat">
+    <xs:annotation>
+        <xs:documentation>Request to get average handling time for sent messages</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Version" type="Version"/>
+                    <xs:element name="Type" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="AverageValidateStat">
+    <xs:annotation>
+        <xs:documentation>Request to get average validation time for messages</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Version" type="Version"/>
+                    <xs:element name="Type" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ReceivedStat">
+    <xs:annotation>
+        <xs:documentation>Request to get received message amount</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="UndefinedCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SentStat">
+    <xs:annotation>
+        <xs:documentation>Request to get sent message amount</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="UndefinedCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ProceedStat">
+    <xs:annotation>
+        <xs:documentation>Request to get proceed message amount</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="UndefinedCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<!-- Administrative command elements -->
+
+<xs:element name="CreateAcceptor">
+    <xs:annotation>
+        <xs:documentation>Request to create FIX session with acceptor role</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerSessionCommand">
+                <xs:sequence>
+                    <xs:element name="Version" type="Version"/>
+                    <!--ApplVerID is deprecated. Please use Version-->
+                    <xs:element name="ApplVerID" type="ApplVerID" minOccurs="0"/>
+                    <xs:element name="ExtraSessionParams" type="ExtraSessionParams" minOccurs="0"/>
+                    <xs:element name="ConfiguredSessionParams" type="ConfiguredSessionParams" minOccurs="0"/>
+                    <xs:element name="StartRightNow" type="xs:boolean" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="CreateCalendar">
+    <xs:annotation>
+        <xs:documentation>Request to create calendar</xs:documentation>
+        <xs:documentation>Since 3.2.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string"/>
+                    <xs:element name="CalendarParameters" type="CalendarParametersType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="UpdateCalendar">
+    <xs:annotation>
+        <xs:documentation>Request to update calendar</xs:documentation>
+        <xs:documentation>Since 3.2.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string"/>
+                    <xs:element name="CalendarParameters" type="CalendarParametersType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="RemoveCalendar">
+    <xs:annotation>
+        <xs:documentation>Request to remove calendar</xs:documentation>
+        <xs:documentation>Since 3.2.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="CreateInitiator">
+    <xs:annotation>
+        <xs:documentation>Request to create FIX session with initiator role</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerSessionCommand">
+                <xs:sequence>
+                    <xs:element name="Version" type="Version"/>
+                    <!--ApplVerID is deprecated. Please use Version-->
+                    <xs:element name="ApplVerID" type="ApplVerID" minOccurs="0"/>
+                    <xs:element name="RemoteHost" type="xs:string"/>
+                    <xs:element name="RemotePort" type="xs:int"/>
+                    <xs:element name="ExtraSessionParams" type="ExtraSessionParams" minOccurs="0"/>
+                    <xs:element name="ConfiguredSessionParams" type="ConfiguredSessionParams" minOccurs="0"/>
+                    <xs:element name="Backup" type="Backup" minOccurs="0"/>
+                    <xs:element name="StartRightNow" type="xs:boolean" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="Delete">
+    <xs:annotation>
+        <xs:documentation>Request to delete FIX session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:sequence>
+                    <xs:element name="SendLogout" type="xs:boolean"/>
+                    <xs:element name="LogoutReason" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="DeleteAll">
+    <xs:annotation>
+        <xs:documentation>Request to delete all FIX sessions</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="SendLogout" type="xs:boolean"/>
+                    <xs:element name="LogoutReason" type="xs:string" minOccurs="0"/>
+                    <xs:element name="Exclude" type="Exclude" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ToBackup">
+    <xs:annotation>
+        <xs:documentation>Request to switch FIX session to backup connection</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ToPrimary">
+    <xs:annotation>
+        <xs:documentation>Request to switch FIX session back to primary connection</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="EditSession">
+    <xs:annotation>
+        <xs:documentation>Request to edit FIX session parameters</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:sequence>
+                    <xs:element name="Version" type="Version" minOccurs="0"/>
+                    <!--ApplVerID is deprecated. Please use Version-->
+                    <xs:element name="ApplVerID" type="ApplVerID" minOccurs="0"/>
+                    <xs:element name="Role" type="SessionRole" minOccurs="0"/>
+                    <xs:element name="RemoteHost" type="xs:string" minOccurs="0"/>
+                    <xs:element name="RemotePort" type="xs:int" minOccurs="0"/>
+                    <xs:element name="ExtraSessionParams" type="ExtraSessionParams" minOccurs="0"/>
+                    <xs:element name="ConfiguredSessionParams" type="ConfiguredSessionParams" minOccurs="0"/>
+                    <xs:element name="Backup" type="Backup" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ChangeSeqNum">
+    <xs:annotation>
+        <xs:documentation>Request to change session sequence number</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:sequence>
+                    <xs:element name="InSeqNum" type="xs:long" minOccurs="0"/>
+                    <xs:element name="OutSeqNum" type="xs:long" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="RestartSession">
+    <xs:annotation>
+        <xs:documentation>Request to logoff and then logon session</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="StartSession">
+    <xs:annotation>
+        <xs:documentation>
+            Request to logon for session with previously send parameters by CreateInitiator/CreateAcceptior command
+        </xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:attribute name="ResetSeqNums" type="YNType" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="StopSession">
+    <xs:annotation>
+        <xs:documentation>Request to logoff session</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:sequence>
+                    <xs:element name="SendLogout" type="xs:boolean" minOccurs="0" default="false"/>
+                    <xs:element name="LogoutReason" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ResetSeqNum">
+    <xs:annotation>
+        <xs:documentation>Request to reset session sequence number (force seqnum reset logon)</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="TestRequest">
+    <xs:annotation>
+        <xs:documentation>Request to send Test Request message to session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:sequence>
+                    <xs:element name="TestReqID" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="Heartbeat">
+    <xs:annotation>
+        <xs:documentation>Request to send Heartbeat message to session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SendMessage">
+    <xs:annotation>
+        <xs:documentation>Request to send message to session</xs:documentation>
+        <xs:documentation>Since 0.9 version. Base64 encoding since 2.18 version. </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand">
+                <xs:sequence>
+                    <xs:element name="Message" type="xs:base64Binary"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ReloadConfig">
+    <xs:annotation>
+        <xs:documentation>Request to reload FIXEdge configuration</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Component">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Element" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="Name" type="xs:string"/>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="Name" type="ComponentNameType" default="BusinessLayer"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="ReloadHistory" type="YNType" default="Y" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<!-- Agent monitoring & administration commands -->
+
+<xs:element name="ServerStatus">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SubscriptionRequest"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ServerEnv">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="Memory" type="xs:boolean" minOccurs="0" nillable="true" fixed="true"/>
+                    <xs:element name="Disk" type="xs:boolean" minOccurs="0" nillable="true" fixed="true"/>
+                    <xs:element name="ThreadCount" type="xs:boolean" minOccurs="0" nillable="true" fixed="true"/>
+                    <xs:element name="CPU" type="xs:boolean" minOccurs="0" nillable="true" fixed="true"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="StartServer">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="StopServer">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="RestartServer">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ExportConfig">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="ConfigType" type="ConfigType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ImportConfig">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand">
+                <xs:sequence>
+                    <xs:element name="ConfigType" type="ConfigType"/>
+                    <xs:element name="ConfigName" type="xs:string"/>
+                    <xs:element name="Config" type="xs:base64Binary"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="SessionLog">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SessionCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="CleanLogs">
+    <xs:annotation>
+        <xs:documentation>Since 2.25 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="ConnectionParams">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="GetFIXProtocolsList">
+    <xs:annotation>
+        <xs:documentation>Request to get information about supported FIX protocols</xs:documentation>
+        <xs:documentation>Since 3.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="GetCustomProtocolsList">
+    <xs:annotation>
+        <xs:documentation>Request to get information about supported FIX or custom protocols</xs:documentation>
+        <xs:documentation>Deprecated since 3.0 version. Please use GetFIXProtocolsList</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<!-- Other command elements -->
+
+<xs:element name="Help">
+    <xs:annotation>
+        <xs:documentation>Request to get list of supported commands</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="ServerCommand"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<!-- TA monitoring & administration commands -->
+
+<xs:element name="AdaptersList">
+    <xs:annotation>
+        <xs:documentation>Subscription request to get information for adapters and sessions</xs:documentation>
+        <xs:documentation>Since 2.21 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="SubscriptionRequest"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+
+<!-- Response message elements -->
+<xs:element name="Response">
+    <xs:annotation>
+        <xs:documentation>Shell for response on monitoring or administrative command</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+        <xs:complexContent>
+            <xs:extension base="Message">
+                <xs:sequence>
+                    <xs:choice minOccurs="0">
+                        <!-- Engine custom responses -->
+                        <xs:element name="CalendarsListData" type="CalendarsListData"/>
+                        <xs:element name="SessionsListData" type="SessionsListData"/>
+                        <xs:element name="AdaptersListData" type="AdaptersListData"/>
+                        <xs:element name="FIXProtocolsListData" type="FIXProtocolsListData"/>
+                        <xs:element name="SessionsSnapshotData" type="SessionsSnapshotData"/>
+                        <xs:element name="SessionParamsData" type="SessionParamsData"/>
+                        <xs:element name="SessionsParametersData" type="SessionsParametersData"/>
+                        <xs:element name="SessionStatData" type="SessionStatData"/>
+                        <xs:element name="SessionStatusData" type="SessionStatusData"/>
+                        <xs:element name="GeneralSessionsStatData" type="GeneralSessionsStatData"/>
+                        <xs:element name="AverageReceivedStatData" type="AverageReceivedStatData"/>
+                        <xs:element name="AverageSentStatData" type="AverageSentStatData"/>
+                        <xs:element name="AverageValidateStatData" type="AverageValidateStatData"/>
+                        <xs:element name="ReceivedStatData" type="ReceivedStatData"/>
+                        <xs:element name="SentStatData" type="SentStatData"/>
+                        <xs:element name="ProceedStatData" type="ProceedStatData"/>
+                        <xs:element name="DeleteAllData" type="DeleteAllData"/>
+                        <!-- Agent custom responses -->
+                        <xs:element name="ConnectionParamsData" type="ConnectionParamsData"/>
+                        <xs:element name="ServerStatusData" type="ServerStatusData"/>
+                        <xs:element name="ServerEnvData" type="ServerEnvData"/>
+                        <xs:element name="ConfigData" type="ConfigData"/>
+                        <xs:element name="SessionLogData" type="SessionLogData"/>
+                        <!--CustomProtocolsListData is deprecated. Please use FIXProtocolsListData-->
+                        <xs:element name="CustomProtocolsListData" type="CustomProtocolsListData"/>
+                        <xs:element name="MeasurementPointListData" type="MeasurementPointListData"/>
+                        <xs:element name="LatencyAlertData" type="LatencyAlertData"/>
+                        <xs:element name="MeasurementPointStatisticData" type="MeasurementPointStatisticData"/>
+                        <xs:element name="BatchLogData" type="BatchLogData"/>
+                        <!-- Common custom responses -->
+                        <xs:element name="HelpData" type="HelpData"/>
+                        <xs:element name="ServerInformationData" type="ServerInformationData"/>
+                    </xs:choice>
+                    <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+                <xs:attribute name="ResultCode" type="ResultCode"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:complexType name="CalendarsListData">
+    <xs:annotation>
+        <xs:documentation>Response with list of calendars</xs:documentation>
+        <xs:documentation>Since 3.2.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Calendar" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Name" type="xs:string"/>
+                            <xs:element name="CalendarParameters" type="CalendarParametersType"/>
+                            <xs:element name="Action" type="Action" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionsListData">
+    <xs:annotation>
+        <xs:documentation>Response with list of sessions</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Session" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="SenderCompID" type="SenderCompID"/>
+                            <xs:element name="TargetCompID" type="TargetCompID"/>
+                            <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                            <xs:element name="Timestamp" type="xs:dateTime"/>
+                            <xs:element name="Action" type="Action" minOccurs="0"/>
+                            <xs:group ref="StatusDataGroup"/>
+                            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionsParametersData">
+    <xs:annotation>
+        <xs:documentation>Response with list of sessions parameters</xs:documentation>
+        <xs:documentation>Since 2.0.3 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SessionsParamsDataList" type ="SessionParamsData" minOccurs="0" maxOccurs="unbounded"></xs:element>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionsSnapshotData">
+    <xs:annotation>
+        <xs:documentation>Response with parameters for session</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Session" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="SenderCompID" type="SenderCompID"/>
+                            <xs:element name="TargetCompID" type="TargetCompID"/>
+                            <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                            <xs:element name="StatusData" type="StatusData"/>
+                            <xs:element name="ParamsData" type="ParamsData" minOccurs="0"/>
+                            <xs:element name="StatData" type="StatData" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="StatusData">
+    <xs:group ref="StatusDataGroup"/>
+</xs:complexType>
+
+<xs:complexType name="ParamsData">
+    <xs:group ref="ParamsDataGroup"/>
+</xs:complexType>
+
+<xs:complexType name="StatData">
+    <xs:group ref="StatDataGroup"/>
+</xs:complexType>
+
+<xs:complexType name="SessionParamsData">
+    <xs:annotation>
+        <xs:documentation>Response with detailed information about session</xs:documentation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SenderCompID" type="SenderCompID"/>
+                <xs:element name="TargetCompID" type="TargetCompID"/>
+                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                <xs:group ref="ParamsDataGroup"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionStatData">
+    <xs:annotation>
+        <xs:documentation>Response with statistical information about session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SenderCompID" type="SenderCompID"/>
+                <xs:element name="TargetCompID" type="TargetCompID"/>
+                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                <xs:group ref="StatDataGroup"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionStatusData">
+    <xs:annotation>
+        <xs:documentation>Response with status of session</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SenderCompID" type="SenderCompID"/>
+                <xs:element name="TargetCompID" type="TargetCompID"/>
+                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                <xs:group ref="StatusDataGroup"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:group name="StatusDataGroup">
+    <xs:sequence>
+        <xs:element name="Status" type="xs:string"/>
+        <xs:element name="StatusGroup" type="StatusGroup"/>
+        <xs:element name="BackupState" type="BackupState" minOccurs="0"/>
+        <xs:element name="InSeqNum" type="xs:long" minOccurs="0"/>
+        <xs:element name="OutSeqNum" type="xs:long" minOccurs="0"/>
+        <xs:element name="OutQueueSize" type="xs:long" minOccurs="0"/>
+    </xs:sequence>
+</xs:group>
+
+<xs:group name="ParamsDataGroup">
+    <xs:sequence>
+        <xs:element name="Version" type="Version" minOccurs="0"/>
+        <!--ApplVerID is deprecated. Please use Version-->
+        <xs:element name="ApplVerID" type="ApplVerID" minOccurs="0"/>
+        <xs:element name="Role" type="SessionRole" minOccurs="0"/>
+        <xs:element name="RemoteHost" type="xs:string" minOccurs="0"/>
+        <xs:element name="RemotePort" type="xs:int" minOccurs="0"/>
+        <xs:element name="ExtraSessionParams" type="ExtraSessionParams" minOccurs="0"/>
+        <xs:element name="ConfiguredSessionParams" type="ConfiguredSessionParams" minOccurs="0"/>
+        <xs:element name="SessionProperties" type="FIXSessionProperties" minOccurs="0"/>
+        <xs:element name="Backup" type="Backup" minOccurs="0"/>
+    </xs:sequence>
+</xs:group>
+
+<xs:group name="StatDataGroup">
+    <xs:sequence>
+        <xs:element name="ReceivedBytes" type="xs:int"/>
+        <xs:element name="SentBytes" type="xs:int"/>
+        <xs:element name="ReceivedMessages" type="xs:int"/>
+        <xs:element name="SentMessages" type="xs:int"/>
+        <xs:element name="ReceivedHandlingTime" type="xs:int"/>
+        <xs:element name="SentHandlingTime" type="xs:int"/>
+        <xs:element name="Established" type="xs:dateTime"/>
+        <xs:element name="TerminatedNormal" type="xs:dateTime"/>
+        <xs:element name="TerminatedAbnormal" type="xs:dateTime"/>
+        <xs:element name="DurationSum" type="xs:int"/>
+        <xs:element name="LastReceivedMessage" type="xs:dateTime"/>
+        <xs:element name="LastSentMessage" type="xs:dateTime"/>
+        <xs:element name="NumOfProcessedMessages" type="xs:long" minOccurs="0"/>
+        <xs:element name="NumOfProcessedMessagesByType" minOccurs="0">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="MessageType" minOccurs="1" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:long">
+                                    <xs:attribute name="type" type="xs:string"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="NumOfRejectedMessages" type="xs:long" minOccurs="0"/>
+        <xs:element name="Latency" type="xs:double" minOccurs="0"/>
+        <xs:element name="Throughput" type="xs:double" minOccurs="0"/>
+        <xs:element name="MinTimeInQueue" type="xs:long" minOccurs="0"/>
+        <xs:element name="MaxTimeInQueue" type="xs:long" minOccurs="0"/>
+        <xs:element name="AvgTimeInQueue" minOccurs="0" type="xs:long"/>
+        <xs:element name="MaxQueueSize" type="xs:long" minOccurs="0"/>
+        <xs:element name="MinQueueSize" type="xs:long" minOccurs="0"/>
+        <xs:element name="AvgQueueSize" type="xs:long" minOccurs="0"/>
+        <xs:element name="CurrentQueueSize" type="xs:long" minOccurs="0"/>
+        <xs:element name="CurrentProcessingQueueSize" type="xs:long" minOccurs="0"/>
+        <xs:element name="IncomingThroughput" type="xs:double" minOccurs="0"/>
+    </xs:sequence>
+</xs:group>
+
+<xs:complexType name="GeneralSessionsStatData">
+    <xs:annotation>
+        <xs:documentation>Response with statistical information about the current state of FIX Engine
+        </xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="ActiveSessions" type="xs:int"/>
+                <xs:element name="ReconnectingSessions" type="xs:int"/>
+                <xs:element name="AwaitingSessions" type="xs:int"/>
+                <xs:element name="TerminatedNormalSessions" type="xs:int"/>
+                <xs:element name="TerminatedAbnormalSessions" type="xs:int"/>
+                <xs:element name="LastSessionCreation" type="xs:dateTime" minOccurs="0"/>
+                <xs:element name="LastSessionDestruction" type="xs:dateTime" minOccurs="0"/>
+                <xs:element name="MinSessionLifetime" type="xs:long" minOccurs="0"/>
+                <xs:element name="MaxSessionLifetime" type="xs:long" minOccurs="0"/>
+                <xs:element name="NumOfProcessedMessages" type="xs:long" minOccurs="0"/>
+                <xs:element name="NumOfProcessedMessagesByType" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="MessageType" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:long">
+                                            <xs:attribute name="type" type="xs:string"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="NumOfRejectedMessages" type="xs:long" minOccurs="0"/>
+                <xs:element name="Latency" type="xs:double" minOccurs="0"/>
+                <xs:element name="Throughput" type="xs:double" minOccurs="0"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AverageReceivedStatData">
+    <xs:annotation>
+        <xs:documentation>Response with average handling time for received messages</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Version" type="Version"/>
+                <xs:element name="Type" type="xs:string"/>
+                <xs:element name="AverageTime" type="xs:int"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AverageSentStatData">
+    <xs:annotation>
+        <xs:documentation>Response with average handling time for sent messages</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Version" type="Version"/>
+                <xs:element name="Type" type="xs:string"/>
+                <xs:element name="AverageTime" type="xs:int"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AverageValidateStatData">
+    <xs:annotation>
+        <xs:documentation>Response with average validation time for messages</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Version" type="Version"/>
+                <xs:element name="Type" type="xs:string"/>
+                <xs:element name="AverageTime" type="xs:int"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ReceivedStatData">
+    <xs:annotation>
+        <xs:documentation>Response with received message amount</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="ReceivedMessages" type="xs:int"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SentStatData">
+    <xs:annotation>
+        <xs:documentation>Response with sent message amount</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SentMessages" type="xs:int"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ProceedStatData">
+    <xs:annotation>
+        <xs:documentation>Response with proceed message amount</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="ProceedMessages" type="xs:int"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ConnectionParamsData">
+    <xs:annotation>
+        <xs:documentation>Response with connection parameters to engine</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SenderCompID" type="SenderCompID"/>
+                <xs:element name="TargetCompID" type="TargetCompID"/>
+                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+                <xs:element name="Version" type="Version" minOccurs="0"/>
+                <!--ApplVerID is deprecated. Please use Version-->
+                <xs:element name="ApplVerID" type="ApplVerID" minOccurs="0"/>
+                <xs:element name="RemoteHost" type="xs:string"/>
+                <xs:element name="RemotePort" type="xs:int"/>
+                <xs:element name="ExtraSessionParams" type="ExtraSessionParams" minOccurs="0"/>
+                <xs:element name="Backup" type="Backup" minOccurs="0"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="MeasurementPointListData">
+    <xs:annotation>
+        <xs:documentation>Response with list of measurement point ID</xs:documentation>
+        <xs:documentation>Since 2.0.6 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="PointList" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="MeasurementPointStatisticData">
+    <xs:annotation>
+        <xs:documentation>Response with statistical information about the measurement point</xs:documentation>
+        <xs:documentation>Since 2.0.6 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="PointID" type="xs:string"/>
+                <xs:element name="Max" type="xs:long"/>
+                <xs:element name="Min" type="xs:long"/>
+                <xs:element name="Avg" type="xs:long"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="LatencyAlertData">
+    <xs:annotation>
+        <xs:documentation>Notice about excess limit latency</xs:documentation>
+        <xs:documentation>Since 2.0.6 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="PointID" type="xs:string"/>
+                <xs:element name="Key" type="xs:string"/>
+                <xs:element name="Latency" type="xs:long"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+
+<xs:complexType name="ServerStatusData">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="ListenPort" type="xs:string" minOccurs="0"/>
+                <xs:element name="EngineVersion" type="xs:string" minOccurs="0"/>
+                <xs:element name="State" type="ServerState"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ServerEnvData">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Memory" type="xs:long" minOccurs="0"/>
+                <xs:element name="Disk" type="xs:long" minOccurs="0"/>
+                <xs:element name="ThreadCount" type="xs:int" minOccurs="0"/>
+                <xs:element name="CPU" type="xs:double" minOccurs="0"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="DeleteAllData">
+    <xs:annotation>
+        <xs:documentation>Response with number of deleted FIX sessions</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Deleted" type="xs:int"/>
+                <xs:element name="Failed" type="xs:int" minOccurs="0"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="HelpData">
+    <xs:annotation>
+        <xs:documentation>Response with list of supported commands</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="FIXAdminProtocolVersion" type="xs:string"/>
+                <xs:element name="SupportedRequest" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ConfigData">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+               <xs:element name="Config" type="xs:base64Binary"/>
+               <xs:element name="ConfigName" type="xs:string"/>
+           </xs:sequence>
+       </xs:extension>
+   </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionLogData">
+    <xs:annotation>
+        <xs:documentation>Since 1.0 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="InMsgLog" type="xs:string"/>
+                <xs:element name="OutMsgLog" type="xs:string"/>
+                <xs:element name="LogSource" type="LogSource"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CustomProtocolsListData">
+    <xs:annotation>
+        <xs:documentation>The list of supported FIX versions or custom protocols</xs:documentation>
+        <xs:documentation>Deprecated since 3.0 version. Please use FIXProtocolsListData</xs:documentation>
+        <xs:documentation>Since 0.9 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="SupportedProtocol" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Name" type="xs:string"/>
+                            <xs:element name="BaseFIXVersion" type="FIXVersion" minOccurs="0"/>
+                            <xs:element name="BaseApplVerID" type="ApplVerID" minOccurs="0"/>
+                            <xs:element name="AdditionalFields" type="xs:string" minOccurs="0"/>
+                            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+    <xs:complexType name="FIXProtocolsListData">
+        <xs:annotation>
+            <xs:documentation>The list of supported FIX protocols</xs:documentation>
+            <xs:documentation>Since 3.0 version</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResponseData">
+                <xs:sequence>
+                    <xs:element name="SupportedProtocol" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Version" type="Version"/>
+                                <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+<xs:complexType name="BatchLogData">
+    <xs:annotation>
+        <xs:documentation>Batch log information</xs:documentation>
+        <xs:documentation>Since 2.0.11 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Log" type="xs:string"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<!-- TA monitoring data -->
+
+<xs:complexType name="AdaptersListData">
+    <xs:annotation>
+        <xs:documentation>Response with list of adapters and sessions</xs:documentation>
+        <xs:documentation>Since 2.21 version</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+        <xs:extension base="ResponseData">
+            <xs:sequence>
+                <xs:element name="Adapter" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Name" type="xs:string"/>
+                            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                            <xs:element name="DllName" type="xs:string" minOccurs="0"/>
+                            <xs:element name="AdapterProperties" type="AdapterProperties" minOccurs="0"/>
+                            <xs:element name="AdapterSession" type="AdapterSession" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<!-- Abstract message types -->
+
+<xs:complexType name="SessionRequest" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="Request">
+            <xs:sequence>
+                <xs:element name="SenderCompID" type="SenderCompID"/>
+                <xs:element name="TargetCompID" type="TargetCompID"/>
+                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionSubscription" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="SubscriptionRequest">
+            <xs:sequence>
+                <xs:element name="SenderCompID" type="SenderCompID"/>
+                <xs:element name="TargetCompID" type="TargetCompID"/>
+                <xs:element name="SessionQualifier" type="SessionQualifier" minOccurs="0"/>
+            </xs:sequence>
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ServerSessionCommand" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="SessionRequest"/>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="ServerCommand" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="Request"/>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionCommand" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="SessionRequest"/>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="UndefinedCommand" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="SessionRequest"/>
+    </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SubscriptionRequest" abstract="true">
+    <xs:complexContent>
+        <xs:extension base="ServerCommand">
+            <xs:sequence>
+                <xs:element name="SubscriptionRequestType" type="SubscriptionRequestType" minOccurs="0"
+                    default="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Request" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="Message">
+                <xs:sequence>
+                    <xs:element name="ToAgent" type="xs:boolean" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Message" abstract="true">
+        <xs:annotation>
+            <xs:appinfo>
+                <jaxb:class name="Message" implClass="MessageImpl"/>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="RequestID" type="RequestIDType" use="optional"/>
+    </xs:complexType>
+
+    <!-- Property types -->
+
+    <xs:complexType name="ExtraSessionParams">
+        <xs:annotation>
+            <xs:documentation>Extra session parameters</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <!-- Extended -->
+            <xs:element name="SenderSubID" type="xs:string" minOccurs="0"/>
+            <xs:element name="TargetSubID" type="xs:string" minOccurs="0"/>
+            <xs:element name="SenderLocationID" type="xs:string" minOccurs="0"/>
+            <xs:element name="TargetLocationID" type="xs:string" minOccurs="0"/>
+            <xs:element name="HBI" type="xs:int" minOccurs="0"/>
+            <!-- Enabled for initiator only -->
+            <xs:element name="StorageType" type="StorageType" minOccurs="0"/>
+            <xs:element name="MaxMessagesAmountInBunch" type="xs:int" minOccurs="0"/>
+            <xs:element name="EnableMessageRejecting" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="SocketOpPriority" type="SocketOpPriority" minOccurs="0"/>
+            <xs:element name="ForcedReconnect" type="xs:boolean" minOccurs="0"/>
+            <!-- Enabled for initiator only -->
+            <xs:element name="DisableTCPBuffer" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="HandleSeqNumAtLogon" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="ClientType" type="ClientType" minOccurs="0"/>
+            <xs:element name="ReconnectMaxTries" type="xs:int" minOccurs="0"/>
+            <!-- Sequence Numbers -->
+            <xs:element name="InSeqNum" type="xs:long" minOccurs="0"/>
+            <xs:element name="OutSeqNum" type="xs:long" minOccurs="0"/>
+            <xs:element name="ForceSeqNumReset" type="ForceSeqNumReset" minOccurs="0"/>
+            <xs:element name="IntradayLogoutToleranceMode" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="IgnoreSeqNumTooLowAtLogon" type="xs:boolean" minOccurs="0"/>
+            <!-- Security -->
+            <xs:element name="Username" type="xs:string" minOccurs="0"/>
+            <xs:element name="Password" type="xs:string" minOccurs="0"/>
+            <xs:element name="SourceIPAddresses" type="SourceIPAddresses" minOccurs="0"/>
+            <xs:element name="SecurityGroups" type="xs:string" minOccurs="0"/>
+            <xs:element name="HideLogonCredentials" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="MaskedFields" type="xs:string" minOccurs="0"/>
+            <!-- Enabled for acceptor only -->
+            <xs:element name="EncryptMethod" type="EncryptMethod" minOccurs="0"/>
+            <!-- FAST -->
+            <xs:element name="FASTVersion" type="FASTVersion" minOccurs="0"/>
+            <xs:element name="Templates" type="xs:string" minOccurs="0"/>
+            <!-- Custom Logon -->
+            <xs:element name="CustomLogon" type="xs:base64Binary" minOccurs="0"/>
+            <!-- Backup -->
+            <xs:element name="KeepConnectionState" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="EnableAutoSwitchToBackupConnection" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="CyclicSwitchBackupConnection" type="xs:boolean" minOccurs="0"/>
+            <!-- SSL Parameters -->
+            <xs:element name="SSL" type="xs:boolean" minOccurs="0"/>
+            <!-- SSL Parameters enabled for initiator only -->
+            <xs:element name="SSLCheckPrivateKey" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="SSLCertificate" type="xs:string" minOccurs="0"/>
+            <xs:element name="SSLPrivateKey" type="xs:string" minOccurs="0"/>
+            <xs:element name="SSLProtocols" type="xs:string" minOccurs="0"/>
+            <xs:element name="ScheduleName" type="xs:string" minOccurs="0"/>
+            <xs:element name="LogonMessageSessionQualifierTag" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ConfiguredSessionParams">
+        <xs:annotation>
+            <xs:documentation>Configured session parameters</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ConfiguredName" type="xs:string" minOccurs="0"/>
+            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+            <xs:element name="StartTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="TerminateTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="ConnectTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="DisconnectTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="RecreateOnLogout" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="TerminateOnLogout" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="FixEdgeActiveConnection" type="FIXEdgeActiveConnection" minOccurs="0"/>
+            <!--CustomFIXVersion is deprecated. Please use Version-->
+            <xs:element name="CustomFIXVersion" type="xs:string" minOccurs="0"/>
+            <xs:element name="PollInterval" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AdapterProperties">
+        <xs:annotation>
+            <xs:documentation>Adapter Properties</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="AdapterProperty" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Name" type="xs:string"/>
+                        <xs:element name="Value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AdapterSession">
+        <xs:annotation>
+            <xs:documentation>Adapter Session</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="SessionProperties" type="SessionProperties" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SessionProperties">
+        <xs:annotation>
+            <xs:documentation>Session Properties</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="SessionProperty" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Name" type="xs:string"/>
+                        <xs:element name="Value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FIXSessionProperties">
+        <xs:annotation>
+            <xs:documentation>Session Properties</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="Name" type="xs:string"/>
+                    <xs:attribute name="Value" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Backup">
+        <xs:annotation>
+            <xs:documentation>Backup connection options</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="RemoteHost" type="xs:string"/>
+            <xs:element name="RemotePort" type="xs:int"/>
+            <xs:element name="ActiveConnection" type="ActiveConnection" minOccurs="0"/>
+            <xs:element name="ExtraSessionParams" type="ExtraSessionParams" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CalendarParametersType">
+        <xs:annotation>
+            <xs:documentation>Calendar parameters</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="StartTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="TerminateTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="ConnectTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="DisconnectTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="DaysOff" type="xs:string" minOccurs="0"/>
+            <xs:element name="TimeZone" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Map">
+        <xs:sequence>
+            <xs:element name="entry" type="MapEntry" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MapEntry">
+        <xs:sequence>
+            <xs:element name="key" type="xs:string"/>
+            <xs:element name="value" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ResponseData" abstract="true"/>
+
+    <xs:simpleType name="RequestIDType">
+        <xs:annotation>
+            <xs:documentation>Request ID attribute</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:long"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="SenderCompID">
+        <xs:annotation>
+            <xs:documentation>Sender ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="TargetCompID">
+        <xs:annotation>
+            <xs:documentation>Target ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="SessionQualifier">
+        <xs:annotation>
+            <xs:documentation>Session Qualifier</xs:documentation>
+            <xs:documentation>Since 2.24 version</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="Version">
+        <xs:annotation>
+            <xs:documentation>FIX Version</xs:documentation>
+            <xs:documentation>Since 3.0 version</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="ServerVersion">
+        <xs:annotation>
+            <xs:documentation>Since 3.5.0 version</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="FIXVersion">
+        <!--FIXVersion is deprecated. Please use Version-->
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="FIX40"/>
+            <xs:enumeration value="FIX41"/>
+            <xs:enumeration value="FIX42"/>
+            <xs:enumeration value="FIX43"/>
+            <xs:enumeration value="FIX44"/>
+            <xs:enumeration value="FIXT11"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ApplVerID">
+        <!--ApplVerID is deprecated. Please use Version-->
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="FIX40"/>
+            <xs:enumeration value="FIX41"/>
+            <xs:enumeration value="FIX42"/>
+            <xs:enumeration value="FIX43"/>
+            <xs:enumeration value="FIX44"/>
+            <xs:enumeration value="FIX50"/>
+            <xs:enumeration value="FIX50SP1"/>
+            <xs:enumeration value="FIX50SP2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="FASTVersion">
+        <xs:annotation>
+            <xs:documentation>FAST Version</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="SubscriptionRequestType">
+        <xs:restriction base="xs:int">
+            <xs:enumeration value="0">
+                <xs:annotation>
+                    <xs:documentation>Snapshot only</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="1">
+                <xs:annotation>
+                    <xs:documentation>Subscribe with snapshot</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="2">
+                <xs:annotation>
+                    <xs:documentation>Unsubscribe</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="3">
+                <xs:annotation>
+                    <xs:documentation>Subscribe only</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Action">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NEW"/>
+            <xs:enumeration value="DELETED"/>
+            <xs:enumeration value="UPDATED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="SourceIPAddresses">
+        <xs:sequence>
+            <xs:element name="SourceIPAddress" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="SessionRole">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INITIATOR"/>
+            <xs:enumeration value="ACCEPTOR"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="StorageType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TRANSIENT"/>
+            <xs:enumeration value="PERSISTENT"/>
+            <xs:enumeration value="PERSISTENTMM"/>
+            <xs:enumeration value="SPLITPERSISTENT"/>
+            <xs:enumeration value="ORACLE"/>
+            <xs:enumeration value="NULL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="StatusGroup">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DISCONNECTED"/>
+            <xs:enumeration value="CONNECTING"/>
+            <xs:enumeration value="RECONNECTING"/>
+            <xs:enumeration value="ESTABLISHED"/>
+            <xs:enumeration value="PLANNED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ServerState">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STARTED"/>
+            <xs:enumeration value="STOPPED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="BackupState">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PRIMARY"/>
+            <xs:enumeration value="BACKUP"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="EncryptMethod">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NONE"/>
+            <xs:enumeration value="PKCS"/>
+            <xs:enumeration value="DES"/>
+            <xs:enumeration value="PKCS_DES"/>
+            <xs:enumeration value="PGP_DES"/>
+            <xs:enumeration value="PGP_DES_MD5"/>
+            <xs:enumeration value="PEM_DES_MD5"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="SocketOpPriority">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="EVEN"/>
+            <xs:enumeration value="DIRECT_SEND"/>
+            <xs:enumeration value="AGGRESSIVE_SEND"/>
+            <xs:enumeration value="AGGRESSIVE_RECEIVE"/>
+            <xs:enumeration value="AGGRESSIVE_SEND_AND_RECEIVE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ForceSeqNumReset">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ON"/>
+            <xs:enumeration value="ALWAYS"/>
+            <xs:enumeration value="OFF"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ClientType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="GENERIC"/>
+            <xs:enumeration value="CME_ILINK"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="LogSource">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SHARED_FILE"/>
+            <xs:enumeration value="FIXEYE_AGENT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ConfigType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ENGINE"/>
+            <xs:enumeration value="ENGINE_SSL_CERT"/>
+            <xs:enumeration value="FIXEDGE"/>
+            <xs:enumeration value="FIXEDGE_BL"/>
+            <xs:enumeration value="FIXEDGE_PR_KEY"/>
+            <xs:enumeration value="FIXEDGE_SSL_CERT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="View">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STATUS"/>
+            <xs:enumeration value="STATUS_PARAMS"/>
+            <xs:enumeration value="STATUS_PARAMS_STAT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Exclude">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CURRENT_ADMIN_SESSION"/>
+            <xs:enumeration value="ALL_ADMIN_SESSIONS"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ResultCode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="0">
+                <xs:annotation>
+                    <xs:documentation>Success</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="1">
+                <xs:annotation>
+                    <xs:documentation>Not implemented</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="2">
+                <xs:annotation>
+                    <xs:documentation>Not enough parameters</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="3">
+                <xs:annotation>
+                    <xs:documentation>Unknown session</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="4">
+                <xs:annotation>
+                    <xs:documentation>Incorrect value</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="5">
+                <xs:annotation>
+                    <xs:documentation>Engine exception</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="6">
+                <xs:annotation>
+                    <xs:documentation>Unknown error</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="7">
+                <xs:annotation>
+                    <xs:documentation>Operation rejected</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="8">
+                <xs:annotation>
+                    <xs:documentation>Conditions lack</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="9">
+                <xs:annotation>
+                    <xs:documentation>Invalid argument</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="10">
+                <xs:annotation>
+                    <xs:documentation>Logic error</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="11">
+                <xs:annotation>
+                    <xs:documentation>Runtime error</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FIXEdgeActiveConnection">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PRIMARY"/>
+            <xs:enumeration value="BACKUP"/>
+            <xs:enumeration value="RESTORE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ActiveConnection">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PRIMARY"/>
+            <xs:enumeration value="BACKUP"/>
+            <xs:enumeration value="RESTORE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="YNType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Y"/>
+            <xs:enumeration value="N"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ComponentNameType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BusinessLayer"/>
+            <xs:enumeration value="FIXEndpoint"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

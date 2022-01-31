@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.b2bits.com/FIXProtocol"
+           xmlns="http://www.b2bits.com/FIXProtocol"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
+    <!-- FIX Protocol specification dictionary -->
+    <xs:complexType name="fixdic">
+        <xs:sequence>
+            <xs:element name="typelist" type="typelist" minOccurs="0"/>
+            <xs:element name="fielddic" type="fielddic" minOccurs="0"/>
+            <xs:element name="msgdic" type="msgdic" minOccurs="0"/>
+            <xs:element name="descr" type="descr" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="fixversion" type="fixversion_t" use="required"/>
+        <xs:attribute name="title" type="xs:string"/>
+        <xs:attribute name="version" type="xs:string"/>
+        <xs:attribute name="date" type="xs:string"/>
+    </xs:complexType>
+    <!-- FIX version and EP number -->
+    <xs:simpleType name="fixversion_t">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="4.0"/>
+            <xs:enumeration value="4.1"/>
+            <xs:enumeration value="4.2"/>
+            <xs:enumeration value="4.3"/>
+            <xs:enumeration value="4.4"/>
+            <xs:enumeration value="5.0"/>
+            <xs:enumeration value="5.0SP1"/>
+            <xs:enumeration value="5.0SP2"/>
+            <xs:enumeration value="T1.1"/>
+            <xs:enumeration value="5.0SP2EP"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="epnum_t">
+        <xs:restriction base="xs:positiveInteger"/>
+    </xs:simpleType>
+    <!-- Attribute group for revisions (to specify where entity was added/updated/deprecated) -->
+    <xs:attributeGroup name="revisionattr">
+        <xs:attribute name="added" type="fixversion_t"/>
+        <xs:attribute name="addedep" type="epnum_t"/>
+        <xs:attribute name="deprecated" type="fixversion_t"/>
+        <xs:attribute name="deprecatedep" type="epnum_t"/>
+        <xs:attribute name="updated" type="fixversion_t"/>
+        <xs:attribute name="updatedep" type="epnum_t"/>
+    </xs:attributeGroup>
+    <!-- Data type definition list -->
+    <xs:complexType name="typelist">
+        <xs:sequence>
+            <xs:element name="typedef" type="typedef" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- The data type definition -->
+    <xs:complexType name="typedef">
+        <xs:sequence>
+            <xs:element name="descr" type="descr" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="extends" type="xs:string"/>
+        <!-- Specifies either type is multiple value type and type of the underlying value -->
+        <xs:attribute name="valuetype" type="xs:string"/>
+        <xs:attribute name="displayname" type="xs:string"/>
+        <xs:attributeGroup ref="revisionattr"/>
+    </xs:complexType>
+    <!-- Field definition list -->
+    <xs:complexType name="fielddic">
+        <xs:sequence>
+            <xs:element name="valblockdef" type="valblockdef" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="fielddef" type="fielddef" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Values block definition for values list for using in several field definitions -->
+    <xs:complexType name="valblockdef">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="item" type="item"/>
+                <xs:element name="range" type="range"/>
+                <xs:element name="multi" type="multi"/>
+            </xs:choice>
+            <xs:element name="descr" type="descr" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+    </xs:complexType>
+    <!-- The field definition (lenfield only for fielddef with type="data" or type="XMLData") -->
+    <xs:complexType name="fielddef">
+        <xs:sequence>
+            <xs:element name="alias" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="item" type="item"/>
+                <xs:element name="range" type="range"/>
+                <xs:element name="multi" type="multi"/>
+                <xs:element name="valblock" type="valblock"/>
+            </xs:choice>
+            <xs:element name="descr" type="descr" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="tag" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="transport">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="lenfield" type="xs:positiveInteger"/>
+        <xs:attributeGroup ref="revisionattr"/>
+    </xs:complexType>
+    <!-- Allowed value -->
+    <xs:complexType name="item" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="comment">
+                <xs:attribute name="val" type="xs:string" use="required"/>
+                <xs:attribute name="id" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- Range of allowed values -->
+    <xs:complexType name="range" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="comment">
+                <xs:attribute name="minval" type="xs:string" use="required"/>
+                <xs:attribute name="maxval" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- Multivalue string values -->
+    <xs:complexType name="multi">
+        <xs:sequence>
+            <xs:element name="item" type="item" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Reference to the values block -->
+    <xs:complexType name="valblock">
+        <xs:attribute name="idref" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!-- Message definition list -->
+    <xs:complexType name="msgdic">
+        <xs:sequence>
+            <xs:element name="blockdef" type="blockdef" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="msgdef" type="msgdef" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- The message definition -->
+    <xs:complexType name="msgdef">
+        <xs:sequence>
+            <xs:element name="alias" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="field" type="field"/>
+                <xs:element name="block" type="block"/>
+                <xs:element name="group" type="group"/>
+            </xs:choice>
+            <xs:element name="descr" type="descr" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="msgtype" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="admin">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attributeGroup ref="revisionattr"/>
+    </xs:complexType>
+    <!-- Component block definition -->
+    <xs:complexType name="blockdef">
+        <xs:sequence>
+            <xs:element name="alias" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="field" type="field"/>
+                <xs:element name="block" type="block"/>
+                <xs:element name="group" type="group"/>
+            </xs:choice>
+            <xs:element name="descr" type="descr" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="transport">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attributeGroup ref="revisionattr"/>
+    </xs:complexType>
+    <!-- Repeating group definition -->
+    <xs:complexType name="group">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="field" type="field"/>
+            <xs:element name="block" type="block"/>
+            <xs:element name="group" type="group"/>
+        </xs:choice>
+        <xs:attribute name="nofield" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="startfield" type="xs:positiveInteger" use="required"/>
+    </xs:complexType>
+    <!-- The component used in message, group -->
+    <xs:complexType name="block">
+        <xs:sequence>
+            <xs:element name="comment" type="comment" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="idref" type="xs:string" use="required"/>
+        <xs:attribute name="req">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="condreq" type="xs:string"/>
+    </xs:complexType>
+    <!-- Field used in message, block or group -->
+    <xs:complexType name="field">
+        <xs:sequence>
+            <xs:element name="comment" type="comment" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="tag" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="req">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="Y"/>
+                    <xs:enumeration value="N"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="condreq" type="xs:string"/>
+    </xs:complexType>
+    <!-- Description of valblock, field, message, compoment block definitions -->
+    <xs:complexType name="descr" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded" >
+            <xs:choice minOccurs="0">
+                <xs:element name="p" type="descr"/>
+                <xs:element name="a" type="a"/>
+                <xs:element name="fieldref" type="fieldref"/>
+                <xs:element name="blockref" type="blockref"/>
+                <xs:element name="msgref" type="msgref"/>
+                <xs:element name="img" type="img"/>
+                <xs:element name="pre" type="pre"/>
+                <xs:element name="ul" type="ul"/>
+                <xs:element name="ol" type="ol"/>
+                <xs:element name="dl" type="dl"/>
+                <xs:element name="table" type="table"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Short comment(s) used for fields or component blocks references -->
+    <xs:complexType name="comment" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded" >
+            <xs:choice minOccurs="0">
+                <xs:element name="fieldref" type="fieldref"/>
+                <xs:element name="blockref" type="blockref"/>
+                <xs:element name="msgref" type="msgref"/>
+                <xs:element name="a" type="a"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- URL reference -->
+    <xs:complexType name="a" mixed="true">
+        <xs:attribute name="href" type="xs:anyURI" use="required"/>
+        <xs:attribute name="target" type="xs:string"/>
+    </xs:complexType>
+    <!-- Field reference -->
+    <xs:complexType name="fieldref" mixed="true">
+        <xs:attribute name="tag" type="xs:positiveInteger" use="required"/>
+    </xs:complexType>
+    <!-- Component block reference -->
+    <xs:complexType name="blockref" mixed="true">
+        <xs:attribute name="idref" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!-- Message reference -->
+    <xs:complexType name="msgref" mixed="true">
+        <xs:attribute name="msgtype" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!-- Image object (typically an inlined image) -->
+    <xs:complexType name="img">
+        <xs:attribute name="src" type="xs:anyURI" use="required"/>
+    </xs:complexType>
+    <!-- Preformatted text -->
+    <xs:complexType name="pre" mixed="true">
+        <xs:attribute name="space" type="xs:string" default="preserve"/>
+    </xs:complexType>
+    <!-- Unordered list -->
+    <xs:complexType name="ul">
+        <xs:sequence>
+            <xs:element name="li" type="descr" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Ordered list -->
+    <xs:complexType name="ol">
+        <xs:sequence>
+            <xs:element name="li" type="descr" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Definition list -->
+    <xs:complexType name="dl">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="dt" type="descr"/>
+            <xs:element name="dd" type="descr"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Table -->
+    <xs:complexType name="table">
+        <xs:sequence>
+            <xs:element name="caption" type="xs:string" minOccurs="0"/>
+            <xs:element name="tr" type="tr" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- The table row -->
+    <xs:complexType name="tr">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="th" type="th"/>
+            <xs:element name="td" type="td"/>
+        </xs:choice>
+    </xs:complexType>
+    <!-- The table row header element -->
+    <xs:complexType name="th" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:attribute name="colspan"/>
+                <xs:attribute name="rowspan"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- The table row description -->
+    <xs:complexType name="td" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:attribute name="colspan"/>
+                <xs:attribute name="rowspan"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- Header -->
+    <xs:complexType name="h1" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="h2" type="h2"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="h2" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="h3" type="h3"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="h3" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="h4" type="h4"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="h4" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="h5" type="h5"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="h5" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="descr">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="h6" type="descr"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

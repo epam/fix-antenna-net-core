@@ -1,0 +1,10 @@
+﻿<Project>
+	<Target Name="GenerateConstants" BeforeTargets="BeforeBuild">
+		<Exec Command="dotnet build &quot;../Tools/TagsGen/Epam.FixAntenna.TagsGen.csproj&quot; -c $(Configuration)"/>
+		<Exec Command="dotnet run -c $(Configuration) --no-build --project &quot;../Tools/TagsGen/Epam.FixAntenna.TagsGen.csproj&quot; -- -y -o Generated -i &quot;../NetCore/Dictionaries/fixdic40.xml&quot; &quot;../NetCore/Dictionaries/fixdic41.xml&quot; &quot;../NetCore/Dictionaries/fixdic42.xml&quot; &quot;../NetCore/Dictionaries/fixdic43.xml&quot; &quot;../NetCore/Dictionaries/fixdic44.xml&quot; &quot;../NetCore/Dictionaries/fixdic50.xml&quot; &quot;../NetCore/Dictionaries/fixdic50sp1.xml&quot; &quot;../NetCore/Dictionaries/fixdic50sp2.xml&quot; &quot;../NetCore/Dictionaries/fixdict11.xml&quot; &quot;../NetCore/Dictionaries/fixdict11ep.xml&quot; -n Epam.FixAntenna.Constants" />
+		<ItemGroup>
+			<Compile Include="**/*$(DefaultLanguageSourceExtension)"
+							 Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**;@(Compile)" />
+		</ItemGroup>
+	</Target>
+</Project>

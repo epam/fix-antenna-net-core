@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../Engine/Entities/definitions.inc">
+        %content; ]>
+
+<cases>
+    <case name="Normal.def">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="AcceptorSocketTransport" port="&PORT;">
+            &SESSION_UP;
+            <expect>
+                8=FIX\.4\.2#9=\d{1,3}#35=A#34=1#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#56=Tester#98=0#108=5#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.2#9=123#35=A#34=1#49=Tester#52=20031027-14:29:11#56=Engine#98=0#108=5#10=126#</send>
+
+            <send>8=FIX.4.2#9=123#35=5#34=2#49=Tester#52=20031027-14:29:11#56=Engine#10=126#</send>
+
+            <expect>8=FIX\.4\.2#9=\d{1,3}#35=5#34=2#49=Engine#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#56=Tester#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+
+    </case>
+</cases>

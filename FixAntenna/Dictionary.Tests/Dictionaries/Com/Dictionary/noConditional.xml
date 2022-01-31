@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fixdic SYSTEM "fixdic.dtd">
+<fixdic id="FIX40" fixversion="4.0" title="FIX 4.0 additional" version="1.5.7" date="2011-04-05">
+    <msgdic>
+        <msgdef msgtype="0" name="Heartbeat" admin="Y">
+            <field tag="1" req="N"/>
+        </msgdef>
+    </msgdic>
+</fixdic>

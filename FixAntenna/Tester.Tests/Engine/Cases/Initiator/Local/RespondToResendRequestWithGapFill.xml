@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+
+
+<!--- This is scenario to check engine do logoff and reconnect if receive no answer after 2 test requests -->
+<cases>
+    <case name="Respond to Resend Request With Sequence Reset - Gap Fill">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            &SEND_LOGON;
+            &RECEIVE_LOGON;
+            <!-- Exchange with test request to ensure sequences is ok-->
+            <send>8=FIX.4.2#9=57#35=1#49=&ME;#56=&YOU;#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=&YOU;#56=&ME;#34=2#112=test01#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+            <!-- Send resend request (expect gap fill)-->
+            <send>8=FIX.4.2#9=57#35=2#49=&ME;#56=&YOU;#34=3#52=20031027-14:29:11#7=2#16=0#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=4#49=&YOU;#56=&ME;#34=2#52=&DATETIMEMS;#122=&DATETIMEMS;#43=Y#36=3#123=Y#10=\d{3}#</expect>
+
+            <!-- Exchange with test request to ensure sequences is ok-->
+            <send>8=FIX.4.2#9=57#35=1#49=&ME;#56=&YOU;#34=4#52=20031027-14:29:11#112=test01#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=0#49=&YOU;#56=&ME;#34=3#112=test01#52=&DATETIMEMS;#10=\d{3}#</expect>
+            <!-- logout -->
+            <send>8=FIX.4.2#9=57#35=5#49=&ME;#56=&YOU;#34=5#52=20031027-14:29:11#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=&YOU;#56=&ME;#34=4#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

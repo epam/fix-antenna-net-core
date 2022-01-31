@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task className="FixEngine.SessionThrowErrorUpTask">
+    <param name="FixVersion">&FIX_VERSION;</param>
+    <param name="host">&HOST;</param>
+    <param name="port">&PORT;</param>
+    <param name="SenderCompID">Engine</param>
+    <param name="TargetCompID">Tester</param>
+    <param name="sessionIdName">sessionId</param>
+    <param name="trows">&THROW_TIMES;</param>
+</task>

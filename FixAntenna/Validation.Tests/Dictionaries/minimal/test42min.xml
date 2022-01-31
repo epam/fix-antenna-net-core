@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fixdic fixversion="4.2" title="Nyse Arca FIX 4.2" date="20101209">
+			<fielddic>
+				<fielddef tag="1" name="Field1" type="String"/>
+                <fielddef tag="2" name="Field2" type="String"/>
+			</fielddic>
+			<msgdic>
+				<msgdef msgtype="A" name="Simplest Message">
+					<field tag="1" req="N"/>
+                    <field tag="2" condreq="existtags(T$1)"/>
+				</msgdef>
+			</msgdic>
+		</fixdic>		

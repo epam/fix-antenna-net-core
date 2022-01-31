@@ -1,0 +1,1676 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fixdic xmlns="http://www.b2bits.com/FIXProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.b2bits.com/FIXProtocol fixdic.xsd"
+        id="FIXT11EP" fixversion="T1.1" title="FIXT 1.1 EP 216" version="1.5.54" date="2017-11-29">
+    <typelist>
+        <typedef type="int">
+            <descr>
+                <p>Sequence of digits without commas or decimals and optional sign character (ASCII
+          characters "-" and "0" - "9" ). The sign character utilizes one byte (i.e. positive int is
+          "99999" while negative int is "-99999"). </p>
+                <p>Note that int values may contain leading zeros
+          (e.g. "00023" = "23").</p>
+                <p>Examples: 723 in field 21 would be mapped int as |21=723|, -723 in
+          field 12 would be mapped int as |12=-723|.</p>
+            </descr>
+        </typedef>
+        <typedef type="Length" extends="int">
+            <descr>
+                <p>Int field (see definition of "int" above) representing the length in bytes. Value must be positive.</p>
+            </descr>
+        </typedef>
+        <typedef type="NumInGroup" extends="int">
+            <descr>
+                <p>Int field (see definition of "int" above) representing the number of entries in a
+          repeating group. Value must be positive.</p>
+            </descr>
+        </typedef>
+        <typedef type="SeqNum" extends="int">
+            <descr>
+                <p>Int field (see definition of "int" above) representing a message sequence number. Value
+          must be positive.</p>
+            </descr>
+        </typedef>
+        <typedef type="TagNum" extends="int">
+            <descr>
+                <p>Int field (see definition of "int" above) representing a field's tag number when using
+          FIX "Tag=Value" syntax. Value must be positive and may not contain leading zeros.</p>
+            </descr>
+        </typedef>
+        <typedef type="DayOfMonth" extends="int">
+            <descr>
+                <p>int field (see definition of "int" above) representing a day during a particular month
+          (values 1-31).</p>
+            </descr>
+        </typedef>
+        <typedef type="float">
+            <descr>
+                <p>Sequence of digits with optional decimal point and sign character (ASCII characters "-",
+          "0" - "9" and "."); the absence of the decimal point within the string will be interpreted
+          as the float representation of an integer value. All float fields must accommodate up to
+          fifteen significant digits. The number of decimal places used should be a factor of
+          business/market needs and mutual agreement between counterparties. Note that float values may contain leading zeros (e.g. "00023.23" = "23.23") and may
+          contain or omit trailing zeros after the decimal point (e.g. "23.0" = "23.0000" = "23" = "23.").</p>
+                <p>Note that fields which are derived from float may contain negative values unless explicitly specified otherwise.
+          </p>
+            </descr>
+        </typedef>
+        <typedef type="Qty" extends="float">
+            <descr>
+                <p>Float field (see definition of "float" above) capable of storing either a whole number
+          (no decimal places) of "shares" (securities denominated in whole units) or a decimal value
+          containing decimal places for non-share quantity asset classes (securities denominated in
+          fractional units).</p>
+            </descr>
+        </typedef>
+        <typedef type="Price" extends="float">
+            <descr>
+                <p>Float field (see definition of "float" above) representing a price. Note the number of
+          decimal places may vary. For certain asset classes prices may be negative values. For
+          example, options strategies can be negative under certain market conditions. Refer to
+          Volume 7: FIX Usage by Product for asset classes that support negative price values.</p>
+            </descr>
+        </typedef>
+        <typedef type="PriceOffset" extends="float">
+            <descr>
+                <p>Float field (see definition of "float" above) representing a price offset, which can be
+          mathematically added to a "Price". Note the number of decimal places may vary and some
+          fields such as LastForwardPoints may be negative.</p>
+            </descr>
+        </typedef>
+        <typedef type="Amt" extends="float">
+            <descr>
+                <p>Float field (see definition of "float" above) typically representing a Price times a Qty.</p>
+            </descr>
+        </typedef>
+        <typedef type="Percentage" extends="float">
+            <descr>
+                <p>Float field (see definition of "float" above) representing a percentage (e.g. .05
+          represents 5% and .9525 represents 95.25%). Note the number of decimal places may vary.</p>
+            </descr>
+        </typedef>
+        <typedef type="char">
+            <descr>
+                <p>Single character value, can include any alphanumeric character or punctuation except the
+          delimiter. All char fields are case sensitive (i.e. m != M).</p>
+            </descr>
+        </typedef>
+        <typedef type="Boolean" extends="char">
+            <descr>
+                <p>Char field (see definition of "char" above) containing one of two values: 'Y' = True/Yes,
+          'N' = False/No.</p>
+            </descr>
+        </typedef>
+        <typedef type="String">
+            <descr>
+                <p>Alpha-numeric free format strings, can include any character or punctuation except the
+          delimiter. All char fields are case sensitive (i.e. morstatt != Morstatt).</p>
+            </descr>
+        </typedef>
+        <typedef type="MultipleCharValue" extends="String" valuetype="char">
+            <descr>
+                <p>String field (see definition of "String" above) containing one or more SINGLE character space delimited values. </p>
+            </descr>
+        </typedef>
+        <typedef type="MultipleValueString" extends="String" valuetype="String">
+            <descr>
+                <p>String field (see definition of "String" above) containing one or more MULTIPLE character space delimited values. </p>
+            </descr>
+        </typedef>
+        <typedef type="Country" extends="String">
+            <descr>
+                <p>String field (see definition of "String" above) representing a country using ISO 3166
+         Country code (2 character) values.</p>
+                <p>Valid values: see "<a href="../appendices/appendix_6-b.html">Appendix 6-B  -  FIX Fields Based Upon Other Standards</a>"</p>
+            </descr>
+        </typedef>
+        <typedef type="Currency" extends="String">
+            <descr>
+                <p>String field (see definition of "String" above) representing a currency type using ISO
+          4217 Currency code (3 character) values.</p>
+                <p>Valid values: see "<a href="../appendices/appendix_6-a.html">Appendix 6-A  - Currency Codes - ISO 4217 Currency codes</a>"</p>
+            </descr>
+        </typedef>
+        <typedef type="Exchange" extends="String">
+            <descr>
+                <p>String field (see definition of "String" above) representing a market or exchange using</p>
+                <p>Valid values: see "<a href="../appendices/appendix_6-c.html">Appendix 6-C  -  Exchange Codes - ISO 10383 Market Identifier Code (MIC)</a>"</p>
+            </descr>
+        </typedef>
+        <typedef type="month-year" extends="String">
+            <descr>
+                <p>String field representing month of a year. An optional day of the month
+          can be appended or an optional week code. </p>
+                <p>Valid formats: YYYYMM YYYYMMDD YYYYMMWW. Valid
+          values: YYYY = 0000-9999, MM = 01-12, DD = 01-31, WW = w1, w2, w3, w4, w5.</p>
+            </descr>
+        </typedef>
+        <typedef type="UTCTimestamp" extends="String">
+            <descr>
+                <p>Time/date combination represented in UTC (Universal Time Coordinated, also known as
+          "GMT") in either YYYYMMDD-HH:MM:SS (whole seconds) or YYYYMMDD-HH:MM:SS.sss (milliseconds)
+          format, colons, dash, and period required.</p>
+                <p>Valid values: YYYY = 0000-9999, MM = 01-12, DD
+          = 01-31, HH = 00-23, MM = 00-59, SS = 00-5960 (60 only if UTC leap second) (without
+          milliseconds). YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS =
+          00-5960 (60 only if UTC leap second), sss=000-999 (indicating milliseconds). </p>
+                <p>Leap Seconds:
+          Note that UTC includes corrections for leap seconds, which are inserted to account for
+          slowing of the rotation of the earth. Leap second insertion is declared by the
+          International Earth Rotation Service (IERS) and has, since 1972, only occurred on the
+          night of Dec. 31 or Jun 30. The IERS considers March 31 and September 30 as secondary
+          dates for leap second insertion, but has never utilized these dates. During a leap second
+          insertion, a UTCTimestamp field may read "19981231-23:59:59", "19981231-23:59:60",
+          "19990101-00:00:00". (see <a href="http://tycho.usno.navy.mil/leapsec.html">http://tycho.usno.navy.mil/leapsec.html</a>)</p>
+            </descr>
+        </typedef>
+        <typedef type="UTCTimeOnly" extends="String">
+            <descr>
+                <p>Time-only represented in UTC (Universal Time Coordinated, also known as "GMT") in either
+          HH:MM:SS (whole seconds) or HH:MM:SS.sss (milliseconds) format, colons, and period
+          required. This special-purpose field is paired with UTCDateOnly to form a proper
+          UTCTimestamp for bandwidth-sensitive messages. </p>
+                <p>Valid values: HH = 00-23, MM = 00-59, SS =
+          00-5960 (60 only if UTC leap second) (without milliseconds). HH = 00-23, MM = 00-59, SS =
+          00-5960 (60 only if UTC leap second), sss=000-999 (indicating milliseconds).</p>
+            </descr>
+        </typedef>
+        <typedef type="UTCDateOnly" extends="String">
+            <descr>
+                <p>Date represented in UTC (Universal Time Coordinated, also known as "GMT") in YYYYMMDD
+          format. This special-purpose field is paired with UTCTimeOnly to form a proper
+          UTCTimestamp for bandwidth-sensitive messages. </p>
+                <p>Valid values: YYYY = 0000-9999, MM = 01-12,
+          DD = 01-31.</p>
+            </descr>
+        </typedef>
+        <typedef type="LocalMktDate" extends="String">
+            <descr>
+                <p>Date of Local Market (vs. UTC) in YYYYMMDD format. This is the "normal" date field used
+          by the FIX protocol. </p>
+                <p>Valid values: YYYY = 0000-9999, MM = 01-12, DD = 01-31.</p>
+            </descr>
+        </typedef>
+        <typedef type="TZTimeOnly" extends="String">
+            <descr>
+                <p>The time represented based on ISO 8601.  This is the time with a UTC offset to allow identification of local time and timezone of that time.
+            Format is HH:MM[:SS][.sss][Z | [ + | - hh[:mm]]] where HH = 00-23 hours, MM = 00-59 minutes, SS = 00-59 seconds, sss = milliseconds, hh = 01-12 offset hours, mm = 00-59 offset minutes.
+            </p>
+                <p>Example:  07:39Z is 07:39 UTC
+            </p>
+                <p>Example:  02:39-05 is five hours behind UTC, thus Eastern Time
+            </p>
+                <p>Example:  15:39+08 is eight hours ahead of UTC, Hong Kong/Singapore time
+            </p>
+                <p>Example:  13:09+05:30 is 5.5 hours ahead of UTC, India time</p>
+            </descr>
+        </typedef>
+        <typedef type="TZTimestamp" extends="String">
+            <descr>
+                <p>The time/date combination representing local time with an offset to UTC to allow identification of local time and timezone offset of that time.  The representation is based on ISO 8601.
+            Format is YYYYMMDD-HH:MM:SS[.sss][Z | [ + | - hh[:mm]]] where 
+            YYYY = 0000 to 9999, MM = 01-12, DD = 01-31
+            HH = 00-23 hours, MM = 00-59 minutes, SS = 00-59 seconds, sss = milliseconds, hh = 01-12 offset hours, mm = 00-59 offset minutes
+            </p>
+                <p>Example:  20060901-07:39Z is 07:39 UTC on 1st of September 2006
+            </p>
+                <p>Example:  20060901-02:39-05 is five hours behind UTC, thus Eastern Time on 1st of September 2006
+            </p>
+                <p>Example:  20060901-15:39+08 is eight hours ahead of UTC, Hong Kong/Singapore time on 1st of September 2006
+            </p>
+                <p>Example:  20060901-13:09+05:30 is 5.5 hours ahead of UTC, India time on 1st of September 2006</p>
+            </descr>
+        </typedef>
+        <typedef type="data">
+            <descr>
+                <p>Raw data with no format or content restrictions. Data fields are always immediately
+          preceded by a length field. The length field should specify the number of bytes of the
+          value of the data field (up to but not including the terminating SOH). Caution: the value
+          of one of these fields may contain the delimiter (SOH) character. Note that the value
+          specified for this field should be followed by the delimiter (SOH) character as all fields
+          are terminated with an "SOH".</p>
+            </descr>
+        </typedef>
+        <typedef type="Pattern">
+            <descr>
+                <p>A "pattern" data type is used to build on and provide some restrictions on what is allowed as valid values in fields that uses a base FIX data type and a pattern data type.  The universe of allowable valid values for the field would then be the union of the base set of valid values and what is defined by the pattern data type.  The pattern data type used by the field will retain its base FIX data type (e.g. String, int, char).
+        </p>
+            </descr>
+        </typedef>
+        <typedef type="Tenor" extends="Pattern">
+            <descr>
+                <p>The Tenor pattern is used to allow the expression of FX standard tenors in addition to the base valid enumerations defined for the field that uses this pattern data type.  This pattern data type is defined as follows:
+</p>
+                <p>Dx = FX tenor expression for "days", e.g. "D5" to express 5 days, where "x" is any integer &gt; 0
+</p>
+                <p>Mx = FX tenor expression for "months", e.g. "M3" to express 3 months, where "x" is any integer &gt; 0
+</p>
+                <p>Wx = FX tenor expression for "weeks", e.g. "W13" to express 13 weeks, where "x" is any integer &gt; 0
+</p>
+                <p>Yx = FX tenor expression for "years", e.g. "Y1" to express 1 year, where "x" is any integer &gt; 0
+</p>
+            </descr>
+        </typedef>
+        <typedef type="Reserved100Plus" extends="Pattern">
+            <descr>
+                <p>The Reserved100Plus pattern is used to allow additional billaterally agreed upon enumerations to be defined for the field by using enumeration values starting at "100" and above.
+            </p>
+            </descr>
+        </typedef>
+        <typedef type="Reserved1000Plus" extends="Pattern">
+            <descr>
+                <p>The Reserved1000Plus pattern is used to allow additional billaterally agreed upon enumerations to be defined for the field by using enumeration values starting at "1000" and above.
+            </p>
+            </descr>
+        </typedef>
+        <typedef type="Reserved4000Plus" extends="Pattern">
+            <descr>
+                <p>The Reserved4000Plus pattern is used to allow additional billaterally agreed upon enumerations to be defined for the field by using enumeration values starting at "4000" and above.
+            </p>
+            </descr>
+        </typedef>
+    </typelist>
+    <fielddic>
+        <fielddef tag="7" name="BeginSeqNo" type="SeqNum">
+            <descr>
+                <p>Message sequence number of first message in range to be resent</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="8" name="BeginString" type="String">
+            <item val="FIXT.1.1" id="FIXT11"/>
+            <descr>
+                <p>Identifies beginning of new message and protocol version.  ALWAYS FIRST FIELD IN MESSAGE. (Always unencrypted)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="9" name="BodyLength" type="Length">
+            <descr>
+                <p>Message length, in bytes, is verified by counting the number of characters in the message following the <fieldref tag="9">BodyLength</fieldref> field up to, and including, the delimiter immediately preceding the <fieldref tag="10">CheckSum</fieldref> field.</p>
+				<p>ALWAYS SECOND FIELD IN MESSAGE. (Always unencrypted)</p>
+				<p>For example, for message 8=FIX 4.4^9=5^35=0^10=10^, the BodyLength is 5 for 35=0^</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="10" name="CheckSum" type="String">
+            <descr>
+                <p>Three byte, simple checksum  (see Volume 2: "CheckSum Calculation" for description).  ALWAYS LAST FIELD IN MESSAGE; i.e. serves, with the trailing &lt;SOH&gt;, as the end-of-message delimiter.  Always defined as three characters. (Always unencrypted)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="16" name="EndSeqNo" type="SeqNum">
+            <descr>
+                <p>"Message sequence number of last message in range to be resent.  If request is for a single message <fieldref tag="7">BeginSeqNo</fieldref>= EndSeqNo.  If request is for all messages subsequent to a particular message, EndSeqNo = "0" (representing infinity)."</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="34" name="MsgSeqNum" type="SeqNum">
+            <descr>
+                <p>Integer message sequence number.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="35" name="MsgType" type="String">
+			<item val="0" id="HEARTBEAT">Heartbeat</item>
+			<item val="1" id="TEST_REQUEST">Test Request</item>
+			<item val="2" id="RESEND_REQUEST">Resend Request</item>
+			<item val="3" id="REJECT">Reject</item>
+			<item val="4" id="SEQUENCE_RESET">Sequence Reset</item>
+			<item val="5" id="LOGOUT">Logout</item>
+			<item val="6" id="IOI">Indication of Interest</item>
+			<item val="7" id="ADVERTISEMENT">Advertisement</item>
+			<item val="8" id="EXECUTION_REPORT">Execution Report</item>
+			<item val="9" id="ORDER_CANCEL_REJECT">Order Cancel Reject</item>
+			<item val="A" id="LOGON">Logon</item>
+			<item val="B" id="NEWS">News</item>
+			<item val="C" id="EMAIL">Email</item>
+			<item val="D" id="NEW_ORDER_SINGLE">New Order - Single</item>
+			<item val="E" id="NEW_ORDER_LIST">New Order - List</item>
+			<item val="F" id="ORDER_CANCEL_REQUEST">Order Cancel Request</item>
+			<item val="G" id="ORDER_REPLACE_REQUEST">Order Cancel/Replace Request</item>
+			<item val="H" id="ORDER_STATUS_REQUEST">Order Status Request</item>
+			<item val="J" id="ALLOCATION">Allocation Instruction</item>
+			<item val="K" id="LIST_CANCEL_REQUEST">List Cancel Request</item>
+			<item val="L" id="LIST_EXECUTE">List Execute</item>
+			<item val="M" id="LIST_STATUS_REQUEST">List Status Request</item>
+			<item val="N" id="LIST_STATUS">List Status</item>
+			<item val="P" id="ALLOCATION_ACK">Allocation Instruction Ack</item>
+			<item val="Q" id="DONT_KNOW_TRADE">Don't Know Trade</item>
+			<item val="R" id="QUOTE_REQUEST">Quote Request</item>
+			<item val="S" id="QUOTE">Quote</item>
+			<item val="T" id="SETTLEMENT_INSTRUCTIONS">Settlement Instructions</item>
+			<item val="V" id="MARKET_DATA_REQUEST">Market Data Request</item>
+			<item val="W" id="MARKET_DATA_SNAPSHOT">Market Data - Snapshot/Full Refresh</item>
+			<item val="X" id="MARKET_DATA_UPDATE">Market Data - Incremental Refresh</item>
+			<item val="Y" id="MARKET_DATA_REQUEST_REJECT">Market Data Request Reject</item>
+			<item val="Z" id="QUOTE_CANCEL">Quote Cancel</item>
+			<item val="a" id="QUOTE_STATUS_REQUEST">Quote Status Request</item>
+			<item val="b" id="QUOTE_ACK">Mass Quote Acknowledgement</item>
+			<item val="c" id="SECURITY_DEFINITION_REQUEST">Security Definition Request</item>
+			<item val="d" id="SECURITY_DEFINITION">Security Definition</item>
+			<item val="e" id="SECURITY_STATUS_REQUEST">Security Status Request</item>
+			<item val="f" id="SECURITY_STATUS">Security Status</item>
+			<item val="g" id="TRADING_SESSION_STATUS_REQUEST">Trading Session Status Request</item>
+			<item val="h" id="TRADING_SESSION_STATUS">Trading Session Status</item>
+			<item val="i" id="MASS_QUOTE">Mass Quote</item>
+			<item val="j" id="BUSINESS_MESSAGE_REJECT">Business Message Reject</item>
+			<item val="k" id="BID_REQUEST">Bid Request</item>
+			<item val="l" id="BID_RESPONSE">Bid Response</item>
+			<item val="m" id="LIST_STRIKE_PRICE">List Strike Price</item>
+			<item val="n" id="XML_MESSAGE">XML message</item>
+			<item val="o" id="REGISTRATION_INSTRUCTIONS">Registration Instructions</item>
+			<item val="p" id="REGISTRATION_INSTRUCTIONS_RESPONSE">Registration Instructions Response</item>
+			<item val="q" id="ORDER_MASS_CANCEL_REQUEST">Order Mass Cancel Request</item>
+			<item val="r" id="ORDER_MASS_CANCEL_REPORT">Order Mass Cancel Report</item>
+			<item val="s" id="NEW_ORDER_CROSS">New Order - Cross</item>
+			<item val="t" id="CROSS_ORDER_REPLACE_REQUEST">Cross Order Cancel/Replace Request</item>
+			<item val="u" id="CROSS_ORDER_CANCEL_REQUEST">Cross Order Cancel Request</item>
+			<item val="v" id="SECURITY_TYPE_REQUEST">Security Type Request</item>
+			<item val="w" id="SECURITY_TYPES">Security Types</item>
+			<item val="x" id="SECURITY_LIST_REQUEST">Security List Request</item>
+			<item val="y" id="SECURITY_LIST">Security List</item>
+			<item val="z" id="DERIVATIVE_SECURITY_LIST_REQUEST">Derivative Security List Request</item>
+			<item val="AA" id="DERIVATIVE_SECURITY_LIST">Derivative Security List</item>
+			<item val="AB" id="NEW_ORDER_MULTILEG">New Order - Multileg</item>
+			<item val="AC" id="MULTILEG_ORDER_REPLACE_REQUEST">Multileg Order Cancel/Replace</item>
+			<item val="AD" id="TRADE_CAPTURE_REPORT_REQUEST">Trade Capture Report Request</item>
+			<item val="AE" id="TRADE_CAPTURE_REPORT">Trade Capture Report</item>
+			<item val="AF" id="ORDER_MASS_STATUS_REQUEST">Order Mass Status Request</item>
+			<item val="AG" id="QUOTE_REQUEST_REJECT">Quote Request Reject</item>
+			<item val="AH" id="RFQ_REQUEST">RFQ Request</item>
+			<item val="AI" id="QUOTE_STATUS_REPORT">Quote Status Report</item>
+			<item val="AJ" id="QUOTE_RESPONSE">Quote Response</item>
+			<item val="AK" id="CONFIRMATION">Confirmation</item>
+			<item val="AL" id="POSITION_MAINTENANCE_REQUEST">Position Maintenance Request</item>
+			<item val="AM" id="POSITION_MAINTENANCE_REPORT">Position Maintenance Report</item>
+			<item val="AN" id="REQUEST_FOR_POSITIONS">Request For Positions</item>
+			<item val="AO" id="REQUEST_FOR_POSITIONS_ACK">Request For Positions Ack</item>
+			<item val="AP" id="POSITION_REPORT">Position Report</item>
+			<item val="AQ" id="TRADE_CAPTURE_REPORT_REQUEST_ACK">Trade Capture Report Request Ack</item>
+			<item val="AR" id="TRADE_CAPTURE_REPORT_ACK">Trade Capture Report Ack</item>
+			<item val="AS" id="ALLOCATION_REPORT">Allocation Report</item>
+			<item val="AT" id="ALLOCATION_REPORT_ACK">Allocation Report Ack</item>
+			<item val="AU" id="CONFIRMATION_ACK">Confirmation Ack</item>
+			<item val="AV" id="SETTLEMENT_INSTRUCTION_REQUEST">Settlement Instruction Request</item>
+			<item val="AW" id="ASSIGNMENT_REPORT">Assignment Report</item>
+			<item val="AX" id="COLLATERAL_REQUEST">Collateral Request</item>
+			<item val="AY" id="COLLATERAL_ASSIGNMENT">Collateral Assignment</item>
+			<item val="AZ" id="COLLATERAL_RESPONSE">Collateral Response</item>
+			<item val="BA" id="COLLATERAL_REPORT">Collateral Report</item>
+			<item val="BB" id="COLLATERAL_INQUIRY">Collateral Inquiry</item>
+			<item val="BC" id="NETWORK_STATUS_REQUEST">Network Counterparty System Status Request</item>
+			<item val="BD" id="NETWORK_STATUS_RESPONSE">Network Counterparty System Status Response</item>
+			<item val="BE" id="USER_REQUEST">User Request</item>
+			<item val="BF" id="USER_RESPONSE">User Response</item>
+			<item val="BG" id="COLLATERAL_INQUIRY_ACK">Collateral Inquiry Ack</item>
+			<item val="BH" id="CONFIRMATION_REQUEST">Confirmation Request</item>
+			<item val="BI" id="TRADING_SESSION_LIST_REQUEST">Trading Session List Request</item>
+			<item val="BJ" id="TRADING_SESSION_LIST">Trading Session List</item>
+			<item val="BK" id="SECURITY_LIST_UPDATE_REPORT">Security List Update Report</item>
+			<item val="BL" id="ADJUSTED_POSITION_REPORT">Adjusted Position Report</item>
+			<item val="BM" id="ALLOCATION_ALERT">Allocation Instruction Alert</item>
+			<item val="BN" id="EXECUTION_ACK">Execution Acknowledgement</item>
+			<item val="BO" id="CONTRARY_INTENTION_REPORT">Contrary Intention Report</item>
+			<item val="BP" id="SECURITY_DEFINITION_UPDATE_REPORT">Security Definition Update Report</item>
+			<item val="BQ">Settlement Obligation Report</item>
+			<item val="BR" id="DERIVATIVE_SECURITY_LIST_UPDATE_REPORT">Derivative Security List Update Report</item>
+			<item val="BS" id="TRADING_SESSION_LIST_UPDATE_REPORT">Trading Session List Update Report</item>
+			<item val="BT">Market Definition Request</item>
+			<item val="BU">Market Definition</item>
+			<item val="BV">Market Definition Update Report</item>
+			<item val="BW">Application Message Request</item>
+			<item val="BX">Application Message Request Ack</item>
+			<item val="BY">Application Message Report</item>
+			<item val="BZ">Order Mass Action Report</item>
+			<item val="CA">Order Mass Action Request</item>
+			<item val="CB">User Notification</item>
+			<item val="CC">Stream Assignment Request</item>
+			<item val="CD">Stream Assignment Report</item>
+			<item val="CE">Stream Assignment Report ACK</item>
+			<item val="CH" id="CH">Margin Requirement Inquiry</item>
+			<item val="CI" id="CI">Margin Requirement Inquiry Ack</item>
+			<item val="CJ" id="CJ">Margin Requirement Report</item>
+			<item val="CF" id="CF">Party Details List Request</item>
+			<item val="CG" id="CG">Party Details List Report</item>
+			<item val="CK" id="CK">Party Details List Update Report</item>
+			<item val="CL" id="CL">Party Risk Limits Request</item>
+			<item val="CM" id="CM">Party Risk Limits Report</item>
+			<item val="CN" id="CN">SecurityMassStatusRequest</item>
+			<item val="CO" id="CO">SecurityMassStatus</item>
+			<item val="CQ" id="CQ">Account Summary Report</item>
+			<item val="CR" id="CR">Party Risk Limits Update Report</item>
+			<item val="CS" id="CS">Party Risk Limits Definition Request</item>
+			<item val="CT" id="CT">Party Risk Limits Definition Request Ack</item>
+			<item val="CU" id="CU">Party Entitlements Request</item>
+			<item val="CV" id="CV">Party Entitlements Report</item>
+			<item val="CW" id="CW">Quote Ack</item>
+			<item val="CX" id="CX">Party Details Definition Request</item>
+			<item val="CY" id="CY">Party Details Definition Request Ack</item>
+			<item val="CZ" id="CZ">Party Entitlements Update Report</item>
+			<item val="DA" id="DA">Party Entitlements Definition Request</item>
+			<item val="DB" id="DB">Party Entitlements Definition Request Ack</item>
+			<item val="DC" id="DC">Trade Match Report</item>
+			<item val="DD" id="DD">Trade Match Report Ack</item>
+			<item val="DE" id="DE">Party Risk Limits Report Ack</item>
+			<item val="DF" id="DF">Party Risk Limit Check Request</item>
+			<item val="DG" id="DG">Party Risk Limit Check Request Ack</item>
+			<item val="DH" id="DH">Party Action Request</item>
+			<item val="DI" id="DI">Party Action Report</item>
+			<item val="DJ" id="DJ">MassOrder</item>
+			<item val="DK" id="DK">MassOrderAck</item>
+			<item val="DL" id="DL">PositionTransferInstruction</item>
+			<item val="DM" id="DM">PositionTransferInstructionAck</item>
+			<item val="DN" id="DN">PositionTransferReport</item>
+			<item val="DO" id="DO">Market Data Statistics Request</item>
+			<item val="DP" id="DP">Market Data Statistics Report</item>
+			<item val="DQ" id="DQ">CollateralReportAck</item>
+			<item val="DR" id="DR">Market Data Report</item>
+            <descr>
+                <p>Defines message type    ALWAYS THIRD FIELD IN MESSAGE. (Always unencrypted)</p>
+                <p>Note: A "U" as the first character in the MsgType field (i.e. U, U2, etc) indicates that the  message format is privately defined between the sender and receiver.</p>
+                <p>*** Note the use of lower case letters ***</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="36" name="NewSeqNo" type="SeqNum">
+            <descr>
+                <p>New sequence number</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="43" name="PossDupFlag" type="Boolean">
+            <item val="N">Original transmission</item>
+            <item val="Y">Possible duplicate</item>
+            <descr>
+                <p>Indicates possible retransmission of message with this sequence number</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="45" name="RefSeqNum" type="SeqNum">
+            <descr>
+                <p>Reference message sequence number</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="49" name="SenderCompID" type="String">
+            <descr>
+                <p>Assigned value used to identify firm sending message.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="50" name="SenderSubID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message originator (desk, trader, etc.)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="52" name="SendingTime" type="UTCTimestamp">
+            <descr>
+                <p>Time of message transmission (always expressed in UTC (Universal Time Coordinated, also known as "GMT")</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="56" name="TargetCompID" type="String">
+            <descr>
+                <p>Assigned value used to identify receiving firm.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="57" name="TargetSubID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific individual or unit intended to receive message.  "ADMIN" reserved for administrative messages not intended for a specific user.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="58" name="Text" type="String">
+            <descr>
+                <p>Free format text string</p>
+                <p>(Note: this field does not have a specified maximum length)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="89" name="Signature" type="data" lenfield="93">
+            <descr>
+                <p>Electronic signature</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="90" name="SecureDataLen" type="Length">
+            <descr>
+                <p>Length of encrypted message</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="91" name="SecureData" type="data" lenfield="90">
+            <descr>
+                <p>Actual encrypted data stream</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="93" name="SignatureLength" type="Length">
+            <descr>
+                <p>Number of bytes in signature field.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="95" name="RawDataLength" type="Length">
+            <descr>
+                <p>Number of bytes in raw data field.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="96" name="RawData" type="data" lenfield="95">
+            <descr>
+                <p>Unformatted raw data, can include bitmaps, word processor documents, etc.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="97" name="PossResend" type="Boolean">
+            <item val="N">Original Transmission</item>
+            <item val="Y">Possible Resend</item>
+            <descr>
+                <p>Indicates that message may contain information that has been sent under another sequence number.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="98" name="EncryptMethod" type="int">
+            <item val="0" id="NONE_OTHER">None / other</item>
+            <item val="1" id="PKCS">PKCS (proprietary)</item>
+            <item val="2" id="DES">DES (ECB mode)</item>
+            <item val="3" id="PKCS_DES">PKCS/DES (proprietary)</item>
+            <item val="4" id="PGP_DES">PGP/DES (defunct)</item>
+            <item val="5" id="PGP_DES_MD5">PGP/DES-MD5 (see app note on FIX web site)</item>
+            <item val="6" id="PEM_DES_MD5">PEM/DES-MD5 (see app note on FIX web site)</item>
+            <descr>
+                <p>Method of encryption.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="108" name="HeartBtInt" type="int">
+            <descr>
+                <p>Heartbeat interval (seconds)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="112" name="TestReqID" type="String">
+            <descr>
+                <p>Identifier included in Test Request message to be returned in resulting Heartbeat</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="115" name="OnBehalfOfCompID" type="String">
+            <descr>
+                <p>Assigned value used to identify firm originating message if the message was delivered by a third party  i.e.   the third party firm identifier would be delivered in the SenderCompID field and the firm originating the message in this field.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="116" name="OnBehalfOfSubID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message originator (i.e. trader) if the message was delivered by a third party</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="122" name="OrigSendingTime" type="UTCTimestamp">
+            <descr>
+                <p>Original time of message transmission (always expressed in UTC (Universal Time Coordinated, also known as "GMT") when transmitting orders as the result of a resend request.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="123" name="GapFillFlag" type="Boolean">
+            <item val="N" id="SEQUENCE_RESET">Sequence Reset, Ignore Msg Seq Num (N/A For FIXML - Not Used)</item>
+            <item val="Y" id="GAP_FILL">Gap Fill Message, Msg Seq Num Field Valid</item>
+            <descr>
+                <p>Indicates that the Sequence Reset message is replacing administrative or application messages which will not be resent.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="128" name="DeliverToCompID" type="String">
+            <descr>
+                <p>Assigned value used to identify the firm targeted to receive the message if the message is delivered by a third party   i.e.  the third party firm identifier would be delivered in the TargetCompID (56) field and the ultimate receiver firm ID in this field.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="129" name="DeliverToSubID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message recipient (i.e. trader) if the message is delivered by a third party</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="141" name="ResetSeqNumFlag" type="Boolean">
+            <item val="N">No</item>
+            <item val="Y" id="YES">Yes, reset sequence numbers</item>
+            <descr>
+                <p>Indicates that the both sides of the FIX session should reset sequence numbers.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="142" name="SenderLocationID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message originator&apos;s location (i.e. geographic location and/or desk, trader)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="143" name="TargetLocationID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message destination&apos;s location (i.e. geographic location and/or desk, trader)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="144" name="OnBehalfOfLocationID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message originator&apos;s location (i.e. geographic location and/or desk, trader) if the message was delivered by a third party</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="145" name="DeliverToLocationID" type="String">
+            <descr>
+                <p>Assigned value used to identify specific message recipient&apos;s location (i.e. geographic location and/or desk, trader) if the message was delivered by a third party</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="212" name="XmlDataLen" type="Length">
+            <descr>
+                <p>Length of the XmlData data block.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="213" name="XmlData" type="data" lenfield="212">
+            <descr>
+                <p>Actual XML data stream (e.g. FIXML). See approriate XML reference (e.g. FIXML).  Note: may contain embedded SOH characters.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="347" name="MessageEncoding" type="String">
+            <descr>
+                <p>Type of message encoding (non-ASCII (non-English) characters) used in a message&apos;s "Encoded" fields.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="354" name="EncodedTextLen" type="Length">
+            <descr>
+                <p>Byte length of encoded (non-ASCII characters) EncodedText (355) field.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="355" name="EncodedText" type="data" lenfield="354">
+            <descr>
+                <p>Encoded (non-ASCII characters) representation of the Text (58) field in the encoded format specified via the MessageEncoding (347) field. If used, the ASCII (English) representation should also be specified in the Text field.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="369" name="LastMsgSeqNumProcessed" type="SeqNum">
+            <descr>
+                <p>The last MsgSeqNum (34) value received by the FIX engine and processed by downstream application, such as trading engine or order routing system.  Can be specified on every message sent.  Useful for detecting a backlog with a counterparty.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="371" name="RefTagID" type="int">
+            <descr>
+                <p>The tag number of the FIX field being referenced.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="372" name="RefMsgType" type="String">
+			<item val="0">Heartbeat</item>
+			<item val="1">Test Request</item>
+			<item val="2">Resend Request</item>
+			<item val="3">Reject</item>
+			<item val="4">Sequence Reset</item>
+			<item val="5">Logout</item>
+			<item val="6">Indication of Interest</item>
+			<item val="7">Advertisement</item>
+			<item val="8">Execution Report</item>
+			<item val="9">Order Cancel Reject</item>
+			<item val="A">Logon</item>
+			<item val="B">News</item>
+			<item val="C">Email</item>
+			<item val="D" id="NEW_ORDER_SINGLE">New Order - Single</item>
+			<item val="E" id="NEW_ORDER_LIST">New Order - List</item>
+			<item val="F">Order Cancel Request</item>
+			<item val="G" id="ORDER_CANCEL_REPLACE_REQUEST">Order Cancel/Replace Request</item>
+			<item val="H">Order Status Request</item>
+			<item val="J">Allocation Instruction</item>
+			<item val="K">List Cancel Request</item>
+			<item val="L">List Execute</item>
+			<item val="M">List Status Request</item>
+			<item val="N">List Status</item>
+			<item val="P">Allocation Instruction Ack</item>
+			<item val="Q" id="DONT_KNOW_TRADE">Don't Know Trade (DK)</item>
+			<item val="R">Quote Request</item>
+			<item val="S">Quote</item>
+			<item val="T">Settlement Instructions</item>
+			<item val="V" id="MD_REQUEST">Market Data Request</item>
+			<item val="W" id="MD_SNAPSHOT">Market Data - Snapshot/Full Refresh</item>
+			<item val="X" id="MD_INCREMENTAL_REFRESH">Market Data - Incremental Refresh</item>
+			<item val="Y" id="MD_REQUEST_REJECT">Market Data Request Reject</item>
+			<item val="Z">Quote Cancel</item>
+			<item val="a">Quote Status Request</item>
+			<item val="b">Mass Quote Acknowledgement</item>
+			<item val="c">Security Definition Request</item>
+			<item val="d">Security Definition</item>
+			<item val="e">Security Status Request</item>
+			<item val="f">Security Status</item>
+			<item val="g">Trading Session Status Request</item>
+			<item val="h">Trading Session Status</item>
+			<item val="i">Mass Quote</item>
+			<item val="j">Business Message Reject</item>
+			<item val="k">Bid Request</item>
+			<item val="l">Bid Response</item>
+			<item val="m">List Strike Price</item>
+			<item val="n">XML message</item>
+			<item val="o">Registration Instructions</item>
+			<item val="p">Registration Instructions Response</item>
+			<item val="q">Order Mass Cancel Request</item>
+			<item val="r">Order Mass Cancel Report</item>
+			<item val="s" id="NEW_ORDER_CROSS">New Order - Cross</item>
+			<item val="t" id="CROSS_ORDER_CANCEL_REPLACE_REQUEST">Cross Order Cancel/Replace Request</item>
+			<item val="u">Cross Order Cancel Request</item>
+			<item val="v">Security Type Request</item>
+			<item val="w">Security Types</item>
+			<item val="x">Security List Request</item>
+			<item val="y">Security List</item>
+			<item val="z">Derivative Security List Request</item>
+			<item val="AA">Derivative Security List</item>
+			<item val="AB" id="NEW_ORDER_MULTILEG">New Order - Multileg</item>
+			<item val="AC" id="MULTILEG_ORDER_CANCEL_REPLACE">Multileg Order Cancel/Replace</item>
+			<item val="AD">Trade Capture Report Request</item>
+			<item val="AE">Trade Capture Report</item>
+			<item val="AF">Order Mass Status Request</item>
+			<item val="AG">Quote Request Reject</item>
+			<item val="AH">RFQ Request</item>
+			<item val="AI">Quote Status Report</item>
+			<item val="AJ">Quote Response</item>
+			<item val="AK">Confirmation</item>
+			<item val="AL">Position Maintenance Request</item>
+			<item val="AM">Position Maintenance Report</item>
+			<item val="AN">Request For Positions</item>
+			<item val="AO">Request For Positions Ack</item>
+			<item val="AP">Position Report</item>
+			<item val="AQ" id="TRADE_CAPTURE_REPORT_REQUEST_ACK">Trade Capture Report Request Ack</item>
+			<item val="AR">Trade Capture Report Ack</item>
+			<item val="AS">Allocation Report</item>
+			<item val="AT">Allocation Report Ack</item>
+			<item val="AU">Confirmation Ack</item>
+			<item val="AV">Settlement Instruction Request</item>
+			<item val="AW">Assignment Report</item>
+			<item val="AX">Collateral Request</item>
+			<item val="AY">Collateral Assignment</item>
+			<item val="AZ">Collateral Response</item>
+			<item val="BA">Collateral Report</item>
+			<item val="BB">Collateral Inquiry</item>
+			<item val="BC" id="NETWORK_COUNTERPARTY_SYSTEM_STATUS_REQUEST">Network Counterparty System Status Request</item>
+			<item val="BD" id="NETWORK_COUNTERPARTY_SYSTEM_STATUS_RESPONSE">Network Counterparty System Status Response</item>
+			<item val="BE">User Request</item>
+			<item val="BF">User Response</item>
+			<item val="BG">Collateral Inquiry Ack</item>
+			<item val="BH">Confirmation Request</item>
+			<item val="BI">Trading Session List Request</item>
+			<item val="BJ">Trading Session List</item>
+			<item val="BK">Security List Update Report</item>
+			<item val="BL">Adjusted Position Report</item>
+			<item val="BM">Allocation Instruction Alert</item>
+			<item val="BN">Execution Acknowledgement</item>
+			<item val="BO">Contrary Intention Report</item>
+			<item val="BP">Security Definition Update Report</item>
+			<item val="BQ">Settlement Obligation Report</item>
+			<item val="BR" id="DERIVATIVE_SECURITY_LIST_UPDATE_REPORT">Derivative Security List Update Report</item>
+			<item val="BS" id="TRADING_SESSION_LIST_UPDATE_REPORT">Trading Session List Update Report</item>
+			<item val="BT">Market Definition Request</item>
+			<item val="BU">Market Definition</item>
+			<item val="BV">Market Definition Update Report</item>
+			<item val="BW">Application Message Request</item>
+			<item val="BX">Application Message Request Ack</item>
+			<item val="BY">Application Message Report</item>
+			<item val="BZ">Order Mass Action Report</item>
+			<item val="CA">Order Mass Action Request</item>
+			<item val="CB">User Notification</item>
+			<item val="CC">Stream Assignment Request</item>
+			<item val="CD">Stream Assignment Report</item>
+			<item val="CE">Stream Assignment Report ACK</item>
+			<item val="CH" id="CH">Margin Requirement Inquiry</item>
+			<item val="CI" id="CI">Margin Requirement Inquiry Ack</item>
+			<item val="CJ" id="CJ">Margin Requirement Report</item>
+			<item val="CF" id="CF">Party Details List Request</item>
+			<item val="CG" id="CG">Party Details List Report</item>
+			<item val="CK" id="CK">Party Details List Update Report</item>
+			<item val="CL" id="CL">Party Risk Limits Request</item>
+			<item val="CM" id="CM">Party Risk Limits Report</item>
+			<item val="CN" id="CN">SecurityMassStatusRequest</item>
+			<item val="CO" id="CO">SecurityMassStatus</item>
+			<item val="CQ" id="CQ">Account Summary Report</item>
+			<item val="CR" id="CR">Party Risk Limits Update Report</item>
+			<item val="CS" id="CS">Party Risk Limits Definition Request</item>
+			<item val="CT" id="CT">Party Risk Limits Definition Request Ack</item>
+			<item val="CU" id="CU">Party Entitlements Request</item>
+			<item val="CV" id="CV">Party Entitlements Report</item>
+			<item val="CW" id="CW">Quote Ack</item>
+			<item val="CX" id="CX">Party Details Definition Request</item>
+			<item val="CY" id="CY">Party Details Definition Request Ack</item>
+			<item val="CZ" id="CZ">Party Entitlements Update Report</item>
+			<item val="DA" id="DA">Party Entitlements Definition Request</item>
+			<item val="DB" id="DB">Party Entitlements Definition Request Ack</item>
+			<item val="DC" id="DC">Trade Match Report</item>
+			<item val="DD" id="DD">Trade Match Report Ack</item>
+			<item val="DE" id="DE">Party Risk Limits Report Ack</item>
+			<item val="DF" id="DF">Party Risk Limit Check Request</item>
+			<item val="DG" id="DG">Party Risk Limit Check Request Ack</item>
+			<item val="DH" id="DH">Party Action Request</item>
+			<item val="DI" id="DI">Party Action Report</item>
+			<item val="DJ" id="DJ">MassOrder</item>
+			<item val="DK" id="DK">MassOrderAck</item>
+			<item val="DL" id="DL">PositionTransferInstruction</item>
+			<item val="DM" id="DM">PositionTransferInstructionAck</item>
+			<item val="DN" id="DN">PositionTransferReport</item>
+			<item val="DO" id="DO">Market Data Statistics Request</item>
+			<item val="DP" id="DP">Market Data Statistics Report</item>
+			<item val="DQ" id="DQ">CollateralReportAck</item>
+			<item val="DR" id="DR">Market Data Report</item>
+            <descr>
+                <p>The MsgType (35) of the FIX message being referenced.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="373" name="SessionRejectReason" type="int">
+            <item val="0">Invalid Tag Number</item>
+            <item val="1">Required Tag Missing</item>
+            <item val="2" id="TAG_NOT_DEFINED_FOR_MSGTYPE">Tag not defined for this message type</item>
+            <item val="3">Undefined tag</item>
+            <item val="4" id="TAG_WITHOUT_VALUE">Tag specified without a value</item>
+            <item val="5" id="VALUE_INCORRECT">Value is incorrect (out of range) for this tag</item>
+            <item val="6" id="INCORRECT_DATA_FORMAT">Incorrect data format for value</item>
+            <item val="7">Decryption problem</item>
+            <item val="8">Signature problem</item>
+            <item val="9">CompID problem</item>
+            <item val="10" id="SENDINGTIME_ACCURACY_PROBLEM">SendingTime Accuracy Problem</item>
+            <item val="11" id="INVALID_MSGTYPE">Invalid MsgType</item>
+            <item val="12">XML Validation Error</item>
+            <item val="13" id="TAG_APPEARS_MORE_THEN_ONCE">Tag appears more than once</item>
+            <item val="14" id="TAG_OUT_OF_ORDER">Tag specified out of required order</item>
+            <item val="15" id="REPEATING_GROUP_FIELDS_OUT_OF_ORDER">Repeating group fields out of order</item>
+            <item val="16" id="INCORRECT_NUMINGROUP_COUNT">Incorrect NumInGroup count for repeating group</item>
+            <item val="17" id="SOH_IN_NON_DATA_TAG">Non "Data" value includes field delimiter (&lt;SOH&gt; character)"</item>
+            <item val="18" id="INVALID_APPLICATION_VERSION">Invalid/Unsupported Application Version</item>
+            <item val="99">Other</item>
+            <descr>
+                <p>Code to identify reason for a session-level Reject message.</p>
+                <p>Any value conforming to the data type Reserved100Plus can be used.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="383" name="MaxMessageSize" type="Length">
+            <descr>
+                <p>Maximum number of bytes supported for a single message.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="384" name="NoMsgTypes" type="NumInGroup">
+            <descr>
+                <p>Number of MsgTypes (35) in repeating group.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="385" name="MsgDirection" type="char">
+            <item val="R">Receive</item>
+            <item val="S">Send</item>
+            <descr>
+                <p>Specifies the direction of the messsage.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="464" name="TestMessageIndicator" type="Boolean">
+            <item val="N" id="PRODUCTION">False (Production)</item>
+            <item val="Y" id="TEST">True (Test)</item>
+            <descr>
+                <p>Indicates whether or not this FIX Session is a "test" vs. "production" connection.  Useful for preventing "accidents".</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="553" name="Username" type="String">
+            <descr>
+                <p>Userid or username.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="554" name="Password" type="String">
+            <descr>
+                <p>Password or passphrase.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="627" name="NoHops" type="NumInGroup">
+            <descr>
+                <p>Number of HopCompID entries in repeating group.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="628" name="HopCompID" type="String">
+            <descr>
+                <p>Assigned value used to identify the third party firm which delivered a specific message either from the firm which originated the message or from another third party (if multiple "hops" are performed). It is recommended that this value be the SenderCompID (49) of the third party.</p>
+                <p>Applicable when messages are communicated/re-distributed via third parties which function as service bureaus or "hubs".  Only applicable if OnBehalfOfCompID (115) is being used.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="629" name="HopSendingTime" type="UTCTimestamp">
+            <descr>
+                <p>Time that HopCompID (628) sent the message. It is recommended that this value be the SendingTime (52) of the message sent by the third party.</p>
+                <p>Applicable when messages are communicated/re-distributed via third parties which function as service bureaus or "hubs".  Only applicable if OnBehalfOfCompID (115) is being used.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="630" name="HopRefID" type="SeqNum">
+            <descr>
+                <p>Reference identifier assigned by HopCompID (628) associated with the message sent. It is recommended that this value be the MsgSeqNum (34) of the message sent by the third party.</p>
+                <p>Applicable when messages are communicated/re-distributed via third parties which function as service bureaus or "hubs".  Only applicable if OnBehalfOfCompID (115) is being used.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="789" name="NextExpectedMsgSeqNum" type="SeqNum">
+            <descr>
+                <p>Next expected MsgSeqNum value to be received.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="925" name="NewPassword" type="String">
+            <descr>
+                <p>Specifies a new password for the FIX Logon. The new password is used for subsequent logons</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1128" name="ApplVerID" type="String">
+            <item val="0">FIX27</item>
+            <item val="1">FIX30</item>
+            <item val="2">FIX40</item>
+            <item val="3">FIX41</item>
+            <item val="4">FIX42</item>
+            <item val="5">FIX43</item>
+            <item val="6">FIX44</item>
+            <item val="7">FIX50</item>
+            <item val="8">FIX50SP1</item>
+            <item val="9">FIX50SP2</item>
+            <descr>
+                <p>Specifies the service pack release being applied at message level. Enumerated field with values assigned at time of service pack release</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1129" name="CstmApplVerID" type="String">
+            <descr>
+                <p>Specifies a custom extension to a message being applied at the message level. Enumerated field</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1130" name="RefApplVerID" type="String">
+            <item val="0">FIX27</item>
+            <item val="1">FIX30</item>
+            <item val="2">FIX40</item>
+            <item val="3">FIX41</item>
+            <item val="4">FIX42</item>
+            <item val="5">FIX43</item>
+            <item val="6">FIX44</item>
+            <item val="7">FIX50</item>
+            <item val="8">FIX50SP1</item>
+            <item val="9">FIX50SP2</item>
+            <descr>
+                <p>Specifies the service pack release being applied to a message at the session level. Enumerated field with values assigned at time of service pack release. Uses same values as ApplVerID</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1131" name="RefCstmApplVerID" type="String">
+            <descr>
+                <p>Specifies a custom extension to a message being applied at the session level.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1137" name="DefaultApplVerID" type="String">
+            <item val="0">FIX27</item>
+            <item val="1">FIX30</item>
+            <item val="2">FIX40</item>
+            <item val="3">FIX41</item>
+            <item val="4">FIX42</item>
+            <item val="5">FIX43</item>
+            <item val="6">FIX44</item>
+            <item val="7">FIX50</item>
+            <item val="8">FIX50SP1</item>
+            <item val="9">FIX50SP2</item>
+            <descr>
+                <p>Specifies the service pack release being applied, by default, to message at the session level. Enumerated field with values assigned at time of service pack release. Uses same values as ApplVerID</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1156" name="ApplExtID" type="String">
+            <descr>
+                <p>Identifies the Extension Pack which is to be applied to the FIX version specified in the ApplVerID.</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1400" name="EncryptedPasswordMethod" type="String"/>
+        <fielddef tag="1401" name="EncryptedPasswordLen" type="Length"/>
+        <fielddef tag="1402" name="EncryptedPassword" type="String"/>
+        <fielddef tag="1403" name="EncryptedNewPasswordLen" type="Length"/>
+        <fielddef tag="1404" name="EncryptedNewPassword" type="String">
+            <descr>
+                <p>Encrypted new password- encrypted via the method specified in the field EncryptedPasswordMethod(1400)</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1406" name="RefApplExtID" type="String">
+            <descr>
+                <p>Specified the extension pack being applied to a message</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1407" name="DefaultApplExtID" type="String">
+            <descr>
+                <p>The default extension pack for FIX messages used in this session</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1408" name="DefaultCstmApplVerID" type="String">
+            <descr>
+                <p>The default custom application version (dictionary) for FIX messages used in this session</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1409" name="SessionStatus" type="String">
+            <descr>
+                <p>Session status at time of logout</p>
+            </descr>
+        </fielddef>
+        <fielddef tag="1410" name="DefaultVerIndicator" type="String">
+            <descr>
+                <p>Indicates that this Application Version (RefApplVerID(1130), RefApplExtID(1406),RefCstmApplVerID(1131)) is the default for the RefMsgType(372) field</p>
+            </descr>
+        </fielddef>
+    </fielddic>
+    <msgdic>
+        <blockdef id="SMH" name="Standard Message Header">
+            <field tag="8" name="BeginString" req="Y">
+                <comment>FIXT.1.1 (Always unencrypted, must be first field in message)</comment>
+            </field>
+            <field tag="9" name="BodyLength" req="Y">
+                <comment>(Always unencrypted, must be second field in message)</comment>
+            </field>
+            <field tag="35" name="MsgType" req="Y">
+                <comment>(Always unencrypted, must be third field in message)</comment>
+            </field>
+            <field tag="1128" name="ApplVerID">
+                <comment>Indicates application version using a service pack identifier. The<fieldref tag="1128">ApplVerID</fieldref>applies to a specific message occurrence.</comment>
+            </field>
+            <field tag="1156" name="ApplExtID"/>
+            <field tag="1129" name="CstmApplVerID">
+                <comment>Used to support bilaterally agreed custom functionality</comment>
+            </field>
+            <field tag="49" name="SenderCompID" req="Y">
+                <comment>(Always unencrypted)</comment>
+            </field>
+            <field tag="56" name="TargetCompID" req="Y">
+                <comment>(Always unencrypted)</comment>
+            </field>
+            <field tag="115" name="OnBehalfOfCompID">
+                <comment>Trading partner company ID used when sending messages via a third party (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="128" name="DeliverToCompID">
+                <comment>Trading partner company ID used when sending messages via a third party (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="90" name="SecureDataLen" condreq="existtags(T$91)">
+                <comment>Required to identify length of encrypted section of message. (Always unencrypted)</comment>
+            </field>
+            <field tag="91" name="SecureData" condreq="existtags(T$90)">
+                <comment>Required when message body is encrypted.  Always immediately follows<fieldref tag="90">SecureDataLen</fieldref>field.</comment>
+            </field>
+            <field tag="34" name="MsgSeqNum" req="Y">
+                <comment>(Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="50" name="SenderSubID">
+                <comment>(Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="142" name="SenderLocationID">
+                <comment>Sender's LocationID (i.e. geographic location and/or desk) (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="57" name="TargetSubID">
+                <comment>"ADMIN" reserved for administrative messages not intended for a specific user. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="143" name="TargetLocationID">
+                <comment>Trading partner LocationID (i.e. geographic location and/or desk) (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="116" name="OnBehalfOfSubID">
+                <comment>Trading partner SubID used when delivering messages via a third party. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="144" name="OnBehalfOfLocationID">
+                <comment>Trading partner LocationID (i.e. geographic location and/or desk) used when delivering messages via a third party. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="129" name="DeliverToSubID">
+                <comment>Trading partner SubID used when delivering messages via a third party. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="145" name="DeliverToLocationID">
+                <comment>Trading partner LocationID (i.e. geographic location and/or desk) used when delivering messages via a third party. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="43" name="PossDupFlag">
+                <comment>Always required for retransmitted messages, whether prompted by the sending system or as the result of a resend request. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="97" name="PossResend">
+                <comment>Required when message may be duplicate of another message sent under a different sequence number. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="52" name="SendingTime" req="Y">
+                <comment>(Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="122" name="OrigSendingTime">
+                <comment>Required for message resent as a result of a ResendRequest.  If data is not available set to same value as<fieldref tag="52">SendingTime</fieldref> (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="212" name="XmlDataLen" condreq="existtags(T$213)">
+                <comment>Required when specifying<fieldref tag="213">XmlData</fieldref>to identify the length of a<fieldref tag="213">XmlData</fieldref>message block. (Can be embedded within encrypted data section.)</comment>
+            </field>
+            <field tag="213" name="XmlData" condreq="existtags(T$212)">
+                <comment>Can contain a XML formatted message block (e.g. FIXML).   Always immediately follows<fieldref tag="212">XmlDataLen</fieldref>field. (Can be embedded within encrypted data section.)
+      See Volume 1: FIXML Support</comment>
+            </field>
+            <field tag="347" name="MessageEncoding">
+                <comment>Type of message encoding (non-ASCII characters) used in a message's "Encoded" fields.  Required if any "Encoding" fields are used.</comment>
+            </field>
+            <field tag="369" name="LastMsgSeqNumProcessed">
+                <comment>The last<fieldref tag="34">MsgSeqNum</fieldref>value received by the FIX engine and processed by downstream application, such as trading system or order routing system.  Can be specified on every message sent.  Useful for detecting a backlog with a counterparty.</comment>
+            </field>
+            <field tag="627" name="NoHops"/>
+            <group nofield="627" startfield="628">
+                <field tag="628" name="HopCompID" condreq="T$627&gt;0"/>
+                <field tag="629" name="HopSendingTime"/>
+                <field tag="630" name="HopRefID"/>
+            </group>
+            <descr>
+                <p>Each administrative or application message is preceded by a standard header.  The header identifies the message type, length, 
+                destination, sequence number, origination point and time.</p>
+                <p>Two fields help with resending messages.  The<fieldref tag="43">PossDupFlag</fieldref>is set to Y when resending a message as 
+                the result of a session level event (i.e. the retransmission of a message reusing a sequence number).  
+                The<fieldref tag="97">PossResend</fieldref>is set to Y when reissuing a message with a new sequence number (i.e. when resending a
+                n order).  The receiving application should process these messages as follows:</p>
+                <p>PossDupFlag - if a message with this sequence number has been previously received, ignore message, if not, process normally.</p>
+                <p>PossResend - forward message to application and determine if previously received  (i.e. verify order id and parameters).</p>
+                <p>Message Routing Details - One Firm-to-One Firm (point-to-point)</p>
+                <p>The following table provides examples regarding the use of SenderCompID, TargetCompID, DeliverToCompID, 
+                and<fieldref tag="115">OnBehalfOfCompID</fieldref>when using a single point-to-point FIX session between two firms.  
+                Assumption (A=sellside, B =buyside):</p>
+                <table>
+                    <tr>
+                        <th/>
+                        <th>
+                            <fieldref tag="49">SenderCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="115">OnBehalfOfCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="56">TargetCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="128">DeliverToCompID</fieldref>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>A to B directly</td>
+                        <td>A</td>
+                        <td/>
+                        <td>B</td>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>B to A directly</td>
+                        <td>B</td>
+                        <td/>
+                        <td>A</td>
+                        <td/>
+                    </tr>
+                </table>
+                <p>Message Routing Details - Third Party Message Routing</p>
+                <p>The FIX Session Protocol supports the ability for a single FIX session to represent multiple counterpaties.  This can be in a  
+                1-to-many, many-to-1, or 1-to-1 fashion.  In addition, some third parties may be connected to other third parties effectively forming a 
+                "chain" of "hops" between the original message initiator and the final message receiver.  The SenderCompID, OnBehalfOfCompID, 
+                TargetCompID, 
+                and<fieldref tag="128">DeliverToCompID</fieldref>fields are used for routing purposes.</p>
+                <p>When a third party sends a message on behalf of another firm (using OnBehalfOfCompID), that third party may optionally add 
+                their details to the<fieldref tag="627">NoHops</fieldref>repeating group.  This repeating group builds a "history" of third parties 
+                through which the original message was re-transmitted.  The<fieldref tag="627">NoHops</fieldref>repeating group is NOT used to 
+                facilitate routing, rather it provides an audit trail of third party involvement to the receiver of a message.  An audit trail 
+                of intermediary involvement may be a requirement of some regulatory bodies or counterparties.  When a third party forwards a 
+                message on to the next hop (may be the end point or another third party), that third party can add its hop details to 
+                the<fieldref tag="627">NoHops</fieldref>repeating group (i.e. its<fieldref tag="49">SenderCompID</fieldref>as HopCompID, 
+                its<fieldref tag="52">SendingTime</fieldref>as HopSendingTime, and the received messages<fieldref tag="34">MsgSeqNum</fieldref>or 
+                some other reference as HopRefID).</p>
+                <p>Note that if<fieldref tag="115">OnBehalfOfCompID</fieldref>or<fieldref tag="128">DeliverToCompID</fieldref>message source 
+                identification/routing is used for a FIX session, then it must be used on all Application messages transmitted via that session 
+                accordingly (Reject the message if not).</p>
+                <p>The following table provides examples regarding the use of SenderCompID, TargetCompID, DeliverToCompID, 
+                and<fieldref tag="115">OnBehalfOfCompID</fieldref>when using a single FIX session to represent multiple firms.  
+                Assumption (A=sellside, B and C=buyside, Q=third party):</p>
+                <table>
+                    <tr>
+                        <th colspan="2"/>
+                        <th>
+                            <fieldref tag="49">SenderCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="115">OnBehalfOfCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="56">TargetCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="128">DeliverToCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="628">HopCompID</fieldref>
+                        </th>
+                        <th>
+                            <fieldref tag="629">HopSendingTime</fieldref>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="8">Send from A to B via Q</td>
+                    </tr>
+                    <tr>
+                        <td>1)</td>
+                        <td>A sends to Q</td>
+                        <td>A</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>B</td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>2)</td>
+                        <td>Q sends to B</td>
+                        <td>Q</td>
+                        <td>A</td>
+                        <td>B</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>A's SendingTime</td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">B responds to A via Q</td>
+                    </tr>
+                    <tr>
+                        <td>1)</td>
+                        <td>B sends to Q</td>
+                        <td>B</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>A</td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>2)</td>
+                        <td>Q sends to A</td>
+                        <td>Q</td>
+                        <td>B</td>
+                        <td>A</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>B's SendingTime</td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">Send from A to B *AND* C via Q</td>
+                    </tr>
+                    <tr>
+                        <td>1)</td>
+                        <td>A sends to Q</td>
+                        <td>A</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>B</td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>2)</td>
+                        <td>Q sends to B</td>
+                        <td>Q</td>
+                        <td>A</td>
+                        <td>B</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>A's SendingTime</td>
+                    </tr>
+                    <tr>
+                        <td>3)</td>
+                        <td>A sends to Q</td>
+                        <td>A</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>C</td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>4)</td>
+                        <td>Q sends to C</td>
+                        <td>Q</td>
+                        <td>A</td>
+                        <td>C</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>A's SendingTime</td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">B *AND* C send to A via Q</td>
+                    </tr>
+                    <tr>
+                        <td>1)</td>
+                        <td>B sends to Q</td>
+                        <td>B</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>A</td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>2)</td>
+                        <td>Q sends to A</td>
+                        <td>Q</td>
+                        <td>B</td>
+                        <td>A</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>B's SendingTime</td>
+                    </tr>
+                    <tr>
+                        <td>3)</td>
+                        <td>C sends to Q</td>
+                        <td>C</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>A</td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr>
+                        <td>4)</td>
+                        <td>Q sends to A</td>
+                        <td>Q</td>
+                        <td>C</td>
+                        <td>A</td>
+                        <td/>
+                        <td>Q</td>
+                        <td>C's SendingTime</td>
+                    </tr>
+                </table>
+                <p>Note that some fields (e.g. ClOrdID on a New Order Single) must be unique for all orders on a given FIX session.  Thus when using<fieldref tag="115">OnBehalfOfCompID</fieldref>(or DeliverToCompID) addressing, a recommended approach is to prepend<fieldref tag="115">OnBehalfOfCompID</fieldref>(or DeliverToCompID) to the original value.  Thus if A sends Q ClOrdID value of "123", then Q could specify ClOrdID of "A-123" when sending the message to C to ensure uniqueness.</p>
+            </descr>
+        </blockdef>
+        <blockdef id="SMT" name="Standard Message Trailer">
+            <field tag="93" name="SignatureLength" condreq="existtags(T$89)">
+                <comment>Required when trailer contains signature.  Note:  Not to be included within<fieldref tag="91">SecureData</fieldref>field</comment>
+            </field>
+            <field tag="89" name="Signature" condreq="existtags(T$93)">
+                <comment>Note:  Not to be included within<fieldref tag="91">SecureData</fieldref>field</comment>
+            </field>
+            <field tag="10" name="CheckSum" req="Y">
+                <comment>(Always unencrypted, always last field in message)</comment>
+            </field>
+            <descr>
+                <p>Each message, administrative or application, is terminated by a standard trailer.  The trailer is used to segregate messages and contains the three digit character representation of the <fieldref tag="10">CheckSum</fieldref> value.</p>
+            </descr>
+        </blockdef>
+        <msgdef msgtype="0" name="Heartbeat" admin="Y">
+            <field tag="112" name="TestReqID">
+                <comment>Required when the heartbeat is the result of a<msgref msgtype="1">Test Request</msgref>message.</comment>
+            </field>
+            <descr>
+                <p>The<msgref msgtype="0">Heartbeat</msgref>monitors the status of the communication link and identifies when the last of a 
+                string of messages was not received.</p>
+                <p>When either end of a FIX connection has not sent any data for [HeartBtInt] seconds, it will transmit 
+                a<msgref msgtype="0">Heartbeat</msgref>message.  When either end of the connection has not received any data for 
+                (HeartBtInt + some reasonable transmission time) seconds, it will transmit a<msgref msgtype="1">Test Request</msgref>message.  
+                If there is still no 
+                heartbeat message received after (HeartBtInt + some reasonable transmission time) seconds then the connection should be 
+                considered lost and corrective action be initiated.  If<fieldref tag="108">HeartBtInt</fieldref>is set to zero then no 
+                regular heartbeat messages will be generated.  Note that a<msgref msgtype="1">Test Request</msgref>message can still be sent independent of the value 
+                of the HeartBtInt, which will force a<msgref msgtype="0">Heartbeat</msgref>message.</p>
+                <p>Heartbeats issued as the result of<msgref msgtype="1">Test Request</msgref>must contain 
+                the<fieldref tag="112">TestReqID</fieldref>transmitted in the<msgref msgtype="1">Test Request</msgref>message.  
+                This is useful to verify that the<msgref msgtype="0">Heartbeat</msgref>is the result of 
+                the<msgref msgtype="1">Test Request</msgref>and not as the result of a regular timeout.</p>
+            </descr>
+        </msgdef>
+        <msgdef msgtype="1" name="Test Request" admin="Y">
+            <field tag="112" name="TestReqID" req="Y"/>
+            <descr>
+                <p>The test request message forces a heartbeat from the opposing application.  The test request message checks sequence numbers 
+                or verifies communication line status.  The opposite application responds to the<msgref msgtype="1">Test Request</msgref>with 
+                a<msgref msgtype="0">Heartbeat</msgref>containing the<fieldref tag="112">TestReqID</fieldref>.</p>
+                <p>The<fieldref tag="112">TestReqID</fieldref>verifies that the opposite application is generating the heartbeat 
+                as the result of<msgref msgtype="1">Test Request</msgref>and not a normal timeout.  The opposite application includes 
+                the<fieldref tag="112">TestReqID</fieldref>in the resulting<msgref msgtype="0">Heartbeat</msgref>.  Any string can be used as 
+                the<fieldref tag="112">TestReqID</fieldref>(one suggestion is to use a timestamp string).</p>
+            </descr>
+        </msgdef>
+        <msgdef msgtype="2" name="Resend Request" admin="Y">
+            <field tag="7" name="BeginSeqNo" req="Y"/>
+            <field tag="16" name="EndSeqNo" req="Y"/>
+            <descr>
+                <p>The resend request is sent by the receiving application to initiate the retransmission of messages.  This function is utilized if a sequence number gap is detected, if the receiving application lost a message, or as a function of the initialization process.</p>
+                <p>The resend request can be used to request a single message, a range of messages or all messages subsequent to a particular message.</p>
+                <p>Note:  the sending application may wish to consider the message type when resending messages;  e.g. if a new order is in the resend series and a significant time period has elapsed since its original inception, the sender may not wish to retransmit the order given the potential for changed market conditions.  (The  Sequence Reset-GapFill message is used to skip messages that a sender does not wish to resend.)</p>
+                <p>Note:  it is imperative that the receiving application process messages in sequence order, e.g.  if message number 7 is missed and 8-9 received, the application should ignore 8 and 9 and ask for a resend of 7-9, or, preferably, 7-0 (0 represents infinity).  This latter approach is strongly recommended to recover from out of sequence conditions as it allows for faster recovery in the presence of certain race conditions when both sides are simultaneously attempting to recover a gap.</p>
+                <ul>
+                    <li>To request a single message: <fieldref tag="7">BeginSeqNo</fieldref>= EndSeqNo</li>
+                    <li>To request a range of messages: <fieldref tag="7">BeginSeqNo</fieldref>= first message of range,<fieldref tag="16">EndSeqNo</fieldref>= last message of range</li>
+                    <li>To request all messages subsequent to a particular message: <fieldref tag="7">BeginSeqNo</fieldref>= first message of range,<fieldref tag="16">EndSeqNo</fieldref>= 0 (represents infinity) .</li>
+                </ul>
+            </descr>
+        </msgdef>
+
+        <msgdef msgtype="3" name="Reject" admin="Y">
+            <field tag="45" name="RefSeqNum" req="Y">
+                <comment>MsgSeqNum of rejected message</comment>
+            </field>
+            <field tag="371" name="RefTagID">
+                <comment>The tag number of the FIX field being referenced.</comment>
+            </field>
+            <field tag="372" name="RefMsgType">
+                <comment>The<fieldref tag="35">MsgType</fieldref>of the FIX message being referenced.</comment>
+            </field>
+            <field tag="1130" name="RefApplVerID">
+                <comment>Recommended when rejecting an application message that does not explicitly provide ApplVerID ( 1128) on the message being rejected. In this case the value from the DefaultApplVerID(1137) or the default value specified in the NoMsgTypes repeating group on the logon message should be provided.</comment>
+            </field>
+            <field tag="1406" name="RefApplExtID">
+                <comment>Recommended when rejecting an application message that does not explicitly provide ApplExtID(1156) on the rejected message. In this case the value from the DefaultApplExtID(1407) or the default value specified in the NoMsgTypes repeating group on the logon message should be provided.</comment>
+            </field>
+            <field tag="1131" name="RefCstmApplVerID">
+                <comment>Recommended when rejecting an application message that does not explicitly provide CstmApplVerID(1129) on the message being rejected. In this case the value from the DefaultCstmApplVerID(1408) or the default value specified in the NoMsgTypes repeating group on the logon message should be provided</comment>
+            </field>
+            <field tag="373" name="SessionRejectReason">
+                <comment>Code to identify reason for a session-level Reject message.</comment>
+            </field>
+            <field tag="58" name="Text">
+                <comment>Where possible, message to explain reason for rejection</comment>
+            </field>
+            <field tag="354" name="EncodedTextLen" condreq="existtags(T$355)">
+                <comment>Must be set if<fieldref tag="355">EncodedText</fieldref>field is specified and must immediately precede it.</comment>
+            </field>
+            <field tag="355" name="EncodedText" condreq="existtags(T$354)">
+                <comment>Encoded (non-ASCII characters) representation of the<fieldref tag="58">Text</fieldref>field in the encoded format specified via the<fieldref tag="347">MessageEncoding</fieldref>field.</comment>
+            </field>
+                        <descr>
+                <p>Reject (session-level)</p>
+                <p>The reject message should be issued when a message is received but cannot be properly processed due to a session-level rule 
+                violation.  An example of when a reject may be appropriate would be the receipt of a message with invalid basic data 
+                (e.g. MsgType=&amp;) which successfully passes de-encryption,<fieldref tag="10">CheckSum</fieldref>and<fieldref tag="9">BodyLength</fieldref>checks.  
+                As a rule, messages should be forwarded to the trading application for business level rejections whenever possible.</p>
+                <p>Rejected messages should be logged and the incoming sequence number incremented.</p>
+                <p>Note:  The receiving application should disregard any message that is garbled, cannot be parsed or fails a data integrity 
+                check. Processing of the next valid FIX message will cause detection of a sequence gap 
+                and a<msgref msgtype="2">Resend Request</msgref>will be generated.  Logic should be included in the FIX engine to recognize 
+                the possible infinite resend loop, which may be encountered in this situation.</p>
+                <p>Generation and receipt of a Reject message indicates a serious error that may be the result of faulty logic in either 
+                the sending or receiving application.</p>
+                <p>If the sending application chooses to retransmit the rejected message, it should be assigned a new sequence number and 
+                sent with PossResend=Y.</p>
+                <p>Whenever possible, it is strongly recommended that the cause of the failure be described in 
+                the<fieldref tag="58">Text</fieldref>field (e.g. INVALID DATA - FIELD 35).</p>
+                <p>If an application-level message received fulfills session-level rules, it should then be processed at a business 
+                message-level.  If this processing detects a rule violation, a business-level reject should be issued.  
+                Many business-level messages have specific reject messages, which should be used.  All others can be rejected at a 
+                business-level via the Business Message Reject message.  See Volume 1: "Business Message Reject" message.</p>
+                <p>Note that in the event a business message is received, fulfills session-level rules, however, the message cannot be 
+                communicated to the business-level processing system, a Business Message Reject
+                with BusinessRejectReason= Application not available at this time should be issued.</p>
+                <p>Scenarios for session-level Reject:</p>
+                <table>
+                    <tr>
+                        <th/>
+                        <th>
+                            <fieldref tag="373">SessionRejectReason</fieldref>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 0 = Invalid tag number </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 1 = Required tag missing </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 2 = Tag not defined for this message type </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 3 = Undefined Tag </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 4 = Tag specified without a value </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 5 = Value is incorrect (out of range) for this tag </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 6 = Incorrect data format for value </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 7 = Decryption problem </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 8 =<fieldref tag="89">Signature</fieldref>problem </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 9 = CompID problem </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 10 =<fieldref tag="52">SendingTime</fieldref>accuracy problem </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 11  = Invalid<fieldref tag="35">MsgType</fieldref>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 12 = XML Validation error </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 13 = Tag appears more than once </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 14 = Tag specified out of required order </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 15 = Repeating group fields out of order </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 16 = Incorrect NumInGroup count for repeating group </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 17 = Non "data" value includes field delimiter (SOH character) </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td> 99 = Other </td>
+                    </tr>
+                </table>
+                <p>(Note other session-level rule violations may exist in which case<fieldref tag="373">SessionRejectReason</fieldref>of Other may be used and further information may be in<fieldref tag="58">Text</fieldref>field.)</p>
+            </descr>
+        </msgdef>
+        <msgdef msgtype="4" name="Sequence Reset" admin="Y">
+            <field tag="123" name="GapFillFlag"/>
+            <field tag="36" name="NewSeqNo" req="Y"/>
+            <descr>
+                <p>The Sequence Reset message has two modes: Gap Fill mode and Reset mode.</p>
+                <p>Gap Fill mode</p>
+                <p>Gap Fill mode is used in response to a<msgref msgtype="2">Resend Request</msgref>when one or more messages must be skipped over for the following reasons:</p>
+                <ul>
+                    <li>During normal resend processing, the sending application may choose not to send a message (e.g. an aged order).</li>
+                    <li>During normal resend processing, a number of administrative messages are skipped and not resent (such as Heart Beats, Test Requests).</li>
+                </ul>
+                <p>Gap Fill mode is indicated by<fieldref tag="123">GapFillFlag</fieldref>(tag 123) field = "Y".</p>
+                <p>If the<fieldref tag="123">GapFillFlag</fieldref>field is present (and equal to "Y"), the<fieldref tag="34">MsgSeqNum</fieldref>should conform to standard message sequencing rules (i.e. the<fieldref tag="34">MsgSeqNum</fieldref>of the Sequence Reset GapFill mode message should represent the beginning<fieldref tag="34">MsgSeqNum</fieldref>in the GapFill range because the remote side is expecting that next message sequence number).</p>
+                <p>Reset mode</p>
+                <p>Reset mode involves specifying an arbitrarily higher new sequence number to be expected by the receiver of the Sequence Reset-Reset message, and is used to reestablish a FIX session after an unrecoverable application failure.</p>
+                <p>Reset mode is indicated by the<fieldref tag="123">GapFillFlag</fieldref>(tag 123) field = "N" or if the field is omitted.</p>
+                <p>If the<fieldref tag="123">GapFillFlag</fieldref>field is not present (or set to N), it can be assumed that the purpose of the Sequence Reset message is to recover from an out-of-sequence condition. In Sequence Reset - Reset mode, the<fieldref tag="34">MsgSeqNum</fieldref>in the header should be ignored (i.e. the receipt of a Sequence Reset - Reset mode message with an out of sequence<fieldref tag="34">MsgSeqNum</fieldref>should not generate resend requests).  Sequence Reset  Reset should NOT be used as a normal response to a<msgref msgtype="2">Resend Request</msgref>(use Sequence Reset  Gap Fill mode).  The Sequence Reset  Reset should ONLY be used to recover from a disaster situation which cannot be recovered via the use of Sequence Reset  Gap Fill.  Note that the use of Sequence Reset  Reset may result in the possibility of lost messages.</p>
+                <p>Rules for processing all Sequence Reset messages</p>
+                <p>The sending application will initiate the Sequence Reset. The message in all situations specifies<fieldref tag="36">NewSeqNo</fieldref>to reset to as the value of the next sequence number to be expected by the message receipient immediately following the messages and/or sequence numbers being skipped.</p>
+                <p>The Sequence Reset can only increase the sequence number.  If a sequence reset is received attempting to decrease the next expected sequence number the message should be rejected and treated as a serious error. It is possible to have multiple Resend Requests issued in a row (e.g. 5 to 10 followed by 5 to 11).  If sequence number 8, 10, and 11 represent application messages while the 5-7 and 9 represent administrative messages, the series of messages as result of the<msgref msgtype="2">Resend Request</msgref>may appear as Sequence Reset-GapFill mode with<fieldref tag="36">NewSeqNo</fieldref>of 8, message 8, Sequence Reset-GapFill with<fieldref tag="36">NewSeqNo</fieldref>of 10, and message 10.  This could then followed by Sequence Reset-GapFill with<fieldref tag="36">NewSeqNo</fieldref>of 8, message 8, Sequence Reset-GapFill with<fieldref tag="36">NewSeqNo</fieldref>of 10, message 10, and message 11.  One must be careful to ignore the duplicate Sequence Reset-GapFill mode which is attempting to lower the next expected sequence number.  This can be detected by checking to see if its<fieldref tag="34">MsgSeqNum</fieldref>is less than expected.  If so, the Sequence Reset-GapFill mode is a duplicate and should be discarded.</p>
+            </descr>
+        </msgdef>
+        <msgdef msgtype="5" name="Logout" admin="Y">
+            <field tag="1409" name="SessionStatus">
+                <comment>Session status at time of logout.</comment>
+            </field>
+            <field tag="58" name="Text"/>
+            <field tag="354" name="EncodedTextLen" condreq="existtags(T$355)">
+                <comment>Must be set if<fieldref tag="355">EncodedText</fieldref>field is specified and must immediately precede it.</comment>
+            </field>
+            <field tag="355" name="EncodedText" condreq="existtags(T$354)">
+                <comment>Encoded (non-ASCII characters) representation of the<fieldref tag="58">Text</fieldref>field in the encoded format specified via the<fieldref tag="347">MessageEncoding</fieldref>field.</comment>
+            </field>
+            <descr>
+                <p>The logout message initiates or confirms the termination of a FIX session.  Disconnection without the exchange of logout 
+                messages should be interpreted as an abnormal condition.</p>
+                <p>Before actually closing the session, the logout initiator should wait for the opposite side to respond with a confirming 
+                logout message.  This gives the remote end a chance to perform any Gap Fill operations that may be necessary.  The session may 
+                be terminated if the remote side does not respond in an appropriate timeframe.</p>
+                <p>After sending the<msgref msgtype="5">Logout</msgref>message, the logout initiator should not send any messages unless 
+                requested to do so by the logout acceptor via a<msgref msgtype="2">Resend Request</msgref>.</p>             
+            </descr>
+        </msgdef>
+        <msgdef msgtype="A" name="Logon" admin="Y">
+            <field tag="98" name="EncryptMethod" req="Y">
+                <comment>(Always unencrypted)</comment>
+            </field>
+            <field tag="108" name="HeartBtInt" req="Y">
+                <comment>Note same value used by both sides</comment>
+            </field>
+            <field tag="95" name="RawDataLength" condreq="existtags(T$96)">
+                <comment>Required for some authentication methods</comment>
+            </field>
+            <field tag="96" name="RawData" condreq="existtags(T$95)">
+                <comment>Required for some authentication methods</comment>
+            </field>
+            <field tag="141" name="ResetSeqNumFlag">
+                <comment>Indicates both sides of a FIX session should reset sequence numbers</comment>
+            </field>
+            <field tag="789" name="NextExpectedMsgSeqNum">
+                <comment>Optional, alternative via counterparty bi-lateral agreement message gap detection and recovery approach  (see "Logon Message<fieldref tag="789">NextExpectedMsgSeqNum</fieldref>Processing" section)</comment>
+            </field>
+            <field tag="383" name="MaxMessageSize">
+                <comment>Can be used to specify the maximum number of bytes supported for messages received</comment>
+            </field>
+            <field tag="384" name="NoMsgTypes">
+                <comment>Specifies the number of repeating RefMsgTypes specified</comment>
+            </field>
+            <group nofield="384" startfield="372">
+                <field tag="372" name="RefMsgType" condreq="T$384&gt;0">
+                    <comment>Specifies a specific, supported MsgType.  Required if<fieldref tag="384">NoMsgTypes</fieldref>is &gt; 0.  Should be specified from the point of view of the sender of the<msgref msgtype="A">Logon</msgref>message</comment>
+                </field>
+                <field tag="385" name="MsgDirection" condreq="T$384&gt;0">
+                    <comment>Indicates direction (send vs. receive) of a supported MsgType.  Required if<fieldref tag="384">NoMsgTypes</fieldref>is &gt; 0. Should be specified from the point of view of the sender of the<msgref msgtype="A">Logon</msgref>message</comment>
+                </field>
+                <field tag="1130" name="RefApplVerID">
+                    <comment>Specifies the service pack release being applied to a message at the session level. Enumerated field with values assigned at time of service pack release</comment>
+                </field>
+                <field tag="1406" name="RefApplExtID">
+                    <comment>Specified the extension pack being applied to a message</comment>
+                </field>
+                <field tag="1131" name="RefCstmApplVerID">
+                    <comment>Specifies a custom extension to a message being applied at the session level.</comment>
+                </field>
+                <field tag="1410" name="DefaultVerIndicator">
+                    <comment>Indicates that this Application Version (RefApplVerID(1130), RefApplExtID(1406),RefCstmApplVerID(1131)) is the default for the RefMsgType(372) field</comment>
+                </field>
+            </group>
+            <field tag="464" name="TestMessageIndicator">
+                <comment>Can be used to specify that  this FIX session will be sending and receiving "test" vs. "production" messages.</comment>
+            </field>
+            <field tag="553" name="Username"/>
+            <field tag="554" name="Password">
+                <comment>Note: minimal security exists without transport-level encryption.</comment>
+            </field>
+            <field tag="925" name="NewPassword">
+                <comment>Specifies a new password for the FIX Logon.  The new password is used for subsequent logons.</comment>
+            </field>
+            <field tag="1400" name="EncryptedPasswordMethod"/>
+            <field tag="1401" name="EncryptedPasswordLen"/>
+            <field tag="1402" name="EncryptedPassword"/>
+            <field tag="1403" name="EncryptedNewPasswordLen"/>
+            <field tag="1404" name="EncryptedNewPassword">
+                <comment>Encrypted new password- encrypted via the method specified in the field EncryptedPasswordMethod(1400)</comment>
+            </field>
+            <field tag="1409" name="SessionStatus">
+                <comment>Session status at time of logon. Field is intended to be used when the logon is sent as an acknowledgement from acceptor of the FIX session.</comment>
+            </field>
+            <field tag="1137" name="DefaultApplVerID" req="Y">
+                <comment>The default version of FIX being carried over this FIXT session</comment>
+            </field>
+            <field tag="1407" name="DefaultApplExtID">
+                <comment>The default extension pack for FIX messages used in this session</comment>
+            </field>
+            <field tag="1408" name="DefaultCstmApplVerID">
+                <comment>The default custom application version (dictionary) for FIX messages used in this session</comment>
+            </field>
+            <field tag="58" name="Text">
+                <comment>Available to provide a response to logon when used as a logon acknowledgement from acceptor back to the logon initiator.</comment>
+            </field>
+            <field tag="354" name="EncodedTextLen">
+                <comment>Must be set if EncodedText field is specified and must immediately precede it.</comment>
+            </field>
+            <field tag="355" name="EncodedText">
+                <comment>Encoded (non-ASCII characters) representation of the Text field in the encoded  format specified via the MessageEncoding field.</comment>
+            </field>
+            <descr>
+                <p>The logon message authenticates a user establishing a connection to a remote system.  The logon message must be the first message sent by the application requesting to initiate a FIX session.</p>
+                <p>The<fieldref tag="108">HeartBtInt</fieldref>(108) field is used to declare the timeout interval for generating heartbeats (same value used by both sides).  The<fieldref tag="108">HeartBtInt</fieldref>value should be agreed upon by the two firms and specified by the<msgref msgtype="A">Logon</msgref>initiator and echoed back by the<msgref msgtype="A">Logon</msgref>acceptor.</p>
+                <p>Upon receipt of a<msgref msgtype="A">Logon</msgref>message, the session acceptor will authenticate the party requesting connection and issue a<msgref msgtype="A">Logon</msgref>message as acknowledgment that the connection request has been accepted.  The acknowledgment<msgref msgtype="A">Logon</msgref>can also be used by the initiator to validate that the connection was established with the correct party.</p>
+                <p>The session acceptor must be prepared to immediately begin processing messages after receipt of the Logon.  The session initiator can choose to begin transmission of FIX messages before receipt of the confirmation Logon, however it is recommended that normal message delivery wait until after the return<msgref msgtype="A">Logon</msgref>is received to accommodate encryption key negotiation.</p>
+                <p>The confirmation<msgref msgtype="A">Logon</msgref>can be used for encryption key negotiation.  If a session key is deemed to be weak, a stronger session key can be suggested by returning a<msgref msgtype="A">Logon</msgref>message with a new key.  This is only valid for encryption protocols that allow for key negotiation.  (See the FIX Web Site&apos;s Application notes for more information on a method for encryption and key passing.)</p>
+                <p>The<msgref msgtype="A">Logon</msgref>message can be used to specify the<fieldref tag="383">MaxMessageSize</fieldref>supported (i.e. can be used to control fragmentation rules for very large messages which support fragmentation).  It can also be used to specify the MsgTypes supported for both sending and receiving.</p>
+            </descr>
+        </msgdef>
+    </msgdic>
+</fixdic>

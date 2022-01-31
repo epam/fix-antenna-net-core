@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.b2bits.com/FIXProtocol"
+           xmlns="http://www.b2bits.com/FIXProtocol"
+           xmlns:fp="http://www.b2bits.com/FIXProtocol"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
+    <xs:include schemaLocation="fixdic_abstract.xsd"/>
+    <!-- FIX Protocol specification dictionary -->
+    <xs:element name="fixdic" type="fixdic">
+        <xs:key name="typedef-type">
+            <xs:selector xpath=".//fp:typedef"/>
+            <xs:field xpath="@type"/>
+        </xs:key>
+        <xs:keyref name="typedef-extends" refer="typedef-type">
+            <xs:selector xpath=".//fp:typedef"/>
+            <xs:field xpath="@extends"/>
+        </xs:keyref>
+        <xs:key name="valblockdef-id">
+            <xs:selector xpath=".//fp:valblockdef"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="valblock-idref" refer="valblockdef-id">
+            <xs:selector xpath=".//fp:valblock"/>
+            <xs:field xpath="@idref"/>
+        </xs:keyref>
+        <xs:key name="fielddef-tag">
+            <xs:selector xpath=".//fp:fielddef"/>
+            <xs:field xpath="@tag"/>
+        </xs:key>
+        <xs:keyref name="fielddef-lenfield" refer="fielddef-tag">
+            <xs:selector xpath=".//fp:fielddef"/>
+            <xs:field xpath="@lenfield"/>
+        </xs:keyref>
+        <xs:keyref name="group-nofield" refer="fielddef-tag">
+            <xs:selector xpath=".//fp:group"/>
+            <xs:field xpath="@nofield"/>
+        </xs:keyref>
+        <xs:keyref name="group-startfield" refer="fielddef-tag">
+            <xs:selector xpath=".//fp:group"/>
+            <xs:field xpath="@startfield"/>
+        </xs:keyref>
+        <xs:keyref name="field-tag" refer="fielddef-tag">
+            <xs:selector xpath=".//fp:field"/>
+            <xs:field xpath="@tag"/>
+        </xs:keyref>
+        <xs:keyref name="fieldref-tag" refer="fielddef-tag">
+            <xs:selector xpath=".//fp:fieldref"/>
+            <xs:field xpath="@tag"/>
+        </xs:keyref>
+        <xs:key name="blockdef-id">
+            <xs:selector xpath=".//fp:blockdef"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="block-idref" refer="blockdef-id">
+            <xs:selector xpath=".//fp:block"/>
+            <xs:field xpath="@idref"/>
+        </xs:keyref>
+        <xs:keyref name="blockref-idref" refer="blockdef-id">
+            <xs:selector xpath=".//fp:blockref"/>
+            <xs:field xpath="@idref"/>
+        </xs:keyref>
+        <xs:key name="msgdef-msgtype">
+            <xs:selector xpath=".//fp:msgdef"/>
+            <xs:field xpath="@msgtype"/>
+        </xs:key>
+        <xs:keyref name="msgref-msgtype" refer="msgdef-msgtype">
+            <xs:selector xpath=".//fp:msgref"/>
+            <xs:field xpath="@msgtype"/>
+        </xs:keyref>
+    </xs:element>
+</xs:schema>

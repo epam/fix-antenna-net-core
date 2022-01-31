@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fixdic fixversion="4.4" title="FIX 4.4" date="2010/03/11">
+
+    <fielddic>
+
+        <fielddef tag="17" name="ExecID" type="String"/>
+        <fielddef tag="9701" name="OmnibusAccount" type="String"/>
+        <fielddef tag="9702" name="CtiCode" type="String"/>
+
+    </fielddic>
+
+    <msgdic>
+
+        <msgdef msgtype="D" name="New Order - Single">
+            <field tag="9701" req="N"/>
+        </msgdef>
+
+        <msgdef msgtype="8" name="Execution Report">
+            <field tag="9702" req="Y"/>
+        </msgdef>
+
+        <msgdef msgtype="9" name="Order Cancel Reject">
+            <field tag="17" req="Y"/>
+        </msgdef>
+
+    </msgdic>
+</fixdic>

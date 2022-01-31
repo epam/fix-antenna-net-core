@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "misc/cases.dtd" [
+        <!ENTITY % content SYSTEM "misc/entity/definitions.inc">
+        %content; ]>
+<cases>
+
+    <case name="Logon and Logout test">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=SUN#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=A#49=B2B#56=SUN#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.4#9=61#35=5#49=SUN#56=B2B#34=2#52=20031027-14:29:11#10=126#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,}#35=5#49=B2B#56=SUN#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#10=\d{1,}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Sequnece number in logout message is less than expected. Logout answer is expected.
+    -->
+    <case name="Sequence number is less then expected">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=SUN#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=A#49=B2B#56=SUN#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.4#9=61#35=5#49=SUN#56=B2B#34=1#52=20031027-14:29:11#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=5#49=B2B#56=SUN#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#58=[^\x01]+#10=\d{1,}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+    <case name="Sequence number is less then expected">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=SUN#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=A#49=B2B#56=SUN#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.4#9=61#35=5#49=SUN#56=B2B#34=1#52=20031027-14:29:11#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,}#35=5#49=B2B#56=SUN#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#58=[^\x01]+#10=\d{1,}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Sequence number in logon message is greater than expected.
+    -->
+    <case name="Sequence number is greater then expected">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=5#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <expect>8=FIX\.4\.4#9=\d+#35=2#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#7=1#16=[02]#10=\d{3}#
+            </expect>
+            <send>8=FIX.4.4#9=57#35=4#49=TEST#56=B2B#34=6#52=20031027-14:29:11#36=7#10=126#</send>
+            <send>8=FIX.4.4#9=101#35=1#49=TEST#56=B2B#34=7#52=20031027-14:29:11#112=test#10=126#</send>
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=8#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=0#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#112=test#10=\d+#
+            </expect>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=4#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Sequence number decrease test.
+    -->
+    <case name="Sequence number decrease test with SequenceReset(1)">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Test requests -->
+            <send>8=FIX.4.4#9=101#35=1#49=TEST#56=B2B#52=20031027-14:29:11#34=2#112=test01#10=126#</send>
+            <send>8=FIX.4.4#9=101#35=1#49=TEST#56=B2B#52=20031027-14:29:11#34=3#112=test02#10=126#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=0#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#112=test01#10=\d+#
+            </expect>
+            <expect>8=FIX\.4\.4#9=\d+#35=0#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#112=test02#10=\d+#
+            </expect>
+            <!-- try to reset to lower sequence number-->
+            <send>8=FIX.4.4#9=57#35=4#49=TEST#56=B2B#34=4#36=2#52=20031027-14:29:11#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=3#49=B2B#56=TEST#34=4#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#45=\d+#371=\d+#373=\d+#10=\d+#
+            </expect>
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=4#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=5#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Sequence number decrease with reject and resend answer test.
+    -->
+    <case name="Sequence number decrease test with SequenceReset(1)">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Test requests -->
+            <send>8=FIX.4.4#9=101#35=1#49=TEST#56=B2B#34=2#52=20031027-14:29:11#112=test01#10=126#</send>
+            <send>8=FIX.4.4#9=101#35=1#49=TEST#56=B2B#34=3#52=20031027-14:29:11#112=test02#10=126#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=0#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#112=test01#10=\d+#
+            </expect>
+            <expect>8=FIX\.4\.4#9=\d+#35=0#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#112=test02#10=\d+#
+            </expect>
+            <!-- try to reset to lower sequence number. Reject is expected, next sequence number is not valid. Resend request is generated back-->
+            <send>8=FIX.4.4#9=57#35=4#49=TEST#56=B2B#34=4#52=20031027-14:29:11#36=2#10=126#</send>
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=5#52=50031027-14:29:11#10=213#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=3#49=B2B#56=TEST#34=4#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#45=\d+#371=\d+#373=\d+#10=\d+#
+            </expect>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=2#49=B2B#56=TEST#34=5#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#7=4#16=[04]#10=\d{3}#
+            </expect>
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=4#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=6#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Sending application message with No Application available. Businness Reject is expected with
+        Reason(380)=4 - Application not available.
+    -->
+    <case name="Send app message. No App available">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Application message -->
+            <send>
+                8=FIX.4.4#9=153#35=D#49=TEST#56=B2B#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=061#
+            </send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=j#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#45=\d+#372=\w#380=\d+#10=\d{3}#
+            </expect>
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Sending message with dupplicate (non-repeating) tags.
+
+        Expecting behaviour: Reject message response with "Session Reject Reason(373) = 13(Tag appears more than once).
+        For more information, see "FIX 4.4. Volume 1. Fix protocol syntax. FIX 'Tag=Value' Syntax. Message Format.",
+        and "Session Reject(3)".
+    -->
+    <case name="Duplicate tags">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- Send logon message with dupplicate TAGS with diff. values in the BODY section. 98 and 108-->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#98=1#108=10#108=20#10=126#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: Sending garbled logon message.
+
+        Expected behaviour: No response.
+
+        References: "FIX 4.4. Volume 1. Fix protocol syntax. FIX 'Tag=Value' Syntax. Message Format."
+    -->
+    <case name="Sending garbled logon message">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- Send garbled login message. Mix up 8 and 9 tags.-->
+            <send>9=61#8=FIX.4.4#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect/>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: Sending application message(NewOrder[D]) with fake Application available.
+        Business logic is not checked.
+
+        Expected behaviour: application message whould be accepted.
+    -->
+    <case name="Send app message. With App available">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Application message -->
+            <send>
+                8=FIX.4.4#9=153#35=D#49=TEST#56=B2B#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=061#
+            </send>
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: Sending application garbled message(NewOrder[D]) with fake Application available.
+        8 and 9 tags are mixed up. Business logic is not checked.
+
+        Expected behaviour: Garbled message should be ignored and inbound MsgSecNumber should not be incremented.
+    -->
+    <case name="Send app message. With App available">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Application message -->
+            <send>
+                9=153#8=FIX.4.4#35=D#49=TEST#56=B2B#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=061#
+            </send>
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=2#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: Sending application message(NewOrder[D]) with fake Application available. TAG 44 is empty.
+
+        Expected behaviour: Session Reject is expected with Reason "Tag specified without a value(4)".
+    -->
+    <case name="Send app message. With App available">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Application message -->
+            <send>
+                8=FIX.4.4#9=153#35=D#49=TEST#56=B2B#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=#60=20000809-18:20:32#10=061#
+            </send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=3#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#45=\d+#371=\d+#372=\w+#373=4#58=[^\x01]+#10=\d+#
+            </expect>
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=3#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: Sending application message(NewOrder[D]) with fake Application available.
+        34 is missed in Header section
+
+        Expected behaviour: This situation is not clearly described in specification.
+        1) According to "Fix 4.4. Volume 2. FIX Session-level Test Cases and Expected Behaviours.
+        What constitutes a garbled message. (Page 30.)".
+        Logout message should be sent terminating FIX Connection, as this indicates a serious application error.
+        2) According to "Fix 4.4. Volume 2. FIX Session-level Test Cases and Expected Behaviours.
+        Test Cases Applicable to all FIX Systems.", Test Case "Receive application or administrative message",
+        "b) Receive message with a required field tag missed", there should be generated reject message and
+        continue working.
+        Engine actions combines two of them: 1) Send reject message; 2) Logout.
+
+        Test Case generates an ERROR ONLY to drawing an attention to this situation. It must be fixed according
+        an appropriate behaviour.
+    -->
+    <case name="Send app message with MsgSeqNumber(34) missed">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Application message -->
+            <send>
+                8=FIX.4.4#9=153#35=D#49=TEST#56=B2B#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=061#
+            </send>
+            <expect>8=FIX\.4\.4#9=\d+#35=3#49=B2B#56=TEST#34=\d+#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#58=(\s\S)*#10=\d+#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: 1. Send the logout(5) message with MsgSeqNum flag greater than expected
+        2. Send SequenceReset(4) in GapFill mode to replace the retransmition of administrative messages.
+        PossDupFlag is missing. Specification needs PossDupFlag set to Y.
+
+        Expected reaction: Session MUST NOT be terminated. The Resend Request(2) is expected.
+        Case contains manual error to point to the fact that Retransmition must be with PossDupFlag=Y.
+        It is not clear what is the reaction of FixEngine.
+
+        Reference: FIX 44. Volume 2. Session Protocol. Message Recovery. Page 8. "Upon receipt of a Resend Request..."
+    -->
+    <case name="logout(5) message with MsgSeqNum flag greater than expected">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send LOGOUT(5) with MsgSeqNum greater than expected -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=4#52=50031027-14:29:11#10=213#</send>
+            <!-- Resent Request expected -->
+            <expect>8=FIX\.4\.4#9=\d+#35=2#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#7=2#16=[03]#10=\d{3}#
+            </expect>
+            <!-- Sequence reset - GapFill Mode sent without PossDupFlag-->
+            <send>
+                8=FIX.4.4#9=101#35=4#49=TEST#56=B2B#34=2#43=Y#52=20031027-14:29:11#122=20031027-14:29:10#123=Y#36=4#10=126#
+            </send>
+
+            <!-- NORMAL LOGOUT -->
+            <send>8=FIX.4.4#9=136#35=5#49=TEST#56=B2B#34=4#52=50031027-14:29:11#10=213#</send>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#10=\d+#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <!--
+        Case action: Sending Logon(A) message with NextExpectedMsgSeqNum(789) field.
+
+        Expected behaviour: Logon(A) response is expected according to handling of NextExpectedMsgSeqNum(789).
+
+        References: Fix 44. VOLUME 2. Session protocol. Logon message NextExpectedMsgSeqNum Processing.
+    -->
+    <!--case name="Logon with NextExpectedMsgSeqNum(789)">
+
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send> 8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=3#52=20031027-14:29:11#98=0#108=10#789=3#10=126# </send>
+            <expect> 8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#789=2#10=\d{3}# </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case-->
+    <!--
+        Case action: Sending application message(NewOrder[D]) with fake Application available.
+        Invalid CompID in Message Header. Business logic is not checked.
+
+        Expected behaviour: application message should be rejected (Reject(3) with reason response) and
+        sesion terminating (Logout(5) response with explanation).
+    -->
+    <case name="Send app message. With App available">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <!-- NORMAL LOGIN -->
+            <send>8=FIX.4.4#9=61#35=A#49=TEST#56=B2B#34=1#52=20031027-14:29:11#98=0#108=10#10=126#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=A#49=B2B#56=TEST#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#98=0#108=10#10=\d{3}#
+            </expect>
+            <!-- Send Application message -->
+            <send>
+                8=FIX.4.4#9=153#35=D#49=TEST1#56=B2B#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=061#
+            </send>
+            <expect>
+                8=FIX\.4\.4#9=\d+#35=3#49=B2B#56=TEST#34=2#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})*#45=\d+#372=\w+#373=9#10=\d+#
+            </expect>
+            <expect>8=FIX\.4\.4#9=\d+#35=5#49=B2B#56=TEST#34=3#52=\d{8}-\d{2}:\d{2}:\d{2}\.?\d{3}#58=[^\x01]+#10=\d+#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

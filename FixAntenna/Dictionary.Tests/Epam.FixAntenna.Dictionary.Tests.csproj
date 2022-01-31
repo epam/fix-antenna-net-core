@@ -1,0 +1,97 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net48</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Dictionaries\Additional\additional42_11_tag_not_required.xml" />
+		<None Remove="Dictionaries\Additional\additional42_11_tag_required.xml" />
+		<None Remove="Dictionaries\Additional\custom_44.xml" />
+		<None Remove="Dictionaries\Additional\fixdic44.xml" />
+		<None Remove="Dictionaries\Additional\qFIX44.xml" />
+		<None Remove="Dictionaries\Com\dictionary\base40.xml" />
+		<None Remove="Dictionaries\Com\dictionary\noConditional.xml" />
+		<None Remove="Dictionaries\Com\validators\fixdic40custom.xml" />
+		<None Remove="Dictionaries\Custom\fixdic40custom.xml" />
+		<None Remove="Dictionaries\Loading\base40_embedded_resource.xml" />
+		<None Remove="Dictionaries\Loading\base40_output_resource.xml" />
+		<None Remove="Dictionaries\Loading\LoadingOrder\base40.xml" />
+		<None Remove="Dictionaries\Loading\LoadingOrder\base40_output.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Dictionaries\Additional\additional42_11_tag_not_required.xml" />
+		<EmbeddedResource Include="Dictionaries\Additional\additional42_11_tag_required.xml" />
+		<EmbeddedResource Include="Dictionaries\Additional\custom_44.xml" />
+		<EmbeddedResource Include="Dictionaries\Additional\fixdic44.xml" />
+		<EmbeddedResource Include="Dictionaries\Additional\qFIX44.xml" />
+		<EmbeddedResource Include="Dictionaries\Com\Dictionary\base40.xml" />
+		<EmbeddedResource Include="Dictionaries\Com\Dictionary\noConditional.xml" />
+		<EmbeddedResource Include="Dictionaries\Com\Validators\fixdic40custom.xml" />
+		<EmbeddedResource Include="Dictionaries\Custom\fixdic40custom.xml" />
+		<Content Include="Dictionaries\Loading\OutputResources\base40.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Dictionaries\Loading\LoadingOrder\base40_output.xml">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+		<EmbeddedResource Include="Dictionaries\Loading\LoadingOrder\base40.xml">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Dictionaries\Loading\EmbeddedResources\base40.xml" />
+	</ItemGroup>
+
+	<Target Name="RenameDictionaryForTests" AfterTargets="Build">
+		<Copy SourceFiles="Dictionaries\Loading\LoadingOrder\base40_output.xml" DestinationFiles="$(OutputPath)\Dictionaries\Loading\LoadingOrder\base40.xml" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="nunit" Version="3.13.2" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.2.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+		<PackageReference Include="NunitXml.TestLogger" Version="3.0.117" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETFramework' ">
+	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="NUnit.Framework.NonParallelizable"></AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\Common.Tests\GlobalNUnitConfig.cs" Link="GlobalNUnitConfig.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\NetCore\Epam.FixAntenna.NetCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Dictionaries\qfix-wrong-major.xml">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Dictionaries\qfix-wrong-minor.xml">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Dictionaries\qfix-wrong-type.xml">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

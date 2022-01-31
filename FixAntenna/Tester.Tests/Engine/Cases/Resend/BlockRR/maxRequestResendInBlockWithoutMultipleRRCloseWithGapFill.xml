@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+    <case name="2 TestRequest before disconnect" disableReason="no next block request issued">
+        &CLEAN_LOGS;
+        <task className="FixEngine.EngineUpWithEchoApp">
+            <param name="port">&ENGINE_PORT;</param>
+            <param name="name">SERVER</param>
+            <param name="global_maxRequestResendInBlock">3</param>
+            <param name="global_switchOffSendingMultipleResendRequests">Yes</param>
+        </task>
+
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+            <!-- send too high seqnum to get RR -->
+            <send>8=FIX.4.4#9=0#35=A#34=8#49=&ME;#52=&DATETIMEMS;#56=&YOU;#98=0#108=1#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=&YOU;#52=&DATETIMEMS;#56=&ME;#10=\d{3}#</expect>
+
+
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=2#34=2#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=1#16=3#10=\d{3}#
+            </expect>
+
+            <!-- resend requested messages -->
+            <send>
+                8=FIX.4.4#9=0#35=4#34=1#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#36=5#123=Y#10=000#
+            </send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=2#34=3#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=5#16=7#10=\d{3}#
+            </expect>
+
+
+            <!-- send one more too high seq num, but shouldn't be RR in answer-->
+            <send>8=FIX.4.4#9=0#35=6#34=9#49=&ME;#52=&DATETIMEMS;#56=&YOU;#23=2#28=N#27=1#55=1#54=1#10=000#</send>
+            <send>8=FIX.4.4#9=0#35=6#34=10#49=&ME;#52=&DATETIMEMS;#56=&YOU;#23=2#28=N#27=1#55=2#54=1#10=000#</send>
+            <send>8=FIX.4.4#9=0#35=6#34=11#49=&ME;#52=&DATETIMEMS;#56=&YOU;#23=2#28=N#27=1#55=3#54=1#10=000#</send>
+
+
+            <send>8=FIX.4.4#9=0#35=6#34=5#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#23=2#28=N#27=1#55=4#54=1#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=4#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=4#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=6#34=6#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#23=2#28=N#27=1#55=5#54=1#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=5#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=5#10=\d{3}#
+            </expect>
+          
+            <send>8=FIX.4.4#9=0#35=6#34=7#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#23=2#28=N#27=1#55=6#54=1#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=2#34=6#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=8#16=8#10=\d{3}#
+            </expect>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=7#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=6#10=\d{3}#
+            </expect>
+          
+
+            <send>8=FIX.4.4#9=0#35=6#34=7#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#23=2#28=N#27=1#55=7#54=1#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=8#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=7#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=6#34=8#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#23=2#28=N#27=1#55=8#54=1#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=9#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=8#10=\d{3}#
+            </expect>
+
+            <!--<send>8=FIX.4.4#9=0#35=6#34=9#49=&ME;#52=&DATETIMEMS;#56=&YOU;#43=Y#122=20031027-14:29:11#23=2#28=N#27=1#55=1#54=1#10=000#</send>-->
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=10#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=1#10=\d{3}#
+            </expect>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=11#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=2#10=\d{3}#
+            </expect>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=12#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=3#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=6#34=9#49=&ME;#52=&DATETIMEMS;#56=&YOU;#23=2#28=N#27=1#55=9#54=1#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=6#34=13#49=&YOU;#56=&ME;#52=&DATETIMEMS;#55=9#10=\d{3}#
+            </expect>
+
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

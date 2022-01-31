@@ -1,0 +1,18 @@
+<!ELEMENT send (#PCDATA)>
+<!ELEMENT cases (case)*>
+<!ELEMENT case (desc | task | transport | tasksList)*>
+<!ATTLIST case name CDATA #IMPLIED>
+<!ATTLIST case updater CDATA #IMPLIED>
+<!ATTLIST case comparator CDATA #IMPLIED>
+<!ATTLIST case disableReason CDATA #IMPLIED>
+<!ELEMENT desc (#PCDATA)>
+<!ELEMENT param (#PCDATA)>
+<!ATTLIST param name CDATA #IMPLIED>
+<!ELEMENT expect (#PCDATA)>
+<!ELEMENT tasksList (task)*>
+<!ELEMENT task (param)*>
+<!ATTLIST task className CDATA #IMPLIED>
+<!ELEMENT transport (task | desc | expect | send)*>
+<!ATTLIST transport className CDATA #IMPLIED>
+<!ATTLIST transport host CDATA #IMPLIED>
+<!ATTLIST transport port CDATA #IMPLIED>

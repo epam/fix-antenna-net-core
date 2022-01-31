@@ -1,0 +1,23 @@
+<Project>
+	<PropertyGroup>
+		<IsPublishable>true</IsPublishable>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<Authors>EPAM</Authors>
+		<Company>EPAM Systems, Inc.</Company>
+		<Copyright>Copyright © EPAM Systems, Inc. 2020-2022</Copyright>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<IsPackable>false</IsPackable>
+		<Deterministic>true</Deterministic>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RepositoryUrl>https://github.com/epam/fix-antenna-net-core</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+</Project>

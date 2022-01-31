@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+    <case name="bug 15718">
+        <!--  Logout message should be sent when after Resend Request engine received message with SeqNum=<less then expected>
+
+        Steps to reproduce:
+            1) Using TCP Client send Logon message with SeqNum=3:
+        8=FIX.4.4#9=58#35=A#49=SNDR#56=TRGT#34=3#52=20081225-18:32:15#98=0#108=0#10=132#
+            - Session SNDR-TRGT was established.
+            - Resend Request was sent from TRGT.
+            2) Using TCP Client send TestRequest message with SeqNum=2.
+        8=FIX.4.4#9=65#35=1#34=2#49=SNDR#56=TRGT#52=20090129-15:01:22.234#112=tEsT-SNDR#10=002#
+
+        Expected:
+            FIXAJ should be sent Logout message with reason "Incoming seq number 2 is
+        less then expected 4", incoming TestRequest message should not be stored in the
+        *.in log. session should be disconnected.
+
+        Actual:
+            FIXAJ was not sent Logout message, but sent Resend Request message and
+        incoming TestRequest message was stored in the *.in log and session has not
+        been terminated.
+        -->
+
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+            <send>8=FIX.4.4#9=123#35=A#34=3#49=TW#52=20031027-14:29:11#56=ISLD#98=0#108=5#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=2#34=2#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#7=1#16=0#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=1#34=2#49=TW#52=20031027-14:29:11#56=ISLD#112=HELLO#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=5#34=3#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

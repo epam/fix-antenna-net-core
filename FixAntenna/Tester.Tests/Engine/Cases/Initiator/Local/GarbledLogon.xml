@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+
+    <!-- Invalid logon (expecting logout with descriptive information) -->
+
+
+    <case name="Logon: (Invalid logon MsgSeqNum=0)">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.2#9=57#35=A#49=123#56=B2B#34=#52=20031027-14:29:11#98=0#108=5#10=123#</send>
+            <expect>
+                8=FIX\.4\.2#9=\d*#35=5#49=B2B#56=123#34=1#52=\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}#58=[a-zA-Z0-9\.:,\s]*#10=\d{3}#
+            </expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+
+
+
+
+</cases>

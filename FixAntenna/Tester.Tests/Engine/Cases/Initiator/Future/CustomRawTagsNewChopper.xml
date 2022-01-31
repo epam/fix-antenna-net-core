@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+
+    <case name="CustomRawTags">
+        &CLEAN_LOGS;
+        <task className="FixEngine.EngineUpWithEchoApp">
+            <param name="port">&ENGINE_PORT;</param>
+            <param name="name">SERVER</param>
+            <!-- the default list of raw tags: 96, 91, 213, 349, 351, 353, 355, 357, 359, 361, 363, 365, 446, 619, 622 -->
+            <!-- custom list without 355 tag for test-->
+            <param name="global_rawTags">96, 91, 213, 349, 351, 353, 357, 359, 361, 363, 365, 446, 619, 622</param>
+            <!-- to use NewMessageChopper as a parser -->
+            <param name="global_validateGarbledMessage">false</param>
+            <!-- disable validation to check only raw tags behaviour -->
+            <param name="global_validation">false</param>
+        </task>
+
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            &SEND_LOGON;
+            &RECEIVE_LOGON;
+            <!-- send message with 355 tag, which was excluded from the raw tag list -->
+            <!-- and check that session isn;t closed with error -->
+            <send>8=FIX.4.2#9=123#35=D#34=2#49=&ME;#56=&YOU;#52=20031027-14:29:11#355=AAA#11=ID#21=1#40=1#54=1#38=200.00#55=INTC#60=20031027-14:29:11#10=000#</send>
+            <expect>8=FIX\.4\.2#9=\d{1,3}#35=D#34=2#49=&YOU;#56=&ME;#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+            <!-- logout -->
+            <send>8=FIX.4.2#9=57#35=5#49=&ME;#56=&YOU;#34=3#52=20031027-14:29:11#10=126#</send>
+            <expect>8=FIX\.4\.2#9=\d*#35=5#49=&YOU;#56=&ME;#34=3#52=&DATETIMEMS;#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+
+</cases>

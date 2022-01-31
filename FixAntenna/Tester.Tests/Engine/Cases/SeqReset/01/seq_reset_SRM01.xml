@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "../../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../../Engine/Entities/definitions.inc">
+        %content; ]>
+
+<cases>
+
+    <!--case SRM01-->
+    <!--testzilla case 10e_001_SR	-->
+    <!--Step 1. Receive Sequence Reset (Gap Fill) message with NewSeqNo = MsgSeqNum and MsgSeqNum =
+        to expected sequence number-->
+    <!--Step 2. 8=FIX.4.4 9=58 35=4 49=SNDR 56=TRGT 34=2 52=20081225-18:32:15 123=Y 36=2 10=150 	-->
+    <!--Step 3. FIXAJ should send Reject (session-level) message with text "58=attempt to lower sequnce number,
+    invalid value NewSeqNum=<x>". Expected MsgSeqNumber should be equal to 2-->
+
+    <case name="SRM01">
+        &CLEAN_LOGS;
+        &ENGINE_UP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+            <send>8=FIX.4.4#9=123#35=A#34=1#49=TW#52=20031027-14:29:11#56=ISLD#98=0#108=5#10=000#</send>
+            <expect>
+                 8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=0#35=4#34=2#49=TW#52=20031027-14:29:11#56=ISLD#36=2#123=Y#10=000#</send>            
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=3#34=2#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#58=[\w\s\p{P}\p{Sm}]*#10=\d{3}#
+            </expect>            
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

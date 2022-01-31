@@ -1,0 +1,25 @@
+<fixdic fixversion="4.2" title="FIX 4.2" date="5000/09/09">
+    <fielddic>
+        <fielddef tag="9701" name="OmnibusAccount" type="String"/>
+        <fielddef tag="9702" name="CtiCode" type="char"/>
+        <fielddef tag="9706" name="FeeBilling" type="char"/>
+        <fielddef tag="9707" name="GiveUpFirm" type="String"/>
+        <fielddef tag="9708" name="CmtaGiveupCD" type="String"/>
+        <fielddef tag="9717" name="CorrelationClOrdID" type="String"/>
+    </fielddic>
+    <msgdic>
+        <msgdef msgtype="D" name="New Order - Single">
+            <field tag="11" name="ClOrdID" req="N"/>
+            <field tag="9701" req="N"/>
+            <field tag="9702" req="Y"/>
+            <field tag="9706" req="N"/>
+            <field tag="9707" req="N"/>
+            <field tag="9708" req="N"/>
+            <field tag="9717" req="Y"/>
+            <field tag="21" req="N"/>
+        </msgdef>
+    </msgdic>
+</fixdic>
+
+
+

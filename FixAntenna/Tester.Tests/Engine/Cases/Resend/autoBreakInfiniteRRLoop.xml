@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE cases SYSTEM "../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../Engine/Entities/definitions.inc">
+        %content; ]>
+
+<cases>
+
+    <!-- Test processing SeqReset without OrigSendingTime(122) field-->
+
+    <case name="Prevent infinite RR loop"  updater="SmartUpdater">
+        &CLEAN_LOGS;
+
+        <task className="FixEngine.EngineUpWithEchoApp">
+            <param name="port">&ENGINE_PORT;</param>
+            <param name="name">SERVER</param>
+            <!--<param name="global_allowedCountOfSimilarRR">3</param>-->
+        </task>
+        <transport className="InitiatorSocketTransport" host="localhost" port="&ENGINE_PORT;">
+            <send>8=FIX.4.4#9=0#35=A#34=1#49=&ME;#56=&YOU;#52=00000000-00:00:00#98=0#108=5#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=&YOU;#56=&ME;#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+            <!-- ====================== PART 1: 2 round of RR and reset counter for normal -->
+            <!-- send corrupted message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=2#49=&ME;#56=&YOU;#52=00000000-00:00:00#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=001#</send>
+            <!-- send correct message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=3#49=&ME;#56=&YOU;#52=00000000-00:00:00#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=2#34=2#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=2#16=0#10=\d{3}#</expect>
+
+            <!-- repeat corrupted message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=2#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=001#</send>
+            <!-- repeat correct message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=3#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=2#34=3#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=2#16=0#10=\d{3}#</expect>
+
+            <!-- repeat normal message -->
+            <send>8=FIX.4.4#9=0#35=D#34=2#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=D#34=4#49=&YOU;#56=&ME;#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+
+            <!-- ====================== PART 1: 3 round of RR and automatic Logout -->
+
+            <!-- repeat corrupted message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=3#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=001#</send>
+            <!-- send correct message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=4#49=&ME;#56=&YOU;#52=00000000-00:00:00#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=2#34=5#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=3#16=0#10=\d{3}#</expect>
+
+
+            <!-- resend corrupted message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=3#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=001#</send>
+            <!-- resend correct message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=4#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=2#34=6#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=3#16=0#10=\d{3}#</expect>
+
+            <!-- resend corrupted message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=3#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=001#</send>
+            <!-- resend correct message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=4#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=2#34=7#49=&YOU;#56=&ME;#52=&DATETIMEMS;#7=3#16=0#10=\d{3}#</expect>
+
+            <!-- resend corrupted message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=3#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=001#</send>
+            <!-- resend correct message (with wrong checksum) -->
+            <send>8=FIX.4.4#9=0#35=D#34=4#43=Y#49=&ME;#56=&YOU;#52=00000000-00:00:00#122=20031027-14:29:11#11=ord1#1=TEST01#21=1#100=DSMD#55=MSFT#54=1#60=20031027-14:29:11#38=100#40=2#44=10#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=5#34=8#49=&YOU;#56=&ME;#52=&DATETIMEMS;#10=\d{3}#</expect>
+
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

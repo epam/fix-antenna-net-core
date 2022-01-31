@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cases SYSTEM "../../../cases.dtd" [
+        <!ENTITY % content SYSTEM "../../../Engine/Entities/definitions.inc">
+        %content; ]>
+<cases>
+
+    <case name="bug15640">
+        &CLEAN_LOGS;
+        &ENGINE_UP_WITH_ECHO_APP;
+
+        <!--Bug 15640-->
+
+
+        <!--1) Create session between SimpleClient and EchoServer.-->
+
+        <!--- Session created.-->
+
+        <!--2) Send few application level messages from SimpleClient to EchoServer like-->
+        <!--following:-->
+        <!--8=FIX.4.4#9=123#35=D#49=TW#56=ISLD#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=000#-->
+
+        <!--- Messages sent.-->
+
+        <!--3) Once messages sent, close session in SimpleClient and create it again with-->
+        <!--'Reset Sequence Number' checkbox checked.-->
+
+        <!--- Session created again, sequence number reset to '1'-->
+
+        <!--4) Send from SimpleClient ResendRequest message in order to check which-->
+        <!--messages were resend:-->
+        <!--8=FIX.4.4#9=52#35=2#49=SC#56=FE#34=2#52=20090126-10:59:42#7=1#16=0#10=174#-->
+
+        <!--Expected: Only messages after Reset Sequence Numbers should be resend.-->
+
+        <!--Actual: Messages sent before Sequence Reset operation are resent. Please see-->
+        <!--EchoServer and SimpleClient logs in attach.-->
+
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+
+            <send>8=FIX.4.4#9=123#35=A#34=1#49=TW#52=20031027-14:29:11#56=ISLD#98=0#108=5#10=000#</send>
+            <expect>
+                8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#
+            </expect>
+
+            <send>8=FIX.4.4#9=123#35=D#49=TW#56=ISLD#34=2#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=000#</send>
+            <send>8=FIX.4.4#9=123#35=D#49=TW#56=ISLD#34=3#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=000#</send>
+            <send>8=FIX.4.4#9=123#35=D#49=TW#56=ISLD#34=4#50=30737#97=Y#52=20000809-20:20:50#11=90001008#1=10030003#21=2#55=TESTA#54=1#38=4000#40=2#59=0#44=30#60=20000809-18:20:32#10=000#</send>
+
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=D#34=2#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+    <case name="bug15640">
+        &ENGINE_UP_WITH_ECHO_APP;
+        <transport className="InitiatorSocketTransport" host="localhost" port="3000">
+            <send>8=FIX.4.4#9=123#35=A#34=1#49=TW#52=20031027-14:29:11#56=ISLD#98=0#108=5#141=Y#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=A#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#10=\d{3}#</expect>
+
+            <send>8=FIX.4.4#9=0#35=2#34=2#49=TW#56=ISLD#52=20090128-14:20:48#7=1#16=0#10=000#</send>
+            <expect>8=FIX\.4\.4#9=\d{1,3}#35=4#34=1#49=ISLD#52=\d{8}-\d{2}:\d{2}:\d{2}(\.\d{3})?#56=TW#36=2#10=\d{3}#</expect>
+        </transport>
+        &ENGINE_DOWN;
+    </case>
+</cases>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fixdic SYSTEM "fixdic.dtd">
+<fixdic fixversion="4.0" title="FIX 4.0 Embedded Resource" date="1997/01/10">
+    <typelist>
+        <typedef type="int"/>
+        <typedef type="char"/>
+        <typedef type="time" extends="String"/>
+        <typedef type="data"/>
+    </typelist>
+    <fielddic>
+        <fielddef tag="1" name="Field1" type="String"/>
+        <fielddef tag="8" name="BeginString" type="char">
+            <item val="FIX.4.0"/>
+        </fielddef>
+        <fielddef tag="9" name="BodyLength" type="int">
+            <range minval="0" maxval="9999" type="int"/>
+        </fielddef>
+        <fielddef tag="10" name="CheckSum" type="char">
+        </fielddef>
+        <fielddef tag="34" name="MsgSeqNum" type="int">
+            <range minval="0" maxval="999999" type="int"/>
+        </fielddef>
+        <fielddef tag="35" name="MsgType" type="char">
+            <item val="0">
+                <msgref msgtype="0">Heartbeat</msgref>
+            </item>
+        </fielddef>
+        <fielddef tag="43" name="PossDupFlag" type="char">
+            <item val="Y">Possible duplicate</item>
+            <item val="N">Original transmission</item>
+        </fielddef>
+        <fielddef tag="49" name="SenderCompID" type="char"/>
+        <fielddef tag="50" name="SenderSubID" type="char"/>
+        <fielddef tag="52" name="SendingTime" type="UTCTimestamp40"/>
+        <fielddef tag="57" name="TargetSubID" type="char"/>
+        <fielddef tag="89" name="Signature" type="data" lenfield="93"/>
+        <fielddef tag="90" name="SecureDataLen" type="int"/>
+        <fielddef tag="91" name="SecureData" type="data" lenfield="90"/>
+        <fielddef tag="93" name="SignatureLength" type="int"/>
+        <fielddef tag="97" name="PossResend" type="char"/>
+        <fielddef tag="108" name="HeartBtInt" type="int"/>
+        <fielddef tag="112" name="TestReqID" type="char"/>
+        <fielddef tag="115" name="OnBehalfOfCompID" type="char"/>
+        <fielddef tag="116" name="OnBehalfOfSubID" type="char"/>
+        <fielddef tag="122" name="OrigSendingTime" type="UTCTimestamp40"/>
+        <fielddef tag="128" name="DeliverToCompID" type="char"/>
+        <fielddef tag="129" name="DeliverToSubID" type="char"/>
+        <fielddef tag="9702" name="CtiCode" type="String"/>
+    </fielddic>
+    <msgdic>
+        <blockdef id="SMH" name="Standard Message Header">
+            <field tag="8" name="BeginString" req="Y"/>
+            <field tag="9" name="BodyLength" req="Y"/>
+            <field tag="35" name="MsgType" req="Y"/>
+            <field tag="49" name="SenderCompID" req="Y"/>
+            <field tag="56" name="TargetCompID" req="Y"/>
+            <field tag="115" name="OnBehalfOfCompID"/>
+            <field tag="128" name="DeliverToCompID"/>
+            <field tag="90" name="SecureDataLen" condreq="existtags(T$91)"/>
+            <field tag="91" name="SecureData" condreq="existtags(T$90)"/>
+            <field tag="34" name="MsgSeqNum" req="Y"/>
+            <field tag="50" name="SenderSubID"/>
+            <field tag="57" name="TargetSubID"/>
+            <field tag="116" name="OnBehalfOfSubID"/>
+            <field tag="129" name="DeliverToSubID"/>
+            <field tag="43" name="PossDupFlag"/>
+            <field tag="97" name="PossResend"/>
+            <field tag="52" name="SendingTime" req="Y"/>
+            <field tag="122" name="OrigSendingTime"/>
+        </blockdef>
+        <blockdef id="SMT" name="Standard Message Trailer">
+            <field tag="93" name="SignatureLength" condreq="existtags(T$89)"/>
+            <field tag="89" name="Signature" condreq="existtags(T$93)"/>
+            <field tag="10" name="CheckSum" req="Y"/>
+        </blockdef>
+        <msgdef msgtype="0" name="Heartbeat" admin="Y">
+            <field tag="1" name="Field1" condreq="existtags(T$112)"/>
+            <field tag="112" name="TestReqID"/>
+            <field tag="9702" req="Y"/>
+        </msgdef>
+    </msgdic>
+</fixdic>

@@ -1,0 +1,2 @@
+copy inv_cond_req_44_01.fix + inv_cond_req_44_02.fix + inv_cond_req_44_03.fix + inv_cond_req_44_04.fix + inv_cond_req_44_05.fix + inv_cond_req_44_06.fix + inv_cond_req_44_07.fix + inv_cond_req_44_08.fix + inv_cond_req_44_09.fix + inv_cond_req_44_10.fix + inv_cond_req_44_11.fix + inv_cond_req_44_12.fix + inv_cond_req_44_13.fix + inv_cond_req_44_14.fix + inv_cond_req_44_15.fix inv_cond_req_44_all.fix
+

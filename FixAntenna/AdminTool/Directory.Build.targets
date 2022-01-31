@@ -1,0 +1,27 @@
+﻿<Project>
+
+	<Target Name="GenerateSources" BeforeTargets="PreBuildEvent">
+
+		<PropertyGroup>
+			<XsdFileName>$(ProjectDir)Fixicc/message.xsd</XsdFileName>
+			<ToolName>dotnet-xscgen</ToolName>
+			<ToolVersion>2.0.634</ToolVersion>
+			<PathGenerated>$(ProjectDir)Fixicc/Generated</PathGenerated>
+			<NamespaceGenerated>Epam.FixAntenna.Fixicc.Message</NamespaceGenerated>
+			<CleanFileName>Message.cs</CleanFileName>
+		</PropertyGroup>
+
+		<Exec Command="dotnet new tool-manifest --force"/>
+		<Exec Command="dotnet tool install --local $(ToolName) --version $(ToolVersion)"/>
+		<Exec Command="dotnet tool restore"/>
+		<Exec Command="dotnet tool run xscgen -0 -n =$(NamespaceGenerated) -o=$(PathGenerated) $(XsdFileName)"/>
+		<Move SourceFiles="$(PathGenerated)/$(NamespaceGenerated).cs" DestinationFiles="$(PathGenerated)/$(CleanFileName)"/>
+
+		<ItemGroup>
+			<Compile Include="**/*$(DefaultLanguageSourceExtension)"
+							 Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**;@(Compile)" />
+		</ItemGroup>
+
+	</Target>
+
+</Project>

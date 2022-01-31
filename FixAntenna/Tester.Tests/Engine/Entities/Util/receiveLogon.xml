@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expect>8=FIX\.4\.2#9=\d*#35=A#49=&YOU;#56=&ME;#34=1#52=&DATETIMEWITHOUTMS;#98=0#108=5#10=\d{3}#</expect>
