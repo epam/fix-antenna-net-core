@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net6.0;net48</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\FixAntenna\Core.Tests\server.pfx" Link="server.pfx">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\FixAntenna\Core.Tests\TestCA.crt" Link="TestCA.crt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\FixAntenna\AdminTool\Epam.FixAntenna.AdminTool.csproj" />
+		<ProjectReference Include="..\..\FixAntenna\NetCore\Epam.FixAntenna.NetCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="EchoServer.pfx">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="fixengine.properties">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>
