@@ -1,0 +1,58 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'Docs/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'Docs/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore ./FixAntenna/Epam.FixAntenna.sln
+
+    - name: Build
+      run: dotnet build ./FixAntenna/Epam.FixAntenna.sln --no-restore -c ReleaseTests
+
+    - name: Run AdminTool.Tests
+      run: dotnet test ./FixAntenna/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Common.Tests
+      run: dotnet test ./FixAntenna/Common.Tests/Epam.FixAntenna.Common.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Configuration.Tests
+      run: dotnet test ./FixAntenna/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Core.Tests
+      run: dotnet test ./FixAntenna/Core.Tests/Epam.FixAntenna.Core.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Dictionary.Tests
+      run: dotnet test ./FixAntenna/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Message.Tests
+      run: dotnet test ./FixAntenna/Message.Tests/Epam.FixAntenna.Message.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Validation.Tests
+      run: dotnet test ./FixAntenna/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+    - name: Run Tester.Tests
+      run: dotnet test ./FixAntenna/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+
+

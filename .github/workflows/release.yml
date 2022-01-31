@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  deploy:
+    
+    runs-on: ubuntu-latest
+    if: github.event.base_ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          source-url: https://nuget.pkg.github.com/epam/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Restore dependencies
+        run: dotnet restore ./FixAntenna/Epam.FixAntenna.sln
+
+      - name: Build
+        run: dotnet build ./FixAntenna/Epam.FixAntenna.sln --no-restore -c ReleaseTests
+      
+      - name: Run AdminTool.Tests
+        run: dotnet test ./FixAntenna/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Common.Tests
+        run: dotnet test ./FixAntenna/Common.Tests/Epam.FixAntenna.Common.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Configuration.Tests
+        run: dotnet test ./FixAntenna/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Core.Tests
+        run: dotnet test ./FixAntenna/Core.Tests/Epam.FixAntenna.Core.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Dictionary.Tests
+        run: dotnet test ./FixAntenna/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Message.Tests
+        run: dotnet test ./FixAntenna/Message.Tests/Epam.FixAntenna.Message.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Validation.Tests
+        run: dotnet test ./FixAntenna/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+      - name: Run Tester.Tests
+        run: dotnet test ./FixAntenna/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+
+      - name: Pack
+        run: dotnet pack ./FixAntenna/Epam.FixAntenna.sln -c Release -o ./nupkgs --include-symbols --no-build
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          draft: true
+          files: './nupkgs/*.*nupkg'
+
+#      - name: Push GPR package
+#        run: dotnet nuget push './nupkgs/*.nupkg' -k ${{secrets.GITHUB_TOKEN}} -s https://nuget.pkg.github.com/epam/index.json --skip-duplicate
+
