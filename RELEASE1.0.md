@@ -52,7 +52,7 @@ public virtual void SetHeartbeatInterval(int heartbeatInterval)
 
 ## Features and improvements
 ### QuickFIX dictionaries support
-Dictionaries in QuickFIX format can be used to start FIX sessions 
+Dictionaries in QuickFIX format can be used for FIX sessions 
 ### Assigning an individual dictionary to a specific FIX session
 An individual dictionary can be assigned to a specific FIX session in the property file
 ### Using environment variables for configuration
