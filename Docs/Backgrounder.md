@@ -230,19 +230,12 @@ Groups&quot; for more details.<sup>[[2]](#source2)</sup>
 > require recasting.<sup>[[3]](#source3)</sup>
 
 ### Data Integrity
-> The integrity of message data content can be verified in two ways:
-> verification of message length and a simple checksum of characters.
+> The integrity of message data content shall be verified for message length and the tagvalue encoding checksum according to the FIX tagvalue encoding specification.
 > 
-> The message length is indicated in the BodyLength field and is verified by
-> counting the number of characters in the message following the BodyLength
-> field up to, and including, the delimiter immediately preceding the
-> CheckSum tag ("10=").
+> The message length must be specified in the BodyLength(9) field. The length must be calculated by counting the number of octets in the message following the end of field delimiter (<SOH>) of BodyLength(9), up to and including the end of field delimiter (<SOH>) of the field immediately preceding the CheckSum(10) field.
 > 
-> The CheckSum integrity check is calculated by summing the binary value of
-> each character from the "8" of "8=" up to and including the &lt;SOH&gt; character
-> immediately preceding the CheckSum tag field and comparing the least
-> significant eight bits of the calculated value to the CheckSum value (see
-> "CheckSum Calculation" for a complete description).<sup>[[4]](#source4)</sup>
+> The checksum must be calculated by summing the binary value of each octet from the start of the BeginString(8) field up to and including the end of field delimiter (<SOH>) of the field immediately preceding the CheckSum(10) field, then transforming this value using a modulo 256.
+> The calculated modulo 256 checksum must then be encoded as an ISO 8859-1 three-octet representation of the decimal value. For example, if the result of the modulo 256 of the sum of the value of the fields is 23, the CheckSum(10) field will be encoded as the ISO 8859-1 string “10=023”<sup>[[4]](#source4)</sup>
 
 ### Message Acknowledgment
 > The FIX session protocol is based on an optimistic model; normal delivery
@@ -258,7 +251,7 @@ Groups&quot; for more details.<sup>[[2]](#source2)</sup>
 > requests, allocations, etc. require specific application level responses,
 > executions can be rejected with the DK message but do not require explicit
 > acceptance. See "Volume 1 - Business Message Reject" for details regarding
-> the appropriate response message to specific application level messages.<sup>[[4]](#source4)</sup>
+> the appropriate response message to specific application level messages.<sup>[[5]](#source5)</sup>
 
 ### Encryption
 The exchange of sensitive data across public carrier networks may make it
@@ -376,7 +369,7 @@ a FIX Session spans multiple logins.
 
 <a name="source3">3. AJ. "FIX protocol interview questions: Part 1 - Admin/Session". Some Technicalities of Life, April 27, 2010, https://aj-sometechnicalitiesoflife.blogspot.com/2010/04/fix-protocol-interview-questions.html.</a><br>
 
-<a name="source4">4. OnixS. "FIXT 1.1: Message Delivery - FIX Dictionary." onixs.biz, OnixS, Accessed on January 1, 2022, https://www.onixs.biz/fix-dictionary/fixt1.1/section_message_delivery.html.</a><br>
+<a name="source4">4. FIX Trading Community. "FIX TagValue Encoding." fixtrading.org, Accessed on February 7, 2022, https://www.fixtrading.org/standards/tagvalue-online.</a><br>
 
 <a name="source5">5. B2BITS. "FIX Sessions". corp-web.b2bits.com, B2BITS FIX Antenna .NET, Syntax based on .NET Framework version 4.8, https://corp-web.b2bits.com/fixanet/doc/html/html/60e5d73c-f584-41d1-b6b5-91c233dbd33f.htm.</a><br>
 

@@ -26,7 +26,7 @@ Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Win
 ## [Changelog](CHANGELOG.md)
 
 ## Roadmap
-- [ ] NuGet packages
+- [x] NuGet packages
 - [ ] Message decorator
 - [ ] Scheduler
 - [ ] REST admin and monitoring interface

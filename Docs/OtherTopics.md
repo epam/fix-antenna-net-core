@@ -146,7 +146,7 @@ public void NewFixSession(IFixSession session)
 ```
 
 FIX specification allows shutting down the connection without sending Logout here:
-"If authentication fails, the session acceptor should shut down the connection after optionally sending a Logout message to indicate the reason of failure. Sending Logout in this case is not required because doing so would consume a sequence number for that session, which in some cases may be problematic."<sup>[[1]](#source1)</sup></a>
+"If authentication fails, the session acceptor should shut down the connection after optionally sending a Logout message to indicate the reason of failure. Sending Logout in this case is not required because doing so would consume a sequence number for that session, which in some cases may be problematic."<sup>[[1]](#source1)</sup>
 
 But if a Logout message is required in your environment, you need to write a custom handler with authorization for Logon messages. It is possible to send a Logout message without Logon from the handler.
 
@@ -187,4 +187,4 @@ Make sure that this port is not in use by some other application. Try `netstat -
 to get the list of used ports.
 
 ## References
-<a name="source1">1. OnixS. "Logon <A> Message - FIXT 1.1 - FIX Dictionary" onixs.biz, OnixS, Accessed on January 1, 2022, https://www.onixs.biz/fix-dictionary/fixt1.1/msgtype_a_65.html</a>
+<a name="source1">1. FIX Trading Community. "FIX connection termination" fixtrading.org, Accessed on February 7, 2022, https://www.fixtrading.org/standards/fix-session-layer-online/#fix-connection-termination</a>
