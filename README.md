@@ -1,7 +1,7 @@
 [![Build net6.0](https://github.com/epam/fix-antenna-net-core/actions/workflows/build.yml/badge.svg)](https://github.com/epam/fix-antenna-net-core/actions/workflows/build.yml)
 
 # FIX Antenna™ .NET Core Community Edition
-FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.
+FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.  Ideal solution for buy side and proprietary trading companies.
 
 ![Responce time](Docs/fanet_response_time-1.0.0.png)
 
