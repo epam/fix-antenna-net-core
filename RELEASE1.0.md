@@ -1,7 +1,7 @@
 # Version 1.0 Release Notes
 
 ## Breaking Changes
-Version 1.0 API does not compatible with versions 0.9.x API.
+Version 1.0 API partially compatible with 0.9.x API. Main differences is namespaces and getters/setters:
 
 ### All namespaces reorganized and renamed with 'Epam.' prefix
 For example, in version 1.0
