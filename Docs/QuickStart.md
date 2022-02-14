@@ -17,56 +17,56 @@ Session-acceptor is created in the following way:
 // implements IFixServerListener to get notifications about new connections
 public class SimpleServer : IFixServerListener
 {
-    public static void Main(string[] args)
-    {
-        FixServer server = new FixServer(); // create server that will listen for TCP/IP connections
-        server.SetPort(777); // setting port it will listen to
-        server.SetListener(new SimpleServer()); // setting listener for new connections
-        server.Start(); // this will start new thread and listen for incoming connections
-        
-        Console.WriteLine("Press enter to exit");
-        Console.Read(); // preventing application from exiting
-        
-        server.Stop(); // this will stop the thread that listens for new connections
-    }
+	public static void Main(string[] args)
+	{
+		FixServer server = new FixServer(); // create server that will listen for TCP/IP connections
+		server.SetPort(777); // setting port it will listen to
+		server.SetListener(new SimpleServer()); // setting listener for new connections
+		server.Start(); // this will start new thread and listen for incoming connections
+		
+		Console.WriteLine("Press enter to exit");
+		Console.Read(); // preventing application from exiting
+		
+		server.Stop(); // this will stop the thread that listens for new connections
+	}
 
-    // this method is called for every new connection
-    public void NewFixSession(IFixSession session) 
-    {
-        try 
-        {
-            session.SetFixSessionListener(new MyFixSessionListener(session)); // setting listener for incoming messages
-            session.Connect(); // accepting connection
-        } 
-        catch (IOException e) 
-        {
-        }
-    }
+	// this method is called for every new connection
+	public void NewFixSession(IFixSession session) 
+	{
+		try 
+		{
+			session.SetFixSessionListener(new MyFixSessionListener(session)); // setting listener for incoming messages
+			session.Connect(); // accepting connection
+		} 
+		catch (IOException e) 
+		{
+		}
+	}
 
-    // listener for incoming messages and session state changes
-    private class MyFixSessionListener : IFixSessionListener 
-    {
-        private IFixSession session;
+	// listener for incoming messages and session state changes
+	private class MyFixSessionListener : IFixSessionListener 
+	{
+		private IFixSession session;
 
-        public MyFixSessionListener(IFixSession session) 
-        {
-            this.session = session;
-        }
+		public MyFixSessionListener(IFixSession session) 
+		{
+			this.session = session;
+		}
 
-        // this method will be called every time session state is changed
-        public void OnSessionStateChange(SessionState sessionState) 
-        {
-            if (sessionState == SessionState.Disconnected) 
-            {
-                session.Dispose();
-            }
-        }
+		// this method will be called every time session state is changed
+		public void OnSessionStateChange(SessionState sessionState) 
+		{
+			if (sessionState == SessionState.Disconnected) 
+			{
+				session.Dispose();
+			}
+		}
 
-        // here you can process incoming messages
-        public void OnNewMessage(FixMessage message) 
-        {
-        }
-    }
+		// here you can process incoming messages
+		public void OnNewMessage(FixMessage message) 
+		{
+		}
+	}
 }
 ```
 
@@ -182,25 +182,25 @@ messages and session changes:
 ```csharp
 private class MyFixSessionListener : IFixSessionListener 
 {
-    private IFixSession session;
+	private IFixSession session;
 
-    public MyFixSessionListener(IFixSession session) 
-    {
-        this.session = session;
-    }
+	public MyFixSessionListener(IFixSession session) 
+	{
+		this.session = session;
+	}
 
-    public void OnSessionStateChange(SessionState sessionState) 
-    {
-        if (sessionState == SessionState.Disconnected) 
-        {
-            session.Dispose();
-        }
-    }
+	public void OnSessionStateChange(SessionState sessionState) 
+	{
+		if (sessionState == SessionState.Disconnected) 
+		{
+			session.Dispose();
+		}
+	}
 
-    public void OnNewMessage(FixMessage message) 
-    {
-        Console.WriteLine("New application level message type: " + message.GetTagValueAsString(Fixt11.Header.MsgType) + "received");
-    }
+	public void OnNewMessage(FixMessage message) 
+	{
+		Console.WriteLine("New application level message type: " + message.GetTagValueAsString(Fixt11.Header.MsgType) + "received");
+	}
 }
 ```
 
@@ -241,61 +241,61 @@ namespace Server
   // implements IFixServerListener to get notifications about new connections
   public class SimpleServer : IFixServerListener
   {
-    public static void Main(string[] args)
-    {
-      FixServer server = new FixServer(); // create server that will listen for TCP/IP connections
-      server.SetPort(777); // setting port it will listen to
-      server.SetListener(new SimpleServer()); // setting listener for new connections
-      server.Start(); // this will start new thread and listen for incoming connections
+	public static void Main(string[] args)
+	{
+	  FixServer server = new FixServer(); // create server that will listen for TCP/IP connections
+	  server.SetPort(777); // setting port it will listen to
+	  server.SetListener(new SimpleServer()); // setting listener for new connections
+	  server.Start(); // this will start new thread and listen for incoming connections
 
-      Console.WriteLine("Press enter to exit");
-      Console.Read(); // preventing application from exiting
+	  Console.WriteLine("Press enter to exit");
+	  Console.Read(); // preventing application from exiting
 
-      server.Stop(); // this will stop the thread that listens for new connections
-    }
+	  server.Stop(); // this will stop the thread that listens for new connections
+	}
 
-    // this method is called for every new connection
-    public void NewFixSession(IFixSession session)
-    {
-      try
-      {
-        session.SetFixSessionListener(new MyFixSessionListener(session)); // setting listener for incoming messages
-        session.Connect(); // accepting connection
-        Console.WriteLine("New connection accepted");
-      }
-      catch (IOException e)
-      {
-      }
-    }
+	// this method is called for every new connection
+	public void NewFixSession(IFixSession session)
+	{
+	  try
+	  {
+		session.SetFixSessionListener(new MyFixSessionListener(session)); // setting listener for incoming messages
+		session.Connect(); // accepting connection
+		Console.WriteLine("New connection accepted");
+	  }
+	  catch (IOException e)
+	  {
+	  }
+	}
 
-    // listener for incoming messages and session state changes
-    private class MyFixSessionListener : IFixSessionListener
-    {
-      private IFixSession session;
+	// listener for incoming messages and session state changes
+	private class MyFixSessionListener : IFixSessionListener
+	{
+	  private IFixSession session;
 
-      public MyFixSessionListener(IFixSession session)
-      {
-        this.session = session;
-      }
+	  public MyFixSessionListener(IFixSession session)
+	  {
+		this.session = session;
+	  }
 
-      // this method will be called every time session state is changed
-      public void OnSessionStateChange(SessionState sessionState)
-      {
-        Console.WriteLine("Session state: " + sessionState);
-        // if disconnected, dispose it to let GC collect it
-        if (sessionState == SessionState.Disconnected)
-        {
-          session.Dispose();
-          Console.WriteLine("Your session has been disconnected. Press ENTER to exit the programm.");
-        }
-      }
+	  // this method will be called every time session state is changed
+	  public void OnSessionStateChange(SessionState sessionState)
+	  {
+		Console.WriteLine("Session state: " + sessionState);
+		// if disconnected, dispose it to let GC collect it
+		if (sessionState == SessionState.Disconnected)
+		{
+		  session.Dispose();
+		  Console.WriteLine("Your session has been disconnected. Press ENTER to exit the programm.");
+		}
+	  }
 
-      // here you can process incoming messages
-      public void OnNewMessage(FixMessage message)
-      {
-        Console.WriteLine("New message is accepted: " + message.ToString());
-      }
-    }
+	  // here you can process incoming messages
+	  public void OnNewMessage(FixMessage message)
+	  {
+		Console.WriteLine("New message is accepted: " + message.ToString());
+	  }
+	}
   }
 }
 ```
@@ -313,83 +313,83 @@ namespace Client
 {
   public class SimpleNewsBroadcaster
   {
-    public static void Main(string[] args)
-    {
-      // creating connection parameters
-      var details = new SessionParameters
-      {
-	      FixVersion = FixVersion.Fix42,
-	      Host = "localhost",
-	      HeartbeatInterval = 30,
-	      Port = 777,
-	      SenderCompId = "senderId",
-	      TargetCompId = "targetId"
-      };
+	public static void Main(string[] args)
+	{
+	  // creating connection parameters
+	  var details = new SessionParameters
+	  {
+		  FixVersion = FixVersion.Fix42,
+		  Host = "localhost",
+		  HeartbeatInterval = 30,
+		  Port = 777,
+		  SenderCompId = "senderId",
+		  TargetCompId = "targetId"
+	  };
 
 
-      // create a session we intend to work with
-      IFixSession session = details.CreateNewFixSession();
+	  // create a session we intend to work with
+	  IFixSession session = details.CreateNewFixSession();
 
-      // listener for incoming messages and session state changes
-      IFixSessionListener application = new MyFixSessionListener(session);
+	  // listener for incoming messages and session state changes
+	  IFixSessionListener application = new MyFixSessionListener(session);
 
-      // setting listener for incoming messages
-      session.SetFixSessionListener(application);
-      // initiate a connection
-      session.Connect();
+	  // setting listener for incoming messages
+	  session.SetFixSessionListener(application);
+	  // initiate a connection
+	  session.Connect();
 
 
-      // create FIX 4.2 News
-      FixMessage messageContent = new FixMessage();
-      messageContent.AddTag(148, "Hello there"); // Add Subject
-      messageContent.AddTag(33, 3); // Add Repeating group
-      messageContent.AddTag(58, "line1");
-      messageContent.AddTag(58, "line2");
-      messageContent.AddTag(58, "line3");
+	  // create FIX 4.2 News
+	  FixMessage messageContent = new FixMessage();
+	  messageContent.AddTag(148, "Hello there"); // Add Subject
+	  messageContent.AddTag(33, 3); // Add Repeating group
+	  messageContent.AddTag(58, "line1");
+	  messageContent.AddTag(58, "line2");
+	  messageContent.AddTag(58, "line3");
 
-      // sending a message
-      session.SendMessage("B", messageContent);
-      try
-      {
-        // sleep for some time to ensure message delivery. Other flow control procedures should
-        // be used in real applications.
-        Thread.Sleep(100);
-      }
-      catch (Exception e)
-      {
-        // ignored
-      }
+	  // sending a message
+	  session.SendMessage("B", messageContent);
+	  try
+	  {
+		// sleep for some time to ensure message delivery. Other flow control procedures should
+		// be used in real applications.
+		Thread.Sleep(100);
+	  }
+	  catch (Exception e)
+	  {
+		// ignored
+	  }
 
-      // disconnecting
-      session.Disconnect("User request");
-    }
+	  // disconnecting
+	  session.Disconnect("User request");
+	}
 
-    private class MyFixSessionListener : IFixSessionListener
-    {
-      private IFixSession session;
+	private class MyFixSessionListener : IFixSessionListener
+	{
+	  private IFixSession session;
 
-      public MyFixSessionListener(IFixSession session)
-      {
-        this.session = session;
-      }
+	  public MyFixSessionListener(IFixSession session)
+	  {
+		this.session = session;
+	  }
 
-      public void OnNewMessage(FixMessage message)
-      {
-        Console.WriteLine("New application level message type: " + message.GetTagValueAsString(Tags.MsgType) + "received");
-        // this callback is called upon new message arrival
-      }
+	  public void OnNewMessage(FixMessage message)
+	  {
+		Console.WriteLine("New application level message type: " + message.GetTagValueAsString(Tags.MsgType) + "received");
+		// this callback is called upon new message arrival
+	  }
 
-      public void OnSessionStateChange(SessionState sessionState)
-      {
-        Console.WriteLine("Session state changed:" + sessionState);
-        // this callback is called upon session state change
-        if (sessionState == SessionState.Disconnected)
-        {
-          // end this session
-          session.Dispose();
-        }
-      }
-    }
+	  public void OnSessionStateChange(SessionState sessionState)
+	  {
+		Console.WriteLine("Session state changed:" + sessionState);
+		// this callback is called upon session state change
+		if (sessionState == SessionState.Disconnected)
+		{
+		  // end this session
+		  session.Dispose();
+		}
+	  }
+	}
   }
 }
 ```

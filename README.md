@@ -5,6 +5,8 @@
 # FIX Antenna™ .NET Core Community Edition
 FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.  Ideal solution for buy side and proprietary trading companies.
 
+## [Fast response time](Docs/benchmarking.md)
+
 ![Responce time](Docs/fanet_response_time-1.0.0.png)
 
 ## Requirements & Compatibility
@@ -13,6 +15,8 @@ The engine is based on .NET Standard 2.0 and is compatible with any platform tha
 Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Windows 10 and Linux Ubuntu 16.04.
 
 .NET SDK 6.0 is required to build and run samples
+
+## [Quick start guide](Docs/QuickStart.md)
 
 ## Features
 - [FIX Engine](Docs/features.md#fix-engine)
@@ -96,3 +100,7 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 Copyright © 2020-2022 [EPAM Systems, Inc.](https://www.epam.com/)
 
 Distributed under [the Apache License](LICENSE), Version 2.0.
+
+## Support
+
+Should you have any questions or inquiries, please direct them to SupportFIXAntenna@epam.com
