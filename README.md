@@ -2,6 +2,8 @@
 [![Build net6.0](https://github.com/epam/fix-antenna-net-core/actions/workflows/build.yml/badge.svg)](https://github.com/epam/fix-antenna-net-core/actions/workflows/build.yml)
 ![Nuget](https://img.shields.io/nuget/v/Epam.FixAntenna.NetCore)
 
+![FIX Antenna](Docs/fa.png)
+
 # FIX Antenna™ .NET Core Community Edition
 FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.  Ideal solution for buy side and proprietary trading companies.
 
@@ -97,6 +99,8 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 - [Vladimir Gusev](https://github.com/portowine1982) - Analyst
 
 ## License
+![b2bits.com](Docs/b2bits.png)
+
 Copyright © 2020-2022 [EPAM Systems, Inc.](https://www.epam.com/)
 
 Distributed under [the Apache License](LICENSE), Version 2.0.
