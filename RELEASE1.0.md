@@ -49,7 +49,7 @@ public virtual void SetHeartbeatInterval(int heartbeatInterval)
 ### Number of binaries reduced
 | v1.0 | v0.9.x |
 |---|---|
-|Epam.FixAntenna.Dialects.dll<br>Epam.FixAntenna.NetCore.dll|FixAntenna.AdminTool.dll<br>FixAntenna.Common.dll<br>FixAntenna.Configuration.dll<br>FixAntenna.Core.dll<br>FixAntenna.Dictionary.dll<br>FixAntenna.Encryption.dll<br>FixAntenna.Message.dll<br>FixAntenna.Tester.dll<br>FixAntenna.Validation.dll<br>FixAntenna.XmlBeans.dll|
+|Epam.FixAntenna.Dialects.dll<br>Epam.FixAntenna.NetCore.dll|FixAntenna.Common.dll<br>FixAntenna.Configuration.dll<br>FixAntenna.Core.dll<br>FixAntenna.Dictionary.dll<br>FixAntenna.Encryption.dll<br>FixAntenna.Message.dll<br>FixAntenna.Tester.dll<br>FixAntenna.Validation.dll<br>FixAntenna.XmlBeans.dll|
 
 ## Features and improvements
 ### QuickFIX dictionaries support
