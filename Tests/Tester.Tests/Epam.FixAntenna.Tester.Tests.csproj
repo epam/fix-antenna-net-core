@@ -36,7 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Tools\Tester\Epam.FixAntenna.Tester.csproj" />
+		<ProjectReference Include="..\..\FixAntenna\Tools\Tester\Epam.FixAntenna.Tester.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -62,9 +62,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="..\NetCore\FixEngine\Session\MessageHandler\Cme\cme_config.properties" Link="Engine\Cases\Cme\cme_config.properties">
+	  <None Include="..\..\FixAntenna\NetCore\FixEngine\Session\MessageHandler\Cme\cme_config.properties" Link="Engine\Cases\Cme\cme_config.properties">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </EmbeddedResource>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>

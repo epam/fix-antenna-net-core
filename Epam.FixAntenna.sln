@@ -3,43 +3,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.NetCore", "NetCore\Epam.FixAntenna.NetCore.csproj", "{CE5A5B41-2C23-404F-B794-1A22444402E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.NetCore", "FixAntenna\NetCore\Epam.FixAntenna.NetCore.csproj", "{CE5A5B41-2C23-404F-B794-1A22444402E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.AdminTool", "AdminTool\Epam.FixAntenna.AdminTool.csproj", "{640F39E6-EF05-4F25-831E-C14E09CC788E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.AdminTool", "FixAntenna\AdminTool\Epam.FixAntenna.AdminTool.csproj", "{640F39E6-EF05-4F25-831E-C14E09CC788E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.AdminTool.Tests", "AdminTool.Tests\Epam.FixAntenna.AdminTool.Tests.csproj", "{BA5AFC10-23FA-4054-BB12-D41C4B202AA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.AdminTool.Tests", "Tests\AdminTool.Tests\Epam.FixAntenna.AdminTool.Tests.csproj", "{BA5AFC10-23FA-4054-BB12-D41C4B202AA0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E8315D07-B5C2-4535-B10B-B5DE263465E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.TestUtils", "Tools\TestUtils\Epam.FixAntenna.TestUtils.csproj", "{27A9BB6E-560A-483F-BA04-C278DFA42FBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.TestUtils", "FixAntenna\Tools\TestUtils\Epam.FixAntenna.TestUtils.csproj", "{27A9BB6E-560A-483F-BA04-C278DFA42FBD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Dialects", "FixAntenna.Dialects\Epam.FixAntenna.Dialects.csproj", "{977C9D95-FEC0-4B57-A0FA-909B9F62F213}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Dialects", "FixAntenna\FixAntenna.Dialects\Epam.FixAntenna.Dialects.csproj", "{977C9D95-FEC0-4B57-A0FA-909B9F62F213}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.TagsGen", "Tools\TagsGen\Epam.FixAntenna.TagsGen.csproj", "{D2438C45-10D4-45F7-9FDD-9448CA51CE74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.TagsGen", "FixAntenna\Tools\TagsGen\Epam.FixAntenna.TagsGen.csproj", "{D2438C45-10D4-45F7-9FDD-9448CA51CE74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Common.Tests", "Common.Tests\Epam.FixAntenna.Common.Tests.csproj", "{B0ECC602-BED3-470E-99FC-A3345AD8B05A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Common.Tests", "Tests\Common.Tests\Epam.FixAntenna.Common.Tests.csproj", "{B0ECC602-BED3-470E-99FC-A3345AD8B05A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Configuration.Tests", "Configuration.Tests\Epam.FixAntenna.Configuration.Tests.csproj", "{5F971C14-F6CA-4E41-A31D-64B6DCF7E90F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Configuration.Tests", "Tests\Configuration.Tests\Epam.FixAntenna.Configuration.Tests.csproj", "{5F971C14-F6CA-4E41-A31D-64B6DCF7E90F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Core.Tests", "Core.Tests\Epam.FixAntenna.Core.Tests.csproj", "{6E8EFBC8-9183-40AD-80CB-1A08955C22AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Core.Tests", "Tests\Core.Tests\Epam.FixAntenna.Core.Tests.csproj", "{6E8EFBC8-9183-40AD-80CB-1A08955C22AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Dictionary.Tests", "Dictionary.Tests\Epam.FixAntenna.Dictionary.Tests.csproj", "{9719EC1F-AE50-4852-98EC-1CB58111AF9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Dictionary.Tests", "Tests\Dictionary.Tests\Epam.FixAntenna.Dictionary.Tests.csproj", "{9719EC1F-AE50-4852-98EC-1CB58111AF9C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Message.Tests", "Message.Tests\Epam.FixAntenna.Message.Tests.csproj", "{A36D2345-309E-48E2-916D-2B2B35267979}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Message.Tests", "Tests\Message.Tests\Epam.FixAntenna.Message.Tests.csproj", "{A36D2345-309E-48E2-916D-2B2B35267979}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Validation.Tests", "Validation.Tests\Epam.FixAntenna.Validation.Tests.csproj", "{6444E143-683D-4F19-A86D-217F768B0C1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Validation.Tests", "Tests\Validation.Tests\Epam.FixAntenna.Validation.Tests.csproj", "{6444E143-683D-4F19-A86D-217F768B0C1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Tester", "Tools\Tester\Epam.FixAntenna.Tester.csproj", "{9EE92162-F624-4824-970B-796949A38A58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Tester", "FixAntenna\Tools\Tester\Epam.FixAntenna.Tester.csproj", "{9EE92162-F624-4824-970B-796949A38A58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Tester.Tests", "Tester.Tests\Epam.FixAntenna.Tester.Tests.csproj", "{08C315F8-A0F9-457E-94CC-09C57FD654AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epam.FixAntenna.Tester.Tests", "Tests\Tester.Tests\Epam.FixAntenna.Tester.Tests.csproj", "{08C315F8-A0F9-457E-94CC-09C57FD654AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{95705DBA-C60E-4A7E-8145-C655FE5B2650}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8D9CECD2-8B2B-47E3-8273-B462216D0C2D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EchoServer", "..\Samples\EchoServer\EchoServer.csproj", "{56ACE5A2-71D2-48BF-B2A8-4907E4EC3951}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EchoServer", "Samples\EchoServer\EchoServer.csproj", "{56ACE5A2-71D2-48BF-B2A8-4907E4EC3951}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToGateway", "..\Samples\ConnectToGateway\ConnectToGateway.csproj", "{78C1BA42-5A8A-4E2D-9C4D-0E77A1709997}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToGateway", "Samples\ConnectToGateway\ConnectToGateway.csproj", "{78C1BA42-5A8A-4E2D-9C4D-0E77A1709997}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2524C5BA-6E6D-4DD6-9558-3F5CCAFA68EE}"
 	ProjectSection(SolutionItems) = preProject
@@ -47,11 +47,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleAdminClient", "..\Samples\SimpleAdminClient\SimpleAdminClient.csproj", "{B4BB9A25-621B-436A-BEB1-09E6347F6E66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleAdminClient", "Samples\SimpleAdminClient\SimpleAdminClient.csproj", "{B4BB9A25-621B-436A-BEB1-09E6347F6E66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleServer", "..\Samples\SimpleServer\SimpleServer.csproj", "{92E1FB2F-9603-4839-A6E2-C7BC67C8FB54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleServer", "Samples\SimpleServer\SimpleServer.csproj", "{92E1FB2F-9603-4839-A6E2-C7BC67C8FB54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToGatewayAsync", "..\Samples\ConnectToGatewayAsync\ConnectToGatewayAsync.csproj", "{BDBB2CDC-5C0A-4421-ABFE-55C05EABFF23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToGatewayAsync", "Samples\ConnectToGatewayAsync\ConnectToGatewayAsync.csproj", "{BDBB2CDC-5C0A-4421-ABFE-55C05EABFF23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
