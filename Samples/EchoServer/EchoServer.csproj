@@ -6,12 +6,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\FixAntenna\Core.Tests\server.pfx" Link="server.pfx">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Include="..\..\FixAntenna\Core.Tests\TestCA.crt" Link="TestCA.crt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	  <None Include="..\..\Tests\Core.Tests\server.pfx" Link="server.pfx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\..\Tests\Core.Tests\TestCA.crt" Link="TestCA.crt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>

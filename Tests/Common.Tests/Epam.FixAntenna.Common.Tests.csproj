@@ -19,8 +19,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\FixAntenna\NetCore\Epam.FixAntenna.NetCore.csproj" />
 		<ProjectReference Include="..\Core.Tests\Epam.FixAntenna.Core.Tests.csproj" />
-		<ProjectReference Include="..\NetCore\Epam.FixAntenna.NetCore.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
