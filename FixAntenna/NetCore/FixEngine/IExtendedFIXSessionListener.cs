@@ -19,7 +19,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 	/// <summary>
 	/// Extended fix session listener
 	/// </summary>
-	internal interface IExtendedFixSessionListener : IFixSessionListener
+	public interface IExtendedFixSessionListener : IFixSessionListener
 	{
 		/// <summary>
 		/// Method fired when message received.
