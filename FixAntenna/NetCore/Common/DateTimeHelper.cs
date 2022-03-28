@@ -23,7 +23,7 @@ using Epam.FixAntenna.NetCore.Helpers;
 
 namespace Epam.FixAntenna.NetCore.Common
 {
-	internal static class DateTimeHelper
+	public static class DateTimeHelper
 	{
 		private static readonly ILog Log = LogFactory.GetLog(typeof(DateTimeHelper));
 
