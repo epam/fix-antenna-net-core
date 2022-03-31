@@ -281,6 +281,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 		/// </summary>
 		public string Host { get; set; }
 
+		public string BindIP { get; set; }
+
 		/// <summary>
 		/// Returns true if the Port is set.
 		/// </summary>
@@ -313,7 +315,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 					}
 
 					if (!(Enum.TryParse(propertyValue, true, out ForceSeqNumReset forceSeqNumReset) 
-					      && Enum.IsDefined(typeof(ForceSeqNumReset), forceSeqNumReset)))
+						  && Enum.IsDefined(typeof(ForceSeqNumReset), forceSeqNumReset)))
 					{
 						Log.Warn("Invalid forceSeqNumReset parameter.");
 						ParamSources.Instance.Set(Config.ForceSeqNumReset, ParamSource.Default, SessionId.ToString());
@@ -530,6 +532,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 			if (properties.ContainsKey("port"))
 			{
 				Port = Convert.ToInt32(properties.GetValueOrDefault("port", "3000"));
+			}
+
+			if (properties.ContainsKey("bindIP"))
+			{
+				BindIP = properties.GetValueOrDefault("bindIP");
 			}
 
 			SetDestinationsIfPresent(properties);

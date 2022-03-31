@@ -65,6 +65,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 			EnableTls = _adapter.IsSslEnabled;
 			SendBufferSize = _adapter.TcpSendBufferSize;
 			ReceiveBufferSize = _adapter.TcpReceiveBufferSize;
+			BindIP = parameters.BindIP;
 		}
 
 		/// <summary>
@@ -88,12 +89,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 		/// </summary>
 		public int RemotePort { get; }
 
+		private string BindIP { get; }
+
 		/// <inheritdoc />
 		public override void Open()
 		{
 			try
 			{
 				CreateSocket();
+				if (!string.IsNullOrEmpty(BindIP))
+				{
+					Socket.Bind(BindIP.ToEndPoint(0));
+				}
 				Socket.Connect(RemoteHost.ToEndPoint(RemotePort));
 				CreateStream();
 			}
