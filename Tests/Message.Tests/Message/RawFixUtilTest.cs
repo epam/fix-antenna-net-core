@@ -137,9 +137,9 @@ namespace Epam.FixAntenna.Message.Tests
 		[Test]
 		public virtual void ParseStartOfMessageWithInvalidEndBuffer()
 		{
-			var msg = RawFixUtil.GetFixMessageUtilTagsExists("8=FIX.4.4\u00019=73\u0001".AsByteArray());
+			var msg = RawFixUtil.GetFixMessageUntilTagsExists("8=FIX.4.4\u00019=73\u0001".AsByteArray());
 			Assert.IsTrue(msg.Length == 2);
-			RawFixUtil.GetFixMessageUtilTagsExists("8=FIX.4.4\u00019=73\u0001fdgsdf".AsByteArray());
+			msg = RawFixUtil.GetFixMessageUntilTagsExists("8=FIX.4.4\u00019=73\u0001fdgsdf".AsByteArray());
 			Assert.IsTrue(msg.Length == 2);
 		}
 

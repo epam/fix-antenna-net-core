@@ -60,7 +60,7 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// Calculates checksum in array of bytes.
 		/// </summary>
 		/// <param name="bytes"> array of bytes </param>
-		internal static int GetChecksum(byte[] bytes)
+		public static int GetChecksum(byte[] bytes)
 		{
 			return GetChecksum(bytes, 0, bytes.Length);
 		}
@@ -71,7 +71,7 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// <param name="bytes">  the array of bytes </param>
 		/// <param name="offset"> the offset in array of  bytes </param>
 		/// <param name="length"> the length of bytes </param>
-		internal static int GetChecksum(byte[] bytes, int offset, int length)
+		public static int GetChecksum(byte[] bytes, int offset, int length)
 		{
 			var checksum = 0;
 			if (offset + length > bytes.Length)
@@ -130,24 +130,12 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// <summary>
 		/// Gets the value from buffer as bytes.
 		/// </summary>
-		/// <param name="buffer"> the buffer of bytes </param>
-		/// <param name="offset"> the offset in buffer </param>
-		/// <param name="length"> the buffer length </param>
-		/// <param name="tag">    the tag id </param>
-		internal static byte[] GetRawValue(byte[] buffer, int offset, int length, int tag)
-		{
-			return GetRawValue(buffer, offset, length, tag, true);
-		}
-
-		/// <summary>
-		/// Gets the value from buffer as bytes.
-		/// </summary>
 		/// <param name="buffer">          the buffer of bytes </param>
 		/// <param name="offset">          the offset in buffer </param>
 		/// <param name="length">          the buffer length </param>
 		/// <param name="tag">             the tag id </param>
 		/// <param name="searchFromStart"> search from start or end of the given buffer </param>
-		internal static byte[] GetRawValue(byte[] buffer, int offset, int length, int tag, bool searchFromStart)
+		public static byte[] GetRawValue(byte[] buffer, int offset, int length, int tag, bool searchFromStart = true)
 		{
 			int seqStart;
 			if (searchFromStart)
@@ -337,25 +325,27 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// <exception cref="ArgumentException"> if tag not exists </exception>
 		internal static long GetSequenceNumber(byte[] message)
 		{
-			return GetLongValue(message, 0, message.Length, 34);
+			return GetLongValue(message, 0, message.Length, Tags.MsgSeqNum);
 		}
 
 		/// <summary>
 		/// Gets sequence number.
 		/// </summary>
 		/// <param name="message"> the buffer of bytes </param>
+		/// <param name="offset">  the offset in buffer </param>
+		/// <param name="length">  the buffer length </param>
 		/// <exception cref="ArgumentException"> if tag not exists </exception>
-		internal static long GetSequenceNumber(byte[] message, int offset, int length)
+		public static long GetSequenceNumber(byte[] message, int offset, int length)
 		{
-			return GetLongValue(message, offset, length, 34);
+			return GetLongValue(message, offset, length, Tags.MsgSeqNum);
 		}
 
-		internal static FixMessage GetFixMessage(byte[] buffer, int messageOffset, int messageLength)
+		public static FixMessage GetFixMessage(byte[] buffer, int messageOffset, int messageLength)
 		{
 			return GetFixMessage(buffer, messageOffset, messageLength, DefaultRawTags);
 		}
 
-		internal static FixMessage GetFixMessage(MsgBuf buf)
+		public static FixMessage GetFixMessage(MsgBuf buf)
 		{
 			return GetFixMessage(buf.Buffer, buf.Offset, buf.Length, DefaultRawTags);
 		}
@@ -385,7 +375,7 @@ namespace Epam.FixAntenna.NetCore.Message
 			return IndexRepeatingGroup(msg, version, msgType, false);
 		}
 
-		internal static string GetMsgType(IndexedStorage msg)
+		public static string GetMsgType(IndexedStorage msg)
 		{
 			var index = msg.GetTagIndex(Tags.MsgType);
 			if (index == IndexedStorage.NotFound)
@@ -418,7 +408,7 @@ namespace Epam.FixAntenna.NetCore.Message
 			}
 
 			var msgType = GetMsgType(msg);
-			if (ReferenceEquals(msgType, null))
+			if (msgType == null)
 			{
 				throw new ArgumentException("There is no info about message type in message. Please use method " +
 											"indexRepeatingGroup(FixMessage, FixVersion, MessageType");
@@ -473,7 +463,7 @@ namespace Epam.FixAntenna.NetCore.Message
 		public static FixMessage IndexRepeatingGroup(FixMessage msg, FixVersionContainer version, bool validation)
 		{
 			var msgType = GetMsgType(msg);
-			if (version == null || ReferenceEquals(msgType, null))
+			if (version == null || msgType == null)
 			{
 				throw new ArgumentException(
 					"There is no info about message type in message. Please use method indexRepeatingGroup(FixMessage, FixVersion, MessageType");
@@ -633,7 +623,7 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// </summary>
 		/// <param name="message"> the buffer of bytes </param>
 		/// <exception cref="GarbledMessageException"> if message is garbled </exception>
-		internal static FixMessage GetFixMessageUtilTagsExists(byte[] message)
+		internal static FixMessage GetFixMessageUntilTagsExists(byte[] message)
 		{
 			return GetFixMessageUntilTagsExists(message, 0, message.Length, DefaultRawTags);
 		}
@@ -913,8 +903,8 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// <param name="bytes"> the message </param>
 		internal static byte[] GetMessageType(byte[] bytes)
 		{
-			var tagValue = GetRawValue(bytes, 0, bytes.Length, 35, true);
-			return tagValue != null ? tagValue : EmptyValue;
+			var tagValue = GetRawValue(bytes, 0, bytes.Length, Tags.MsgType, true);
+			return tagValue ?? EmptyValue;
 		}
 
 		/// <summary>
@@ -922,10 +912,12 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// If type is unknown return empty array.
 		/// </summary>
 		/// <param name="bytes"> the message </param>
+		/// <param name="offset">the offset in buffer </param>
+		/// <param name="length">the buffer length </param>
 		internal static byte[] GetMessageType(byte[] bytes, int offset, int length)
 		{
-			var tagValue = GetRawValue(bytes, offset, length, 35, true);
-			return tagValue != null ? tagValue : EmptyValue;
+			var tagValue = GetRawValue(bytes, offset, length, Tags.MsgType, true);
+			return tagValue ?? EmptyValue;
 		}
 
 		/// <summary>
@@ -1039,7 +1031,7 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// <summary>
 		/// Checks if message type is Logon.
 		/// </summary>
-		/// <param name="fixMessagest"> fix field list, parameter must be not null </param>
+		/// <param name="fixMessage"> fix field list, parameter must be not null </param>
 		/// <returns> true if is </returns>
 		internal static bool IsLogon(FixMessage fixMessage)
 		{
@@ -1069,7 +1061,7 @@ namespace Epam.FixAntenna.NetCore.Message
 		/// <returns> RawTags </returns>
 		internal static IRawTags CreateRawTags(string rawTags)
 		{
-			if (ReferenceEquals(rawTags, null) || rawTags.Length == 0)
+			if (string.IsNullOrEmpty(rawTags))
 			{
 				// if empty value
 				return DefaultRawTags;
