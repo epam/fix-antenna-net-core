@@ -299,7 +299,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 		{
 			if (_started)
 			{
-				return SerializeAndSend(msgType, content, null, true);
+				return SerializeAndSend(msgType, content, null, false);
 			}
 
 			return PutInQueue(msgType, content);
@@ -307,9 +307,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 
 		private bool SerializeAndSend(string msgType, FixMessage content, ChangesType? changesType, bool checkState)
 		{
-			if (checkState && !_started)
+			if (checkState)
 			{
-				throw new InvalidOperationException("Pumper is not started, it cannot send any messages in this state.");
+				if (!_started)
+				{
+					throw new InvalidOperationException("Pumper is not started, it cannot send any messages in this state.");
+				}
+
+				if (((AbstractFixSession)_fixSession).AlreadySendingLogout)
+				{
+					throw new InvalidOperationException("Session is shutting down, cannot send any messages in this state.");
+				}
 			}
 			try
 			{

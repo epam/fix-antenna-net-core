@@ -24,7 +24,7 @@ using NUnit.Framework;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 {
-    [TestFixture]
+	[TestFixture]
 	internal class NoQueueMessagePumperTest
 	{
 		private NoQueueMessagePumper _messagePumper;
@@ -67,6 +67,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 		[Test]
 		public virtual void WriteInButch()
 		{
+			// test session has AlreadySendingLogout = true while not inited
+			_extendedFixSession.AlreadySendingLogout.AtomicExchange(false);
+
 			_messagePumper.Start();
 			for (var i = 0; i < 5; i++)
 			{
