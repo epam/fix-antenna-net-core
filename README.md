@@ -47,6 +47,7 @@ Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Win
 |[SimpleServer](Docs/InstallationAndUninstallation.md#simpleserver)|[Samples/SimpleServer](Samples/SimpleServer)|Demonstrates how to implement a FIX server with simple IP filtering of incoming sessions.|
 |[SimpleAdminClient](Docs/InstallationAndUninstallation.md#simpleadminclient)|[Samples/SimpleAdminClient](Samples/SimpleAdminClient)|Demonstrates how to connect to an administrative session and communicate with it using the implementation of administrative messages.|
 |[ConnectToGatewayAsync](Docs/InstallationAndUninstallation.md#connecttogatewayasync)|[Samples/ConnectToGatewayAsync](Samples/ConnectToGatewayAsync)|Version of 'ConnectToGateway' using 'session.ConnectAsync(...)'|
+|[Latency](Docs/latency_sample.md)|[Samples/Latency/Server](Samples/Latency/Server)<br>[Samples/Latency/Sender](Samples/Latency/Sender)|Simple scenario to test performance|
 
 ## How to build and run samples
 
