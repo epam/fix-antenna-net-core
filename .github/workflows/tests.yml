@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'Docs/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'Docs/**'
+
+jobs:
+  tests:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        framework: [net6.0, net48]
+        platform: [x64]
+        test_proj: 
+          - './Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj'
+          - './Tests/Common.Tests/Epam.FixAntenna.Common.Tests.csproj'
+          - './Tests/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj'
+          - './Tests/Core.Tests/Epam.FixAntenna.Core.Tests.csproj'
+          - './Tests/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj'
+          - './Tests/Message.Tests/Epam.FixAntenna.Message.Tests.csproj'
+          - './Tests/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj'
+          - './Tests/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj'
+        exclude:
+          - os: ubuntu-latest
+            framework: net48
+    
+    env:
+      solution_path: './Epam.FixAntenna.sln'
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.solution_path }}
+
+    - name: Build
+      run: dotnet build ${{ env.solution_path }} --no-restore -c ReleaseTests
+
+    - name: Run tests
+      run: dotnet test ${{matrix.test_proj}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release
+
+
