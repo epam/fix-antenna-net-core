@@ -1,5 +1,5 @@
 ![GitHub](https://img.shields.io/github/license/epam/fix-antenna-net-core)
-[![Build net6.0](https://github.com/epam/fix-antenna-net-core/actions/workflows/build.yml/badge.svg)](https://github.com/epam/fix-antenna-net-core/actions/workflows/build.yml)
+[![Tests](https://github.com/epam/fix-antenna-net-core/actions/workflows/tests.yml/badge.svg)](https://github.com/epam/fix-antenna-net-core/actions/workflows/tests.yml)
 ![Nuget](https://img.shields.io/nuget/v/Epam.FixAntenna.NetCore)
 
 ![FIX Antenna](Docs/fa.png)
