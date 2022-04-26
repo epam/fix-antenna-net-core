@@ -54,6 +54,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			_queue.Initialize();
 			_messagePumper = new NoQueueMessagePumper(_extendedFixSession, _queue, _messageStorage, messageFactory, _transport, _extendedFixSession.SequenceManager);
 			_messagePumper.Init();
+			_extendedFixSession.AlreadySendingLogout = false;
 		}
 
 		[TearDown]
@@ -67,9 +68,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 		[Test]
 		public virtual void WriteInButch()
 		{
-			// test session has AlreadySendingLogout = true while not inited
-			_extendedFixSession.AlreadySendingLogout.AtomicExchange(false);
-
 			_messagePumper.Start();
 			for (var i = 0; i < 5; i++)
 			{
@@ -142,7 +140,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			}
 		}
 
-		[Test, Timeout(3000), Ignore("Temporary (debugging)")]
+		[Test, Timeout(3000)]
 		public virtual void SenderIsLockedDuringSessionStart()
 		{
 			var sender = new Thread(() =>
@@ -151,8 +149,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				{
 					_messagePumper.Send("D", _message);
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
+					Assert.Fail($"Exception while sending: {e.Message}");
 				}
 			});
 			sender.Start();
@@ -205,6 +204,22 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 		{
 			_messagePumper.Start();
 			_messagePumper.Shutdown();
+			try
+			{
+				_messagePumper.Send("D", _message);
+			}
+			catch (InvalidOperationException)
+			{
+				return;
+			}
+			Assert.Fail();
+		}
+
+		[Test]
+		public virtual void ShouldThrowExceptionWhileSendingWhenLogout()
+		{
+			_messagePumper.Start();
+			_extendedFixSession.TryStartSendingLogout();
 			try
 			{
 				_messagePumper.Send("D", _message);
