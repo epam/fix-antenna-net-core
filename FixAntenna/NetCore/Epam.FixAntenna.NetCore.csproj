@@ -47,7 +47,7 @@
 		</PackageReference>
 		<PackageReference Include="NLog" Version="4.7.15" />
 		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
-		<PackageReference Include="System.Text.Json" Version="6.0.2" />
+		<PackageReference Include="System.Text.Json" Version="6.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>
