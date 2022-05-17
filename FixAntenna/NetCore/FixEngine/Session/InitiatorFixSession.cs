@@ -17,12 +17,13 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
-	internal class InitiatorFixSession : AbstractFixSession
+	internal class InitiatorFixSession : AbstractFixSession, IScheduledFixSession
 	{
 		private ISessionTransportFactory TransportFactory { get; }
 
@@ -78,7 +79,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 		}
 
-		public async override Task ConnectAsync()
+		public override async Task ConnectAsync()
 		{
 			CheckForDisposed();
 			CheckForActiveAndInitTransport();
@@ -328,5 +329,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				GC.SuppressFinalize(this);
 			}
 		}
+
+		#region IScheduledFixSession implementation
+		public void Schedule()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Deschedule()
+		{
+			throw new NotImplementedException();
+		}
+		#endregion
 	}
 }

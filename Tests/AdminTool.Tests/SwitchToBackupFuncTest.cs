@@ -145,7 +145,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Assert.IsTrue
 			(
 				_backup1ConnectedHook.IsEventRaised(),
-				$"Backup connection not established({_backup1ConnectedHook.GetTimeToWait()}ms)"
+				$"Backup connection not established({_backup1ConnectedHook.TimeToWait}ms)"
 			);
 
 			Assert.IsNotNull(_backupSession);
@@ -191,7 +191,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Assert.IsTrue
 			(
 				_backup1ConnectedHook.IsEventRaised(),
-				$"Backup connection not established({_backup1ConnectedHook.GetTimeToWait()}ms)"
+				$"Backup connection not established({_backup1ConnectedHook.TimeToWait}ms)"
 			);
 
 			Assert.IsNotNull(_backupSession);
@@ -206,7 +206,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Assert.IsTrue
 			(
 				_backup2ConnectedHook.IsEventRaised(),
-				$"Backup connection not established({_backup2ConnectedHook.GetTimeToWait()}ms)"
+				$"Backup connection not established({_backup2ConnectedHook.TimeToWait}ms)"
 			);
 
 
@@ -221,7 +221,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Assert.IsTrue
 			(
 				_backup1ConnectedHook.IsEventRaised(),
-				$"Backup connection not established({_backup1ConnectedHook.GetTimeToWait()}ms)"
+				$"Backup connection not established({_backup1ConnectedHook.TimeToWait}ms)"
 			);
 		}
 
@@ -363,7 +363,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 				Assert.IsTrue
 				(
 					DisconnectedEventHook.IsEventRaised(),
-					$"Could not disconnect({DisconnectedEventHook.GetTimeToWait()}ms)"
+					$"Could not disconnect({DisconnectedEventHook.TimeToWait}ms)"
 				);
 			}
 
@@ -372,7 +372,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 				Assert.IsTrue
 				(
 					ConnectedEventHook.IsEventRaised(),
-					$"Could not connect({ConnectedEventHook.GetTimeToWait()}ms)"
+					$"Could not connect({ConnectedEventHook.TimeToWait}ms)"
 				);
 			}
 		}

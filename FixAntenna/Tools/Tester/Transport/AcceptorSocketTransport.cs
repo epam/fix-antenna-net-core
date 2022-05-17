@@ -112,7 +112,7 @@ namespace Epam.FixAntenna.Tester.Transport
 			int attempts = 0;
 			while (Socket == null && attempts++ < CONNECTION_ATTEMPTS)
 			{
-				Thread.Sleep(100);
+				Thread.Sleep(200);
 			}
 			if (Socket == null)
 			{

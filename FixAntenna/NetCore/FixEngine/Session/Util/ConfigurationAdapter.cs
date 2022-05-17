@@ -160,6 +160,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 		public bool IsValidationEnabled => Configuration.GetPropertyAsBoolean(Config.Validation, false);
 
+		#region Reset SeqNum sheduled
 		public bool IsResetSeqNumTimeEnabled => Configuration.GetPropertyAsBoolean(Config.PerformResetSeqNumTime, false);
 
 		private string ResetSequenceTime => Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
@@ -206,6 +207,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				return builder.Build(timeZone).TotalMilliseconds();
 			}
 		}
+		#endregion
 
 		public StorageCleanupMode StorageCleanupMode
 		{

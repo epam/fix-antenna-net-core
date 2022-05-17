@@ -22,32 +22,31 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 	{
 		private static readonly ILog Log = LogFactory.GetLog(typeof(EventHook));
 
-		private readonly string _name;
-		private object _eventData;
+		protected readonly object LockObject = new object();
+		protected Event EventState = Event.Unknown;
+		protected long TimeToWaitSum;
 
-		protected internal readonly object LockObject = new object();
-		protected internal Event EventState = Event.Unknown;
-		protected internal long TimeToWait;
-		protected internal long TimeToWaitSum;
+		public object EventData { get; set; }
+
+		public string Name { get; }
+
+		public int TimeToWait { get; }
 
 		public EventHook(string eventName) : this(eventName, int.MaxValue)
 		{
 		}
 
-		public EventHook(string eventName, long timeToWait)
+		public EventHook(string eventName, int timeToWait)
 		{
 			TimeToWait = timeToWait;
-			_name = eventName;
+			Name = eventName;
 		}
 
-		public virtual object GetEventData()
+		[Obsolete]
+		public EventHook(string eventName, long timeToWait)
 		{
-			return _eventData;
-		}
-
-		public virtual void SetEventData(object eventData)
-		{
-			_eventData = eventData;
+			TimeToWait = (int)timeToWait;
+			Name = eventName;
 		}
 
 		public virtual void RaiseEvent()
@@ -60,7 +59,7 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 
 			if (Log.IsDebugEnabled)
 			{
-				Log.Debug("Event " + GetName() + " raised");
+				Log.Debug("Event " + Name + " raised");
 			}
 		}
 
@@ -73,7 +72,7 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 
 			if (Log.IsDebugEnabled)
 			{
-				Log.Debug("Event " + GetName() + " reset");
+				Log.Debug("Event " + Name + " reset");
 			}
 		}
 
@@ -86,13 +85,13 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 
 			lock (LockObject)
 			{
-				Monitor.Wait(LockObject, TimeSpan.FromMilliseconds(TimeToWait));
+				Monitor.Wait(LockObject, TimeToWait);
 			}
 
 			return EventState == Event.RaisedEvent;
 		}
 
-		public virtual bool IsEventRaised(long timeout)
+		public virtual bool IsEventRaised(int timeout)
 		{
 			if (EventState == Event.RaisedEvent)
 			{
@@ -101,7 +100,7 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 
 			lock (LockObject)
 			{
-				Monitor.Wait(LockObject, TimeSpan.FromMilliseconds(timeout));
+				Monitor.Wait(LockObject, timeout);
 				if (EventState != Event.RaisedEvent)
 				{
 					TimeToWaitSum += timeout;
@@ -123,11 +122,13 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 			}
 		}
 
+		[Obsolete]
 		public virtual string GetName()
 		{
-			return _name ?? ToString();
+			return Name ?? ToString();
 		}
 
+		[Obsolete]
 		public virtual long GetTimeToWait()
 		{
 			return TimeToWait;

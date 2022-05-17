@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-
 using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using Epam.FixAntenna.NetCore.FixEngine.Manager.Scheduler;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
@@ -35,6 +28,17 @@ using Epam.FixAntenna.NetCore.FixEngine.Storage.Queue;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation;
+
+using Quartz;
+using Quartz.Impl;
+
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Quartz.Simpl;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -47,9 +51,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		protected readonly ILog Log;
 
 		private const string DontRedefineType = "";
-		private const int MillisInDay = 24 * 60 * 60 * 1000;
-
 		private const int Second = 1000;
+		private static TimeSpan CheckHbAndTestRequestInterval = TimeSpan.FromSeconds(1);
 
 		private static readonly FixMessage SeqNumResetTag = new FixMessage();
 
@@ -87,7 +90,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		protected internal readonly ConfigurationAdapter ConfigAdapter;
 
-		private SchedulerTask _seqResetTask;
 		private PreparedMessageUtil _preparedMessageUtil;
 
 		private volatile DisconnectReason _disconnectReason;
@@ -99,6 +101,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		private readonly IDictionary<string, ConcurrentBag<IExtendedFixSessionAttributeListener>> _attributeListeners = new ConcurrentDictionary<string, ConcurrentBag<IExtendedFixSessionAttributeListener>>();
 
 		private readonly ISet<ITypedFixMessageListener> _outSessionLevelListeners = new HashSet<ITypedFixMessageListener>();
+
+		protected IScheduler _scheduler;
 
 		/// <summary>
 		/// Creates the <c>AbstractFIXSession</c>.
@@ -610,7 +614,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					OnDisconnect();
 					break;
 				case SessionState.InnerEnum.Dead:
-					UnRegisterSchedulerTask();
+					UnRegisterSessionTasks();
 					break;
 			}
 
@@ -745,11 +749,26 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			var nextOutStorageSeqNum = Pumper.Init();
 
 			Queue.OutOfTurnOnlyMode = true; // turn off when response received
-			RegisterSchedulerTask();
-
+			
 			SequenceManager.Reinit(this);
 			SequenceManager.InitSeqNums(inStorageSeqNum, nextOutStorageSeqNum);
 			SubscribeForAttributeChanges(ExtendedFixSessionAttribute.IsResendRequestProcessed, new ExtendedFixSessionAttributeListener(this));
+
+			if (_scheduler == null)
+			{
+				// The new GUID is used as scheduler name for each session because making "schedulerName"
+				// (for example from SessionID) leads to problem when running unit tests (many tests uses same SessionID)
+				var guid = Guid.NewGuid().ToString();
+				DirectSchedulerFactory.Instance.CreateScheduler(guid, SessionId, new DefaultThreadPool(), new RAMJobStore());
+				_scheduler = DirectSchedulerFactory.Instance.GetScheduler(guid).Result;
+			}
+
+			if (!_scheduler?.IsStarted ?? false)
+			{
+				_scheduler.Start();
+			}
+
+			RegisterSessionTasks();
 		}
 
 		private class ExtendedFixSessionAttributeListener : IExtendedFixSessionAttributeListener
@@ -799,65 +818,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 
 			return new AsyncMessagePumper(this, queue, outgoingMessageStorage, messageFactory, transportOrWrapper, sequenceManager);
-		}
-
-		private void RegisterSchedulerTask()
-		{
-			UnRegisterSchedulerTask();
-			if (ConfigAdapter.IsResetSeqNumTimeEnabled)
-			{
-				_seqResetTask = new SchedulerTaskImpl(this);
-				var timestamp = ConfigAdapter.ResetSequenceTimeInUserTimestamp;
-				FixSessionManager.Instance.ScheduleTask(_seqResetTask, AdjustTimestamp(timestamp), MillisInDay);
-			}
-		}
-
-		internal class SchedulerTaskImpl : SchedulerTask
-		{
-			private readonly AbstractFixSession _session;
-
-			public SchedulerTaskImpl(AbstractFixSession session) : base("SeqReset(" + session.ToString() + ")")
-			{
-				_session = session;
-			}
-
-			public override void Run()
-			{
-				try
-				{
-					_session.ResetSequenceNumbers(true);
-				}
-				catch (Exception e)
-				{
-					if (_session.Log.IsDebugEnabled)
-					{
-						_session.Log.Warn("Error on reset sequences. Cause:" + e.Message, e);
-					}
-					else
-					{
-						_session.Log.Warn("Error on reset sequences. Cause:" + e.Message);
-					}
-				}
-			}
-		}
-
-		private long AdjustTimestamp(long timestamp)
-		{
-			if (DateTimeHelper.CurrentMilliseconds > timestamp)
-			{
-				timestamp = timestamp + MillisInDay;
-			}
-			return timestamp;
-		}
-
-		private void UnRegisterSchedulerTask()
-		{
-			if (_seqResetTask != null)
-			{
-				Log.Debug("UnRegister seq reset scheduler task");
-				FixSessionManager.Instance.CancelScheduleTask(_seqResetTask);
-				_seqResetTask = null;
-			}
 		}
 
 		public virtual void StartSession()
@@ -1362,6 +1322,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			{
 				((IClosable)StorageFactory).Close();
 			}
+
+			_scheduler?.Shutdown(false);
+			_scheduler = null;
 		}
 
 		/// <summary>
@@ -2079,5 +2042,115 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 			set => SetSequenceNumbers(-1, value);
 		}
+
+		#region Scheduled tasks and methods
+		/// <summary>
+		/// Register session`s scheduled tasks:
+		///		- Scheduled SeqNum reset task
+		///		- HB
+		///		- TestRequest tasks
+		///		- Session schedule task
+		/// </summary>
+		private void RegisterSessionTasks()
+		{
+			// required jobs
+			RegisterHeartbeatJob();
+			RegisterTestRequestJob();
+
+			// SeqNum reset if configured
+			if (ConfigAdapter.IsResetSeqNumTimeEnabled)
+			{
+				RegisterSeqResetJob();
+			}
+
+			// scheduled session if configured
+			//TODO: scheduler
+		}
+
+		/// <summary>
+		/// De-register session scheduled tasks:
+		///		- SeqNum reset
+		///		- HB
+		///		- TestRequest
+		///		- Session schedule
+		/// </summary>
+		private void UnRegisterSessionTasks()
+		{
+			_scheduler?.Standby().Wait();
+		}
+
+		private void RegisterHeartbeatJob()
+		{
+			var hbJob = JobBuilder.Create<InactivityCheckTask>()
+				//.WithIdentity($"InactivityCheckTask-{SessionId}", "Regular jobs")
+				.UsingJobData("SessionId", SessionId)
+				.Build();
+			
+			var hbTrigger = TriggerBuilder.Create()
+				//.WithIdentity($"InactivityCheckTrigger-{SessionId}", "Regular triggers")
+				.WithSimpleSchedule(s => s
+					.WithInterval(CheckHbAndTestRequestInterval)
+					.WithMisfireHandlingInstructionIgnoreMisfires()
+					.RepeatForever())
+				.Build();
+			
+			var nextRun = _scheduler.ScheduleJob(hbJob, hbTrigger).Result;
+			Log.Trace($"{nameof(InactivityCheckTask)} will run at {nextRun:O}");
+		}
+
+		private void RegisterTestRequestJob()
+		{
+			var hbJob = JobBuilder.Create<TestRequestTask>()
+				//.WithIdentity($"TestRequestTask-{SessionId}", "Regular jobs")
+				.UsingJobData("SessionId", SessionId)
+				.Build();
+			
+			var hbTrigger = TriggerBuilder.Create()
+				//.WithIdentity($"TestRequestTrigger-{SessionId}", "Regular triggers")
+				.StartAt(DateTimeOffset.Now.AddSeconds(1))
+				.WithSimpleSchedule(s => s
+					.WithInterval(CheckHbAndTestRequestInterval)
+					.WithMisfireHandlingInstructionIgnoreMisfires()
+					.RepeatForever())
+				.Build();
+			
+			var nextRun = _scheduler.ScheduleJob(hbJob, hbTrigger).Result;
+			Log.Trace($"{nameof(TestRequestTask)} will run at {nextRun:O}");
+		}
+
+		private void RegisterSeqResetJob()
+		{
+			var resetTimeString = ConfigAdapter.Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
+			var resetTimeZoneString = ConfigAdapter.Configuration.GetProperty(Config.ResetSequenceTimeZone, string.Empty);
+
+			var resetTime = TimeSpan.Parse(resetTimeString);
+			var resetTimeZone = TimeZoneInfo.Local;
+
+			try
+			{
+				resetTimeZone = TimeZoneInfo.FindSystemTimeZoneById(resetTimeZoneString);
+			}
+			catch (Exception e)
+			{
+				Log.Warn($"Cannot parse TimeZone '{resetTimeZoneString}', using Local TZ instead.", e);
+			}
+
+			var srJob = JobBuilder.Create<ResetSeqNumTask>()
+				//.WithIdentity($"ResetSeqNumTask-{SessionId}", "Regular jobs")
+				.UsingJobData("SessionId", SessionId)
+				.Build();
+
+			var srTrigger = TriggerBuilder.Create()
+				//.WithIdentity($"SeqResetTrigger-{SessionId}", "Regular triggers")
+				.WithDailyTimeIntervalSchedule(s => s
+					.WithIntervalInHours(24)
+					.StartingDailyAt(new TimeOfDay(resetTime.Hours, resetTime.Minutes, resetTime.Seconds))
+					.InTimeZone(resetTimeZone))
+				.Build();
+
+			var nextRun = _scheduler.ScheduleJob(srJob, srTrigger).Result;
+			Log.Trace($"{nameof(ResetSeqNumTask)} will run at {nextRun:O}");
+		}
+		#endregion
 	}
 }

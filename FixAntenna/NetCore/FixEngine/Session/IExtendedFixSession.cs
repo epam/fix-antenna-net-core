@@ -51,7 +51,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		/// <summary>
 		/// Gracefully disconnects current session but wait for answer forcedLogoffTimeout.
-		///
+		/// 
 		/// Logoff with specified reason will be sent to your counterparty. Session will wait the answer for some period,
 		/// defined by forcedLogoffTimeout configuration property.
 		/// <i>Note: This method doesn't guarantee immediate shutdown,
@@ -61,6 +61,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		/// counterparty newer answer.
 		/// </i>
 		/// </summary>
+		/// <param name="reasonType">      the disconnect reason type</param>
 		/// <param name="reason">          the reason </param>
 		/// <param name="continueReading"> if false then reading of incoming messages will be stopped. This can be used for prevent
 		///                        reading of messages with broken sequencing. </param>

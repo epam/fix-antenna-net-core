@@ -13,10 +13,6 @@
 // limitations under the License.
 
 using Epam.FixAntenna.NetCore.Common.Logging;
-using Epam.FixAntenna.NetCore.Common.Threading.Queue;
-using Epam.FixAntenna.NetCore.Common.Threading.Runnable;
-using Epam.FixAntenna.NetCore.FixEngine.Manager.Scheduler;
-using Epam.FixAntenna.NetCore.FixEngine.Manager.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 
@@ -26,9 +22,6 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Threading;
-
-using ThreadPool = Epam.FixAntenna.NetCore.Common.Threading.ThreadPool;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 {
@@ -43,18 +36,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 	internal class FixSessionManager
 	{
 		private static readonly ILog Log = LogFactory.GetLog(typeof(FixSessionManager));
-
 		private readonly RarelyChangeList<IFixSessionListListener> _listenersList = new RarelyChangeList<IFixSessionListListener>();
-
-		private ThreadPool _service;
-		private FixedRunnablePool<IRunnableObject> _runnablePool;
-
-		private CopyOnEditArrayList<IExtendedFixSession> _list;
-		private readonly IList<ISessionManagerTask> _tasks = new List<ISessionManagerTask>();
-
-		private TaskLaunchThread _taskThread;
-		private readonly SchedulerManager _schedulerManager = new SchedulerManager();
-
+		private readonly CopyOnEditArrayList<IExtendedFixSession> _sessions;
 		private bool _running;
 
 		/// <summary>
@@ -62,73 +45,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// </summary>
 		public static FixSessionManager Instance { get; } = new FixSessionManager();
 
-		/// <summary>
-		/// Gets or sets wait time.
-		/// </summary>
-		public int WaitTime { get; set; } = 1000;
-
-		/// <summary>
-		/// Adds a new session manager task.
-		/// </summary>
-		/// <param name="task"> the task to add </param>
-		public void AddTask(ISessionManagerTask task)
-		{
-			lock (_tasks)
-			{
-				_tasks.Add(task);
-			}
-		}
-
-		/// <summary>
-		/// Removes the task.
-		/// </summary>
-		/// <param name="task"> the task to remove </param>
-		public bool RemoveTask(ISessionManagerTask task)
-		{
-			lock (_tasks)
-			{
-				return _tasks.Remove(task);
-			}
-		}
-
-		/// <summary>
-		/// Added scheduled task.
-		/// </summary>
-		/// <param name="schedulerTask">     the task </param>
-		/// <param name="scheduleTimestamp"> the timestamp </param>
-		/// <exception cref="InvalidOperationException"> if task was scheduled. </exception>
-		public void ScheduleTask(SchedulerTask schedulerTask, long scheduleTimestamp)
-		{
-			_schedulerManager.Schedule(schedulerTask, scheduleTimestamp);
-		}
-
-		/// <summary>
-		/// Added scheduled task.
-		/// </summary>
-		/// <param name="schedulerTask">     the task </param>
-		/// <param name="scheduleTimestamp"> the timestamp </param>
-		/// <param name="period">            the period </param>
-		/// <exception cref="InvalidOperationException"> if task was scheduled. </exception>
-		public void ScheduleTask(SchedulerTask schedulerTask, long scheduleTimestamp, int period)
-		{
-			_schedulerManager.Schedule(schedulerTask, scheduleTimestamp, period);
-		}
-
-		/// <summary>
-		/// Remove scheduled task.
-		/// </summary>
-		public void CancelScheduleTask(SchedulerTask schedulerTask)
-		{
-			_schedulerManager.Cancel(schedulerTask);
-		}
-
 		private FixSessionManager()
 		{
-			_list = new CopyOnEditArrayList<IExtendedFixSession>();
-			
-			AddTask(new TestRequestTask());
-			AddTask(new InactivityCheckTask());
-
+			_sessions = new CopyOnEditArrayList<IExtendedFixSession>();
 			_running = true;
 
 			AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
@@ -158,9 +77,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		{
 			if (_running)
 			{
-				_taskThread?.StopService(true);
-				_schedulerManager.Shutdown();
 				_running = false;
+				//TODO: shudown schedulers?
 				NLog.LogManager.Shutdown();
 			}
 		}
@@ -202,21 +120,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		public void RegisterFixSession(IExtendedFixSession session)
 		{
 			var sessionId = session.Parameters.SessionId.ToString();
+			
 			if (Exists(sessionId))
 			{
 				throw new DuplicateSessionException("Session already exists. Duplicate sessionID: " + sessionId);
 			}
 
-			lock (_list)
+			lock (_sessions)
 			{
-				if (_taskThread == null)
-				{
-					_taskThread = new TaskLaunchThread(this);
-					_taskThread.Start();
-				}
-
-				_list.Add(session);
-				_taskThread.ListIncreaseEvent();
+				_sessions.Add(session);
+				//TODO: check task execution??
 			}
 
 			NotifySessionAdd(session);
@@ -229,9 +142,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		public void RemoveFixSession(IExtendedFixSession session)
 		{
 			bool result;
-			lock (_list)
+			lock (_sessions)
 			{
-				result = _list.Remove(session);
+				result = _sessions.Remove(session);
 			}
 			if (result)
 			{
@@ -248,7 +161,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// </summary>
 		public void RemoveAllSessions()
 		{
-			var copy = _list.RemoveAll();
+			var copy = _sessions.RemoveAll();
 			for (var i = 0; i < copy.Count; i++)
 			{
 				var session = copy[i];
@@ -266,7 +179,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// <param name="sessionId"> the unique session identifier </param>
 		public IExtendedFixSession Locate(string sessionId)
 		{
-			var readCopy = _list.GetReadOnlyCopy();
+			var readCopy = _sessions.GetReadOnlyCopy();
 			for (var i = 0; i < readCopy.Count; i++)
 			{
 				var session = readCopy[i];
@@ -285,7 +198,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// <param name="sessionId"> the unique session identifier </param>
 		public IExtendedFixSession Locate(SessionId sessionId)
 		{
-			var readCopy = _list.GetReadOnlyCopy();
+			var readCopy = _sessions.GetReadOnlyCopy();
 			for (var i = 0; i < readCopy.Count; i++)
 			{
 				var session = readCopy[i];
@@ -325,7 +238,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// <param name="targetCompId"> the target comp id </param>
 		public IExtendedFixSession LocateFirst(string senderCompId, string targetCompId)
 		{
-			var readCopy = _list.GetReadOnlyCopy();
+			var readCopy = _sessions.GetReadOnlyCopy();
 			for (var i = 0; i < readCopy.Count; i++)
 			{
 				var session = readCopy[i];
@@ -344,7 +257,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// <param name="sessionId"> the unique session identifier </param>
 		public bool Exists(string sessionId)
 		{
-			var readCopy = _list.GetReadOnlyCopy();
+			var readCopy = _sessions.GetReadOnlyCopy();
 			for (var i = 0; i < readCopy.Count; i++)
 			{
 				var session = readCopy[i];
@@ -360,198 +273,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// <summary>
 		/// Gets cloned list of sessions.
 		/// </summary>
-		public IList<IExtendedFixSession> SessionListCopy => _list.GetReadOnlyCopy();
+		public IList<IExtendedFixSession> SessionListCopy => _sessions.GetReadOnlyCopy();
 
-		public int SessionsCount => _list.Count;
-
-		private class TaskLaunchThread
-		{
-			private readonly FixSessionManager _manager;
-			private readonly Thread _thread;
-
-			internal ServiceStatus Status = ServiceStatus.NotInit;
-
-			public TaskLaunchThread(FixSessionManager manager)
-			{
-				_manager = manager;
-				_thread = new Thread(Run) { IsBackground = true, Name = "TaskLaunchThread" };
-			}
-
-			public void Init()
-			{
-				var factory = new RunnableSessionTaskFactory();
-				_manager._runnablePool = new FixedRunnablePool<IRunnableObject>(100, 300, factory);
-
-				var queue = new SynchronizeBlockingQueue<IRunnableObject>(500);
-				_manager._service = new ThreadPool(10, "SessionManager", queue);
-				Status = ServiceStatus.Working;
-			}
-
-			private class RunnableSessionTaskFactory : IRunnableFactory<IRunnableObject>
-			{
-				public IRunnableObject Create(IRunnablePool<IRunnableObject> pool)
-				{
-					return new RunnableSessionTask(pool);
-				}
-			}
-
-			public void Start()
-			{
-				_thread.Start();
-			}
-
-			public void Run()
-			{
-				Init();
-				Log.Debug("Task thread started");
-				while (!IsStopped())
-				{
-					if (_manager._list.IsEmpty)
-					{
-						var needWait = false;
-						lock (_manager._list)
-						{
-							if (_manager._list.IsEmpty)
-							{
-								needWait = true;
-								Status = ServiceStatus.Waiting;
-							}
-						}
-
-						if (needWait)
-						{
-							WaitUntilNotify();
-						}
-					}
-
-					SubmitTasks();
-					if (!_manager._list.IsEmpty)
-					{
-						Sleep();
-					}
-				}
-			}
-
-			public bool IsStopped()
-			{
-				return Status == ServiceStatus.Stopped;
-			}
-
-			public void ListIncreaseEvent()
-			{
-				lock (this)
-				{
-					if (Status == ServiceStatus.Waiting)
-					{
-						Status = ServiceStatus.Working;
-						Monitor.PulseAll(this);
-					}
-				}
-			}
-
-			public void WaitUntilNotify()
-			{
-				lock (this)
-				{
-					try
-					{
-						if (Status == ServiceStatus.Waiting)
-						{
-							Log.Debug("Task thread waiting...");
-							Monitor.Wait(this);
-							Log.Debug("Task thread awake");
-						}
-					}
-					catch (ThreadInterruptedException)
-					{
-						Log.Trace("Thread interrupted.");
-					}
-				}
-			}
-
-			public void StopService(bool interrupt)
-			{
-				lock (this)
-				{
-					_manager._service.Stop(interrupt);
-					Status = ServiceStatus.Stopped;
-					Log.Debug("Task thread stopped");
-				}
-			}
-
-			public void SubmitTasks()
-			{
-				var readCopy = _manager._list.GetReadOnlyCopy();
-				foreach (var extendedFixSession in readCopy)
-				{
-					lock (_manager._tasks)
-					{
-						foreach (var task in _manager._tasks)
-						{
-							SubmitTask(extendedFixSession, task);
-						}
-					}
-				}
-			}
-
-			public void SubmitTask(IExtendedFixSession session, ISessionManagerTask task)
-			{
-				var runnableTask = (RunnableSessionTask) _manager._runnablePool.Get();
-				runnableTask.Session = session;
-				runnableTask.Task = task;
-				try
-				{
-					_manager._service.Execute(runnableTask);
-				}
-				catch (ThreadInterruptedException e)
-				{
-					if (Log.IsDebugEnabled)
-					{
-						Log.Warn($"Task interrupted. SessionID: {session.Parameters.SessionId}. {e.Message}", e);
-					}
-					else
-					{
-						Log.Warn($"Task interrupted. SessionID: {session.Parameters.SessionId}. {e.Message}");
-					}
-				}
-			}
-
-			public void Sleep()
-			{
-				try
-				{
-					Thread.Sleep(_manager.WaitTime); // now sleep for awhile
-				}
-				catch (ThreadInterruptedException)
-				{
-					// intentionally empty catch block
-					Log.Trace("Thread interrupted.");
-				}
-			}
-		}
-
-		internal enum ServiceStatus
-		{
-			NotInit,
-			Working,
-			Waiting,
-			Stopped
-		}
-
-		internal class RunnableSessionTask : RunnableObject
-		{
-			internal ISessionManagerTask Task;
-			internal IExtendedFixSession Session;
-
-			public RunnableSessionTask(IRunnablePool<IRunnableObject> pool) : base(pool)
-			{
-			}
-
-			protected override void RunTask()
-			{
-				Task.RunForSession(Session);
-			}
-		}
+		public int SessionsCount => _sessions.Count;
 
 		/// <summary>
 		/// Register client <see cref="IFixSessionListListener"/>.
@@ -635,7 +359,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// </summary>
 		public static void CloseAllSession()
 		{
-			var fixSessions = Instance._list.GetReadOnlyCopy();
+			var fixSessions = Instance._sessions.GetReadOnlyCopy();
 			for (var i = 0; i < fixSessions.Count; i++)
 			{
 				CloseSession(fixSessions[i]);
@@ -661,7 +385,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		/// </summary>
 		public static void DisposeAllSession()
 		{
-			var fixSessions = Instance._list.GetReadOnlyCopy();
+			var fixSessions = Instance._sessions.GetReadOnlyCopy();
 			for (var i = 0; i < fixSessions.Count; i++)
 			{
 				Dispose(fixSessions[i]);

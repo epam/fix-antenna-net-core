@@ -94,8 +94,4 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="FixEngine\Session\MessageHandler\Pre\" />
-	</ItemGroup>
-
 </Project>
