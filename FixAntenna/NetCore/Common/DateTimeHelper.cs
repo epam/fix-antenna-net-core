@@ -44,8 +44,11 @@ namespace Epam.FixAntenna.NetCore.Common
 		private static readonly Calendar GregorianCalendar = new GregorianCalendar();
 
 		private static readonly double SwPerTick = (double)TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
-		private static readonly DateTime BaseNow = DateTime.UtcNow;
-		private static readonly double BaseTimestamp = Stopwatch.GetTimestamp();
+
+		private static DateTime _baseNow = DateTime.UtcNow;
+		private static double _baseTimestamp = Stopwatch.GetTimestamp();
+		private static readonly long SetBaseInterval = TimeSpan.FromSeconds(10).Ticks; // sync to system time each ten seconds 
+		private static readonly object Lock = new object();
 
 		/// <summary>
 		/// Gets number of ticks representing current UTC time. One tick is 100 ns, equal to DateTime.Tick unit.
@@ -55,8 +58,20 @@ namespace Epam.FixAntenna.NetCore.Common
 			get
 			{
 				var endTime = Stopwatch.GetTimestamp();
-				var delta = (endTime - BaseTimestamp) * SwPerTick;
-				return BaseNow.Ticks + (long)delta;
+				var delta = (endTime - _baseTimestamp) * SwPerTick;
+
+				if (delta < SetBaseInterval)
+				{
+					return _baseNow.Ticks + (long)delta;
+				}
+
+				lock (Lock)
+				{
+					_baseTimestamp = Stopwatch.GetTimestamp();
+					_baseNow = DateTime.UtcNow;
+				}
+				
+				return _baseNow.Ticks;
 			}
 		}
 
