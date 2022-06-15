@@ -166,6 +166,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			while (sender.ThreadState != ThreadState.WaitSleepJoin)
 			{
 				//wait until another thread runs and locks
+				Thread.Sleep(1);
 			}
 
 			Assert.AreEqual(0, _transport.GetMessages().Count);
@@ -179,6 +180,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			while (sender.ThreadState != ThreadState.WaitSleepJoin)
 			{
 				//wait until another thread runs and locks
+				Thread.Sleep(1);
 			}
 
 			Assert.AreEqual(0, _transport.GetMessages().Count);
@@ -187,11 +189,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			while (sender.IsAlive)
 			{
 				//wait until another thread finishes
+				Thread.Sleep(1);
 			}
 
 			while (_transport.GetMessages().Count == 0)
 			{
 				//wait transport get messages
+				Thread.Sleep(1);
 			}
 
 			//check that first message is Logon
