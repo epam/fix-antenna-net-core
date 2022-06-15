@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<PackageTags>FIX;FIX Antenna;FixAntenna;NetCore;AdminTool;FIXICC;EPAM</PackageTags>
+		<PackageTags>FIX;FIX Antenna;FixAntenna;NetCore;AdminTool;FIXICC;EPAM;FIX Protocol;fixprotocol</PackageTags>
 		<PackageId>Epam.FixAntenna.AdminTool</PackageId>
 		<PackageDescription>Epam.FixAntenna.NetCore administrative add-on</PackageDescription>
 		<IsPackable>true</IsPackable>
