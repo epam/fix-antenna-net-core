@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
@@ -221,7 +222,7 @@ namespace Epam.FixAntenna.TagsGen
 											(string.IsNullOrEmpty(_namespace) ? _dictionaryName : _namespace + "." + _dictionaryName));
 				file.WriteLine("{");
 				file.WriteLine("\t/// <summary>");
-				file.WriteLine("\t/// " + data.Description);
+				file.WriteLine("\t/// " + SecurityElement.Escape(data.Description));
 				file.WriteLine("\t/// </summary>");
 				file.WriteLine("\t[GeneratedCode(\"TagsGen\", \"" + Assembly.GetExecutingAssembly().GetName().Version + "\")]");
 				file.WriteLine("\tpublic class " + data.Name);
