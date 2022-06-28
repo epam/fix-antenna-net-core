@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Security;
 using System.Text;
 
 namespace Epam.FixAntenna.TagsGen
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.TagsGen
 			var type = Value is int ? "int" : "string";
 
 			output.AppendLine(indent + "/// <summary>");
-			output.AppendLine(indent + "/// " + Description);
+			output.AppendLine(indent + "/// " + SecurityElement.Escape(Description));
 			output.AppendLine(indent + "/// </summary>");
 			output.AppendLine(indent + $"public const {type} {Name} = {Utils.Prepare(Value)};");
 			return output;
