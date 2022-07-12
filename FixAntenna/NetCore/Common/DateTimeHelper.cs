@@ -314,16 +314,25 @@ namespace Epam.FixAntenna.NetCore.Common
 		/// <returns>Returns <see cref="TimeSpan"/> that represents time offset from UTC for given time zone Id.</returns>
 		public static bool TryParseTimeZoneOffset(string timeZoneId, out TimeSpan offset)
 		{
+			var isParsed = TryParseTimeZone(timeZoneId, out var result);
+			offset = result.BaseUtcOffset;
+			return isParsed;
+		}
+
+		internal static bool TryParseTimeZone(string timeZoneId, out TimeZoneInfo timeZoneInfo)
+		{
+			timeZoneInfo = TimeZoneInfo.Utc;
+
 			try
 			{
-				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-				offset = timeZoneInfo.GetUtcOffset(DateTime.UtcNow);
+				timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 				return true;
 			}
 			catch (TimeZoneNotFoundException)
 			{
-				if (TryParseGmtPattern(timeZoneId, out offset))
+				if (TryParseGmtPattern(timeZoneId, out var offset))
 				{
+					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone("CustomTimeZone", offset, "", "");
 					return true;
 				}
 			}
@@ -332,7 +341,6 @@ namespace Epam.FixAntenna.NetCore.Common
 				Log.Debug($"Cannot parse time zone: {timeZoneId}");
 			}
 
-			offset = UtcOffset;
 			return false;
 		}
 
@@ -362,27 +370,6 @@ namespace Epam.FixAntenna.NetCore.Common
 			Log.Debug($"Cannot parse time zone: {pattern}");
 
 			offset = UtcOffset;
-			return false;
-		}
-
-		internal static bool TryParseTimeZone(string timeZoneId, out TimeZoneInfo timeZoneInfo)
-		{
-			timeZoneInfo = TimeZoneInfo.Utc;
-
-			try
-			{
-				timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-				return true;
-			}
-			catch (TimeZoneNotFoundException)
-			{
-				if (TryParseGmtPattern(timeZoneId, out var offset))
-				{
-					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone("CustomTimeZone", offset, "", "");
-					return true;
-				}
-			}
-
 			return false;
 		}
 	}
