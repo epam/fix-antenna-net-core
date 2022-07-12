@@ -163,9 +163,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		#region Reset SeqNum sheduled
 		public bool IsResetSeqNumTimeEnabled => Configuration.GetPropertyAsBoolean(Config.PerformResetSeqNumTime, false);
 
-		private string ResetSequenceTime => Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
+		public string ResetSequenceTime => Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
 
-		private string ResetSequenceTimeZone => Configuration.GetProperty(Config.ResetSequenceTimeZone, "UTC");
+		public string ResetSequenceTimeZone => Configuration.GetProperty(Config.ResetSequenceTimeZone, "UTC");
 
 		private TimeSpan ParseResetSequenceTimeZone()
 		{

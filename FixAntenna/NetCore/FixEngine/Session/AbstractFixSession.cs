@@ -38,6 +38,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Quartz.Impl.Matchers;
 using Quartz.Simpl;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
@@ -102,7 +103,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		private readonly ISet<ITypedFixMessageListener> _outSessionLevelListeners = new HashSet<ITypedFixMessageListener>();
 
-		protected IScheduler _scheduler;
+		protected IScheduler Scheduler;
 
 		/// <summary>
 		/// Creates the <c>AbstractFIXSession</c>.
@@ -754,18 +755,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			SequenceManager.InitSeqNums(inStorageSeqNum, nextOutStorageSeqNum);
 			SubscribeForAttributeChanges(ExtendedFixSessionAttribute.IsResendRequestProcessed, new ExtendedFixSessionAttributeListener(this));
 
-			if (_scheduler == null)
+			if (Scheduler == null)
 			{
 				// The new GUID is used as scheduler name for each session because making "schedulerName"
 				// (for example from SessionID) leads to problem when running unit tests (many tests uses same SessionID)
-				var guid = Guid.NewGuid().ToString();
-				DirectSchedulerFactory.Instance.CreateScheduler(guid, SessionId, new DefaultThreadPool(), new RAMJobStore());
-				_scheduler = DirectSchedulerFactory.Instance.GetScheduler(guid).Result;
+				var schedulerName = Guid.NewGuid().ToString();
+				DirectSchedulerFactory.Instance.CreateScheduler(schedulerName, SessionId, new DefaultThreadPool(), new RAMJobStore());
+				Scheduler = DirectSchedulerFactory.Instance.GetScheduler(schedulerName).Result;
 			}
 
-			if (!_scheduler?.IsStarted ?? false)
+			if (!Scheduler?.IsStarted ?? false)
 			{
-				_scheduler.Start();
+				Scheduler.Start();
 			}
 
 			RegisterSessionTasks();
@@ -1323,8 +1324,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				((IClosable)StorageFactory).Close();
 			}
 
-			_scheduler?.Shutdown(false);
-			_scheduler = null;
+			Scheduler?.Shutdown(false);
+			Scheduler = null;
 		}
 
 		/// <summary>
@@ -2049,10 +2050,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		///		- Scheduled SeqNum reset task
 		///		- HB
 		///		- TestRequest tasks
-		///		- Session schedule task
 		/// </summary>
 		private void RegisterSessionTasks()
 		{
+			UnRegisterSessionTasks();
+
 			// required jobs
 			RegisterHeartbeatJob();
 			RegisterTestRequestJob();
@@ -2062,9 +2064,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			{
 				RegisterSeqResetJob();
 			}
-
-			// scheduled session if configured
-			//TODO: scheduler
 		}
 
 		/// <summary>
@@ -2076,37 +2075,34 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		/// </summary>
 		private void UnRegisterSessionTasks()
 		{
-			_scheduler?.Standby().Wait();
+			var jobKeys = Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result;
+			Scheduler.DeleteJobs(jobKeys).Wait();
 		}
 
 		private void RegisterHeartbeatJob()
 		{
 			var hbJob = JobBuilder.Create<InactivityCheckTask>()
-				//.WithIdentity($"InactivityCheckTask-{SessionId}", "Regular jobs")
 				.UsingJobData("SessionId", SessionId)
 				.Build();
 			
 			var hbTrigger = TriggerBuilder.Create()
-				//.WithIdentity($"InactivityCheckTrigger-{SessionId}", "Regular triggers")
 				.WithSimpleSchedule(s => s
 					.WithInterval(CheckHbAndTestRequestInterval)
 					.WithMisfireHandlingInstructionIgnoreMisfires()
 					.RepeatForever())
 				.Build();
 			
-			var nextRun = _scheduler.ScheduleJob(hbJob, hbTrigger).Result;
+			var nextRun = Scheduler.ScheduleJob(hbJob, hbTrigger).Result;
 			Log.Trace($"{nameof(InactivityCheckTask)} will run at {nextRun:O}");
 		}
 
 		private void RegisterTestRequestJob()
 		{
 			var hbJob = JobBuilder.Create<TestRequestTask>()
-				//.WithIdentity($"TestRequestTask-{SessionId}", "Regular jobs")
 				.UsingJobData("SessionId", SessionId)
 				.Build();
 			
 			var hbTrigger = TriggerBuilder.Create()
-				//.WithIdentity($"TestRequestTrigger-{SessionId}", "Regular triggers")
 				.StartAt(DateTimeOffset.Now.AddSeconds(1))
 				.WithSimpleSchedule(s => s
 					.WithInterval(CheckHbAndTestRequestInterval)
@@ -2114,41 +2110,39 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					.RepeatForever())
 				.Build();
 			
-			var nextRun = _scheduler.ScheduleJob(hbJob, hbTrigger).Result;
+			var nextRun = Scheduler.ScheduleJob(hbJob, hbTrigger).Result;
 			Log.Trace($"{nameof(TestRequestTask)} will run at {nextRun:O}");
 		}
 
 		private void RegisterSeqResetJob()
 		{
-			var resetTimeString = ConfigAdapter.Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
-			var resetTimeZoneString = ConfigAdapter.Configuration.GetProperty(Config.ResetSequenceTimeZone, string.Empty);
+			var resetTimeString = ConfigAdapter.ResetSequenceTime;
+			var resetTimeZoneString = ConfigAdapter.ResetSequenceTimeZone;
 
-			var resetTime = TimeSpan.Parse(resetTimeString);
-			var resetTimeZone = TimeZoneInfo.Local;
-
-			try
+			if (!TimeSpan.TryParseExact(resetTimeString, @"h\:m\:s", null, out var resetTime))
 			{
-				resetTimeZone = TimeZoneInfo.FindSystemTimeZoneById(resetTimeZoneString);
+				resetTime = TimeSpan.Zero;
+				Log.Warn($"Cannot parse Time '{resetTimeString}', using {resetTime} instead.");
 			}
-			catch (Exception e)
+
+			if (!DateTimeHelper.TryParseTimeZone(resetTimeZoneString, out var resetTimeZone))
 			{
-				Log.Warn($"Cannot parse TimeZone '{resetTimeZoneString}', using Local TZ instead.", e);
+				resetTimeZone = TimeZoneInfo.Utc;
+				Log.Warn($"Cannot parse Time Zone '{resetTimeZoneString}', using UTC Time Zone instead.");
 			}
 
 			var srJob = JobBuilder.Create<ResetSeqNumTask>()
-				//.WithIdentity($"ResetSeqNumTask-{SessionId}", "Regular jobs")
 				.UsingJobData("SessionId", SessionId)
 				.Build();
 
 			var srTrigger = TriggerBuilder.Create()
-				//.WithIdentity($"SeqResetTrigger-{SessionId}", "Regular triggers")
 				.WithDailyTimeIntervalSchedule(s => s
 					.WithIntervalInHours(24)
 					.StartingDailyAt(new TimeOfDay(resetTime.Hours, resetTime.Minutes, resetTime.Seconds))
 					.InTimeZone(resetTimeZone))
 				.Build();
 
-			var nextRun = _scheduler.ScheduleJob(srJob, srTrigger).Result;
+			var nextRun = Scheduler.ScheduleJob(srJob, srTrigger).Result;
 			Log.Trace($"{nameof(ResetSeqNumTask)} will run at {nextRun:O}");
 		}
 		#endregion

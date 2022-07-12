@@ -322,26 +322,9 @@ namespace Epam.FixAntenna.NetCore.Common
 			}
 			catch (TimeZoneNotFoundException)
 			{
-				// trying to find and parse GMT pattern: GMT+05:30, GMT-3 or similar
-				var m = Regex.Match(timeZoneId, @"(?:GMT|UTC) ?([+|-]\d{1,2}(:?\d{2})?)?");
-				if (m.Success)
+				if (TryParseGmtPattern(timeZoneId, out offset))
 				{
-					// group 1 can be like "+2:30","-03" or empty
-					// empty Group 1 means UTC or GMT
-					if (m.Groups[1].Length == 0)
-					{
-						offset = UtcOffset;
-						return true;
-					}
-
-					// group 2 can be like ":30" or empty
-					var matched = m.Groups[2].Length == 0 ? m.Groups[1].Value + ":00" : m.Groups[1].Value;
-
-					if (TimeSpan.TryParse(matched.TrimStart('+'), out offset))
-					{
-						return true;
-					}
-					Log.Debug($"Cannot parse time zone: {timeZoneId}");
+					return true;
 				}
 			}
 			catch (Exception)
@@ -350,6 +333,56 @@ namespace Epam.FixAntenna.NetCore.Common
 			}
 
 			offset = UtcOffset;
+			return false;
+		}
+
+		private static bool TryParseGmtPattern(string pattern, out TimeSpan offset)
+		{
+			// trying to find and parse GMT pattern: GMT+05:30, GMT-3 or similar
+			var m = Regex.Match(pattern, @"(?:GMT|UTC) ?([+|-]\d{1,2}(:?\d{2})?)?");
+			if (m.Success)
+			{
+				// group 1 can be like "+2:30","-03" or empty
+				// empty Group 1 means UTC or GMT
+				if (m.Groups[1].Length == 0)
+				{
+					offset = UtcOffset;
+					return true;
+				}
+
+				// group 2 can be like ":30" or empty
+				var matched = m.Groups[2].Length == 0 ? m.Groups[1].Value + ":00" : m.Groups[1].Value;
+
+				if (TimeSpan.TryParse(matched.TrimStart('+'), out offset))
+				{
+					return true;
+				}
+			}
+
+			Log.Debug($"Cannot parse time zone: {pattern}");
+
+			offset = UtcOffset;
+			return false;
+		}
+
+		internal static bool TryParseTimeZone(string timeZoneId, out TimeZoneInfo timeZoneInfo)
+		{
+			timeZoneInfo = TimeZoneInfo.Utc;
+
+			try
+			{
+				timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+				return true;
+			}
+			catch (TimeZoneNotFoundException)
+			{
+				if (TryParseGmtPattern(timeZoneId, out var offset))
+				{
+					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone("CustomTimeZone", offset, "", "");
+					return true;
+				}
+			}
+
 			return false;
 		}
 	}
