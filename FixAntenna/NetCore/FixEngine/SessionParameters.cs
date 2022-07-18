@@ -27,6 +27,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 using static Epam.FixAntenna.NetCore.Configuration.Config;
 
 namespace Epam.FixAntenna.NetCore.FixEngine
@@ -821,6 +822,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 			return StandardFixSessionFactory.GetFactory(this).CreateInitiatorSession(this);
 		}
 
+        /// <summary>
+        /// Creates scheduled initiator session
+        /// </summary>
+        /// <returns> FIX session </returns>
+        public IScheduledFixSession CreateScheduledInitiatorSession()
+        {
+            return (IScheduledFixSession)StandardFixSessionFactory.GetFactory(this).CreateInitiatorSession(this);
+        }
+
 		public void PrintConfiguration()
 		{
 			if (Log.IsDebugEnabled)
@@ -932,6 +942,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 				PrintParameter(SslServerName);
 				PrintParameter(SslValidatePeerCertificate, configuration.GetPropertyAsBoolean(SslValidatePeerCertificate, defaultValue: false, warnToLog: true), ParamSources.Instance.Get(SslValidatePeerCertificate, sessionId));
 				// end SSL
+
+				PrintParameter(TradePeriodBegin);
+				PrintParameter(TradePeriodEnd);
+				PrintParameter(TradePeriodTimeZone);
 
 				PrintTitle("End configuration of session: " + _outerInstance.SessionId);
 

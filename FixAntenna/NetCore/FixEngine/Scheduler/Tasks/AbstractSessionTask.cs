@@ -29,7 +29,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 	{
 		protected readonly ILog Log;
 
-		public AbstractSessionTask()
+		protected AbstractSessionTask()
 		{
 			Log = LogFactory.GetLog(GetType());
 		}

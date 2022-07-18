@@ -35,7 +35,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		}
 
 		private static readonly IPAddress TestAddress = IPAddress.Parse("127.0.0.1");
-		private const int TestPort = 3000;
+		private const int TestPort = 3016;
 		private TcpServer _server;
 
 		private void Init()

@@ -321,8 +321,6 @@ namespace Epam.FixAntenna.NetCore.Common
 
 		internal static bool TryParseTimeZone(string timeZoneId, out TimeZoneInfo timeZoneInfo)
 		{
-			timeZoneInfo = TimeZoneInfo.Utc;
-
 			try
 			{
 				timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
@@ -341,6 +339,7 @@ namespace Epam.FixAntenna.NetCore.Common
 				Log.Debug($"Cannot parse time zone: {timeZoneId}");
 			}
 
+			timeZoneInfo = TimeZoneInfo.Utc;
 			return false;
 		}
 

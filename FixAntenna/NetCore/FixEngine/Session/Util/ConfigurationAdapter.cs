@@ -86,6 +86,25 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 		public string ConnectAddress => Configuration.GetProperty(Config.ConnectAddress);
 
+		public string TradePeriodBegin => Configuration.GetProperty(Config.TradePeriodBegin);
+
+		public string TradePeriodEnd => Configuration.GetProperty(Config.TradePeriodEnd);
+
+		public TimeZoneInfo TradePeriodTimeZone
+		{
+			get
+			{
+				var timeZone = Configuration.GetProperty(Config.TradePeriodTimeZone);
+				if (DateTimeHelper.TryParseTimeZone(timeZone, out var timeZoneInfo))
+				{
+					return timeZoneInfo;
+				}
+
+				Log.Warn("Using UTC time zone");
+				return TimeZoneInfo.Utc;
+			}
+		}
+
 		public bool IsSendingTimeAccuracyCheckEnabled => Configuration.GetPropertyAsBoolean(Config.CheckSendingTimeAccuracy, false);
 
 		public int GetReasonableDelay(int defaultValue)

@@ -333,13 +333,72 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		#region IScheduledFixSession implementation
 		public void Schedule()
 		{
-			throw new NotImplementedException();
+			Scheduler.DescheduleSessionStartAndStop();
+
+			Log.Debug($"Init session scheduler: {Parameters.SessionId}");
+
+			var startTimeExpr = ConfigAdapter.TradePeriodBegin;
+			var stopTimeExpr = ConfigAdapter.TradePeriodEnd;
+			var timeZone = ConfigAdapter.TradePeriodTimeZone;
+
+			ValidateParameters(startTimeExpr, stopTimeExpr);
+
+			if (startTimeExpr != null)
+			{
+				Scheduler.ScheduleSessionStart(startTimeExpr, timeZone);
+			}
+
+			if (stopTimeExpr != null)
+			{
+				Scheduler.ScheduleSessionStop(stopTimeExpr, timeZone);
+			}
+
+			if (startTimeExpr != null && stopTimeExpr != null)
+			{
+				if (SessionTaskScheduler.IsInsideInterval(DateTimeOffset.UtcNow, startTimeExpr, stopTimeExpr, timeZone))
+				{
+					Connect();
+				}
+			}
 		}
 
 		public void Deschedule()
 		{
-			throw new NotImplementedException();
+			Log.Debug($"Cancel session scheduler: {Parameters.SessionId}");
+
+			Scheduler.DescheduleSessionStartAndStop();
 		}
+		
+		private void ValidateParameters(string startTimeExpr, string stopTimeExpr)
+		{
+			ValidateStartTime(startTimeExpr);
+			ValidateStopTime(stopTimeExpr);
+		}
+
+		private void ValidateStopTime(string stopTimeExpr)
+		{
+			if (stopTimeExpr != null)
+			{
+				if (!SessionTaskScheduler.IsValidCronExpression(stopTimeExpr))
+				{
+					Log.Error("Session stop time expression is invalid: " + stopTimeExpr);
+					throw new ArgumentException("Session stop time expression is invalid: " + stopTimeExpr);
+				}
+			}
+		}
+
+		private void ValidateStartTime(string startTimeExpr)
+		{
+			if (startTimeExpr != null)
+			{
+				if (!SessionTaskScheduler.IsValidCronExpression(startTimeExpr))
+				{
+					Log.Error("Session start time expression is invalid: " + startTimeExpr);
+					throw new ArgumentException("Session start time expression is invalid: " + startTimeExpr);
+				}
+			}
+		}
+
 		#endregion
 	}
 }

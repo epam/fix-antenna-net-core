@@ -18,7 +18,6 @@ using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
@@ -29,17 +28,13 @@ using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation;
 
-using Quartz;
-using Quartz.Impl;
-
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Quartz.Impl.Matchers;
-using Quartz.Simpl;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -103,7 +98,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		private readonly ISet<ITypedFixMessageListener> _outSessionLevelListeners = new HashSet<ITypedFixMessageListener>();
 
-		protected IScheduler Scheduler;
+		protected internal SessionTaskScheduler Scheduler;
 
 		/// <summary>
 		/// Creates the <c>AbstractFIXSession</c>.
@@ -757,16 +752,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			if (Scheduler == null)
 			{
-				// The new GUID is used as scheduler name for each session because making "schedulerName"
-				// (for example from SessionID) leads to problem when running unit tests (many tests uses same SessionID)
-				var schedulerName = Guid.NewGuid().ToString();
-				DirectSchedulerFactory.Instance.CreateScheduler(schedulerName, SessionId, new DefaultThreadPool(), new RAMJobStore());
-				Scheduler = DirectSchedulerFactory.Instance.GetScheduler(schedulerName).Result;
-			}
-
-			if (!Scheduler?.IsStarted ?? false)
-			{
-				Scheduler.Start();
+				Scheduler = new SessionTaskScheduler(Parameters);
 			}
 
 			RegisterSessionTasks();
@@ -1324,7 +1310,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				((IClosable)StorageFactory).Close();
 			}
 
-			Scheduler?.Shutdown(false);
+			Scheduler?.Shutdown();
 			Scheduler = null;
 		}
 
@@ -2056,13 +2042,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			UnRegisterSessionTasks();
 
 			// required jobs
-			RegisterHeartbeatJob();
-			RegisterTestRequestJob();
+			Scheduler.ScheduleHeartbeat(CheckHbAndTestRequestInterval);
+			Scheduler.ScheduleTestRequest(CheckHbAndTestRequestInterval);
 
 			// SeqNum reset if configured
 			if (ConfigAdapter.IsResetSeqNumTimeEnabled)
 			{
-				RegisterSeqResetJob();
+				RegisterSeqResetTask();
 			}
 		}
 
@@ -2075,46 +2061,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		/// </summary>
 		private void UnRegisterSessionTasks()
 		{
-			var jobKeys = Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result;
-			Scheduler.DeleteJobs(jobKeys).Wait();
+			Scheduler.DescheduleAllTasks();
 		}
 
-		private void RegisterHeartbeatJob()
-		{
-			var hbJob = JobBuilder.Create<InactivityCheckTask>()
-				.UsingJobData("SessionId", SessionId)
-				.Build();
-			
-			var hbTrigger = TriggerBuilder.Create()
-				.WithSimpleSchedule(s => s
-					.WithInterval(CheckHbAndTestRequestInterval)
-					.WithMisfireHandlingInstructionIgnoreMisfires()
-					.RepeatForever())
-				.Build();
-			
-			var nextRun = Scheduler.ScheduleJob(hbJob, hbTrigger).Result;
-			Log.Trace($"{nameof(InactivityCheckTask)} will run at {nextRun:O}");
-		}
-
-		private void RegisterTestRequestJob()
-		{
-			var hbJob = JobBuilder.Create<TestRequestTask>()
-				.UsingJobData("SessionId", SessionId)
-				.Build();
-			
-			var hbTrigger = TriggerBuilder.Create()
-				.StartAt(DateTimeOffset.Now.AddSeconds(1))
-				.WithSimpleSchedule(s => s
-					.WithInterval(CheckHbAndTestRequestInterval)
-					.WithMisfireHandlingInstructionIgnoreMisfires()
-					.RepeatForever())
-				.Build();
-			
-			var nextRun = Scheduler.ScheduleJob(hbJob, hbTrigger).Result;
-			Log.Trace($"{nameof(TestRequestTask)} will run at {nextRun:O}");
-		}
-
-		private void RegisterSeqResetJob()
+		private void RegisterSeqResetTask()
 		{
 			var resetTimeString = ConfigAdapter.ResetSequenceTime;
 			var resetTimeZoneString = ConfigAdapter.ResetSequenceTimeZone;
@@ -2131,19 +2081,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				Log.Warn($"Cannot parse Time Zone '{resetTimeZoneString}', using UTC Time Zone instead.");
 			}
 
-			var srJob = JobBuilder.Create<ResetSeqNumTask>()
-				.UsingJobData("SessionId", SessionId)
-				.Build();
-
-			var srTrigger = TriggerBuilder.Create()
-				.WithDailyTimeIntervalSchedule(s => s
-					.WithIntervalInHours(24)
-					.StartingDailyAt(new TimeOfDay(resetTime.Hours, resetTime.Minutes, resetTime.Seconds))
-					.InTimeZone(resetTimeZone))
-				.Build();
-
-			var nextRun = Scheduler.ScheduleJob(srJob, srTrigger).Result;
-			Log.Trace($"{nameof(ResetSeqNumTask)} will run at {nextRun:O}");
+			Scheduler.ScheduleSeqReset(resetTime, resetTimeZone);
 		}
 		#endregion
 	}
