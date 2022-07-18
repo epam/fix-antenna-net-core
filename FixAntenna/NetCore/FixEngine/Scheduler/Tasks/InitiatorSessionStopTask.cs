@@ -45,7 +45,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 				}
 				catch (Exception e)
 				{
-					Log.Error("Session could not be started", e);
+					Log.Error("Session could not be disconnected", e);
 				}
 			}
 			else
