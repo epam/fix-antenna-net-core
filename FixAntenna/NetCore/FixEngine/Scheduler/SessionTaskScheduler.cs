@@ -151,7 +151,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 			var nextRun = _scheduler.ScheduleJob(job, trigger).Result;
 
-			Log.Trace($"{nameof(T)} will run at {nextRun:O}");
+			Log.Trace($"{typeof(T).Name} will run at {nextRun:O}");
 		}
 
 		private IJobDetail CreateJob<T>(JobKey jobKey) where T: IJob
