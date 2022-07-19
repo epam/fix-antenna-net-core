@@ -333,7 +333,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		#region IScheduledFixSession implementation
 		public void Schedule()
 		{
-			Scheduler.DescheduleSessionStartAndStop();
+			VerifySessionState();
 
 			Log.Debug($"Init session scheduler: {Parameters.SessionId}");
 

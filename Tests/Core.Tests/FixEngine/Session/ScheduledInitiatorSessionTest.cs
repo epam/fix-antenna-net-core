@@ -138,6 +138,26 @@ namespace Epam.FixAntenna.NetCore.Tests.FixEngine.Session
 			Assert.AreEqual(expectedIsSessionStopScheduled, _session.IsSessionStopScheduled);
 		}
 
+		[Test]
+		public void TestScheduleAfterDisposeIsOk()
+		{
+			// Arrange
+			var props = new Dictionary<string, string>
+			{
+				{ "tradePeriodBegin", "0 10 * * * ?" },
+				{ "tradePeriodEnd", "0 20 * * * ?" }
+			};
+
+			_session = CreateScheduledSession(props);
+
+			// Act, Assert
+			Assert.Throws<InvalidOperationException>(() =>
+			{
+				_session.Dispose();
+				_session.Schedule();
+			});
+		}
+
 		[TearDown]
 		public void CleanUp()
 		{

@@ -26,20 +26,31 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 	{
 		private static readonly ILog Log = LogFactory.GetLog(typeof(SessionTaskScheduler));
 		private readonly IScheduler _scheduler;
-		private JobKey _startSessionTaskId;
-		private JobKey _stopSessionTaskId ;
 		private readonly SessionParameters _sessionParameters;
+
+		// We want a separate scheduler per session, so we need to use a unique per session scheduler name.
+		// SessionId is not good for that as tests can create several sessions with the same Id.
+		private readonly string _schedulerName = Guid.NewGuid().ToString();
+
+		private readonly JobKey _heartbeatJobKey;
+		private readonly JobKey _testRequestJobKey;
+		private readonly JobKey _seqResetJobKey;
+		private readonly JobKey _sessionStartJobKey;
+		private readonly JobKey _sessionStopJobKey;
 
 		internal SessionTaskScheduler(SessionParameters sessionParameters)
 		{
 			_sessionParameters = sessionParameters;
 
-			// We want a separate scheduler per session, so we need to use a unique per session scheduler name.
-			// SessionId is not good for that as tests can create several sessions with the same Id.
-			var schedulerName = Guid.NewGuid().ToString();
-			DirectSchedulerFactory.Instance.CreateScheduler(schedulerName, schedulerName, new DefaultThreadPool(), new RAMJobStore());
-			_scheduler = DirectSchedulerFactory.Instance.GetScheduler(schedulerName).Result;
+			DirectSchedulerFactory.Instance.CreateScheduler(_schedulerName, _schedulerName, new DefaultThreadPool(), new RAMJobStore());
+			_scheduler = DirectSchedulerFactory.Instance.GetScheduler(_schedulerName).Result;
 			_scheduler = _scheduler ?? throw new InvalidOperationException("Cannot create scheduler.");
+
+			_heartbeatJobKey = new JobKey("Heartbeat", _schedulerName);
+			_testRequestJobKey = new JobKey("TestRequest", _schedulerName);
+			_seqResetJobKey = new JobKey("SeqReset", _schedulerName);
+			_sessionStartJobKey = new JobKey("SessionStart", _schedulerName);
+			_sessionStopJobKey = new JobKey("SessionStop", _schedulerName);
 
 			_scheduler.Start();
 		}
@@ -48,64 +59,50 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		{
 			Log.Trace($"Add start session task {startTimeExpr}: {_sessionParameters.SessionId}");
 
-			if (_startSessionTaskId != null)
-			{
-				Deschedule(_startSessionTaskId);
-			}
-
-			var (nextRun, key) = ScheduleCronJob<InitiatorSessionStartTask>(startTimeExpr, timeZone);
-
-			Log.Trace($"{nameof(InactivityCheckTask)} will run at {nextRun:O}");
-
-			_startSessionTaskId = key;
-		}
-
-		internal bool IsSessionStartScheduled()
-		{
-			return _startSessionTaskId != null && _scheduler.GetJobDetail(_startSessionTaskId).Result != null;
-		}
-
-		internal bool IsSessionStopScheduled()
-		{
-			return _stopSessionTaskId != null && _scheduler.GetJobDetail(_stopSessionTaskId).Result != null;
+			ScheduleCronJob<InitiatorSessionStartTask>(startTimeExpr, timeZone, _sessionStartJobKey);
 		}
 
 		internal void ScheduleSessionStop(string stopTimeExpr, TimeZoneInfo timeZone)
 		{
 			Log.Trace($"Add stop session task {stopTimeExpr}: {_sessionParameters.SessionId}");
 
-			if (_stopSessionTaskId != null)
-			{
-				Deschedule(_stopSessionTaskId);
-			}
+			ScheduleCronJob<InitiatorSessionStopTask>(stopTimeExpr, timeZone, _sessionStopJobKey);
+		}
 
-			var (nextRun, key) = ScheduleCronJob<InitiatorSessionStopTask>(stopTimeExpr, timeZone);
+		internal bool IsSessionStartScheduled()
+		{
+			return JobExists(_sessionStartJobKey);
+		}
 
-			Log.Trace($"{nameof(InactivityCheckTask)} will run at {nextRun:O}");
-
-			_stopSessionTaskId = key;
+		internal bool IsSessionStopScheduled()
+		{
+			return JobExists(_sessionStopJobKey);
 		}
 
 		internal void ScheduleHeartbeat(TimeSpan checkHeartbeatInterval)
 		{
-			var hbJob = CreateJob<InactivityCheckTask>();
+			Deschedule(_heartbeatJobKey);
+
+			var job = CreateJob<InactivityCheckTask>(_heartbeatJobKey);
 			
-			var hbTrigger = TriggerBuilder.Create()
+			var trigger = TriggerBuilder.Create()
 				.WithSimpleSchedule(s => s
 					.WithInterval(checkHeartbeatInterval)
 					.WithMisfireHandlingInstructionIgnoreMisfires()
 					.RepeatForever())
 				.Build();
 			
-			var nextRun = _scheduler.ScheduleJob(hbJob, hbTrigger).Result;
+			var nextRun = _scheduler.ScheduleJob(job, trigger).Result;
 			Log.Trace($"{nameof(InactivityCheckTask)} will run at {nextRun:O}");
 		}
 
 		internal void ScheduleTestRequest(TimeSpan checkTestRequestInterval)
 		{
-			var hbJob = CreateJob<TestRequestTask>();
+			Deschedule(_testRequestJobKey);
+
+			var job = CreateJob<TestRequestTask>(_testRequestJobKey);
 			
-			var hbTrigger = TriggerBuilder.Create()
+			var trigger = TriggerBuilder.Create()
 				.StartAt(DateTimeOffset.Now.AddSeconds(1))
 				.WithSimpleSchedule(s => s
 					.WithInterval(checkTestRequestInterval)
@@ -113,77 +110,85 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 					.RepeatForever())
 				.Build();
 			
-			var nextRun = _scheduler.ScheduleJob(hbJob, hbTrigger).Result;
+			var nextRun = _scheduler.ScheduleJob(job, trigger).Result;
 			Log.Trace($"{nameof(TestRequestTask)} will run at {nextRun:O}");
 		}
 
 		internal void ScheduleSeqReset(TimeSpan resetTime, TimeZoneInfo resetTimeZone)
 		{
-			var srJob = CreateJob<ResetSeqNumTask>();
+			Deschedule(_seqResetJobKey);
 
-			var srTrigger = TriggerBuilder.Create()
+			var job = CreateJob<ResetSeqNumTask>(_seqResetJobKey);
+
+			var trigger = TriggerBuilder.Create()
 				.WithDailyTimeIntervalSchedule(s => s
 					.WithIntervalInHours(24)
 					.StartingDailyAt(new TimeOfDay(resetTime.Hours, resetTime.Minutes, resetTime.Seconds))
 					.InTimeZone(resetTimeZone))
 				.Build();
 
-			var nextRun = _scheduler.ScheduleJob(srJob, srTrigger).Result;
+			var nextRun = _scheduler.ScheduleJob(job, trigger).Result;
 			Log.Trace($"{nameof(ResetSeqNumTask)} will run at {nextRun:O}");
 		}
 
-		private (DateTimeOffset nextRun, JobKey key)
-			ScheduleCronJob<T>(string cronExpression, TimeZoneInfo timeZone)
+		private bool JobExists(JobKey jobKey)
+		{
+			return _scheduler.CheckExists(jobKey).Result;
+		}
+
+		private void ScheduleCronJob<T>(string cronExpression, TimeZoneInfo timeZone, JobKey jobKey)
 			where T: IJob
 		{
-			var job = CreateJob<T>();
+			Deschedule(jobKey);
+
+			var job = CreateJob<T>(jobKey);
 			var trigger = TriggerBuilder.Create()
 				.WithCronSchedule(
 					cronExpression,
 					s => s.InTimeZone(timeZone)
 				)
 				.Build();
+
 			var nextRun = _scheduler.ScheduleJob(job, trigger).Result;
-			return (nextRun, job.Key);
+
+			Log.Trace($"{nameof(T)} will run at {nextRun:O}");
 		}
 
-		private IJobDetail CreateJob<T>() where T: IJob
+		private IJobDetail CreateJob<T>(JobKey jobKey) where T: IJob
 		{
 			return JobBuilder.Create<T>()
+				.WithIdentity(jobKey)
 				.UsingJobData("SessionId", _sessionParameters.SessionId.ToString())
 				.Build();
 		}
 
 		internal void DescheduleSessionStartAndStop()
 		{
-			if (_startSessionTaskId != null)
+			if (JobExists(_sessionStartJobKey))
 			{
 				Log.Trace($"Cancel start session task: {_sessionParameters.SessionId}");
-
-				Deschedule(_startSessionTaskId);
-				_startSessionTaskId = null;
+				Deschedule(_sessionStartJobKey);
 			}
 
-			if (_stopSessionTaskId != null)
+			if (JobExists(_sessionStopJobKey))
 			{
 				Log.Trace($"Cancel stop session task: {_sessionParameters.SessionId}");
-
-				Deschedule(_stopSessionTaskId);
-				_stopSessionTaskId = null;
+				Deschedule(_sessionStopJobKey);
 			}
 		}
 
 		private void Deschedule(JobKey key)
 		{
-			_scheduler.DeleteJob(key).Wait();
+			if (JobExists(key))
+			{
+				_scheduler.DeleteJob(key).Wait();
+			}
 		}
 
 		internal void DescheduleAllTasks()
 		{
 			var jobKeys = _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result;
 			_scheduler.DeleteJobs(jobKeys).Wait();
-			_startSessionTaskId = null;
-			_stopSessionTaskId = null;
 		}
 
 		internal void Shutdown()

@@ -1204,7 +1204,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			return Pumper.Send(content, allowedChangesType, options);
 		}
 
-		private void VerifySessionState()
+		protected internal void VerifySessionState()
 		{
 			if (SessionState.Dead == SessionState)
 			{
@@ -2039,8 +2039,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		/// </summary>
 		private void RegisterSessionTasks()
 		{
-			UnRegisterSessionTasks();
-
 			// required jobs
 			Scheduler.ScheduleHeartbeat(CheckHbAndTestRequestInterval);
 			Scheduler.ScheduleTestRequest(CheckHbAndTestRequestInterval);
@@ -2061,7 +2059,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		/// </summary>
 		private void UnRegisterSessionTasks()
 		{
-			Scheduler.DescheduleAllTasks();
+			Scheduler?.DescheduleAllTasks();
 		}
 
 		private void RegisterSeqResetTask()
