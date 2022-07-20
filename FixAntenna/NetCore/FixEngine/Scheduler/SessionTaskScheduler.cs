@@ -55,6 +55,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_scheduler.Start();
 		}
 
+		internal bool IsShutdown() => _scheduler.IsShutdown;
+
+		internal bool IsSessionStartScheduled() => JobExists(_sessionStartJobKey);
+
+		internal bool IsSessionStopScheduled() => JobExists(_sessionStopJobKey);
+
 		internal void ScheduleSessionStart(string startTimeExpr, TimeZoneInfo timeZone)
 		{
 			Log.Trace($"Add start session task {startTimeExpr}: {_sessionParameters.SessionId}");
@@ -67,16 +73,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			Log.Trace($"Add stop session task {stopTimeExpr}: {_sessionParameters.SessionId}");
 
 			ScheduleCronJob<InitiatorSessionStopTask>(stopTimeExpr, timeZone, _sessionStopJobKey);
-		}
-
-		internal bool IsSessionStartScheduled()
-		{
-			return JobExists(_sessionStartJobKey);
-		}
-
-		internal bool IsSessionStopScheduled()
-		{
-			return JobExists(_sessionStopJobKey);
 		}
 
 		internal void ScheduleHeartbeat(TimeSpan checkHeartbeatInterval)

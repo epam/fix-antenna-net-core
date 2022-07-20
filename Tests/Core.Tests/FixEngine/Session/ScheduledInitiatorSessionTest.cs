@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Common;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
@@ -156,6 +157,48 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			});
 		}
 
+		[Test]
+		public void TestDeSchedule()
+		{
+			// Arrange
+			var props = new Dictionary<string, string>
+			{
+				{ "tradePeriodBegin", "0 10 * * * ?" },
+				{ "tradePeriodEnd", "0 20 * * * ?" }
+			};
+
+			_session = CreateScheduledSession(props);
+
+			// Act
+			_session.Schedule();
+			_session.Deschedule();
+
+			// Assert
+			Assert.IsFalse(_session.IsSessionStartScheduled);
+			Assert.IsFalse(_session.IsSessionStopScheduled);
+		}
+
+		[Test]
+		public void TestDeScheduleAfterDispose()
+		{
+			// Arrange
+			var props = new Dictionary<string, string>
+			{
+				{ "tradePeriodBegin", "0 10 * * * ?" },
+				{ "tradePeriodEnd", "0 20 * * * ?" }
+			};
+
+			_session = CreateScheduledSession(props);
+			var scheduler = _session.GetScheduler();
+
+			// Act
+			_session.Schedule();
+			_session.Dispose();
+
+			// Assert
+			Assert.IsTrue(scheduler.IsShutdown());
+		}
+
 		[TearDown]
 		public void CleanUp()
 		{
@@ -215,6 +258,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			internal int ConnectionAttempts { get; private set; }
 			internal bool IsSessionStartScheduled => Scheduler.IsSessionStartScheduled();
 			internal bool IsSessionStopScheduled => Scheduler.IsSessionStopScheduled();
+			internal SessionTaskScheduler GetScheduler() => Scheduler;
 
 			public ScheduledInitiatorSessionForTests(
 				IFixMessageFactory factory,

@@ -377,7 +377,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			Log.Debug($"Cancel session scheduler: {Parameters.SessionId}");
 
-			Scheduler.DescheduleSessionStartAndStop();
+			Scheduler?.DescheduleSessionStartAndStop();
 		}
 		
 		private void ValidateParameters(string startTimeExpr, string stopTimeExpr)
