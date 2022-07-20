@@ -116,6 +116,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			new object[] { "0 10 * * * ?", "0 20 * * * ?" , true, true},
 			new object[] { null, null , false, false},
+			new object[] { "0 10 * * * ?", null , true, false},
+			new object[] { null, "0 10 * * * ?" , false, true},
 		};
 
 		[TestCaseSource(nameof(TestCasesSessionScheduled))]
