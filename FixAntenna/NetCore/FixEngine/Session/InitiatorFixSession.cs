@@ -353,13 +353,24 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				Scheduler.ScheduleSessionStop(stopTimeExpr, timeZone);
 			}
 
-			if (startTimeExpr != null && stopTimeExpr != null)
+			if (startTimeExpr == null || stopTimeExpr == null) return;
+
+			if (!CanStartScheduledSession(startTimeExpr, stopTimeExpr, timeZone)) return;
+
+			lock (SessionLock)
 			{
-				if (SessionTaskScheduler.IsInsideInterval(DateTimeOffset.UtcNow, startTimeExpr, stopTimeExpr, timeZone))
+				if (CanStartScheduledSession(startTimeExpr, stopTimeExpr, timeZone))
 				{
 					Connect();
 				}
 			}
+		}
+
+		private bool CanStartScheduledSession(string startTimeExpr, string stopTimeExpr, TimeZoneInfo timeZone)
+		{
+			var isDisconnected = SessionState.IsDisconnected(SessionState);
+			var isInsideInterval = SessionTaskScheduler.IsInsideInterval(DateTimeOffset.UtcNow, startTimeExpr, stopTimeExpr, timeZone);
+			return isDisconnected && isInsideInterval;
 		}
 
 		public void Deschedule()
@@ -377,26 +388,20 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		private void ValidateStopTime(string stopTimeExpr)
 		{
-			if (stopTimeExpr != null)
-			{
-				if (!SessionTaskScheduler.IsValidCronExpression(stopTimeExpr))
-				{
-					Log.Error("Session stop time expression is invalid: " + stopTimeExpr);
-					throw new ArgumentException("Session stop time expression is invalid: " + stopTimeExpr);
-				}
-			}
+			if (stopTimeExpr == null) return;
+			if (SessionTaskScheduler.IsValidCronExpression(stopTimeExpr)) return;
+
+			Log.Error("Session stop time expression is invalid: " + stopTimeExpr);
+			throw new ArgumentException("Session stop time expression is invalid: " + stopTimeExpr);
 		}
 
 		private void ValidateStartTime(string startTimeExpr)
 		{
-			if (startTimeExpr != null)
-			{
-				if (!SessionTaskScheduler.IsValidCronExpression(startTimeExpr))
-				{
-					Log.Error("Session start time expression is invalid: " + startTimeExpr);
-					throw new ArgumentException("Session start time expression is invalid: " + startTimeExpr);
-				}
-			}
+			if (startTimeExpr == null) return;
+			if (SessionTaskScheduler.IsValidCronExpression(startTimeExpr)) return;
+
+			Log.Error("Session start time expression is invalid: " + startTimeExpr);
+			throw new ArgumentException("Session start time expression is invalid: " + startTimeExpr);
 		}
 
 		#endregion

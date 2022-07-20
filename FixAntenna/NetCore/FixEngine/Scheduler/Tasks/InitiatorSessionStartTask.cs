@@ -46,7 +46,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 				}
 				try
 				{
-					await session.ConnectAsync();
+					session.Connect();
 				}
 				catch (IOException e)
 				{
@@ -57,6 +57,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 			{
 				Log.Warn("Session " + sessionParameters.SessionId + " is already active");
 			}
+
+			await Task.CompletedTask;
 		}
 	}
 }

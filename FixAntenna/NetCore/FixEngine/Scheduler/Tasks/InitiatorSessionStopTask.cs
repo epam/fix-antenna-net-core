@@ -41,7 +41,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 				}
 				try
 				{
-					await session.DisconnectAsync("Scheduled disconnect");
+					session.Disconnect("Scheduled disconnect");
 				}
 				catch (Exception e)
 				{
@@ -52,6 +52,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 			{
 				Log.Warn("Session " + sessionParameters.SessionId + " is already disconnected");
 			}
+
+			await Task.CompletedTask;
 		}
 	}
 
