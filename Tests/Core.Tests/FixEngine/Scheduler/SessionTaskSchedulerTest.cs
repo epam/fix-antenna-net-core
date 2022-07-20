@@ -16,7 +16,7 @@ using System;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 using NUnit.Framework;
 
-namespace Epam.FixAntenna.NetCore.Tests.FixEngine.Scheduler
+namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
 	internal class SessionTaskSchedulerTest
 	{

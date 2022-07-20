@@ -16,14 +16,12 @@ using System;
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
-using Epam.FixAntenna.NetCore.FixEngine;
-using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Common;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using NUnit.Framework;
 
-namespace Epam.FixAntenna.NetCore.Tests.FixEngine.Session
+namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
 	internal class ScheduledInitiatorSessionTest
 	{

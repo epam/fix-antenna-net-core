@@ -17,7 +17,7 @@ using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 using NUnit.Framework;
 using Quartz;
 
-namespace Epam.FixAntenna.NetCore.Tests.FixEngine.Scheduler
+namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
 	internal class CronPredictorTest
 	{
