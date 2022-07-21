@@ -336,7 +336,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			VerifySessionState();
 
-			Log.Debug($"Init session scheduler: {Parameters.SessionId}");
+			if (Log.IsDebugEnabled)
+			{
+				Log.Debug($"Init session scheduler: {Parameters}");
+			}
 
 			var startTimeExpr = ConfigAdapter.TradePeriodBegin;
 			var stopTimeExpr = ConfigAdapter.TradePeriodEnd;
@@ -346,11 +349,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			if (startTimeExpr != null)
 			{
+				Log.Trace($"Add start session task {startTimeExpr}: {Parameters.SessionId}");
 				Scheduler.ScheduleCronTask<InitiatorSessionStartTask>(startTimeExpr, timeZone);
 			}
 
 			if (stopTimeExpr != null)
 			{
+				Log.Trace($"Add stop session task {stopTimeExpr}: {Parameters.SessionId}");
 				Scheduler.ScheduleCronTask<InitiatorSessionStopTask>(stopTimeExpr, timeZone);
 			}
 
@@ -376,7 +381,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		public void Deschedule()
 		{
-			Log.Debug($"Cancel session scheduler: {Parameters.SessionId}");
+			if (Log.IsDebugEnabled)
+			{
+				Log.Debug($"Cancel session scheduler: {Parameters}");
+			}
 
 			if (Scheduler == null) return;
 
