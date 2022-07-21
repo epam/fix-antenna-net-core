@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Common;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
@@ -140,7 +141,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		}
 
 		[Test]
-		public void TestScheduleAfterDisposeIsOk()
+		public void TestScheduleAfterDisposeThrowInvalidOperation()
 		{
 			// Arrange
 			var props = new Dictionary<string, string>
@@ -160,7 +161,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		}
 
 		[Test]
-		public void TestDeSchedule()
+		public void TestDeschedule()
 		{
 			// Arrange
 			var props = new Dictionary<string, string>
@@ -181,7 +182,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		}
 
 		[Test]
-		public void TestDeScheduleAfterDispose()
+		public void TestSessionIsDescheduledAfterDispose()
 		{
 			// Arrange
 			var props = new Dictionary<string, string>
@@ -258,8 +259,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		private class ScheduledInitiatorSessionForTests : InitiatorFixSession
 		{
 			internal int ConnectionAttempts { get; private set; }
-			internal bool IsSessionStartScheduled => Scheduler.IsSessionStartScheduled();
-			internal bool IsSessionStopScheduled => Scheduler.IsSessionStopScheduled();
+			internal bool IsSessionStartScheduled => Scheduler.IsTaskScheduled<InitiatorSessionStartTask>();
+			internal bool IsSessionStopScheduled => Scheduler.IsTaskScheduled<InitiatorSessionStopTask>();
 			internal SessionTaskScheduler GetScheduler() => Scheduler;
 
 			public ScheduledInitiatorSessionForTests(

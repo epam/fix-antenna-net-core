@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 
@@ -345,12 +346,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			if (startTimeExpr != null)
 			{
-				Scheduler.ScheduleSessionStart(startTimeExpr, timeZone);
+				Scheduler.ScheduleCronTask<InitiatorSessionStartTask>(startTimeExpr, timeZone);
 			}
 
 			if (stopTimeExpr != null)
 			{
-				Scheduler.ScheduleSessionStop(stopTimeExpr, timeZone);
+				Scheduler.ScheduleCronTask<InitiatorSessionStopTask>(stopTimeExpr, timeZone);
 			}
 
 			if (startTimeExpr == null || stopTimeExpr == null) return;
@@ -377,7 +378,19 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			Log.Debug($"Cancel session scheduler: {Parameters.SessionId}");
 
-			Scheduler?.DescheduleSessionStartAndStop();
+			if (Scheduler == null) return;
+
+			if (Scheduler.IsTaskScheduled<InitiatorSessionStartTask>())
+			{
+				Log.Trace($"Cancel start session task: {Parameters.SessionId}");
+				Scheduler.DescheduleTask<InitiatorSessionStartTask>();
+			}
+
+			if (Scheduler.IsTaskScheduled<InitiatorSessionStopTask>())
+			{
+				Log.Trace($"Cancel stop session task: {Parameters.SessionId}");
+				Scheduler.DescheduleTask<InitiatorSessionStopTask>();
+			}
 		}
 		
 		private void ValidateParameters(string startTimeExpr, string stopTimeExpr)
