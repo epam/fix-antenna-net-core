@@ -197,9 +197,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			var startLastExecutionDate = CronPredictor.GetTimeBefore(date, startTimeCronExpression);
 			var stopLastExecutionDate = CronPredictor.GetTimeBefore(date, stopTimeCronExpression);
 
-			return startLastExecutionDate > stopLastExecutionDate
-					&& !stopTimeCronExpression.IsSatisfiedBy(date)
-					&& !startTimeCronExpression.IsSatisfiedBy(date);
+			var isIntervalEnd = stopTimeCronExpression.IsSatisfiedBy(date) || startTimeCronExpression.IsSatisfiedBy(date);
+
+			if (startLastExecutionDate.HasValue && stopLastExecutionDate.HasValue)
+			{
+				return startLastExecutionDate > stopLastExecutionDate && !isIntervalEnd;
+			}
+
+			// there was a start but not end yet
+			if (startLastExecutionDate.HasValue)
+			{
+				return !isIntervalEnd;
+			}
+
+			// no start was done
+			return false;
 		}
 
 		internal static bool IsValidCronExpression(string cronExpression)

@@ -21,19 +21,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 	{
 		/// <summary>
 		/// Find the closest time before the passed date that satisfied the cron expression.
-		/// Had to implement this as GetTimeBefore from CronExpression is not implemented.
+		/// Had to implement this as GetTimeBefore from CronExpression is not implemented and always returns null.
 		/// 
 		/// Calculation is based on the existing GetNextValidTimeAfter method and the binary search idea.
 		/// Basically, we need to find an appropriate value of the function y(t) = GetNextValidTimeAfter(t).
 		/// This function is non-decreasing, and this fact allows using the binary search.
-		/// We want to find "t" that satisfied the cron expression and y(t) > date.
+		/// We want to find "t" that satisfies the cron expression and y(t) >= date or y(t) is null.
+		/// y(t) = null means that no time in future after the "t" value satisfies the cron expression).
 		/// </summary>
-		internal static DateTimeOffset GetTimeBefore(DateTimeOffset date, CronExpression exp)
+		internal static DateTimeOffset? GetTimeBefore(DateTimeOffset date, CronExpression exp)
 		{
 			date = RemoveMilliseconds(date);
 			var low = DateTimeOffset.FromUnixTimeSeconds(0);
 			var up = date;
 			var second = TimeSpan.FromSeconds(1);
+
+			// no previous date satisfies cron expression
+			if (exp.GetNextValidTimeAfter(low) >= date) return null;
 
 			while (low < up - second)
 			{
@@ -42,12 +46,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 				var nextValidTime = exp.GetNextValidTimeAfter(mean);
 
-				if (exp.IsSatisfiedBy(mean) && nextValidTime >= date)
+				if (exp.IsSatisfiedBy(mean) && (nextValidTime >= date || nextValidTime == null))
 				{
 					return mean;
 				}
 
-				if (nextValidTime >= date)
+				if (nextValidTime >= date || nextValidTime == null)
 				{
 					up = mean;
 				}
