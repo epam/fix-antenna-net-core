@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
@@ -345,7 +346,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			var stopTimeExpr = ConfigAdapter.TradePeriodEnd;
 			var timeZone = ConfigAdapter.TradePeriodTimeZone;
 
-			ValidateParameters(startTimeExpr, stopTimeExpr);
+			ValidateCronExpression(startTimeExpr, Config.TradePeriodBegin);
+			ValidateCronExpression(stopTimeExpr, Config.TradePeriodEnd);
 
 			if (startTimeExpr != null)
 			{
@@ -400,29 +402,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				Scheduler.DescheduleTask<InitiatorSessionStopTask>();
 			}
 		}
-		
-		private void ValidateParameters(string startTimeExpr, string stopTimeExpr)
+
+		private void ValidateCronExpression(string timeExpr, string configParameterName)
 		{
-			ValidateStartTime(startTimeExpr);
-			ValidateStopTime(stopTimeExpr);
-		}
+			if (timeExpr == null) return;
+			if (SessionTaskScheduler.IsValidCronExpression(timeExpr)) return;
 
-		private void ValidateStopTime(string stopTimeExpr)
-		{
-			if (stopTimeExpr == null) return;
-			if (SessionTaskScheduler.IsValidCronExpression(stopTimeExpr)) return;
+			var message = $"{configParameterName} expression is invalid: {timeExpr}";
 
-			Log.Error("Session stop time expression is invalid: " + stopTimeExpr);
-			throw new ArgumentException("Session stop time expression is invalid: " + stopTimeExpr);
-		}
-
-		private void ValidateStartTime(string startTimeExpr)
-		{
-			if (startTimeExpr == null) return;
-			if (SessionTaskScheduler.IsValidCronExpression(startTimeExpr)) return;
-
-			Log.Error("Session start time expression is invalid: " + startTimeExpr);
-			throw new ArgumentException("Session start time expression is invalid: " + startTimeExpr);
+			Log.Error(message);
+			throw new ArgumentException(message);
 		}
 
 		#endregion

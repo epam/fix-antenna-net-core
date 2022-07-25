@@ -45,9 +45,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		internal bool IsShutdown() => _scheduler.IsShutdown;
 
-		internal void ScheduleCronTask<T>(string stopTimeExpr, TimeZoneInfo timeZone) where T : AbstractSessionTask
+		internal void ScheduleCronTask<T>(string cronExpression, TimeZoneInfo timeZone) where T : AbstractSessionTask
 		{
-			ScheduleCronJob<T>(stopTimeExpr, timeZone);
+			ScheduleCronJob<T>(cronExpression, timeZone);
 		}
 
 		internal void ScheduleHeartbeat(TimeSpan checkHeartbeatInterval)
@@ -177,6 +177,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			}
 		}
 
+		/// <summary>
+		/// Check if a date is inside interval defined by the cron expressions.
+		/// If a date satisfies startTimeExpr or stopTimeExpr then it's not inside the interval
+		/// </summary>
 		internal static bool IsInsideInterval(DateTimeOffset date, string startTimeExpr, string stopTimeExpr, TimeZoneInfo timeZone)
 		{
 			if (!IsValidCronExpression(startTimeExpr))
@@ -212,6 +216,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 			// no start was done
 			return false;
+		}
+
+		internal static bool IsCronExpressionSatisfiedBy(DateTimeOffset date, string cronExpression)
+		{
+			return new CronExpression(cronExpression).IsSatisfiedBy(date);
 		}
 
 		internal static bool IsValidCronExpression(string cronExpression)

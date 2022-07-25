@@ -12,49 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading.Tasks;
-using Epam.FixAntenna.NetCore.FixEngine.Session;
-using Quartz;
-
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 {
-	internal class InitiatorSessionStopTask : AbstractSessionTask
+	internal class InitiatorSessionStopTask : SessionStopTask
 	{
-		protected override async Task RunForSession(IJobExecutionContext context, IExtendedFixSession session)
-		{
-			var sessionParameters = session.Parameters;
-			if (SessionState.IsDisposed(session.SessionState))
-			{
-				if (Log.IsWarnEnabled)
-				{
-					Log.Warn("Session could not be disconnected because it was disposed already: " + sessionParameters);
-				}
-				return;
-			}
-
-			if (SessionState.IsNotDisconnected(session.SessionState))
-			{
-				if (Log.IsDebugEnabled)
-				{
-					Log.Debug("Disconnect session: " + sessionParameters);
-				}
-				try
-				{
-					session.Disconnect("Scheduled disconnect");
-				}
-				catch (Exception e)
-				{
-					Log.Error("Session could not be disconnected", e);
-				}
-			}
-			else
-			{
-				Log.Warn("Session " + sessionParameters.SessionId + " is already disconnected");
-			}
-
-			await Task.CompletedTask;
-		}
 	}
-
 }

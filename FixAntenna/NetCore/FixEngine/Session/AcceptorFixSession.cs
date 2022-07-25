@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.FixEngine.Acceptor;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Helpers;
@@ -275,6 +276,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 
 			return result;
+		}
+
+		internal void ScheduleDisconnect(string cronExpression, TimeZoneInfo timeZone)
+		{
+			Scheduler.ScheduleCronTask<AcceptorSessionStopTask>(cronExpression, timeZone);
 		}
 	}
 }
