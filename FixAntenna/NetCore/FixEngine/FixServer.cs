@@ -39,7 +39,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 
 		private IConnectionValidator _connectionValidator;
 
-		private readonly ConfigurationAdapter ConfigAdapter;
+		private protected readonly ConfigurationAdapter ConfigAdapter;
 		private IConfiguredSessionRegister ConfiguredSessionRegister;
 
 		/// <summary>

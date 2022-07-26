@@ -42,7 +42,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		{
 			if (listener != null)
 			{
-				base.SetListener(new FilteredFixServerListener(listener));
+				base.SetListener(new FilteredFixServerListener(this.ConfigAdapter, listener));
 			}
 		}
 	}

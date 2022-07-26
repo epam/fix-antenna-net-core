@@ -98,7 +98,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		private readonly ISet<ITypedFixMessageListener> _outSessionLevelListeners = new HashSet<ITypedFixMessageListener>();
 
-		protected internal SessionTaskScheduler Scheduler;
+		private protected SessionTaskScheduler Scheduler;
 
 		/// <summary>
 		/// Creates the <c>AbstractFIXSession</c>.
@@ -1204,7 +1204,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			return Pumper.Send(content, allowedChangesType, options);
 		}
 
-		protected internal void VerifySessionState()
+		private protected void VerifySessionState()
 		{
 			if (SessionState.Dead == SessionState)
 			{
