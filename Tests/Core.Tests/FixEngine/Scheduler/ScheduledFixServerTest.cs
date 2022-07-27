@@ -25,7 +25,7 @@ using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
 using NUnit.Framework;
 
-namespace Epam.FixAntenna.Core.FixEngine.Scheduler
+namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
 	internal class ScheduledFixServerTest
 	{

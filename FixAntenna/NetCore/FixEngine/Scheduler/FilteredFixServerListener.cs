@@ -49,8 +49,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 				ScheduleDisconnect(session, schedule);
 
-				// Session is still inside allowed interval
-				if (!schedule.IsScheduleDefined() || schedule.IsNowInsideInterval()) return;
+				// Session is still inside allowed interval. Do nothing
+				if (!schedule.AreBeginAndEndDefined() || schedule.IsNowInsideConnectionInterval()) return;
 
 				// Trade time is over, so let's disconnect.
 				// The situation is possible if while connecting, we reached the end of the allowed trade period
@@ -66,7 +66,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 					Log.Debug("Session was denied by filter: " + session.Parameters);
 				}
 
-				session.Disconnect(DenialReason);
 				session.Dispose();
 			}
 		}
@@ -93,18 +92,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 				return false;
 			}
 
-			if (!schedule.IsScheduleDefined())
+			if (!schedule.AreBeginAndEndDefined())
 			{
 				Log.Debug($"Both {Config.TradePeriodBegin} and {Config.TradePeriodEnd} should be set to filter connections");
 				return true;
 			}
 
-			return schedule.IsNowInsideInterval();
+			return schedule.IsNowInsideConnectionInterval();
 		}
 
 		private Schedule GetSchedule(SessionParameters sessionParameters)
 		{
-			// Th server configuration and the session configuration can be read from different config files.
+			// The server configuration and the session configuration can be read from different config files.
 			// Thus, let's check if a configuration for the session set. If not then let's use the server configuration.
 			var sessionConfigAdapter = new ConfigurationAdapter(sessionParameters.Configuration);
 			var sessionConfig = sessionConfigAdapter.Configuration;
@@ -132,11 +131,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			public string TradePeriodEnd { get; set; }
 			public TimeZoneInfo TimeZone { get; set; }
 
-			public bool IsScheduleDefined() => TradePeriodBegin != null && TradePeriodEnd != null;
+			public bool AreBeginAndEndDefined() => TradePeriodBegin != null && TradePeriodEnd != null;
 
-			public bool IsNowInsideInterval()
+			public bool IsNowInsideConnectionInterval()
 			{
-				if (!IsScheduleDefined())
+				if (!AreBeginAndEndDefined())
 				{
 					throw new InvalidOperationException("Schedule is not defined");
 				}
