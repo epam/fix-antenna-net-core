@@ -63,6 +63,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 		[TearDown]
 		public virtual void TearDown()
 		{
+			_messagePumper.Shutdown();
 			ExtendedFixSession.Dispose();
 		}
 

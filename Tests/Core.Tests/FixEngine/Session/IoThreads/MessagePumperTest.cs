@@ -69,6 +69,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 		{
 			ExtendedFixSession.Dispose();
 			_messageStorage.Dispose();
+			_messagePumper.Shutdown();
 		}
 
 		[Test]
