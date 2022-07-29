@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Quartz;
@@ -45,9 +47,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		internal bool IsShutdown() => _scheduler.IsShutdown;
 
-		internal void ScheduleCronTask<T>(string cronExpression, TimeZoneInfo timeZone) where T : AbstractSessionTask
+		internal void ScheduleCronTask<T>(string pipedCronExpression, TimeZoneInfo timeZone) where T : AbstractSessionTask
 		{
-			ScheduleCronJob<T>(cronExpression, timeZone);
+			ScheduleCronJob<T>(pipedCronExpression, timeZone);
 		}
 
 		internal void ScheduleHeartbeat(TimeSpan checkHeartbeatInterval)
@@ -114,6 +116,24 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			return JobExists(jobKey);
 		}
 
+		internal IEnumerable<string> GetCronExpressionsForScheduledCronTask<T>() where T : AbstractSessionTask
+		{
+			var jobKey = CreateJobKey<T>();
+			if (!JobExists(jobKey)) return Enumerable.Empty<string>();
+
+			var triggers = _scheduler.GetTriggersOfJob(jobKey).Result;
+			var result = new List<string>();
+			foreach (var trigger in triggers)
+			{
+				if (trigger is ICronTrigger cronTrigger)
+				{
+					result.Add(cronTrigger.CronExpressionString);
+				}
+			}
+
+			return result;
+		}
+
 		internal void DescheduleTask<T>() where T : AbstractSessionTask
 		{
 			var jobKey = CreateJobKey<T>();
@@ -141,7 +161,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			return _scheduler.CheckExists(jobKey).Result;
 		}
 
-		private void ScheduleCronJob<T>(string cronExpression, TimeZoneInfo timeZone)
+		private void ScheduleCronJob<T>(string pipedCronExpression, TimeZoneInfo timeZone)
 			where T: IJob
 		{
 			var jobKey = CreateJobKey<T>();
@@ -149,16 +169,41 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			DescheduleJob(jobKey);
 
 			var job = CreateJob<T>(jobKey);
-			var trigger = TriggerBuilder.Create()
-				.WithCronSchedule(
-					cronExpression,
-					s => s.InTimeZone(timeZone)
+			var triggers = MultipartCronExpression
+				.ExtractCronExpressions(pipedCronExpression)
+				.Select(cronExpression => TriggerBuilder.Create()
+					.WithCronSchedule(
+						cronExpression,
+						s => s.InTimeZone(timeZone)
+					)
+					.Build()
 				)
-				.Build();
+				.ToArray();
 
-			var nextRun = _scheduler.ScheduleJob(job, trigger).Result;
+			// Quartz.net does not allow scheduling for cron expressions that do not have a fire date in the future.
+			// Thus, to avoid throwing an exception, we filter them out
+			var triggersToFire = new List<ICronTrigger>(triggers.Length);
+			foreach (var trigger in triggers)
+			{
+				var cronTrigger = (ICronTrigger)trigger;
+				if (CanCronTriggerFire(cronTrigger))
+				{
+					triggersToFire.Add(cronTrigger);
+				}
+				else
+				{
+					Log.Warn($"{cronTrigger.CronExpressionString} will not be triggered");
+				}
+			}
 
-			Log.Trace($"{typeof(T).Name} will run at {nextRun:O}");
+			_scheduler.ScheduleJob(job, triggersToFire, true).Wait();
+		}
+
+		private bool CanCronTriggerFire(ICronTrigger cronTrigger)
+		{
+			return
+				cronTrigger.CronExpressionString != null &&
+				cronTrigger.GetFireTimeAfter(cronTrigger.StartTimeUtc.AddSeconds(-1)) != null;
 		}
 
 		private IJobDetail CreateJob<T>(JobKey jobKey) where T: IJob
@@ -183,23 +228,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		/// </summary>
 		internal static bool IsInsideInterval(DateTimeOffset date, string startTimeExpr, string stopTimeExpr, TimeZoneInfo timeZone)
 		{
-			if (!IsValidCronExpression(startTimeExpr))
+			if (!MultipartCronExpression.IsValidCronExpression(startTimeExpr))
 			{
 				throw new ArgumentException($"{nameof(startTimeExpr)} is invalid: {startTimeExpr}");
 			}
 
-			if (!IsValidCronExpression(stopTimeExpr))
+			if (!MultipartCronExpression.IsValidCronExpression(stopTimeExpr))
 			{
 				throw new ArgumentException($"{nameof(stopTimeExpr)} is invalid: {stopTimeExpr}");
 			}
 
 			timeZone = timeZone ?? throw new ArgumentNullException(nameof(timeZone));
 
-			var startTimeCronExpression = new CronExpression(startTimeExpr) { TimeZone = timeZone };
-			var stopTimeCronExpression = new CronExpression(stopTimeExpr) { TimeZone = timeZone };
+			var startTimeCronExpression = new MultipartCronExpression(startTimeExpr, timeZone);
+			var stopTimeCronExpression = new MultipartCronExpression(stopTimeExpr, timeZone);
 
-			var startLastExecutionDate = CronPredictor.GetTimeBefore(date, startTimeCronExpression);
-			var stopLastExecutionDate = CronPredictor.GetTimeBefore(date, stopTimeCronExpression);
+			var startLastExecutionDate = startTimeCronExpression.GetTimeBefore(date);
+			var stopLastExecutionDate = stopTimeCronExpression.GetTimeBefore(date);
 
 			var isIntervalEnd = stopTimeCronExpression.IsSatisfiedBy(date) || startTimeCronExpression.IsSatisfiedBy(date);
 
@@ -216,16 +261,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 			// no start was done
 			return false;
-		}
-
-		internal static bool IsCronExpressionSatisfiedBy(DateTimeOffset date, string cronExpression)
-		{
-			return new CronExpression(cronExpression).IsSatisfiedBy(date);
-		}
-
-		internal static bool IsValidCronExpression(string cronExpression)
-		{
-			return CronExpression.IsValidExpression(cronExpression);
 		}
 	}
 }

@@ -22,7 +22,6 @@ using NUnit.Framework;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 {
-	[TestFixture]
 	internal class AbstractInitiatorResetTst
 	{
 		private const int Port = 9778;

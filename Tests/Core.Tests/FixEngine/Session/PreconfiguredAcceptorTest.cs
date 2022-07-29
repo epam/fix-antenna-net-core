@@ -23,7 +23,6 @@ using System.Threading;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
-	[TestFixture]
 	internal class PreconfiguredAcceptorTest
 	{
 		public const int Port = 12345;

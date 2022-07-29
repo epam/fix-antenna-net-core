@@ -13,12 +13,53 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
 using Quartz;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
-	internal class CronPredictor
+	/// <summary>
+	/// Keeps a list of cron expressions.
+	/// Cron expressions are passed in a string with the "|" delimiter.
+	/// </summary>
+	internal class MultipartCronExpression
 	{
+		private readonly CronExpression[] _cronExpressions;
+
+		public MultipartCronExpression(string pipedCronExpression, TimeZoneInfo timeZone)
+		{
+			if (pipedCronExpression == null) throw new ArgumentNullException(nameof(pipedCronExpression));
+
+			_cronExpressions = ExtractCronExpressions(pipedCronExpression)
+				.Select(p => new CronExpression(p) { TimeZone = timeZone })
+				.ToArray();
+		}
+
+		public static bool IsValidCronExpression(string pipedCronExpression)
+		{
+			var parts = ExtractCronExpressions(pipedCronExpression);
+			return parts.All(CronExpression.IsValidExpression);
+		}
+
+		public bool IsSatisfiedBy(DateTimeOffset date)
+		{
+			return _cronExpressions.Any(p => p.IsSatisfiedBy(date));
+		}
+
+		public static string[] ExtractCronExpressions(string pipedCronExpression)
+		{
+			return pipedCronExpression.Split('|');
+		}
+
+		/// <summary>
+		/// Find the closest time before the passed date that satisfied at least one of the cron expressions.
+		/// See <see cref="GetTimeBefore(DateTimeOffset, CronExpression)"/>
+		/// </summary>
+		public DateTimeOffset? GetTimeBefore(DateTimeOffset date)
+		{
+			return _cronExpressions.Select(exp => GetTimeBefore(date, exp)).Max();
+		}
+
 		/// <summary>
 		/// Find the closest time before the passed date that satisfied the cron expression.
 		/// Had to implement this as GetTimeBefore from CronExpression is not implemented and always returns null.
@@ -29,7 +70,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		/// We want to find "t" that satisfies the cron expression and y(t) >= date or y(t) is null.
 		/// y(t) = null means that no time in future after the "t" value satisfies the cron expression).
 		/// </summary>
-		internal static DateTimeOffset? GetTimeBefore(DateTimeOffset date, CronExpression exp)
+		private static DateTimeOffset? GetTimeBefore(DateTimeOffset date, CronExpression exp)
 		{
 			date = RemoveMilliseconds(date);
 			var low = DateTimeOffset.FromUnixTimeSeconds(0);

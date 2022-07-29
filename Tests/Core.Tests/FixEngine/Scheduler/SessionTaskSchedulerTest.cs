@@ -13,8 +13,12 @@
 // limitations under the License.
 
 using System;
-using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
+using System.Linq;
+using System.Threading.Tasks;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
+using Epam.FixAntenna.NetCore.FixEngine.Session;
 using NUnit.Framework;
+using Quartz;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
@@ -41,6 +45,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ? 2022", "0 0 5 9 10 ? 2022", true },
 			new object[] { "12/07/2022 4:33 +1", "0 0 4 5 6 ? 2022", "0 0 5 9 10 ? 2022", true },
 			new object[] { "12/07/2022 4:33 +1", "0 32,33 4 12 7 ? 2022", "0 0 5 9 10 ? 2022", false },
+
+			new object[] { "12/07/2022 4:33 +1", "0 0 3 * * ?|0 0 4 * * ?", "0 0 5 * * ?|0 0 6 * * ?", true },
 		};
 
 		[TestCaseSource(nameof(TestCases))]
@@ -55,6 +61,50 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 			// Assert
 			Assert.AreEqual(expected, actual, $"Wrong behaviour. {dateString}, {startTimeExpr}, {stopTimeExpr}");
+		}
+
+		[Test]
+		public void TestScheduleCronTaskDoesNotScheduleWhenNoEventsInFuture()
+		{
+			// Arrange
+			var pipedCronExpression = "0 33 4 * * ? 2020|0 33 4 * * ?";
+			var scheduler = new SessionTaskScheduler(new SessionParameters());
+			var expected = MultipartCronExpression.ExtractCronExpressions(pipedCronExpression).Skip(1);
+
+			// Act
+			scheduler.ScheduleCronTask<ATask>(pipedCronExpression, TimeZoneInfo.Utc);
+			var actual = scheduler.GetCronExpressionsForScheduledCronTask<ATask>();
+			
+			// Assert
+			Assert.That(actual, Is.EquivalentTo(expected));
+
+			scheduler.Shutdown();
+		}
+
+		[Test]
+		public void TestScheduleCronTaskWithMultipleCronExpressions()
+		{
+			// Arrange
+			var pipedCronExpression = "0 33 4 * * ?|0 34 4 * * ?";
+			var scheduler = new SessionTaskScheduler(new SessionParameters());
+			var expected = MultipartCronExpression.ExtractCronExpressions(pipedCronExpression);
+
+			// Act
+			scheduler.ScheduleCronTask<ATask>(pipedCronExpression, TimeZoneInfo.Utc);
+			var actual = scheduler.GetCronExpressionsForScheduledCronTask<ATask>();
+			
+			// Assert
+			Assert.That(actual, Is.EquivalentTo(expected));
+
+			scheduler.Shutdown();
+		}
+
+		private class ATask : AbstractSessionTask
+		{
+			protected override Task RunForSession(IJobExecutionContext context, IExtendedFixSession session)
+			{
+				return Task.CompletedTask;
+			}
 		}
 	}
 }

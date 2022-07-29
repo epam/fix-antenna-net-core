@@ -63,7 +63,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			{
 				if (Log.IsDebugEnabled)
 				{
-					Log.Debug("Session was denied by filter: " + session.Parameters);
+					Log.Debug($"Session was denied by filter: {session.Parameters}");
 				}
 
 				session.Dispose();
@@ -80,13 +80,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		private bool IsAllowedToConnect(Schedule schedule)
 		{
-			if (schedule.TradePeriodBegin != null && !SessionTaskScheduler.IsValidCronExpression(schedule.TradePeriodBegin))
+			if (schedule.TradePeriodBegin != null && !MultipartCronExpression.IsValidCronExpression(schedule.TradePeriodBegin))
 			{
 				Log.Error($"{Config.TradePeriodBegin} expression is invalid: {schedule.TradePeriodBegin}");
 				return false;
 			}
 
-			if (schedule.TradePeriodEnd != null && !SessionTaskScheduler.IsValidCronExpression(schedule.TradePeriodEnd))
+			if (schedule.TradePeriodEnd != null && !MultipartCronExpression.IsValidCronExpression(schedule.TradePeriodEnd))
 			{
 				Log.Error($"{Config.TradePeriodEnd} expression is invalid: {schedule.TradePeriodEnd}");
 				return false;
@@ -141,7 +141,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 				}
 
 				var now = DateTimeOffset.UtcNow;
-				var isIntervalStart = SessionTaskScheduler.IsCronExpressionSatisfiedBy(now, TradePeriodBegin);
+				var isIntervalStart = new MultipartCronExpression(TradePeriodBegin, TimeZone).IsSatisfiedBy(now);
 				var isInsideInterval = SessionTaskScheduler.IsInsideInterval(now, TradePeriodBegin, TradePeriodEnd, TimeZone);
 
 				return isIntervalStart || isInsideInterval;

@@ -406,7 +406,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		private void ValidateCronExpression(string timeExpr, string configParameterName)
 		{
 			if (timeExpr == null) return;
-			if (SessionTaskScheduler.IsValidCronExpression(timeExpr)) return;
+			if (MultipartCronExpression.IsValidCronExpression(timeExpr)) return;
 
 			var message = $"{configParameterName} expression is invalid: {timeExpr}";
 
