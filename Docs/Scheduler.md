@@ -61,5 +61,6 @@ sessions.testSession.tradePeriodTimeZone=UTC
 ```
 
 ## Samples
-[Samples/SimpleScheduledServer](Samples/SimpleScheduledServer)
-[Samples/SimpleScheduledClient](Samples/SimpleScheduledClient)
+[Samples/SimpleScheduledServer](/Samples/SimpleScheduledServer)
+
+[Samples/SimpleScheduledClient](/Samples/SimpleScheduledClient)
