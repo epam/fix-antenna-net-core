@@ -600,7 +600,8 @@ The table below specifies the server behavior settings.
 <tr>
     <td>tradePeriodBegin</td>
     <td></td>
-    <td>Cron expression to set the start of the period when the server is allowed to accept a connection. We use Quartz.NET and their implementation of cron expressions for scheduling. See
+    <td>Cron expression to set the start of the period when the server is allowed to accept a connection.<br>
+        We use Quartz.NET and their implementation of cron expressions for scheduling. See
         <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">cron expression</a> for more information about the allowed expression format.<br>
         It is possible to combine several cron expressions with the "|" symbol.<br>
         Example: 0 0 8 1/2 * ?|0 0 9 2/2 * ?
@@ -1143,7 +1144,7 @@ Custom session configuration can override global settings for the session and al
         <td>tradePeriodBegin</td>
         <td></td>
         <td>For initiator sessions, it is a cron expression to set a scheduled session start. 
-            For acceptor sessions, the parameter overrides the appropriate server value for this session.
+            For acceptor sessions, the parameter overrides the appropriate server value for this session.<br>
             We use Quartz.NET and their implementation of cron expressions for scheduling. See
             <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">cron expression</a> for more information about the allowed expression format.<br>
             It is possible to combine several cron expressions with the "|" symbol.<br>
