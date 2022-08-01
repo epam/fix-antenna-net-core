@@ -22,8 +22,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 	/// </summary>
 	public class ScheduledFixServer : FixServer
 	{
-		private static readonly ILog Log = LogFactory.GetLog(typeof(ScheduledFixServer));
-
 		/// <summary>
 		/// Creates a scheduled fix server.
 		/// </summary>

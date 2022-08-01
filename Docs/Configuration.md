@@ -597,6 +597,31 @@ The table below specifies the server behavior settings.
         <code>System.Net.Sockets.Socket.ReceiveBufferSize</code> will not be changed.
     </td>
 </tr>
+<tr>
+    <td>tradePeriodBegin</td>
+    <td></td>
+    <td>Cron expression to set the start of the period when the server is allowed to accept a connection. We use Quartz.NET and their implementation of cron expressions for scheduling. See
+        <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">Cron expression</a>.  
+        It is possible to combine several cron expressions with the "|" symbol.  
+        Example: 0 0 8 1/2 * ?|0 0 9 2/2 * ?
+    </td>
+</tr>
+<tr>
+    <td>tradePeriodEnd</td>
+    <td></td>
+    <td>Cron expression to set the end of the period when the server is allowed to accept a connection.  
+        It is possible to combine several cron expressions with the "|" symbol.
+    </td>
+</tr>
+<tr>
+    <td>tradePeriodTimeZone</td>
+    <td>UTC</td>
+    <td>Specifies the time zone and affects the tradePeriodBegin and tradePeriodEnd.
+        More information about time zone format:
+        <a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a>
+        For sample: <b>tradePeriodBegin</b>=UTC
+    </td>
+</tr>
 </tbody>
 </table>
 
@@ -1114,7 +1139,34 @@ Custom session configuration can override global settings for the session and al
         <td></td>
         <td>Additional fields for an outgoing Logon message.</td>
     </tr>
-
+    <tr>
+        <td>tradePeriodBegin</td>
+        <td></td>
+        <td>For initiator sessions, it is a cron expression to set a scheduled session start. 
+            For acceptor sessions, the parameter overrides the appropriate server value for this session.
+            We use Quartz.NET and their implementation of cron expressions for scheduling. See
+            <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">Cron expression</a>.  
+            It is possible to combine several cron expressions with the "|" symbol.  
+            Example: 0 0 8 1/2 * ?|0 0 9 2/2 * ?
+        </td>
+    </tr>
+    <tr>
+        <td>tradePeriodEnd</td>
+        <td></td>
+        <td>For initiator sessions, it is a cron expression to set a scheduled session end. 
+            For acceptor sessions, the parameter overrides the appropriate server value for this session.  
+            It is possible to combine several cron expressions with the "|" symbol.
+        </td>
+    </tr>
+    <tr>
+        <td>tradePeriodTimeZone</td>
+        <td>UTC</td>
+        <td>Specifies the time zone and affects the tradePeriodBegin and tradePeriodEnd.
+            More information about time zone format:
+            <a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a>
+            For sample: <b>tradePeriodBegin</b>=UTC
+        </td>
+    </tr>
 </tbody>
 </table>
 
