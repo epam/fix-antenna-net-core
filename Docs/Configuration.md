@@ -620,7 +620,6 @@ The table below specifies the server behavior settings.
     <td>Specifies the time zone and affects the tradePeriodBegin and tradePeriodEnd.
         More information about time zone format:
         <a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a><br>
-        Example: <b>tradePeriodBegin</b>=UTC
     </td>
 </tr>
 </tbody>
@@ -1165,7 +1164,6 @@ Custom session configuration can override global settings for the session and al
         <td>Specifies the time zone and affects the tradePeriodBegin and tradePeriodEnd.
             More information about time zone format:
             <a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a><br>
-            Example: <b>tradePeriodBegin</b>=UTC
         </td>
     </tr>
 </tbody>
