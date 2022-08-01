@@ -1,6 +1,6 @@
 # Scheduler
 ## Initiator
-FIX Antenna .NET Core allows sсheduling a session start/stop action using syntax similar to a UNIX cron daemon. We use Quartz.NET and their implementation of cron expressions for scheduling. See <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">Cron expression</a>.
+FIX Antenna™ .NET Core allows sсheduling a session start/stop action using syntax similar to a UNIX cron daemon. We use Quartz.NET and their implementation of cron expressions for scheduling. See <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">cron expression</a>  for more information about the allowed expression format.
 
 The scheduler parameters are set via the config file the following way:
 ```ini
@@ -8,18 +8,18 @@ sessions.testSession.tradePeriodBegin=0 0 8 * * ?
 sessions.testSession.tradePeriodEnd=0 0 17 * * ?
 sessions.testSession.tradePeriodTimeZone=UTC
 ```
-The `tradePeriodTimeZone` is optional and have "UTC" as a default value. `tradePeriodBegin` and `tradePeriodEnd` can contain several cron expression divided by "|" ("0 0 8 * * ?|0 0 9 * * ?").  
-More information about time zone format:  
-<a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a>
+The `tradePeriodTimeZone` is optional and have "UTC" as a default value. `tradePeriodBegin` and `tradePeriodEnd` can contain several cron expressions divided by "|" ("0 0 8 * * ?|0 0 9 * * ?").
+
+More information about time zone format: <a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a>
 
 ```csharp
-// loading a pre-configured session parameters from the fixengine.properties file
+// loading pre-configured session parameters from the fixengine.properties file
 var sessionParams = SessionParametersBuilder.BuildSessionParameters("testSession");
 
-// create pre-configured session
+// create the pre-configured session
 var session = sessionParams.CreateScheduledInitiatorSession();
 
-// create and attach listener 
+// create and attach a listener 
 session.SetFixSessionListener(new FixSessionListener());
 
 // schedule the session. It will connect/disconnect according to the configured parameters 
@@ -43,7 +43,7 @@ tradePeriodBegin=0 0 8 * * ?
 tradePeriodEnd=0 0 17 * * ?
 tradePeriodTimeZone=UTC
 ```
-The `tradePeriodTimeZone` is optional and have "UTC" as a default value. `tradePeriodBegin` and `tradePeriodEnd` can contain several cron expression divided by "|".
+The `tradePeriodTimeZone` is optional and have "UTC" as a default value. `tradePeriodBegin` and `tradePeriodEnd` can contain several cron expressions divided by "|".
 
 ```csharp
 var configuration = new Config(Config.DefaultEngineProperties);

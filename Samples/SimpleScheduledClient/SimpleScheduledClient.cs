@@ -27,13 +27,13 @@ namespace Epam.FixAntenna.Example
 
 		public static void Main()
 		{
-			// loading a pre-configured session parameters from the fixengine.properties file
+			// loading pre-configured session parameters from the fixengine.properties file
 			var sessionParams = SessionParametersBuilder.BuildSessionParameters("testSession");
 
-			// create pre-configured session
+			// create the pre-configured session
 			var session = sessionParams.CreateScheduledInitiatorSession();
 
-			// create and attach listener 
+			// create and attach a listener 
 			session.SetFixSessionListener(new FixSessionListener());
 
 			// schedule the session
