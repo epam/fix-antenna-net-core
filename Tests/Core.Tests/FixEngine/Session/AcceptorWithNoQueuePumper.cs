@@ -48,8 +48,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			fixServer.SetListener(new DummyFixServerListener(msgTypeForTest, _logger));
 			fixServer.Start();
 
-			Thread.Sleep(100);
-
 			var parameters = new SessionParameters();
 			parameters.SenderCompId = "target";
 			parameters.TargetCompId = "sender";
