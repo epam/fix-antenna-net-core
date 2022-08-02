@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 EPAM Systems
+﻿// Copyright (c) 2022 EPAM Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,28 +14,28 @@
 
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 
-namespace Epam.FixAntenna.NetCore.FixEngine.Manager.Tasks
+using Quartz;
+
+using System.Threading.Tasks;
+
+namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 {
-	internal class InactivityCheckTask : ISessionManagerTask
+	internal class InactivityCheckTask : AbstractSessionTask
 	{
-		/// <inheritdoc />
-		public void RunForSession(IExtendedFixSession session)
+		protected override async Task RunForSession(IJobExecutionContext context, IExtendedFixSession session)
 		{
-			var abstractFixSession = (AbstractFixSession) session;
+			var abstractFixSession = (AbstractFixSession)session;
 
 			if (abstractFixSession.IsHbtControlInPumper)
 			{
-				if (!SessionState.IsConnected(session.SessionState))
+				if (SessionState.IsConnected(session.SessionState)
+				    && session.Parameters.HeartbeatInterval != 0)
 				{
-					return; // no need to run for sessions that aren't connected
+					abstractFixSession.CheckSessionInactiveAndSendHbt();
 				}
-
-				if (session.Parameters.HeartbeatInterval == 0)
-				{
-					return;
-				}
-				abstractFixSession.CheckSessionInactiveAndSendHbt();
 			}
+
+			await Task.CompletedTask;
 		}
 	}
 }

@@ -16,13 +16,16 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
-	internal class InitiatorFixSession : AbstractFixSession
+	internal class InitiatorFixSession : AbstractFixSession, IScheduledFixSession
 	{
 		private ISessionTransportFactory TransportFactory { get; }
 
@@ -78,7 +81,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 		}
 
-		public async override Task ConnectAsync()
+		public override async Task ConnectAsync()
 		{
 			CheckForDisposed();
 			CheckForActiveAndInitTransport();
@@ -328,5 +331,89 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				GC.SuppressFinalize(this);
 			}
 		}
+
+		#region IScheduledFixSession implementation
+		public void Schedule()
+		{
+			VerifySessionState();
+
+			if (Log.IsDebugEnabled)
+			{
+				Log.Debug($"Init session scheduler: {Parameters}");
+			}
+
+			var startTimeExpr = ConfigAdapter.TradePeriodBegin;
+			var stopTimeExpr = ConfigAdapter.TradePeriodEnd;
+			var timeZone = ConfigAdapter.TradePeriodTimeZone;
+
+			ValidateCronExpression(startTimeExpr, Config.TradePeriodBegin);
+			ValidateCronExpression(stopTimeExpr, Config.TradePeriodEnd);
+
+			if (startTimeExpr != null)
+			{
+				Log.Trace($"Add start session task {startTimeExpr}: {Parameters.SessionId}");
+				Scheduler.ScheduleCronTask<InitiatorSessionStartTask>(startTimeExpr, timeZone);
+			}
+
+			if (stopTimeExpr != null)
+			{
+				Log.Trace($"Add stop session task {stopTimeExpr}: {Parameters.SessionId}");
+				Scheduler.ScheduleCronTask<InitiatorSessionStopTask>(stopTimeExpr, timeZone);
+			}
+
+			if (startTimeExpr == null || stopTimeExpr == null) return;
+
+			if (!CanStartScheduledSession(startTimeExpr, stopTimeExpr, timeZone)) return;
+
+			lock (SessionLock)
+			{
+				if (CanStartScheduledSession(startTimeExpr, stopTimeExpr, timeZone))
+				{
+					Connect();
+				}
+			}
+		}
+
+		private bool CanStartScheduledSession(string startTimeExpr, string stopTimeExpr, TimeZoneInfo timeZone)
+		{
+			var isDisconnected = SessionState.IsDisconnected(SessionState);
+			var isInsideInterval = SessionTaskScheduler.IsInsideInterval(DateTimeOffset.UtcNow, startTimeExpr, stopTimeExpr, timeZone);
+			return isDisconnected && isInsideInterval;
+		}
+
+		public void Deschedule()
+		{
+			if (Log.IsDebugEnabled)
+			{
+				Log.Debug($"Cancel session scheduler: {Parameters}");
+			}
+
+			if (Scheduler == null) return;
+
+			if (Scheduler.IsTaskScheduled<InitiatorSessionStartTask>())
+			{
+				Log.Trace($"Cancel start session task: {Parameters.SessionId}");
+				Scheduler.DescheduleTask<InitiatorSessionStartTask>();
+			}
+
+			if (Scheduler.IsTaskScheduled<InitiatorSessionStopTask>())
+			{
+				Log.Trace($"Cancel stop session task: {Parameters.SessionId}");
+				Scheduler.DescheduleTask<InitiatorSessionStopTask>();
+			}
+		}
+
+		private void ValidateCronExpression(string timeExpr, string configParameterName)
+		{
+			if (timeExpr == null) return;
+			if (MultipartCronExpression.IsValidCronExpression(timeExpr)) return;
+
+			var message = $"{configParameterName} expression is invalid: {timeExpr}";
+
+			Log.Error(message);
+			throw new ArgumentException(message);
+		}
+
+		#endregion
 	}
 }

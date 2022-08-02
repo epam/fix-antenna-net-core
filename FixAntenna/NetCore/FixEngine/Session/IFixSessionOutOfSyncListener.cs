@@ -16,7 +16,7 @@ using Epam.FixAntenna.NetCore.Message;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
-	internal interface IFixSessionOutOfSyncListener
+	public interface IFixSessionOutOfSyncListener
 	{
 		void OnGapDetected(long lastProcessedSeqNum, long receivedSeqNum);
 		void OnGapClosed(long lastProcessedSeqNum);

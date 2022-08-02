@@ -86,6 +86,25 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 		public string ConnectAddress => Configuration.GetProperty(Config.ConnectAddress);
 
+		public string TradePeriodBegin => Configuration.GetProperty(Config.TradePeriodBegin);
+
+		public string TradePeriodEnd => Configuration.GetProperty(Config.TradePeriodEnd);
+
+		public TimeZoneInfo TradePeriodTimeZone
+		{
+			get
+			{
+				var timeZone = Configuration.GetProperty(Config.TradePeriodTimeZone);
+				if (DateTimeHelper.TryParseTimeZone(timeZone, out var timeZoneInfo))
+				{
+					return timeZoneInfo;
+				}
+
+				Log.Warn("Using UTC time zone");
+				return TimeZoneInfo.Utc;
+			}
+		}
+
 		public bool IsSendingTimeAccuracyCheckEnabled => Configuration.GetPropertyAsBoolean(Config.CheckSendingTimeAccuracy, false);
 
 		public int GetReasonableDelay(int defaultValue)
@@ -160,11 +179,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 		public bool IsValidationEnabled => Configuration.GetPropertyAsBoolean(Config.Validation, false);
 
+		#region Reset SeqNum sheduled
 		public bool IsResetSeqNumTimeEnabled => Configuration.GetPropertyAsBoolean(Config.PerformResetSeqNumTime, false);
 
-		private string ResetSequenceTime => Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
+		public string ResetSequenceTime => Configuration.GetProperty(Config.ResetSequenceTime, "00:00:00");
 
-		private string ResetSequenceTimeZone => Configuration.GetProperty(Config.ResetSequenceTimeZone, "UTC");
+		public string ResetSequenceTimeZone => Configuration.GetProperty(Config.ResetSequenceTimeZone, "UTC");
 
 		private TimeSpan ParseResetSequenceTimeZone()
 		{
@@ -206,6 +226,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				return builder.Build(timeZone).TotalMilliseconds();
 			}
 		}
+		#endregion
 
 		public StorageCleanupMode StorageCleanupMode
 		{

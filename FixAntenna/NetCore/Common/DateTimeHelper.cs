@@ -314,40 +314,59 @@ namespace Epam.FixAntenna.NetCore.Common
 		/// <returns>Returns <see cref="TimeSpan"/> that represents time offset from UTC for given time zone Id.</returns>
 		public static bool TryParseTimeZoneOffset(string timeZoneId, out TimeSpan offset)
 		{
+			var isParsed = TryParseTimeZone(timeZoneId, out var result);
+			offset = result.BaseUtcOffset;
+			return isParsed;
+		}
+
+		internal static bool TryParseTimeZone(string timeZoneId, out TimeZoneInfo timeZoneInfo)
+		{
 			try
 			{
-				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-				offset = timeZoneInfo.GetUtcOffset(DateTime.UtcNow);
+				timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 				return true;
 			}
 			catch (TimeZoneNotFoundException)
 			{
-				// trying to find and parse GMT pattern: GMT+05:30, GMT-3 or similar
-				var m = Regex.Match(timeZoneId, @"(?:GMT|UTC) ?([+|-]\d{1,2}(:?\d{2})?)?");
-				if (m.Success)
+				if (TryParseGmtPattern(timeZoneId, out var offset))
 				{
-					// group 1 can be like "+2:30","-03" or empty
-					// empty Group 1 means UTC or GMT
-					if (m.Groups[1].Length == 0)
-					{
-						offset = UtcOffset;
-						return true;
-					}
-
-					// group 2 can be like ":30" or empty
-					var matched = m.Groups[2].Length == 0 ? m.Groups[1].Value + ":00" : m.Groups[1].Value;
-
-					if (TimeSpan.TryParse(matched.TrimStart('+'), out offset))
-					{
-						return true;
-					}
-					Log.Debug($"Cannot parse time zone: {timeZoneId}");
+					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone("CustomTimeZone", offset, "", "");
+					return true;
 				}
 			}
 			catch (Exception)
 			{
 				Log.Debug($"Cannot parse time zone: {timeZoneId}");
 			}
+
+			timeZoneInfo = TimeZoneInfo.Utc;
+			return false;
+		}
+
+		private static bool TryParseGmtPattern(string pattern, out TimeSpan offset)
+		{
+			// trying to find and parse GMT pattern: GMT+05:30, GMT-3 or similar
+			var m = Regex.Match(pattern, @"(?:GMT|UTC) ?([+|-]\d{1,2}(:?\d{2})?)?");
+			if (m.Success)
+			{
+				// group 1 can be like "+2:30","-03" or empty
+				// empty Group 1 means UTC or GMT
+				if (m.Groups[1].Length == 0)
+				{
+					offset = UtcOffset;
+					return true;
+				}
+
+				// group 2 can be like ":30" or empty
+				var matched = m.Groups[2].Length == 0 ? m.Groups[1].Value + ":00" : m.Groups[1].Value;
+
+				if (TimeSpan.TryParse(matched.TrimStart('+'), out offset))
+				{
+					return true;
+				}
+			}
+
+			Log.Debug($"Cannot parse time zone: {pattern}");
 
 			offset = UtcOffset;
 			return false;

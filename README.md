@@ -48,6 +48,7 @@ Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Win
 |[SimpleAdminClient](Docs/InstallationAndUninstallation.md#simpleadminclient)|[Samples/SimpleAdminClient](Samples/SimpleAdminClient)|Demonstrates how to connect to an administrative session and communicate with it using the implementation of administrative messages.|
 |[ConnectToGatewayAsync](Docs/InstallationAndUninstallation.md#connecttogatewayasync)|[Samples/ConnectToGatewayAsync](Samples/ConnectToGatewayAsync)|Version of 'ConnectToGateway' using 'session.ConnectAsync(...)'|
 |[Latency](Docs/latency_sample.md)|[Samples/Latency/Server](Samples/Latency/Server)<br>[Samples/Latency/Sender](Samples/Latency/Sender)|Simple scenario to test performance|
+|[Scheduler](Docs/Scheduler.md)|[Samples/SimpleScheduledServer](Samples/SimpleScheduledServer)<br>[Samples/SimpleScheduledClient](Samples/SimpleScheduledClient)|Demonstrates how to accept a scheduled connection, and how to connect with a schedule.|
 
 ## How to build and run samples
 
@@ -84,6 +85,7 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 - [Tags Generator Tool](Docs/TagsGen.md)
 - [SSL/TLS support](Docs/TlsSupport.md)
 - [Validation](Docs/Validation.md)
+- [Scheduler](Docs/Scheduler.md)
 
 ## Contributing
 1. Fork it (https://github.com/epam/fix-antenna-net-core/fork)

@@ -131,5 +131,11 @@ namespace Epam.FixAntenna.TestUtils
 					|| Regex.IsMatch(name, ".*\\.[0-9]{1,5}$")
 					|| Regex.IsMatch(name, ".*\\.properties$");
 		}
+
+		public static bool ClearDefaultLogs()
+		{
+			var logsCleaner = new LogsCleaner();
+			return logsCleaner.Clean("./logs") && logsCleaner.Clean("./logs/backup");
+		}
 	}
 }

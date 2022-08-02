@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 
 namespace Epam.FixAntenna.Core.Tests
 {
@@ -34,6 +35,20 @@ namespace Epam.FixAntenna.Core.Tests
 
 			var defaultMask = regexMatches.Length == 0 ? mask ?? "*" : "*";
 			return new DirectoryInfo(dir).GetFiles(defaultMask).Count(file => regexMatches.Length == 0 || regexMatches.Any(r => r.IsMatch(file.Name)));
+		}
+
+		public static void CreateConfigurationFileForSession(string filename, string content)
+		{
+			File.WriteAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, filename), content);
+		}
+
+		public static void DeleteConfigurationFileForSession(string filename)
+		{
+			var path = Path.Combine(TestContext.CurrentContext.TestDirectory, filename);
+			if (File.Exists(path))
+			{
+				File.Delete(path);
+			}
 		}
 	}
 }

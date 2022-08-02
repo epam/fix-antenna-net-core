@@ -45,22 +45,22 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 
 		public override bool IsEventRaised()
 		{
-			_messageWaiter.Wait(TimeSpan.FromMilliseconds(TimeToWait));
+			_messageWaiter.Wait(TimeToWait);
 			lock (LockObject)
 			{
 				var res = _waitNums <= 0;
 				if (!res && Log.IsInfoEnabled)
 				{
-					Log.Warn(GetName() + " expected yet another " + _waitNums + " events");
+					Log.Warn(Name + " expected yet another " + _waitNums + " events");
 				}
 
 				return res;
 			}
 		}
 
-		public override bool IsEventRaised(long elapsedTime)
+		public override bool IsEventRaised(int elapsedTime)
 		{
-			_messageWaiter.Wait(TimeSpan.FromMilliseconds(TimeToWait));
+			_messageWaiter.Wait(TimeToWait);
 			lock (LockObject)
 			{
 				TimeToWaitSum += elapsedTime;

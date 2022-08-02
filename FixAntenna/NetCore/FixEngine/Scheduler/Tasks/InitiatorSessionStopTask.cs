@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 EPAM Systems
+﻿// Copyright (c) 2022 EPAM Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Epam.FixAntenna.NetCore.FixEngine.Session;
-
-namespace Epam.FixAntenna.NetCore.FixEngine.Manager.Tasks
+namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 {
-	/// <summary>
-	/// The base interface for all sessions task.
-	/// </summary>
-	/// <seealso cref="FixSessionManager"> </seealso>
-	internal interface ISessionManagerTask
+	internal class InitiatorSessionStopTask : SessionStopTask
 	{
-		/// <summary>
-		/// This method invoked for all session. </summary>
-		/// <param name="session"> the session </param>
-		void RunForSession(IExtendedFixSession session);
 	}
 }

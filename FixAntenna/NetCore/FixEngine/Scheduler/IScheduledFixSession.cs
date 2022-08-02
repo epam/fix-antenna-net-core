@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 EPAM Systems
+﻿// Copyright (c) 2022 EPAM Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Epam.FixAntenna.NetCore.FixEngine;
-using Epam.FixAntenna.NetCore.FixEngine.Session.Common;
-
-namespace Epam.FixAntenna.NetCore.FixEngine.Session.Common
+namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
-	internal class FixSessionFactoryHelper : AbstractFixSessionFactory
+	/// <summary>
+	/// Interface for FIX session which could have scheduled start/stop time.
+	/// </summary>
+	public interface IScheduledFixSession : IFixSession
 	{
-		public override IFixMessageFactory MessageFactory
-		{
-			get { return null; }
-		}
+		/// <summary>
+		/// Init scheduler with start/stop tasks for this session.
+		/// </summary>
+		void Schedule();
+
+		/// <summary>
+		/// Deactivate scheduled tasks for this session.
+		/// </summary>
+		void Deschedule();
 	}
 }

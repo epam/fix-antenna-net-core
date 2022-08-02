@@ -981,6 +981,22 @@ namespace Epam.FixAntenna.NetCore.Configuration
 		#endregion
 
 		/// <summary>
+		/// Cron expression to set a scheduled session start.
+		/// </summary>
+		public const string TradePeriodBegin = "tradePeriodBegin";
+
+		/// <summary>
+		/// Cron expression to set the end of the scheduled session.
+		/// </summary>
+		public const string TradePeriodEnd = "tradePeriodEnd";
+
+		/// <summary>
+		/// Time zone id for tradePeriodBegin and TradePeriodEnd properties.
+		/// </summary>
+		[DefaultValue("UTC")]
+		public const string TradePeriodTimeZone = "tradePeriodTimeZone";
+
+		/// <summary>
 		/// Acceptor: Default listening port(s) for unsecured connections.
 		/// Initiator: Target port for connection.
 		/// </summary>
