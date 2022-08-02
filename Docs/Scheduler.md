@@ -47,6 +47,8 @@ tradePeriodTimeZone=UTC
 ```
 The `tradePeriodTimeZone` is optional and have "UTC" as a default value. `tradePeriodBegin` and `tradePeriodEnd` can contain several cron expressions divided by "|".
 
+The accepted session will be automatically disconnected at `tradePeriodEnd`.
+
 ```csharp
 var configuration = new Config(Config.DefaultEngineProperties);
 
