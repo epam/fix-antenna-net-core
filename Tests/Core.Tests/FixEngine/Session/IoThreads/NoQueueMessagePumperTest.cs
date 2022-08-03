@@ -154,13 +154,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 					Assert.Fail($"Exception while sending: {e.Message}");
 				}
 			});
-			sender.Start();
 
 			//FIX session send Logon out of turn on start
 			//emulate this behaviour and send Logon
 			var logon = "8=FIX.4.2#9=0#35=A#34=1#49=ME#56=YOU#52=20090320-11:00:35.027#98=0#108=5#10=000#".Replace('#', '\u0001');
 			var fixFields = RawFixUtil.GetFixMessage(logon.AsByteArray());
 			_messagePumper.SendOutOfTurn("", fixFields);
+
+			sender.Start();
 
 			//sender should be blocked and no messages are sent yet
 			while (sender.ThreadState != ThreadState.WaitSleepJoin)

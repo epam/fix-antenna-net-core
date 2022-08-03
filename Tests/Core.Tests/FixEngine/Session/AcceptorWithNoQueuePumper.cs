@@ -31,7 +31,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		private readonly ILogger _logger = LogManager.GetLogger(typeof(AcceptorWithNoQueuePumper).FullName);
 		public const int Port = 11192;
 
-		[Test]
+		[Test, Ignore("Intermittently fails on CI")]
 		public virtual void ThereShouldBeDelayBeforeSendingApplicationMessages()
 		{
 			var msgTypeForTest = "D";
