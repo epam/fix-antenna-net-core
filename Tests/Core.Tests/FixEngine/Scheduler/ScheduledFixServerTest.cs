@@ -228,6 +228,7 @@ sessions.testSession.tradePeriodTimeZone=UTC+{timeShiftInHours}");
 		[TearDown]
 		public void TearDown()
 		{
+			_session.Dispose();
 			_server.Stop();
 			FixSessionManager.DisposeAllSession();
 			_connected.Dispose();
@@ -243,6 +244,7 @@ sessions.testSession.tradePeriodTimeZone=UTC+{timeShiftInHours}");
 			_server.SetListener(new FixServerListener());
 			_server.Start();
 		}
+
 		private void InitServer(string sessionConfigPath)
 		{
 			_server = new ScheduledFixServer {ConfigPath = sessionConfigPath};
