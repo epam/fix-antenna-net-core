@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.Common.Logging;
+using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.Message;
@@ -27,29 +29,42 @@ namespace Epam.FixAntenna.Example
 
 		public static void Main()
 		{
-			// loading pre-configured session parameters from the fixengine.properties file
-			var sessionParams = SessionParametersBuilder.BuildSessionParameters("testSession");
+			// loading list of pre-configured sessions from the fixengine.properties file
+			var configuredSessions = SessionParametersBuilder.BuildSessionParametersList(Config.DefaultEngineProperties);
+			var sessions = new List<IFixSession>();
 
-			// create the pre-configured session
-			var session = sessionParams.CreateScheduledInitiatorSession();
+			foreach (var sessionParams in configuredSessions.Values)
+			{
+				try
+				{
+					// create pre-configured session
+					var session = sessionParams.CreateScheduledInitiatorSession();
+					sessions.Add(session);
 
-			// create and attach a listener 
-			session.SetFixSessionListener(new FixSessionListener());
+					// create and attach listener 
+					session.SetFixSessionListener(new FixSessionListener());
 
-			// schedule the session
-			session.Schedule();
-
+					// schedule the session
+					session.Schedule();
+				}
+				catch (Exception e)
+				{
+					Logger.Error($"Cannot schedule {sessionParams.SessionId} session.", e);
+				}
+			}
 			// waiting user input to terminate application
 			Logger.Info(" ... Press ENTER to exit the program.");
 			Console.Read();
 			
-			// disconnect and close the session on application exit
-			if (SessionState.IsNotDisconnected(session.SessionState))
+			// disconnect and close configured sessions on application exit
+			foreach (var session in sessions)
 			{
-				session.Disconnect("Shutting down...");
+				if (SessionState.IsNotDisconnected(session.SessionState))
+				{
+					session.Disconnect("Shutting down...");
+				}
+				session.Dispose();
 			}
-
-			session.Dispose();
 		}
 
 		private class FixSessionListener : IFixSessionListener
