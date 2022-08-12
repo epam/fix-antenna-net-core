@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Common.ResourceLoading;
 using Epam.FixAntenna.NetCore.Configuration;
@@ -27,6 +28,11 @@ namespace Epam.FixAntenna.Dictionary.Tests.Dictionary
 		private readonly DictionaryBuilder _builder = new DictionaryBuilder();
 
 		[Test]
+		// Loading embedded resources relies on stack trace information to find all assemblies that
+		// participate in the call chain.
+		// But the stack trace can be optimized for execution in the Release mode and the calling assembly is not necessary there.
+		// Unfortunately this functionality looks like not very good designed and it's better avoid relying on it.
+		[MethodImpl(MethodImplOptions.NoOptimization)]
 		public void EmbeddedDictionaryLoaded()
 		{
 			Assert.DoesNotThrow(() =>
