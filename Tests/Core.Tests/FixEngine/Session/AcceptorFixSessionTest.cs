@@ -70,6 +70,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				{
 					_outerInstance.WaitReject.Wait();
 					session.Reject(_outerInstance.RejectReason);
+					session.Dispose();
 				}
 				catch (IOException e)
 				{
@@ -518,6 +519,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					if (Count++ < 2)
 					{
 						session.Reject(_outerInstance.RejectReason);
+						session.Dispose();
 					}
 					else
 					{
@@ -597,6 +599,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					if (Count++ < 2)
 					{
 						session.Reject(_outerInstance.RejectReason);
+						session.Dispose();
 					}
 					else
 					{
@@ -649,13 +652,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		public virtual byte[] GetLogonMessage(int seqNum)
 		{
-			var rawLogon = "8=FIX.4.2#9=72#35=A#34=1#49=initiator#56=acceptor#52=20130409-07:49:00.678#98=0#108=2#10=045#".Replace('#', '\u0001');
+			var rawLogon = "8=FIX.4.2#9=72#35=A#34=1#49=initiator#56=acceptor#52=20130409-07:49:00.678#98=0#108=10#10=045#".Replace('#', '\u0001');
 			return PrepareMsg(rawLogon, seqNum);
 		}
 
 		public virtual byte[] GetLogonMessage(int seqNum, string additionalFields)
 		{
-			var rawLogon = ("8=FIX.4.2#9=72#35=A#34=1#49=initiator#56=acceptor#52=20130409-07:49:00.678#98=0#108=2#" + additionalFields + "10=045#").Replace('#', '\u0001');
+			var rawLogon = ("8=FIX.4.2#9=72#35=A#34=1#49=initiator#56=acceptor#52=20130409-07:49:00.678#98=0#108=10#" + additionalFields + "10=045#").Replace('#', '\u0001');
 			return PrepareMsg(rawLogon, seqNum);
 		}
 
