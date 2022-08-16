@@ -28,12 +28,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		private const string DenialReason = "Session was denied because of the server schedule";
 		private static readonly ILog Log = LogFactory.GetLog(typeof(FilteredFixServerListener));
 
-		private readonly ConfigurationAdapter _serverConfigAdapter;
 		private readonly IFixServerListener _parentListener;
 
-		public FilteredFixServerListener(ConfigurationAdapter serverConfigAdapter, IFixServerListener parentListener)
+		public FilteredFixServerListener(IFixServerListener parentListener)
 		{
-			_serverConfigAdapter = serverConfigAdapter;
 			_parentListener = parentListener;
 		}
 
@@ -103,25 +101,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		private Schedule GetSchedule(SessionParameters sessionParameters)
 		{
-			// The server configuration and the session configuration can be read from different config files.
-			// Thus, let's check if a configuration for the session set. If not then let's use the server configuration.
 			var sessionConfigAdapter = new ConfigurationAdapter(sessionParameters.Configuration);
-			var sessionConfig = sessionConfigAdapter.Configuration;
 
 			return new Schedule
 			{
-				TradePeriodBegin = sessionConfig.Exists(Config.TradePeriodBegin)
-					? sessionConfigAdapter.TradePeriodBegin
-					: _serverConfigAdapter.TradePeriodBegin,
-				TradePeriodEnd = sessionConfig.Exists(Config.TradePeriodEnd)
-					? sessionConfigAdapter.TradePeriodEnd
-					: _serverConfigAdapter.TradePeriodEnd,
-				// TimeZone have a default value, so we use the server's value only if no session level parameters are set.
-				TimeZone = sessionConfig.Exists(Config.TradePeriodTimeZone)
-							|| sessionConfig.Exists(Config.TradePeriodBegin)
-							|| sessionConfig.Exists(Config.TradePeriodEnd)
-					? sessionConfigAdapter.TradePeriodTimeZone
-					: _serverConfigAdapter.TradePeriodTimeZone
+				TradePeriodBegin = sessionConfigAdapter.TradePeriodBegin,
+				TradePeriodEnd = sessionConfigAdapter.TradePeriodEnd,
+				TimeZone = sessionConfigAdapter.TradePeriodTimeZone
 			};
 		}
 
