@@ -14,6 +14,7 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Common;
+using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
@@ -35,6 +36,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 			ConfigurationHelper.StoreGlobalConfig();
+			// Speed up test execution. Otherwise _helper.Session.Dispose() takes 30 seconds
+			Config.GlobalConfiguration.SetProperty(Config.ReadingThreadShutdownTimeout, "1");
 			_helper = new AcceptorFixSessionHelper(GetTestSessionParameters());
 		}
 
