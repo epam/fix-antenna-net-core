@@ -33,14 +33,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 		/// <summary>
 		/// Gets session parameters from login message.
 		/// </summary>
+		/// <param name="configuration">the configuration</param>
 		/// <param name="loginMessage"> the logon message </param>
 		/// <param name="host">         the host </param>
 		/// <param name="port">         the port </param>
 		/// <returns> SessionParameters </returns>
 		/// <exception cref="ArgumentException"> if target or sender are invalid </exception>
-		public virtual ParseResult ParseLogon(FixMessage loginMessage, string host, int port)
+		public virtual ParseResult ParseLogon(Config configuration, FixMessage loginMessage, string host, int port)
 		{
-			var parseResult = new ParseResult();
+			var parseResult = new ParseResult(configuration);
 			parseResult.SessionParameters.Host = host;
 			parseResult.SessionParameters.Port = port;
 
@@ -118,7 +119,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 
 		internal class ParseResult
 		{
-			internal ParsedSessionParameters SessionParameters { get; set; } = new ParsedSessionParameters();
+			public ParseResult(Config config)
+			{
+				SessionParameters = new ParsedSessionParameters(config);
+			}
+
+			internal ParsedSessionParameters SessionParameters { get; }
 		}
 	}
 }

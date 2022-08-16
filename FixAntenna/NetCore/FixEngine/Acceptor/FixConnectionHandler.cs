@@ -33,11 +33,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 		private readonly LogonMessageParser _logonMessageParser;
 		private int _logonWaitTimeout = 5000; // ms
 
+		private readonly Config _configuration;
 		private readonly SessionAcceptorStrategyHandler _sessionAcceptorStrategyHandler;
 		private IConfiguredSessionRegister _configuredSessionRegister;
 
-		public FixConnectionHandler(SessionAcceptorStrategyHandler acceptorStrategyHandler, ISessionTransportFactory transportFactory)
+		public FixConnectionHandler(Config configuration, SessionAcceptorStrategyHandler acceptorStrategyHandler, ISessionTransportFactory transportFactory)
 		{
+			_configuration = configuration;
 			_sessionAcceptorStrategyHandler = acceptorStrategyHandler;
 			_logonMessageParser = new LogonMessageParser();
 			_transportFactory = transportFactory;
@@ -75,8 +77,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 	//        int maxMessageSize = Configuration.getGlobalConfiguration().getPropertyAsInt(Configuration.MAX_MESSAGE_SIZE);
 	//        boolean validateCheckSum = Configuration.getGlobalConfiguration().getPropertyAsBoolean(Configuration.VALIDATE_CHECK_SUM, true);
 	//        final AcceptorFIXTransport fixTransport = new AcceptorFIXTransport(transport, maxMessageSize, validateCheckSum);
-			var globalConfiguration = Config.GlobalConfiguration;
-			var fixTransport = _transportFactory.CreateAcceptorTransport(transport, globalConfiguration);
+			var config = (Config)_configuration.Clone();
+			var fixTransport = _transportFactory.CreateAcceptorTransport(transport, config);
 			try
 			{
 				var logon = new FixMessage();
@@ -103,7 +105,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 					return;
 				}
 
-				var parseResult = _logonMessageParser.ParseLogon(logon, transport.RemoteEndPoint.Address.AsString(), transport.LocalEndPoint.Port);
+				var parseResult = _logonMessageParser.ParseLogon(config, logon, transport.RemoteEndPoint.Address.AsString(), transport.LocalEndPoint.Port);
 				var sessionParameters = parseResult.SessionParameters;
 				sessionParameters.LogonReadTimeTicks = readLogonTimeTicks;
 
