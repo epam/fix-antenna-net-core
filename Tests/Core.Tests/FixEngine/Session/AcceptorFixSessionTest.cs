@@ -17,9 +17,7 @@ using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Acceptor;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using Epam.FixAntenna.NetCore.Message.Format;
 using Epam.FixAntenna.TestUtils;
 
 using NUnit.Framework;
@@ -28,6 +26,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+
+using static Epam.FixAntenna.NetCore.FixEngine.Session.TestMessageHelper;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -132,8 +132,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// reset seqNum
 			helper.PrepareToReceiveMessages(1);
@@ -143,14 +143,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// make manual reset
 			serverListener.Session.ResetSequenceNumbers();
 			helper.WaitForMessages(3000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1, "141=Y#"));
 			// send msg foe test new seqNum
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(3000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -163,7 +163,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// expect to continue seqNum
 			helper.SendMessage(GetLogonMessage(4));
 			helper.WaitForMessages(3000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
 			Server.Stop();
 		}
 
@@ -181,8 +181,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -198,8 +198,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -212,8 +212,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(4));
 			helper.SendMessage(GetNewsMessage(5));
 			helper.WaitForMessages(500000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
 
 			Server.Stop();
 		}
@@ -233,8 +233,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -255,8 +255,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -269,8 +269,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(4));
 			helper.SendMessage(GetNewsMessage(5));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
 
 			Server.Stop();
 		}
@@ -289,8 +289,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -312,8 +312,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(11));
 			helper.SendMessage(GetNewsMessage(12));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 11);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 12);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 11);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 12);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(13));
@@ -326,8 +326,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(14));
 			helper.SendMessage(GetNewsMessage(15));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 14);
-			AssetTypeAndSeqNum(helper.GetMessages()[1], "B", 15);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 14);
+			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 15);
 
 			Server.Stop();
 		}
@@ -345,7 +345,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -377,7 +377,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -410,7 +410,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -448,7 +448,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -626,7 +626,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1, "141=Y#"));
 			helper.WaitForMessages(5000);
-			AssetTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 			AssertUnexpectedDuplicateTag(helper.GetMessages()[0], Tags.ResetSeqNumFlag, 1);
 
 			helper.SendMessage(GetLogoutMessage(2));
@@ -642,46 +642,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			var response = messages[0];
 			Assert.AreEqual("5", response.GetTagValueAsString(35), "Respond Logout");
 			Assert.AreEqual(RejectReason, response.GetTagValueAsString(58), "Logout reason");
-		}
-
-		private byte[] GetNewsMessage(int seqNum)
-		{
-			var rawMsg = "8=FIX.4.2#9=92#35=B#34=2#49=initiator#56=acceptor#52=20130409-08:09:16.499#148=Hello there:1#33=1#58=line1#10=232#".Replace('#', '\u0001');
-			return PrepareMsg(rawMsg, seqNum);
-		}
-
-		public virtual byte[] GetLogonMessage(int seqNum)
-		{
-			var rawLogon = "8=FIX.4.2#9=72#35=A#34=1#49=initiator#56=acceptor#52=20130409-07:49:00.678#98=0#108=10#10=045#".Replace('#', '\u0001');
-			return PrepareMsg(rawLogon, seqNum);
-		}
-
-		public virtual byte[] GetLogonMessage(int seqNum, string additionalFields)
-		{
-			var rawLogon = ("8=FIX.4.2#9=72#35=A#34=1#49=initiator#56=acceptor#52=20130409-07:49:00.678#98=0#108=10#" + additionalFields + "10=045#").Replace('#', '\u0001');
-			return PrepareMsg(rawLogon, seqNum);
-		}
-
-		public virtual byte[] GetLogoutMessage(int seqNum)
-		{
-			var rawLogout = "8=FIX.4.2#9=75#35=5#34=3#49=initiator#56=acceptor#52=20140319-09:35:10.385#58=User request#10=186#".Replace('#', '\u0001');
-			return PrepareMsg(rawLogout, seqNum);
-		}
-
-		private byte[] PrepareMsg(string rawMsg, int seqNum)
-		{
-			var msg = RawFixUtil.GetFixMessage(rawMsg.AsByteArray());
-			msg.SetCalendarValue(52, DateTimeOffset.Now, FixDateFormatterFactory.FixDateType.UtcTimestampWithMillis);
-			msg.Set(34, seqNum);
-			msg.Set(9, msg.CalculateBodyLength());
-			msg.Set(10, FormatChecksum(msg.CalculateChecksum()));
-			return msg.AsByteArray();
-		}
-
-		private void AssetTypeAndSeqNum(FixMessage msg, string type, int seqNum)
-		{
-			Assert.AreEqual(type, msg.GetTagValueAsString(35), "Unexpected type in message: " + msg);
-			Assert.AreEqual(seqNum, msg.GetTagAsInt(34), "Unexpected SeqNum in message: " + msg);
 		}
 
 		private void AssertUnexpectedDuplicateTag(FixMessage msg, int tagId, int allowableCount)
@@ -724,15 +684,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					_session.SendMessage(message);
 				}
 			}
-		}
-
-		private byte[] FormatChecksum(int checksum)
-		{
-			var val = new byte[3];
-			val[0] = (byte)(checksum / 100 + (byte) '0');
-			val[1] = (byte)(((checksum / 10) % 10) + (byte) '0');
-			val[2] = (byte)((checksum % 10) + (byte) '0');
-			return val;
 		}
 	}
 }

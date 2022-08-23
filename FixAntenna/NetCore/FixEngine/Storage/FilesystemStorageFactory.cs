@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Epam.FixAntenna.NetCore.Common;
+using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
@@ -29,6 +30,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 	/// </summary>
 	internal class FilesystemStorageFactory : IStorageFactory
 	{
+		private static readonly ILog Log = LogFactory.GetLog(typeof(FilesystemStorageFactory));
+
 		/// <summary>
 		/// Locator for backup files of incoming storage
 		/// </summary>
@@ -186,9 +189,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 				state.FromProperties(properties);
 				return true;
 			}
-			catch (Exception)
+			catch (ArgumentException ex)
 			{
-				//log.warn("Can't load session parameters. Cause: " + e.getMessage(), e);
+				Log.Warn(ex.Message, ex);
+			}
+			catch (Exception e)
+			{
+				Log.Debug("Can't load session parameters. Cause: " + e.Message);
 			}
 
 			return false;

@@ -37,10 +37,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		public virtual void NewFixSession(IFixSession session)
 		{
-			var schedule = GetSchedule(session.Parameters);
-
-			if (IsAllowedToConnect(schedule))
+			if (TryParseSchedule(session.Parameters, out var schedule) && IsAllowedToConnect(schedule))
 			{
+				if (!schedule.IsTradingPeriodDefined())
+				{
+					Log.Debug($"Both {Config.TradePeriodBegin} and {Config.TradePeriodEnd} should be set to filter connections");
+				}
+
 				_parentListener.NewFixSession(session);
 
 				if (SessionState.IsDisposed(session.SessionState)) return;
@@ -48,7 +51,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 				ScheduleDisconnect(session, schedule);
 
 				// Session is still inside allowed interval. Do nothing
-				if (!schedule.AreBeginAndEndDefined() || schedule.IsNowInsideConnectionInterval()) return;
+				if (IsAllowedToConnect(schedule)) return;
 
 				// Trade time is over, so let's disconnect.
 				// The situation is possible if while connecting, we reached the end of the allowed trade period
@@ -73,65 +76,34 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			if (schedule.TradePeriodEnd == null) return;
 
 			var acceptorSession = (AcceptorFixSession)session;
-			acceptorSession.ScheduleDisconnect(schedule.TradePeriodEnd, schedule.TimeZone);
+			acceptorSession.ScheduleDisconnect(schedule.TradePeriodEnd.OriginalCronExpression, schedule.TimeZone);
+		}
+
+		private bool TryParseSchedule(SessionParameters sessionParameters, out Schedule schedule)
+		{
+			schedule = null;
+			var config = new ConfigurationAdapter(sessionParameters.Configuration);
+
+			if (config.TradePeriodBegin != null && !MultipartCronExpression.IsValidCronExpression(config.TradePeriodBegin))
+			{
+				Log.Error($"{Config.TradePeriodBegin} expression is invalid: {config.TradePeriodBegin}");
+				return false;
+			}
+
+			if (config.TradePeriodEnd != null && !MultipartCronExpression.IsValidCronExpression(config.TradePeriodEnd))
+			{
+				Log.Error($"{Config.TradePeriodEnd} expression is invalid: {config.TradePeriodEnd}");
+				return false;
+			}
+
+			schedule = new Schedule(config.TradePeriodBegin, config.TradePeriodEnd, config.TradePeriodTimeZone);
+
+			return true;
 		}
 
 		private bool IsAllowedToConnect(Schedule schedule)
 		{
-			if (schedule.TradePeriodBegin != null && !MultipartCronExpression.IsValidCronExpression(schedule.TradePeriodBegin))
-			{
-				Log.Error($"{Config.TradePeriodBegin} expression is invalid: {schedule.TradePeriodBegin}");
-				return false;
-			}
-
-			if (schedule.TradePeriodEnd != null && !MultipartCronExpression.IsValidCronExpression(schedule.TradePeriodEnd))
-			{
-				Log.Error($"{Config.TradePeriodEnd} expression is invalid: {schedule.TradePeriodEnd}");
-				return false;
-			}
-
-			if (!schedule.AreBeginAndEndDefined())
-			{
-				Log.Debug($"Both {Config.TradePeriodBegin} and {Config.TradePeriodEnd} should be set to filter connections");
-				return true;
-			}
-
-			return schedule.IsNowInsideConnectionInterval();
-		}
-
-		private Schedule GetSchedule(SessionParameters sessionParameters)
-		{
-			var sessionConfigAdapter = new ConfigurationAdapter(sessionParameters.Configuration);
-
-			return new Schedule
-			{
-				TradePeriodBegin = sessionConfigAdapter.TradePeriodBegin,
-				TradePeriodEnd = sessionConfigAdapter.TradePeriodEnd,
-				TimeZone = sessionConfigAdapter.TradePeriodTimeZone
-			};
-		}
-
-		private class Schedule
-		{
-			public string TradePeriodBegin { get; set; }
-			public string TradePeriodEnd { get; set; }
-			public TimeZoneInfo TimeZone { get; set; }
-
-			public bool AreBeginAndEndDefined() => TradePeriodBegin != null && TradePeriodEnd != null;
-
-			public bool IsNowInsideConnectionInterval()
-			{
-				if (!AreBeginAndEndDefined())
-				{
-					throw new InvalidOperationException("Schedule is not defined");
-				}
-
-				var now = DateTimeOffset.UtcNow;
-				var isIntervalStart = new MultipartCronExpression(TradePeriodBegin, TimeZone).IsSatisfiedBy(now);
-				var isInsideInterval = SessionTaskScheduler.IsInsideInterval(now, TradePeriodBegin, TradePeriodEnd, TimeZone);
-
-				return isIntervalStart || isInsideInterval;
-			}
+			return !schedule.IsTradingPeriodDefined() || schedule.IsInsideOrAtBeginningOfInterval(DateTimeOffset.UtcNow);
 		}
 	}
 }

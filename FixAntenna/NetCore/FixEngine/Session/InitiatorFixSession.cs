@@ -363,21 +363,22 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			if (startTimeExpr == null || stopTimeExpr == null) return;
 
-			if (!CanStartScheduledSession(startTimeExpr, stopTimeExpr, timeZone)) return;
+			var schedule = new Schedule(startTimeExpr, stopTimeExpr, timeZone);
+			if (!CanStartScheduledSession(schedule)) return;
 
 			lock (SessionLock)
 			{
-				if (CanStartScheduledSession(startTimeExpr, stopTimeExpr, timeZone))
+				if (CanStartScheduledSession(schedule))
 				{
 					Connect();
 				}
 			}
 		}
 
-		private bool CanStartScheduledSession(string startTimeExpr, string stopTimeExpr, TimeZoneInfo timeZone)
+		private bool CanStartScheduledSession(Schedule schedule)
 		{
 			var isDisconnected = SessionState.IsDisconnected(SessionState);
-			var isInsideInterval = SessionTaskScheduler.IsInsideInterval(DateTimeOffset.UtcNow, startTimeExpr, stopTimeExpr, timeZone);
+			var isInsideInterval = schedule.IsInsideInterval(DateTimeOffset.UtcNow);
 			return isDisconnected && isInsideInterval;
 		}
 

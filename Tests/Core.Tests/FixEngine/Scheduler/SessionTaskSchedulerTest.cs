@@ -24,45 +24,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
 	internal class SessionTaskSchedulerTest
 	{
-		private static readonly object[] TestCases =
-		{
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ?", "0 0 5 * * ?", true },
-			new object[] { "12/07/2022 4:33 +1", "0 0 6 * * ?", "0 0 5 * * ?", true },
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ?", "0 30 4 * * ?", false },
-			new object[] { "12/07/2022 4:33 +1", "0 0 6 * * ?", "0 0 13 * * ?", false },
-			new object[] { "12/07/2022 4:33 +1", "0/4 0 6 * * ?", "1/4 0 6 * * ?", false },
-			new object[] { "12/07/2022 4:33 +1", "0 0/4 4 * * ?", "0 1/4 6 * * ?", true },
-
-			new object[] { "12/07/2022 4:33 +1", "0 33 4 * * ?", "0 34 4 * * ?", false },
-			new object[] { "12/07/2022 4:33 +1", "0 32 4 * * ?", "0 33 4 * * ?", false },
-
-			new object[] { "12/07/2022 4:33 +2", "0 0 4 * * ?", "0 0 5 * * ?", true },
-			new object[] { "12/07/2022 4:33 +2", "0 0 4 * * ?", "0 30 4 * * ?", false },
-
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ? 2021", "0 0 5 * * ? 2021", false },
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ? 2023", "0 0 5 * * ? 2023", false },
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ? 2022", "0 0 5 * * ? 2022", true },
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 * * ? 2022", "0 0 5 9 10 ? 2022", true },
-			new object[] { "12/07/2022 4:33 +1", "0 0 4 5 6 ? 2022", "0 0 5 9 10 ? 2022", true },
-			new object[] { "12/07/2022 4:33 +1", "0 32,33 4 12 7 ? 2022", "0 0 5 9 10 ? 2022", false },
-
-			new object[] { "12/07/2022 4:33 +1", "0 0 3 * * ?|0 0 4 * * ?", "0 0 5 * * ?|0 0 6 * * ?", true },
-		};
-
-		[TestCaseSource(nameof(TestCases))]
-		public void TestIsInsideInterval(string dateString, string startTimeExpr, string stopTimeExpr, bool expected)
-		{
-			// Arrange
-			var date = DateTimeOffset.ParseExact(dateString, "d/M/yyyy H:m z", null);
-			var timeZone = TimeZoneInfo.CreateCustomTimeZone("Test", date.Offset, "", "");
-
-			// Act
-			var actual = SessionTaskScheduler.IsInsideInterval(date, startTimeExpr, stopTimeExpr, timeZone);
-
-			// Assert
-			Assert.AreEqual(expected, actual, $"Wrong behaviour. {dateString}, {startTimeExpr}, {stopTimeExpr}");
-		}
-
 		[Test]
 		public void TestScheduleCronTaskDoesNotScheduleWhenNoEventsInFuture()
 		{

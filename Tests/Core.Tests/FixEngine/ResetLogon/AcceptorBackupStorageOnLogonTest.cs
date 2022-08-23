@@ -43,6 +43,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 		private IExtendedFixSession _session;
 		private FixServer _server;
 
+		private EventHook _sessionConnectedEvent;
+		private EventHook _sessionDisconnectedEvent;
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -54,6 +57,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			globalConfiguration.SetProperty(Config.StorageCleanupMode, StorageCleanupMode.Backup.ToString());
 
 			var acceptorSessionConnectedEvent = new EventHook("Acceptor start", 5000);
+			_sessionConnectedEvent = new EventHook("Acceptor start", 5000);
+			_sessionDisconnectedEvent = new EventHook("Acceptor stopped", 5000);
+
 			_server = new FixServer();
 			_server.SetListener(new FixServerListener(this, acceptorSessionConnectedEvent));
 			_server.SetPort(Port);
@@ -89,7 +95,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			public void NewFixSession(IFixSession acceptorSession)
 			{
 				_outerInstance._session = (IExtendedFixSession) acceptorSession;
-				_outerInstance._session.SetFixSessionListener(new FixSessionAdapter(_outerInstance._session));
+				_outerInstance._session.SetFixSessionListener(
+					new FixSessionAdapter(_outerInstance._session, _outerInstance._sessionConnectedEvent, _outerInstance._sessionDisconnectedEvent));
 				try
 				{
 					_outerInstance._session.Connect();
@@ -106,12 +113,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 		[TearDown]
 		public virtual void TearDown()
 		{
-			_server.Stop();
-			_sessionHelper.Close();
-			FixSessionManager.DisposeAllSession();
+			try
+			{
+				_server.Stop();
+				_sessionHelper.Close();
+				FixSessionManager.DisposeAllSession();
 
-			ConfigurationHelper.RestoreGlobalConfig();
-			ClearLogs();
+				ClearLogs();
+			}
+			finally
+			{
+				ConfigurationHelper.RestoreGlobalConfig();
+			}
 		}
 
 		private void ClearLogs()
@@ -127,17 +140,42 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			CheckBackupStorageSize(_session.Parameters, 0);
 
 			_sessionHelper.Close();
-
-			//replace delay event waiting
-			Thread.Sleep(1000);
+			Assert.True(_sessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
 
 			_sessionHelper.Open();
 			_sessionHelper.SendResetLogon();
 			_sessionHelper.ReceiveResetLogon();
 			_sessionHelper.SendNewsMessage();
-			Thread.Sleep(1000);
 
 			CheckBackupStorageSize(_session.Parameters, 3);
+		}
+
+		[Test]
+		public void TestBackupStorageWhenLogonReceivedAndTradingPeriodDefined()
+		{
+			CheckBackupStorageSize(_session.Parameters, 0);
+			Config.GlobalConfiguration.SetProperty(Config.ResetSeqNumFromFirstLogon, ResetSeqNumFromFirstLogonMode.Schedule.ToString());
+			var now = DateTimeOffset.UtcNow;
+			Config.GlobalConfiguration.SetProperty(Config.ResetSeqNumFromFirstLogon, ResetSeqNumFromFirstLogonMode.Schedule.ToString());
+			Config.GlobalConfiguration.SetProperty(Config.TradePeriodBegin, GetCronExpression(now - TimeSpan.FromMinutes(1)));
+			Config.GlobalConfiguration.SetProperty(Config.TradePeriodEnd, GetCronExpression(now + TimeSpan.FromMinutes(10)));
+
+			_sessionHelper.Close();
+			Assert.True(_sessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
+
+			_sessionConnectedEvent.ResetEvent();
+			_sessionDisconnectedEvent.ResetEvent();
+
+			_sessionHelper.Open();
+			_sessionHelper.SendLogon();
+			Assert.True(_sessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
+			_sessionHelper.ReceiveLogon();
+			_sessionHelper.SendNewsMessage();
+			CheckBackupStorageSize(_session.Parameters, 3);
+		}
+		private string GetCronExpression(DateTimeOffset date)
+		{
+			return $"0 {date.Minute} {date.Hour} * * ?";
 		}
 
 		private void CheckBackupStorageSize(SessionParameters sessionParameters, int expectedSize)
@@ -160,23 +198,36 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 		private class FixSessionAdapter : IFixSessionListener
 		{
 			private readonly IExtendedFixSession _session;
+			private readonly EventHook _connectEventHook;
+			private readonly EventHook _disconnectEventHook;
 
-			public FixSessionAdapter(IExtendedFixSession session)
+			public FixSessionAdapter(IExtendedFixSession session, EventHook connectEventHook, EventHook disconnectEventHook)
 			{
 				_session = session;
+				_connectEventHook = connectEventHook;
+				_disconnectEventHook = disconnectEventHook;
 			}
 
 			public void OnSessionStateChange(SessionState sessionState)
 			{
+				if (SessionState.IsConnected(sessionState)) {
+					_connectEventHook.RaiseEvent();
+				}
+
 				if (SessionState.IsDisconnected(sessionState))
 				{
 					_session.Dispose();
+				}
+
+				if (SessionState.IsDisposed(sessionState)) {
+					_disconnectEventHook.RaiseEvent();
 				}
 			}
 
 			public void OnNewMessage(FixMessage message)
 			{
 				Log.Debug("New message received: " + message);
+				_session.SendMessage(message);
 			}
 		}
 	}

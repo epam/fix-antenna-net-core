@@ -282,5 +282,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			Scheduler.ScheduleCronTask<AcceptorSessionStopTask>(cronExpression, timeZone);
 		}
+
+		internal bool IsDisconnectScheduled()
+		{
+			return Scheduler.IsTaskScheduled<AcceptorSessionStopTask>();
+		}
 	}
 }

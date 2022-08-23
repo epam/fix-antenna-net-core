@@ -377,5 +377,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(p => int.TryParse(p.Trim(), out var port) ? port : -1)
 				.Where(port => port > -1);
+
+		public ResetSeqNumFromFirstLogonMode ResetSeqNumFromFirstLogonMode()
+		{
+			var resetSeqNumFromFirstLogon = Configuration.GetProperty(ResetSeqNumFromFirstLogon);
+			if (TryParseEnum<ResetSeqNumFromFirstLogonMode>(resetSeqNumFromFirstLogon, out var value) )
+			{
+				return value;
+			}
+
+			throw new ArgumentException($"Property {ResetSeqNumFromFirstLogon} has wrong value:" + resetSeqNumFromFirstLogon);
+		}
+
+		private bool TryParseEnum<T>(string value, out T result) where T : struct
+		{
+			return Enum.TryParse(value, true, out result) && Enum.IsDefined(typeof(T), result);
+		}
 	}
 }

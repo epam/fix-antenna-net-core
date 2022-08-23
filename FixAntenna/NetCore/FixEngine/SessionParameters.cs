@@ -559,7 +559,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 
 			if (properties.ContainsKey("lastSeqNumResetTimestamp"))
 			{
-				LastSeqNumResetTimestamp = Convert.ToInt64(properties.GetValueOrDefault("lastSeqNumResetTimestamp"));
+				try
+				{
+					LastSeqNumResetTimestamp =  Convert.ToInt64(properties.GetValueOrDefault("lastSeqNumResetTimestamp"));
+				}
+				catch (FormatException)
+				{
+					throw new ArgumentException(
+						"Error while trying to parse the last sequence reset date and time stored in the persistent storage. " +
+						"The last sequence reset date and time are treated as empty. " +
+						"Session's sequence numbers will be synchronized");
+				}
 			}
 
 			if (properties.ContainsKey("FixMessage"))

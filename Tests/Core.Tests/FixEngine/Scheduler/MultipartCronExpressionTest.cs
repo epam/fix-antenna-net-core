@@ -23,7 +23,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 	{
 		private static readonly TimeZoneInfo CustomTimeZone = TimeZoneInfo.CreateCustomTimeZone("Test", TimeSpan.FromHours(3), "", "");
 
-		private static readonly object[] TestCases =
+		private static readonly object[] TestCasesForGetTimeBefore =
 		{
 			// different time zones
 			new object[] { "12/07/2022 4:33:01 +0", "0 33 4 * * ?", TimeZoneInfo.Utc, "12/07/2022 4:33:00 +0" },
@@ -55,7 +55,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			new object[] { "12/07/2022 4:33:01 +0", "0 32 4 * * ?|0 33 4 * * ?", TimeZoneInfo.Utc, "12/07/2022 4:33:00 +0" },
 		};
 
-		[TestCaseSource(nameof(TestCases))]
+		[TestCaseSource(nameof(TestCasesForGetTimeBefore))]
 		public void TestGetTimeBefore(string dateString, string pipedCronExpressionString, TimeZoneInfo timeZone, string expectedString)
 		{
 			// Arrange
@@ -66,6 +66,35 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 			// Act
 			var actual = cronExpression.GetTimeBefore(date);
+
+			// Assert
+			Assert.AreEqual(expected, actual, "Wrong behaviour.");
+		}
+
+		private static readonly object[] TestCasesForGetTimeAfter =
+		{
+			// different time zones
+			new object[] { "12/07/2022 4:33:01 +0", "0 33 4 * * ?", TimeZoneInfo.Utc, "13/07/2022 4:33:00 +0" },
+			new object[] { "12/07/2022 4:33:01 +0", "0 33 4 * * ?", CustomTimeZone, "13/07/2022 1:33:00 +0" },
+
+			// passed date satisfies the cron expression
+			new object[] { "12/07/2022 4:33:00 +0", "0 33 4 * * ?", TimeZoneInfo.Utc, "13/07/2022 4:33:00 +0" },
+
+			// piped cron expression
+			new object[] { "12/07/2022 4:33:01 +0", "0 33 4 * * ?|0 35 4 * * ?", TimeZoneInfo.Utc, "12/07/2022 4:35:00 +0" },
+		};
+
+		[TestCaseSource(nameof(TestCasesForGetTimeAfter))]
+		public void TestGetTimeAfter(string dateString, string pipedCronExpressionString, TimeZoneInfo timeZone, string expectedString)
+		{
+			// Arrange
+			var dateFormat = "d/M/yyyy H:m:s z";
+			var date = DateTimeOffset.ParseExact(dateString, dateFormat, null);
+			var cronExpression = new MultipartCronExpression(pipedCronExpressionString, timeZone);
+			var expected = expectedString == null ? (DateTimeOffset?)null : DateTimeOffset.ParseExact(expectedString, dateFormat, null);
+
+			// Act
+			var actual = cronExpression.GetTimeAfter(date);
 
 			// Assert
 			Assert.AreEqual(expected, actual, "Wrong behaviour.");
