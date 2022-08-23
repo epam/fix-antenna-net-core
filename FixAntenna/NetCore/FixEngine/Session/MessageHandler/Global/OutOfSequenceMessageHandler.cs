@@ -32,6 +32,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		private int _allowedCountOfSimilarRr = 3;
 		protected internal bool IncludeNextExpectedMsgSeqNum;
 		private bool _resetQueueOnLowSeqNum = true;
+		private bool _resetSeqNumFromFirstLogon = false;
 
 		/// <summary>
 		/// If incoming sequence is equals to expected the next handler will be calls.
@@ -64,6 +65,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				}
 
 				_resetQueueOnLowSeqNum = configuration.GetPropertyAsBoolean(Config.ResetQueueOnLowSequenceNum, true);
+
+				if (value is AcceptorFixSession)
+				{
+					_resetSeqNumFromFirstLogon = cfg.ResetSeqNumFromFirstLogonMode() == ResetSeqNumFromFirstLogonMode.Schedule;
+				}
+
 				base.Session = value;
 			}
 		}
@@ -112,6 +119,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		/// Returns true if message is sequence reset and its NewSeqNo is less than expected.
 		/// </summary>
 		/// <param name="message"> the message </param>
+		/// <param name="expectedSeqNum">the expected sequence number</param>
 		public static bool IsSeqResetAndNewSeqNoIsLessThanExpected(FixMessage message, long expectedSeqNum)
 		{
 			return FixMessageUtil.IsSeqReset(message) && message.GetTagValueAsLong(Tags.NewSeqNo) < expectedSeqNum;
@@ -170,11 +178,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 					return true;
 				}
 			}
-			if (FixMessageUtil.IsIgnorableMsg(message) || (_ignoreSeqNumTooLowAtLogon && FixMessageUtil.IsMessageType(message, new[]{ (byte)'A' })))
-			{
-				return true;
-			}
-			return false;
+
+			var anyFlagToProcessLogonAnyway = _ignoreSeqNumTooLowAtLogon || _resetSeqNumFromFirstLogon;
+
+			return FixMessageUtil.IsIgnorableMsg(message) ||
+				(anyFlagToProcessLogonAnyway && FixMessageUtil.IsMessageType(message, new[]{ (byte)'A' }));
 		}
 
 		/// <summary>

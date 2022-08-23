@@ -622,6 +622,20 @@ The table below specifies the server behavior settings.
         <a href="https://docs.microsoft.com/en-us/dotnet/api/system.timezoneinfo.id?view=netstandard-2.0#System_TimeZoneInfo_Id">System.TimeZoneInfo.Id</a><br>
     </td>
 </tr>
+<tr>
+    <td>resetSeqNumFromFirstLogon</td>
+    <td>Never</td>
+    <td>Determines if sequence numbers should be accepted from the incoming Logon message. The option allows to reduce
+        miscommunication between sides and easier connect after scheduled sequence reset.<br>
+        The option doesn’t change behavior if the Logon message contains ResetSeqNumFlag(141) equals to “Y” (in this
+        case session sequence numbers will be reset).<br>
+        The value ‘Schedule’ allows to adopt to the sequence numbers from the incoming Logon message if the reset time
+        is outdated (the session recovers after scheduled reset time). In this case session’s incoming sequence number
+        will be set to the value of MsgSeqNum(34) tag from the incoming Logon and outgoing sequence number become
+        equivalent to NextExpectedMsgSeqNum (789) tag value (if the tag is present) or will be reset to 1.<br>
+        Valid values: Never | Schedule
+    </td>
+</tr>
 </tbody>
 </table>
 

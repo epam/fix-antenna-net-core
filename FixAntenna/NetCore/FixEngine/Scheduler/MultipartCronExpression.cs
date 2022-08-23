@@ -25,10 +25,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 	internal class MultipartCronExpression
 	{
 		private readonly CronExpression[] _cronExpressions;
+		public string OriginalCronExpression { get; }
 
 		public MultipartCronExpression(string pipedCronExpression, TimeZoneInfo timeZone)
 		{
-			if (pipedCronExpression == null) throw new ArgumentNullException(nameof(pipedCronExpression));
+			OriginalCronExpression = pipedCronExpression ?? throw new ArgumentNullException(nameof(pipedCronExpression));
 
 			_cronExpressions = ExtractCronExpressions(pipedCronExpression)
 				.Select(p => new CronExpression(p) { TimeZone = timeZone })
@@ -58,6 +59,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		public DateTimeOffset? GetTimeBefore(DateTimeOffset date)
 		{
 			return _cronExpressions.Select(exp => GetTimeBefore(date, exp)).Max();
+		}
+
+		/// <summary>
+		/// Find the closest time after the passed date that satisfied at least one of the cron expressions.
+		/// </summary>
+		public DateTimeOffset? GetTimeAfter(DateTimeOffset date)
+		{
+			return _cronExpressions.Select(exp => exp.GetTimeAfter(date)).Min();
 		}
 
 		/// <summary>

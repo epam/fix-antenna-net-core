@@ -42,7 +42,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		public void SetIncomingLogon(FixMessage logon)
 		{
 			var logonMessageParser = new LogonMessageParser();
-			var parseResult = logonMessageParser.ParseLogon(logon, Transport.RemoteEndPoint.Address.AsString(), Transport.LocalEndPoint.Port);
+			var parseResult = logonMessageParser.ParseLogon(Config.GlobalConfiguration, logon, Transport.RemoteEndPoint.Address.AsString(), Transport.LocalEndPoint.Port);
 
 			var strategy = new AllowNonRegisteredAcceptorStrategyHandler();
 			strategy.CheckSessionParameters(parseResult.SessionParameters, Session.Parameters);

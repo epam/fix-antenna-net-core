@@ -907,6 +907,35 @@ namespace Epam.FixAntenna.NetCore.Configuration
 		public const string WriteSocketAddressToLog = "writeSocketAddressToLog";
 
 		/// <summary>
+		/// Determines if sequence numbers should be accepted from the incoming Logon message. The option allows to reduce
+		/// miscommunication between sides and easier connect after scheduled sequence reset.
+		/// <p/>
+		/// The option doesn’t change behavior if the Logon message contains ResetSeqNumFlag(141) equals to “Y” (in this
+		/// case session sequence numbers will be reset).<p/>
+		/// The value ‘Schedule’ allows to adopt to the sequence numbers from the incoming Logon message if the reset time
+		/// is outdated (the session recovers after scheduled reset time). In this case session’s incoming sequence number
+		/// will be set to the value of MsgSeqNum(34) tag from the incoming Logon and outgoing sequence number become
+		/// equivalent to NextExpectedMsgSeqNum (789) tag value (if the tag is present) or will be reset to 1.
+		/// <p/>
+		/// If the parameter 'ResetSeqNumFromFirstLogon' is set to 'Schedule' on the acceptor's side, then:
+		/// If the tag ResetSeqNumFlag (141) in the received Logon message is set to 'Y', then:
+		/// The incoming sequence number must be set to 1
+		/// The outgoing sequence number must be set to 1
+		/// If the tag ResetSeqNumFlag (141) in the received Logon message is set to 'N' or missing, then
+		/// If the sequence numbers reset date and time is outdated, then:
+		/// The incoming sequence number must be set to the value of the tag MsgSeqNum (34)
+		/// If the tag NextExpectedMsgSeqNum (789) is specified in the received Logon message, then
+		/// The outgoing sequence number must be set to the value of the tag NextExpectedMsgSeqNum (789)
+		/// If the tag NextExpectedMsgSeqNum (789) is missing in the received Logon message, then
+		/// The outgoing sequence number must be set to the 1
+		/// If the sequence numbers reset date and time is actual, then:
+		/// The incoming and outgoing sequence numbers are handled according to the FIX protocol
+		/// Valid values: Never | Schedule.
+		/// </summary>
+		[DefaultValue("Never")]
+		public const string ResetSeqNumFromFirstLogon = "resetSeqNumFromFirstLogon";
+
+		/// <summary>
 		/// Masked tags. List all tags here engine should hide value with asterisks in logs.
 		/// </summary>
 		[DefaultValue("554, 925")]

@@ -1,6 +1,6 @@
 # Scheduler
 ## Initiator
-FIX Antenna™ .NET Core allows sсheduling a session start/stop action using syntax similar to a UNIX cron daemon. We use Quartz.NET and their implementation of cron expressions for scheduling. See <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">cron expression</a>  for more information about the allowed expression format.
+FIX Antenna™ .NET Core allows sсheduling a session start/stop action using syntax similar to the UNIX cron daemon. We use Quartz.NET and their implementation of cron expressions for scheduling. See <a href="https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction">cron expression</a>  for more information about the allowed expression format.
 
 The scheduler parameters are set via the config file the following way:
 ```ini
@@ -63,6 +63,8 @@ sessions.testSession.tradePeriodBegin=0 0 8 * * ?
 sessions.testSession.tradePeriodEnd=0 0 17 * * ?
 sessions.testSession.tradePeriodTimeZone=UTC
 ```
+
+If `tradePeriodBegin` is not set, the session will be allowed to connect and will be disconnected at `tradePeriodEnd`.
 
 ## Samples
 [Samples/SimpleScheduledServer](/Samples/SimpleScheduledServer)

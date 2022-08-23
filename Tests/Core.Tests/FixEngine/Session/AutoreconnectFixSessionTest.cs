@@ -57,8 +57,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			try
 			{
-				ShutdownServers();
+				// Dispose initiator session first. Otherwise it will try to do reconnecting after the server shutdown
 				_initiatorSession.Dispose();
+				ShutdownServers();
 			}
 			catch (IOException e)
 			{

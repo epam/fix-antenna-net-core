@@ -221,46 +221,5 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 				_scheduler.DeleteJob(key).Wait();
 			}
 		}
-
-		/// <summary>
-		/// Check if a date is inside interval defined by the cron expressions.
-		/// If a date satisfies startTimeExpr or stopTimeExpr then it's not inside the interval
-		/// </summary>
-		internal static bool IsInsideInterval(DateTimeOffset date, string startTimeExpr, string stopTimeExpr, TimeZoneInfo timeZone)
-		{
-			if (!MultipartCronExpression.IsValidCronExpression(startTimeExpr))
-			{
-				throw new ArgumentException($"{nameof(startTimeExpr)} is invalid: {startTimeExpr}");
-			}
-
-			if (!MultipartCronExpression.IsValidCronExpression(stopTimeExpr))
-			{
-				throw new ArgumentException($"{nameof(stopTimeExpr)} is invalid: {stopTimeExpr}");
-			}
-
-			timeZone = timeZone ?? throw new ArgumentNullException(nameof(timeZone));
-
-			var startTimeCronExpression = new MultipartCronExpression(startTimeExpr, timeZone);
-			var stopTimeCronExpression = new MultipartCronExpression(stopTimeExpr, timeZone);
-
-			var startLastExecutionDate = startTimeCronExpression.GetTimeBefore(date);
-			var stopLastExecutionDate = stopTimeCronExpression.GetTimeBefore(date);
-
-			var isIntervalEnd = stopTimeCronExpression.IsSatisfiedBy(date) || startTimeCronExpression.IsSatisfiedBy(date);
-
-			if (startLastExecutionDate.HasValue && stopLastExecutionDate.HasValue)
-			{
-				return startLastExecutionDate > stopLastExecutionDate && !isIntervalEnd;
-			}
-
-			// there was a start but not end yet
-			if (startLastExecutionDate.HasValue)
-			{
-				return !isIntervalEnd;
-			}
-
-			// no start was done
-			return false;
-		}
 	}
 }

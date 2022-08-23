@@ -118,7 +118,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 
 		private FixConnectionHandler GetConnectionHandler(Config configuration)
 		{
-			var connectionHandler = new FixConnectionHandler(GetAcceptorStrategy(configuration), GetTransportFactory(configuration));
+			var connectionHandler = new FixConnectionHandler(configuration, GetAcceptorStrategy(configuration), GetTransportFactory(configuration));
 			connectionHandler.SetConfiguredSessionRegister(ConfiguredSessionRegister);
 			return connectionHandler;
 		}

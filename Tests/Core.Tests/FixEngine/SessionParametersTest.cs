@@ -458,5 +458,14 @@ namespace Epam.FixAntenna.FixEngine
 			Assert.AreEqual("fixdic42.xml", p.FixVersionContainer.DictionaryFile);
 			Assert.IsNull(p.FixVersionContainer.ExtensionFile);
 		}
+
+		[Test]
+		public void TestSetIncorrectLastSeqNumReset(){
+			var props = new Properties();
+			props.Put("lastSeqNumResetTimestamp", "test");
+
+			var sessionParameters = new SessionParameters();
+			Assert.Throws<ArgumentException>(() => sessionParameters.FromProperties(props.ToDictionary()));
+		}
 	}
 }

@@ -16,7 +16,10 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Epam.FixAntenna.Constants.Fixt11;
+using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
+using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
+using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType.Util;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.Message;
@@ -36,6 +39,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 		private const string ErrorHrtbIntervalMismatch = "Logon HeartBtInt(108) does not match value configured for session";
 
 		private bool _ignoreSeqNumTooLowAtLogon = true;
+		private bool _resetSeqNumFromFirstLogon = false;
 		private bool _isDisconnectOnHbtMismatchEnabled;
 
 		private readonly TagValue _tempTagValue = new TagValue();
@@ -49,6 +53,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 				var cfg = new ConfigurationAdapter(configuration);
 				_ignoreSeqNumTooLowAtLogon = cfg.IgnoreSeqNumTooLowAtLogon;
 				_isDisconnectOnHbtMismatchEnabled = configuration.GetPropertyAsBoolean(Config.DisconnectOnLogonHbtMismatch, true);
+				if (value is AcceptorFixSession)
+				{
+					_resetSeqNumFromFirstLogon = cfg.ResetSeqNumFromFirstLogonMode() == ResetSeqNumFromFirstLogonMode.Schedule;
+				}
+
 				base.Session = value;
 			}
 		}
@@ -109,9 +118,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			}
 
 			var resetSeqNumFlagIndex = message.GetTagIndex(Tags.ResetSeqNumFlag);
-			if (resetSeqNumFlagIndex != FixMessage.NotFound)
+			var resetSeqNumFlag = '\u0000';
+			if (resetSeqNumFlagIndex != FixMessage.NotFound){
+				resetSeqNumFlag = (char) message.GetTagValueAsByteAtIndex(resetSeqNumFlagIndex, 0);
+			}
+
+			if (resetSeqNumFlagIndex != FixMessage.NotFound && resetSeqNumFlag != 'n' && resetSeqNumFlag != 'N')
 			{
-				var resetSeqNumFlag = (char) message.GetTagValueAsByteAtIndex(resetSeqNumFlagIndex, 0);
 				if (message.GetTagValueLengthAtIndex(resetSeqNumFlagIndex) == 1 && (resetSeqNumFlag == 'y' || resetSeqNumFlag == 'Y'))
 				{
 					if (!message.IsTagExists(Tags.MsgSeqNum))
@@ -160,48 +173,58 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			}
 			else
 			{
+				var resetFromFirstLogonOccurred = false;
+				if (_resetSeqNumFromFirstLogon) {
+					resetFromFirstLogonOccurred = HandleResetSeqNumFromFirstLogon(message, session);
+				}
+
 				var nextExpectedSeqnumIndex = message.GetTagIndex(Tags.NextExpectedMsgSeqNum);
 				if (nextExpectedSeqnumIndex != FixMessage.NotFound)
 				{
 					var nextExpectedSeqNum = message.GetTagValueAsLongAtIndex(nextExpectedSeqnumIndex);
 					var nextActualSeqNum = session.RuntimeState.OutSeqNum;
-					if (nextActualSeqNum > nextExpectedSeqNum)
+
+					if (!resetFromFirstLogonOccurred)
 					{
-						//need to resend messages
-						session.SetAttribute(ExtendedFixSessionAttribute.IsResendRequestProcessed.Name, ExtendedFixSessionAttribute.YesValue);
-						try
+						if (nextActualSeqNum > nextExpectedSeqNum)
 						{
-							session.SetOutOfTurnMode(true);
-							//check if queue contains Logon answer (acceptor case) - increase outgoing seq num
-							var messageQueue = session.MessageQueue;
-							var msg = messageQueue.Poll();
-							if (messageQueue.Size > 0 && ("A".Equals(msg.MessageType) || IsLogon(msg)))
+							//need to resend messages
+							session.SetAttribute(ExtendedFixSessionAttribute.IsResendRequestProcessed.Name,
+								ExtendedFixSessionAttribute.YesValue);
+							try
 							{
-								nextActualSeqNum++;
+								session.SetOutOfTurnMode(true);
+								//check if queue contains Logon answer (acceptor case) - increase outgoing seq num
+								var messageQueue = session.MessageQueue;
+								var msg = messageQueue.Poll();
+								if (messageQueue.Size > 0 && ("A".Equals(msg.MessageType) || IsLogon(msg)))
+								{
+									nextActualSeqNum++;
+								}
+
+								var gapStart = nextExpectedSeqNum;
+								//nextActualSeqNum shows the next (non exist) message
+								var gapEnd = nextActualSeqNum - 1;
+								session.FixSessionOutOfSyncListener.OnResendRequestReceived(gapStart, gapEnd);
+
+								ExtractAllMessagesAndResend(message, session, gapStart, gapEnd);
 							}
+							finally
+							{
+								session.RemoveAttribute(ExtendedFixSessionAttribute.IsResendRequestProcessed.Name);
+								session.SetOutOfTurnMode(false);
 
-							var gapStart = nextExpectedSeqNum;
-							//nextActualSeqNum shows the next (non exist) message
-							var gapEnd = nextActualSeqNum - 1;
-							session.FixSessionOutOfSyncListener.OnResendRequestReceived(gapStart, gapEnd);
-
-							ExtractAllMessagesAndResend(message, session, gapStart, gapEnd);
+								session.FixSessionOutOfSyncListener.OnResendRequestProcessed(nextActualSeqNum);
+							}
 						}
-						finally
+						else if (nextActualSeqNum < nextExpectedSeqNum)
 						{
-							session.RemoveAttribute(ExtendedFixSessionAttribute.IsResendRequestProcessed.Name);
-							session.SetOutOfTurnMode(false);
-
-							session.FixSessionOutOfSyncListener.OnResendRequestProcessed(nextActualSeqNum);
+							//remove Logon answer
+							session.ClearQueue();
+							var errorMessage = "NextExpectedMsgSeqNum(789) request sequence " + nextExpectedSeqNum + " which is higher then actual " + nextActualSeqNum;
+							session.ForcedDisconnect(DisconnectReason.InitConnectionProblem, errorMessage, false);
+							throw new InvalidMessageException(message, errorMessage);
 						}
-					}
-					else if (nextActualSeqNum < nextExpectedSeqNum)
-					{
-						//remove Logon answer
-						session.ClearQueue();
-						var errorMessage = "NextExpectedMsgSeqNum(789) request sequence " + nextExpectedSeqNum + " which is higher then actual " + nextActualSeqNum;
-						session.ForcedDisconnect(DisconnectReason.InitConnectionProblem, errorMessage, false);
-						throw new InvalidMessageException(message, errorMessage);
 					}
 				}
 				else if (_ignoreSeqNumTooLowAtLogon)
@@ -219,6 +242,157 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			// wait for a response to it before sending queued or new messages in order to Allow both sides to
 			// handle resend request processing.
 			DoDelay(session);
+		}
+
+		private bool HandleResetSeqNumFromFirstLogon(FixMessage message, IExtendedFixSession session)
+		{
+			if (Log.IsTraceEnabled) {
+				Log.Trace("Check if the reset from first Logon is required for session " + Session.Parameters.SessionId);
+			}
+
+			var acceptorFixSession = (AcceptorFixSession) session;
+			var expectedInMsgSeqNum = message.MsgSeqNumber;
+			var nextExpectedSeqNumIndex = message.GetTagIndex(Tags.NextExpectedMsgSeqNum);
+			var expectedOutMsgSeqNum = nextExpectedSeqNumIndex != FixMessage.NotFound ?
+				message.GetTagValueAsLongAtIndex(nextExpectedSeqNumIndex) : 1;
+
+			var currentInSeqNum = GetSequenceManager().GetExpectedIncomingSeqNumber();
+			var currentOutSeqNum = session.RuntimeState.OutSeqNum;
+
+			var result = false;
+			if (currentInSeqNum != expectedInMsgSeqNum || currentOutSeqNum != expectedOutMsgSeqNum) {
+				result = HandleTradingSessionParameters(message,
+					acceptorFixSession,
+					expectedInMsgSeqNum, expectedOutMsgSeqNum);
+			}
+
+			if (!result && expectedInMsgSeqNum < currentInSeqNum) {
+				var errorMessage = $"Incoming seq number {expectedInMsgSeqNum} is less then expected {currentInSeqNum}";
+				session.ForcedDisconnect(DisconnectReason.GotSequenceTooLow, errorMessage, false);
+				throw new SequenceToLowException(errorMessage, message.ToPrintableString());
+			}
+
+			return result;
+		}
+
+		private bool HandleTradingSessionParameters(
+			FixMessage message, AcceptorFixSession acceptorFixSession,
+			long expectedInMsgSeqNum, long expectedOutMsgSeqNum)
+		{
+			var restoredInSeqNum = (long?) acceptorFixSession.GetAttribute(ExtendedFixSessionAttribute.SequenceWasDecremented.Name);
+			var currentInSeqNum = restoredInSeqNum ?? acceptorFixSession.RuntimeState.InSeqNum;
+			var currentOutSeqNum = acceptorFixSession.RuntimeState.OutSeqNum;
+			var firstSessionConnection = currentInSeqNum == 1 && currentOutSeqNum == 1;
+
+			var config = acceptorFixSession.ConfigAdapter;
+			var schedule = new Schedule(config.TradePeriodBegin, config.TradePeriodEnd, config.TradePeriodTimeZone);
+
+			if (schedule.IsTradingPeriodDefined())
+			{
+				if (IsLastResetOccurredAfterPeriodEnd(acceptorFixSession, schedule))
+				{
+					var reason = "Illegal state on handle of reset sequence numbers from first logon: last reset is after scheduled end of trading period";
+					OnFailedSeqNumResetFromFirstLogon(message, acceptorFixSession, reason, null);
+				}
+				else if (!IsLastResetOccurredInTradingPeriod(acceptorFixSession, schedule) || firstSessionConnection)
+				{
+					if (Log.IsTraceEnabled)
+					{
+						Log.Trace("Trade period is defined for session " + Session.Parameters.SessionId +
+							" and needs sequence reset (first connect in this period)");
+					}
+
+					return ResetSequencesFromFirstLogon(message, acceptorFixSession, expectedInMsgSeqNum, expectedOutMsgSeqNum);
+				}
+				else
+				{
+					if (Log.IsTraceEnabled)
+					{
+						Log.Trace("No needs reset for session " + Session.Parameters.SessionId +
+							" in this trading period (it was done already)");
+					}
+				}
+			}
+			else if (schedule.IsOnlyPeriodBeginDefined())
+			{
+				if (!IsLastResetOccurredAfterPeriodBegin(acceptorFixSession, schedule) || firstSessionConnection)
+				{
+					if (Log.IsTraceEnabled)
+					{
+						Log.Trace("Trade period begins for session " + Session.Parameters.SessionId +
+							" and needs sequence reset (first connect in this period)");
+					}
+
+					return ResetSequencesFromFirstLogon(message, acceptorFixSession, expectedInMsgSeqNum, expectedOutMsgSeqNum);
+				}
+				else
+				{
+					if (Log.IsTraceEnabled)
+					{
+						Log.Trace("Trade period begins for session " + Session.Parameters.SessionId +
+							" but reset was done before");
+					}
+				}
+			}
+			else
+			{
+				var reason = "Trading period is not defined for the session with enabled reset sequence from first logon. Session: "
+						+ acceptorFixSession.Parameters.SessionId;
+				Log.Warn(reason);
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool ResetSequencesFromFirstLogon(
+			FixMessage message, AcceptorFixSession acceptorFixSession, long expectedInMsgSeqNum, long expectedOutMsgSeqNum)
+		{
+			try {
+				if (Log.IsTraceEnabled) {
+					Log.Trace("Do reset in/out sequences from first logon in session {} to {}:{}" + acceptorFixSession.Parameters.SessionId
+						+ " to " + expectedInMsgSeqNum + ":" + expectedOutMsgSeqNum);
+				}
+
+				GetSequenceManager().ConfigureStateBeforeReset();
+				acceptorFixSession.SetSequenceNumbers(expectedInMsgSeqNum, expectedOutMsgSeqNum);
+				acceptorFixSession.Parameters.LastSeqNumResetTimestamp = DateTimeHelper.CurrentMilliseconds;
+				Log.Info("In/out sequences were reset from first logon in session " + acceptorFixSession.Parameters.SessionId
+					+ " to " + expectedInMsgSeqNum + ":" + expectedOutMsgSeqNum);
+				return true;
+			} catch (IOException e) {
+				var reason = "Error on handle of reset sequence numbers from first logon.";
+				OnFailedSeqNumResetFromFirstLogon(message, acceptorFixSession, reason + " Cause: " + e.Message, e);
+			}
+
+			return false;
+		}
+
+		private void OnFailedSeqNumResetFromFirstLogon(FixMessage message, AcceptorFixSession acceptorFixSession, string reason, Exception e)
+		{
+			if (e != null) {
+				Log.Error(reason, e);
+			} else {
+				Log.Error(reason);
+			}
+
+			acceptorFixSession.ClearQueue();
+			acceptorFixSession.Disconnect(DisconnectReason.InvalidMessage, reason);
+			throw new InvalidMessageException(message, reason, true);
+		}
+
+		private bool IsLastResetOccurredInTradingPeriod(AcceptorFixSession acceptorFixSession, Schedule schedule)
+		{
+			return schedule.IsTimestampInTradingPeriod(acceptorFixSession.Parameters.LastSeqNumResetTimestamp);
+		}
+
+		private bool IsLastResetOccurredAfterPeriodBegin(AcceptorFixSession acceptorFixSession, Schedule schedule)
+		{
+			return schedule.IsTimestampAfterTradingPeriodBegin(acceptorFixSession.Parameters.LastSeqNumResetTimestamp);
+		}
+
+		private bool IsLastResetOccurredAfterPeriodEnd(AcceptorFixSession acceptorFixSession, Schedule schedule) {
+			return schedule.IsTimestampAfterTradingPeriodEnd(acceptorFixSession.Parameters.LastSeqNumResetTimestamp);
 		}
 
 		private bool IsLogon(FixMessageWithType msgWithType)
