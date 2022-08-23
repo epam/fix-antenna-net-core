@@ -17,8 +17,10 @@ using System.Collections.Generic;
 using System.Threading;
 using Epam.FixAntenna.Core.Tests;
 using Epam.FixAntenna.NetCore.Common;
+using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
+using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
 using NUnit.Framework;
@@ -31,6 +33,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		private readonly string _sessionConfigPath = $"{Guid.NewGuid()}.properties";
 		private ScheduledFixServer _server;
 		private IFixSession _session;
+		private AcceptorFixSession _acceptorSession;
 		private CountdownEvent _connected;
 		private CountdownEvent _disconnectedAbnormally;
 
@@ -70,6 +73,42 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 			// Assert
 			Assert.AreEqual(SessionState.Connected, _session.SessionState);
+		}
+
+		[Test]
+		public void TestScheduledServerSchedulesDisconnectWhenTradePeriodEndIsSet()
+		{
+			// Arrange
+			var now = DateTimeOffset.UtcNow;
+			var tenMinutes = TimeSpan.FromMinutes(10);
+			var configuration = GetConfiguration(now - tenMinutes, now + tenMinutes, "UTC");
+			InitServer(configuration);
+
+			// Act
+			_session.Connect();
+			_connected.Wait(TimeSpan.FromSeconds(5));
+
+			// Assert
+			CheckingUtils.CheckWithinTimeout(
+				() => _acceptorSession.IsDisconnectScheduled(), TimeSpan.FromSeconds(3));
+		}
+
+		[Test]
+		public void TestScheduledServerSchedulesDisconnectWhenTradePeriodEndIsSetAndNoStartPeriod()
+		{
+			// Arrange
+			var now = DateTimeOffset.UtcNow;
+			var tenMinutes = TimeSpan.FromMinutes(10);
+			var configuration = GetConfiguration(null, now + tenMinutes, "UTC");
+			InitServer(configuration);
+
+			// Act
+			_session.Connect();
+			_connected.Wait(TimeSpan.FromSeconds(5));
+
+			// Assert
+			CheckingUtils.CheckWithinTimeout(
+				() => _acceptorSession.IsDisconnectScheduled(), TimeSpan.FromSeconds(3));
 		}
 
 		[Test]
@@ -241,7 +280,7 @@ sessions.testSession.tradePeriodTimeZone=UTC+{timeShiftInHours}");
 		{
 			_server = new ScheduledFixServer(configuration);
 			_server.SetPort(Port);
-			_server.SetListener(new FixServerListener());
+			_server.SetListener(new FixServerListener(this));
 			_server.Start();
 		}
 
@@ -249,7 +288,7 @@ sessions.testSession.tradePeriodTimeZone=UTC+{timeShiftInHours}");
 		{
 			_server = new ScheduledFixServer {ConfigPath = sessionConfigPath};
 			_server.SetPort(Port);
-			_server.SetListener(new FixServerListener());
+			_server.SetListener(new FixServerListener(this));
 			_server.Start();
 		}
 
@@ -307,8 +346,16 @@ sessions.testSession.tradePeriodTimeZone=UTC+{timeShiftInHours}");
 
 		private class FixServerListener : IFixServerListener
 		{
+			private readonly ScheduledFixServerTest _outerScope;
+
+			public FixServerListener(ScheduledFixServerTest outerScope)
+			{
+				_outerScope = outerScope;
+			}
+
 			public void NewFixSession(IFixSession session)
 			{
+				_outerScope._acceptorSession = (AcceptorFixSession)session;
 				session.Connect();
 			}
 		}
