@@ -321,6 +321,8 @@ namespace Epam.FixAntenna.NetCore.Common
 
 		internal static bool TryParseTimeZone(string timeZoneId, out TimeZoneInfo timeZoneInfo)
 		{
+			timeZoneInfo = TimeZoneInfo.Utc;
+			var logErrorMessage = $"Cannot parse time zone: {timeZoneId}";
 			try
 			{
 				timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
@@ -328,26 +330,45 @@ namespace Epam.FixAntenna.NetCore.Common
 			}
 			catch (TimeZoneNotFoundException)
 			{
-				if (TryParseGmtPattern(timeZoneId, out var offset))
+				if (!TryParseGmtPattern(timeZoneId, out var offset))
 				{
-					var customTimeZoneId = $"UTC{(offset < TimeSpan.Zero ? '-' : '+')}{offset:hh\\:mm}";
-					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone(customTimeZoneId, offset, "", "");
-					return true;
+					Log.Debug(logErrorMessage);
+					return false;
 				}
+
+				if (!IsUtcOffsetValid(offset))
+				{
+					Log.Debug("UTC offset must be within plus or minus 14.0 hours");
+					return false;
+				}
+
+				timeZoneInfo = CreateCustomTimeZone(offset);
+				return true;
 			}
 			catch (Exception)
 			{
-				Log.Debug($"Cannot parse time zone: {timeZoneId}");
+				Log.Debug(logErrorMessage);
 			}
 
-			timeZoneInfo = TimeZoneInfo.Utc;
 			return false;
+		}
+
+		private static TimeZoneInfo CreateCustomTimeZone(TimeSpan offset)
+		{
+			var customTimeZoneId = $"UTC{(offset < TimeSpan.Zero ? '-' : '+')}{offset:hh\\:mm}";
+			return TimeZoneInfo.CreateCustomTimeZone(customTimeZoneId, offset, "", "");
+		}
+
+		private static bool IsUtcOffsetValid(TimeSpan offset)
+		{
+			var maxOffset = TimeSpan.FromHours(14.0);
+			return offset >= -maxOffset && offset <= maxOffset;
 		}
 
 		private static bool TryParseGmtPattern(string pattern, out TimeSpan offset)
 		{
 			// trying to find and parse GMT pattern: GMT+05:30, GMT-3 or similar
-			var m = Regex.Match(pattern, @"(?:GMT|UTC) ?([+|-]\d{1,2}(:?\d{2})?)?");
+			var m = Regex.Match(pattern.Trim(), @"^(?:GMT|UTC) ?([+|-]\d{1,2}(:\d{2})?)?$");
 			if (m.Success)
 			{
 				// group 1 can be like "+2:30","-03" or empty
@@ -366,8 +387,6 @@ namespace Epam.FixAntenna.NetCore.Common
 					return true;
 				}
 			}
-
-			Log.Debug($"Cannot parse time zone: {pattern}");
 
 			offset = UtcOffset;
 			return false;

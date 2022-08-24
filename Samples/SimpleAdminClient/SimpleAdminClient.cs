@@ -84,7 +84,7 @@ namespace Epam.FixAntenna.Example
 			session.SendWithChanges(message, ChangesType.AddSmhAndSmt);
 
 			// wait some time
-			Thread.Sleep(2000);
+			Thread.Sleep(3000);
 
 			// disconnecting
 			session.Disconnect("close app");
