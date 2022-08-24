@@ -351,13 +351,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			if (startTimeExpr != null)
 			{
-				Log.Trace($"Add start session task {startTimeExpr}: {Parameters.SessionId}");
+				if (Log.IsTraceEnabled)
+				{
+					Log.Trace($"Add 'start' task {startTimeExpr} {timeZone.Id}: {Parameters.SessionId}");
+				}
+
 				Scheduler.ScheduleCronTask<InitiatorSessionStartTask>(startTimeExpr, timeZone);
 			}
 
 			if (stopTimeExpr != null)
 			{
-				Log.Trace($"Add stop session task {stopTimeExpr}: {Parameters.SessionId}");
+				if (Log.IsTraceEnabled)
+				{
+					Log.Trace($"Add 'stop' task {stopTimeExpr} {timeZone.Id}: {Parameters.SessionId}");
+				}
+
 				Scheduler.ScheduleCronTask<InitiatorSessionStopTask>(stopTimeExpr, timeZone);
 			}
 

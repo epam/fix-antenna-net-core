@@ -37,7 +37,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		public virtual void NewFixSession(IFixSession session)
 		{
-			if (TryParseSchedule(session.Parameters, out var schedule) && IsAllowedToConnect(schedule))
+			var config = new ConfigurationAdapter(session.Parameters.Configuration);
+			var isScheduleParsed = TryParseSchedule(config, out var schedule);
+
+			if (isScheduleParsed && IsAllowedToConnect(schedule))
 			{
 				if (!schedule.IsTradingPeriodDefined())
 				{
@@ -48,7 +51,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 				if (SessionState.IsDisposed(session.SessionState)) return;
 
-				ScheduleDisconnect(session, schedule);
+				ScheduleDisconnect(session, config, schedule);
 
 				// Session is still inside allowed interval. Do nothing
 				if (IsAllowedToConnect(schedule)) return;
@@ -67,22 +70,33 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 					Log.Debug($"Session was denied by filter: {session.Parameters}");
 				}
 
+				if (Log.IsTraceEnabled && isScheduleParsed)
+				{
+					Log.Trace("Incoming connections will be allowed at " + 
+						$"{schedule.TradePeriodBegin.OriginalCronExpression} {schedule.TimeZone.Id}: {session.Parameters.SessionId}");
+				}
+
 				session.Dispose();
 			}
 		}
 
-		private void ScheduleDisconnect(IFixSession session, Schedule schedule)
+		private void ScheduleDisconnect(IFixSession session, ConfigurationAdapter config, Schedule schedule)
 		{
 			if (schedule.TradePeriodEnd == null) return;
+
+			if (Log.IsTraceEnabled)
+			{
+				Log.Trace("Add 'stop' task " + 
+					$"{schedule.TradePeriodEnd.OriginalCronExpression} {schedule.TimeZone.Id}: {session.Parameters.SessionId}");
+			}
 
 			var acceptorSession = (AcceptorFixSession)session;
 			acceptorSession.ScheduleDisconnect(schedule.TradePeriodEnd.OriginalCronExpression, schedule.TimeZone);
 		}
 
-		private bool TryParseSchedule(SessionParameters sessionParameters, out Schedule schedule)
+		private bool TryParseSchedule(ConfigurationAdapter config, out Schedule schedule)
 		{
 			schedule = null;
-			var config = new ConfigurationAdapter(sessionParameters.Configuration);
 
 			if (config.TradePeriodBegin != null && !MultipartCronExpression.IsValidCronExpression(config.TradePeriodBegin))
 			{

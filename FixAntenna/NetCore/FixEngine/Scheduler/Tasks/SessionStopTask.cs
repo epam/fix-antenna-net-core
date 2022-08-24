@@ -15,6 +15,7 @@
 using System;
 using System.Threading.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
+using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Quartz;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
@@ -45,6 +46,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 				try
 				{
 					session.Disconnect("Scheduled disconnect");
+					if (Log.IsInfoEnabled)
+					{
+						var config = new ConfigurationAdapter(sessionParameters.Configuration);
+						Log.Info($"{sessionParameters.SessionId}: The session is stopped by schedule at {config.TradePeriodEnd} {config.TradePeriodTimeZone.Id}");
+					}
 				}
 				catch (Exception e)
 				{

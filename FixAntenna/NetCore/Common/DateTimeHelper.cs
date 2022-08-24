@@ -330,7 +330,8 @@ namespace Epam.FixAntenna.NetCore.Common
 			{
 				if (TryParseGmtPattern(timeZoneId, out var offset))
 				{
-					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone("CustomTimeZone", offset, "", "");
+					var customTimeZoneId = $"UTC{(offset < TimeSpan.Zero ? '-' : '+')}{offset:hh\\:mm}";
+					timeZoneInfo = TimeZoneInfo.CreateCustomTimeZone(customTimeZoneId, offset, "", "");
 					return true;
 				}
 			}

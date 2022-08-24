@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 
 using Quartz;
 
 using System.IO;
 using System.Threading.Tasks;
+using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 {
@@ -47,6 +49,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks
 				try
 				{
 					session.Connect();
+					if (Log.IsInfoEnabled)
+					{
+						var config = new ConfigurationAdapter(sessionParameters.Configuration);
+						Log.Info($"{sessionParameters.SessionId}: The session is started by schedule at {config.TradePeriodBegin} {config.TradePeriodTimeZone.Id}");
+					}
 				}
 				catch (IOException e)
 				{

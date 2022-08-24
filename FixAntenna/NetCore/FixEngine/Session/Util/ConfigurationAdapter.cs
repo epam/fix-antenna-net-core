@@ -100,7 +100,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 					return timeZoneInfo;
 				}
 
-				Log.Warn("Using UTC time zone");
+				Log.Warn($"Using UTC time zone instead of '{timeZone}'");
 				return TimeZoneInfo.Utc;
 			}
 		}
