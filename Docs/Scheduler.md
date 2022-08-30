@@ -37,8 +37,8 @@ session.Connect();
 If the moment of calling `session.Schedule()` is inside the time interval defined by `tradePeriodBegin` and `tradePeriodEnd`, the session will start connecting immediately.
 
 ## Acceptor
-It is possible to allow incomming connections only during specified period of time.
-To use this feature you need to add configuration and create an instance of `ScheduledFixServer` instead of `FixServer`:
+It is possible to allow incoming connections only during specified period of time.
+To use this feature, you need to add configuration and create an instance of `ScheduledFixServer` instead of `FixServer`:
 
 ```ini
 tradePeriodBegin=0 0 8 * * ?
