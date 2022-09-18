@@ -100,6 +100,8 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 - [Ivan Ponomarev](https://github.com/houtengeki) - QA Engineer
 - [Sergey Matveev](https://github.com/epm-sergem) - Developer
 - [Vladimir Gusev](https://github.com/portowine1982) - Analyst
+- [Viktar Tserashchuk](https://github.com/Viktar-Tserashchuk) - Developer
+- [Oleh Vasyliev](https://github.com/OlehVasylievEPAM) - Developer
 
 ## License
 ![b2bits.com](Docs/b2bits.png)
