@@ -26,7 +26,7 @@ namespace Epam.FixAntenna.NetCore.Common
 	internal sealed class Properties : IEnumerable
 	{
 		private static readonly ILog Log = LogFactory.GetLog(typeof(Properties));
-		private ConcurrentDictionary<string, string> _props = new ConcurrentDictionary<string, string>();
+		private ConcurrentDictionary<string, string> _props = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 		private readonly Properties _defaults;
 
 		public Properties() : this ((Properties)null) { }
@@ -40,7 +40,7 @@ namespace Epam.FixAntenna.NetCore.Common
 
 		public Properties(Dictionary<string, string> init)
 		{
-			_props = new ConcurrentDictionary<string, string>(init);
+			_props = new ConcurrentDictionary<string, string>(init, StringComparer.OrdinalIgnoreCase);
 		}
 
 		public string GetProperty(string key)
@@ -75,7 +75,7 @@ namespace Epam.FixAntenna.NetCore.Common
 
 		public IDictionary<string, string> ToDictionary()
 		{
-			return _props.ToImmutableDictionary();
+			return _props.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
 		}
 
 		#region Load
