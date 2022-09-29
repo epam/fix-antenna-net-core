@@ -21,130 +21,141 @@ using Epam.FixAntenna.NetCore.Message;
 using System.Collections.Generic;
 using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.Configuration;
+using Epam.FixAntenna.NetCore.FixEngine.Manager;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Reconect
 {
-    [TestFixture]
-    internal class ReconnectOptionTest
-    {
-        private IFixSession _initiatorSession;
-        private IFixSession _acceptorSession;
-        private const int Port = 3000;
-        private FixServer _server;
-        private CountdownEvent _disconnectedAbnormally;
-        private CountdownEvent _newSessionConnected;
+	[TestFixture]
+	internal class ReconnectOptionTest
+	{
+		private IFixSession _initiatorSession;
+		private IFixSession _acceptorSession;
+		private const int Port = 3000;
+		private FixServer _server;
+		private CountdownEvent _disconnectedAbnormally;
+		private CountdownEvent _newSessionConnected;
 
-        [SetUp]
-        public void Before()
-        {
-            LogsCleaner.ClearDefaultLogs();
-            _disconnectedAbnormally = new CountdownEvent(1);
-            _newSessionConnected = new CountdownEvent(1);
-        }
+		[SetUp]
+		public void Before()
+		{
+			LogsCleaner.ClearDefaultLogs();
+			_disconnectedAbnormally = new CountdownEvent(1);
+			_newSessionConnected = new CountdownEvent(1);
+		}
 
-        [Test]
-        public virtual void TestAutoreconnectSessionWhenForceSeqNumResetIsOneTime()
-        {
-            var props = new Dictionary<string, string>();
-            props.Add("autoreconnectAttempts", "0");
-            props.Add("autoreconnectDelayInMs", "100");
-            props.Add("forceSeqNumReset", "OneTime");
-            InitClient(new Config(props));
+		[TearDown]
+		public void TearDown()
+		{
+			_server.Stop();
+			FixSessionManager.DisposeAllSession();
+			_newSessionConnected.Dispose();
+			_disconnectedAbnormally.Dispose();
+			LogsCleaner.ClearDefaultLogs();
+		}
 
-            _initiatorSession.Connect();
-            _disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
+		[Test]
+		public virtual void TestAutoreconnectSessionWhenForceSeqNumResetIsOneTime()
+		{
+			var props = new Dictionary<string, string>();
+			props.Add("autoreconnectAttempts", "0");
+			props.Add("autoreconnectDelayInMs", "100");
+			props.Add("forceSeqNumReset", "OneTime");
+			InitClient(new Config(props));
 
-            var aacceptorConfig = GetAcceptorConfiguration();
-            InitServer(aacceptorConfig);
+			_initiatorSession.Connect();
+			_disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
 
-            _newSessionConnected.Wait(TimeSpan.FromSeconds(5));
+			var aacceptorConfig = GetAcceptorConfiguration();
+			InitServer(aacceptorConfig);
 
-            Assert.IsTrue(!string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
+			_newSessionConnected.Wait(TimeSpan.FromSeconds(5));
 
-            _newSessionConnected.Reset();
-            _disconnectedAbnormally.Reset();
+			Assert.IsTrue(!string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
 
-            _initiatorSession.Disconnect("tests");
-            _disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
-            _initiatorSession.Connect();
-            _newSessionConnected.Wait(TimeSpan.FromSeconds(5));
+			_newSessionConnected.Reset();
+			_disconnectedAbnormally.Reset();
 
-            Assert.IsTrue(string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
-        }
+			_initiatorSession.Disconnect("tests");
+			_disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
+			_initiatorSession.Connect();
+			_newSessionConnected.Wait(TimeSpan.FromSeconds(5));
 
-        private void InitServer(Config config)
-        {
-            _server = new FixServer(config);
-            _server.SetPort(Port);
-            _server.SetListener(new FixServerListener(this));
-            _server.Start();
-        }
+			Assert.IsTrue(string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
+		}
 
-        private void InitClient(Config config)
-        {
-            var parameters = new SessionParameters
-            {
-                FixVersion = FixVersion.Fix44,
-                Host = "localhost",
-                Port = Port,
-                SenderCompId = "initiator",
-                TargetCompId = "acceptor"  ,
-                Configuration = config
-            };
+		private void InitServer(Config config)
+		{
+			_server = new FixServer(config);
+			_server.SetPort(Port);
+			_server.SetListener(new FixServerListener(this));
+			_server.Start();
+		}
 
-            _initiatorSession = parameters.CreateInitiatorSession();
-            _initiatorSession.SetFixSessionListener(new InitiatorFixSessionListener(this));
-        }
+		private void InitClient(Config config)
+		{
+			var parameters = new SessionParameters
+			{
+				FixVersion = FixVersion.Fix44,
+				Host = "localhost",
+				Port = Port,
+				SenderCompId = "initiator",
+				TargetCompId = "acceptor",
+				Configuration = config
+			};
 
-        private Config GetAcceptorConfiguration()
-        {
-            var props = new Dictionary<string, string>();
-            props.Add("host", "localhost");
-            props.Add("senderCompID", "acceptor");
-            props.Add("targetCompID", "initiator");
-            props.Add("sessionType", "acceptor");
-            props.Add("fixVersion", "FIX.4.4");
+			_initiatorSession = parameters.CreateInitiatorSession();
+			_initiatorSession.SetFixSessionListener(new InitiatorFixSessionListener(this));
+		}
 
-            return new Config(props);
-        }
+		private Config GetAcceptorConfiguration()
+		{
+			var props = new Dictionary<string, string>();
+			props.Add("host", "localhost");
+			props.Add("senderCompID", "acceptor");
+			props.Add("targetCompID", "initiator");
+			props.Add("sessionType", "acceptor");
+			props.Add("fixVersion", "FIX.4.4");
 
-        private class FixServerListener : IFixServerListener
-        {
-            private readonly ReconnectOptionTest _outerScope;
+			return new Config(props);
+		}
 
-            public FixServerListener(ReconnectOptionTest outerScope)
-            {
-                _outerScope = outerScope;
-            }
+		private class FixServerListener : IFixServerListener
+		{
+			private readonly ReconnectOptionTest _outerScope;
 
-            public void NewFixSession(IFixSession session)
-            {
-                _outerScope._acceptorSession = (AcceptorFixSession)session;
-                session.Connect();
-                _outerScope._newSessionConnected.Signal();
-            }
-        }
+			public FixServerListener(ReconnectOptionTest outerScope)
+			{
+				_outerScope = outerScope;
+			}
 
-        private class InitiatorFixSessionListener : IFixSessionListener
-        {
-            private readonly ReconnectOptionTest _outerInstance;
+			public void NewFixSession(IFixSession session)
+			{
+				_outerScope._acceptorSession = (AcceptorFixSession)session;
+				session.Connect();
+				_outerScope._newSessionConnected.Signal();
+			}
+		}
 
-            public InitiatorFixSessionListener(ReconnectOptionTest outerInstance)
-            {
-                _outerInstance = outerInstance;
-            }
+		private class InitiatorFixSessionListener : IFixSessionListener
+		{
+			private readonly ReconnectOptionTest _outerInstance;
 
-            public void OnNewMessage(FixMessage message)
-            {
-            }
+			public InitiatorFixSessionListener(ReconnectOptionTest outerInstance)
+			{
+				_outerInstance = outerInstance;
+			}
 
-            public void OnSessionStateChange(SessionState sessionState)
-            {
-                if (sessionState.Equals(SessionState.DisconnectedAbnormally))
-                {
-                    _outerInstance._disconnectedAbnormally.Signal();
-                }
-            }
-        }
-    }
+			public void OnNewMessage(FixMessage message)
+			{
+			}
+
+			public void OnSessionStateChange(SessionState sessionState)
+			{
+				if (sessionState.Equals(SessionState.DisconnectedAbnormally))
+				{
+					_outerInstance._disconnectedAbnormally.Signal();
+				}
+			}
+		}
+	}
 }
