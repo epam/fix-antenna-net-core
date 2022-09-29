@@ -21,6 +21,7 @@ using Epam.FixAntenna.NetCore.Message;
 using System.Collections.Generic;
 using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.Configuration;
+using Epam.FixAntenna.NetCore.FixEngine.Manager;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Reconect
 {
@@ -40,6 +41,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Reconect
             LogsCleaner.ClearDefaultLogs();
             _disconnectedAbnormally = new CountdownEvent(1);
             _newSessionConnected = new CountdownEvent(1);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _server.Stop();
+            FixSessionManager.DisposeAllSession();
+            _newSessionConnected.Dispose();
+            _disconnectedAbnormally.Dispose();
+            LogsCleaner.ClearDefaultLogs();
         }
 
         [Test]
