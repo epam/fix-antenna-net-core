@@ -159,23 +159,25 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		{
 			var pr = new Properties();
 			var sessionPrefix = $"sessions.{sessionId}.";
+			var sessionPrefixLength = sessionPrefix.Length;
 			
 			foreach (KeyValuePair<string,string> entry in data)
 			{
-				if (entry.Key.Contains(sessionPrefix))
+				if (entry.Key.StartsWith(sessionPrefix, StringComparison.OrdinalIgnoreCase))
 				{
-					pr.Put(entry.Key.Replace(sessionPrefix, string.Empty), entry.Value);
+					pr.Put(entry.Key.Substring(sessionPrefixLength), entry.Value);
 				}
 			}
 
 			// check out the corresponding environment variables
 			var evs = Environment.GetEnvironmentVariables();
 			var evPrefix = Properties.PrepareEvPrefix(sessionId);
+			var evPrefixLength = evPrefix.Length;
 			foreach (string evName in evs.Keys)
 			{
 				if (evName.StartsWith(evPrefix, StringComparison.OrdinalIgnoreCase))
 				{
-					var paramName = evName.Replace(evPrefix, string.Empty);
+					var paramName = evName.Substring(evPrefixLength);
 					pr.Put(paramName, evs[evName].ToString());
 					ParamSources.Instance.Set(paramName, ParamSource.Environment, sessionId);
 				}

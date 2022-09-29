@@ -467,5 +467,20 @@ namespace Epam.FixAntenna.FixEngine
 			var sessionParameters = new SessionParameters();
 			Assert.Throws<ArgumentException>(() => sessionParameters.FromProperties(props.ToDictionary()));
 		}
+
+		[Test]
+		public void TestSessionParametersAreCaseInsensitive(){
+			// Arrange
+			var props = new Properties();
+			var port = 12345;
+			props.Put("Port", port.ToString());
+			var sessionParameters = new SessionParameters();
+
+			// Act
+			sessionParameters.FromProperties(props.ToDictionary());
+
+			// Assert
+			Assert.AreEqual(port, sessionParameters.Port);
+		}
 	}
 }
