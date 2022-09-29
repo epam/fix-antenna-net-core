@@ -172,6 +172,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			{
 				LastDisconnectReason = DisconnectReason.InitConnectionProblem;
 				SessionState = SessionState.DisconnectedAbnormally;
+				RemoveAttribute(ExtendedFixSessionAttribute.IsSendResetSeqNum.Name);
 				if (Log.IsDebugEnabled)
 				{
 					Log.Debug("Connect failed", e);
