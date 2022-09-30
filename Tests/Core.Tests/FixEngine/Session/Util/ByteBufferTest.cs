@@ -74,6 +74,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		}
 
 		[Test]
+		public virtual void CheckByteBufferWithAddOneCharThatWritesOneByte()
+		{
+			const char NonAsciiGlyph = '€';
+			const int ByteBufferLength = 1;
+			_buffer = new ByteBuffer(ByteBufferLength);
+
+			_buffer.Add(NonAsciiGlyph);
+
+			Assert.AreEqual(ByteBufferLength, _buffer.Length);
+		}
+
+		[Test]
 		public virtual void CheckBigBufferWithAddTheSameArray()
 		{
 			_buffer = new ByteBuffer(3);
