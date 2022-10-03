@@ -165,7 +165,8 @@ namespace Epam.FixAntenna.NetCore.Common.Utils
 				IncreaseBuffer(64);
 			}
 
-			_writer.Write(b);
+			_writer.Write((byte)b);
+
 			return this;
 		}
 

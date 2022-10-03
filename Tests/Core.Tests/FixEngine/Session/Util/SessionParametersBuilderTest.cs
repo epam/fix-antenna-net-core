@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Reflection;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
@@ -85,6 +86,47 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			Assert.AreEqual(2, sessionParameters.Count);
 			Assert.IsNotNull(sessionParameters["acceptorSession"]);
 			Assert.IsNotNull(sessionParameters["defaultSession"]);
+		}
+
+		[Test]
+		public virtual void TestCaseInsensitivityWhenBuildingSessionParameters()
+		{
+			// Act
+			var sessionParameters = SessionParametersBuilder.BuildInitiatorSessionParametersList("FixEngine/Session/Util/sample_config_case_insensitivity.properties");
+
+			// Assert
+			var parameters = sessionParameters["testSession"];
+			Assert.IsNotNull(parameters);
+
+			Assert.AreEqual(12345, parameters.Port);
+			Assert.AreEqual(31, parameters.HeartbeatInterval);
+			Assert.AreEqual("EchoServer", parameters.TargetCompId);
+			Assert.AreEqual("ConnectToGateway", parameters.SenderCompId);
+			Assert.AreEqual("FIX.4.4", parameters.FixVersion.MessageVersion);
+		}
+
+		[Test]
+		public virtual void TestUsingEnvironmentVariables()
+		{
+			// Arrange
+			const string envVariable = "FANET_sessions__default__senderSubID";
+			const string envVariableValue = "aValue";
+			Environment.SetEnvironmentVariable(envVariable, envVariableValue, EnvironmentVariableTarget.Process);
+
+			// Act
+			var sessionParameters = SessionParametersBuilder.BuildInitiatorSessionParametersList("FixEngine/Session/Util/sample_config_case_insensitivity.properties");
+
+			// Assert
+			try
+			{
+				var parameters = sessionParameters["testSession"];
+				Assert.IsNotNull(parameters);
+				Assert.AreEqual(envVariableValue, parameters.SenderSubId);
+			}
+			finally
+			{
+				Environment.SetEnvironmentVariable(envVariable, null, EnvironmentVariableTarget.Process);
+			}
 		}
 
 		[Test]
