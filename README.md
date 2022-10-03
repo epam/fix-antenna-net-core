@@ -36,7 +36,7 @@ Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Win
 ## Roadmap
 - [x] NuGet packages
 - [ ] Message decorator
-- [ ] Scheduler
+- [x] Scheduler
 - [ ] REST admin and monitoring interface
 
 ## Samples description
