@@ -25,12 +25,16 @@ namespace Epam.FixAntenna.NetCore.Common.ResourceLoading
 		/// <summary>
 		/// Default resource loader. <br/>
 		/// Order of looking for resources: <br/>
-		/// 1. Files inside current directory <br/>
-		/// 2. Files inside home directory <br/>
-		/// 3. Embedded resources inside libraries from method callstack.
+		/// 1. Files inside configured directory <br/>
+		/// 2. Files inside current directory <br/>
+		/// 3. Files inside home directory <br/>
+		/// 4. Embedded resources inside libraries from method callstack.
 		/// </summary>
 		public static readonly ResourceLoader DefaultLoader =
-			new CurrentDirResourceLoader(new HomeDirResourceLoader(new EmbeddedResourceLoader()));
+			new ConfiguredDirResourceLoader(
+				new CurrentDirResourceLoader(
+					new HomeDirResourceLoader(
+						new EmbeddedResourceLoader())));
 
 		/// <summary>
 		/// Default resource loader for dictionaries. <br/>

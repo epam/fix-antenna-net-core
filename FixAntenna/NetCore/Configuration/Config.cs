@@ -1175,7 +1175,26 @@ namespace Epam.FixAntenna.NetCore.Configuration
 		/// Get global configuration. Method returned default configuration loaded on startup.
 		/// </summary>
 		/// <value> instance of global configuration. </value>
-		public static Config GlobalConfiguration { get; } = new Config();
+		public static Config GlobalConfiguration => LazyGlobalConfiguration.Value;
+
+		private static readonly Lazy<Config> LazyGlobalConfiguration = new Lazy<Config>(() => new Config());
+		private static volatile string _configurationDirectory;
+
+		/// <summary>
+		/// Allows setting a directory that will be used to load configuration e.g. to load fixengine.properties.
+		/// The parameter does not affect the loading of dictionaries.<br/>
+		/// The order of searching for fixengine.properties will be <br/>
+		/// 1. Directory defined by this parameter <br/>
+		/// 2. Current directory <br/>
+		/// 3. Home directory <br/>
+		/// 4. Embedded resources inside libraries from method callstack.
+		/// Set it before reading any configuration.
+		/// </summary>
+		public static string ConfigurationDirectory
+		{
+			get => _configurationDirectory;
+			set => _configurationDirectory = value;
+		}
 
 		/// <summary>
 		/// Setter for properties.
