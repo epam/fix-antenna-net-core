@@ -6,9 +6,10 @@ separate file.
 
 ## Global configuration
 Antenna loads global settings from a configuration file with a fixed name: *fixengine.properties*. This file should be placed in one of the following places:
-1. in the application working directory
-2. in the user home directory
-3. inside the library as an embedded resource
+1. in a custom directory configured via `Config.ConfigurationDirectory`
+2. in the application working directory
+3. in the user home directory
+4. inside the library as an embedded resource
 
 Global settings could include server behavior and/or default behavior of sessions.
 

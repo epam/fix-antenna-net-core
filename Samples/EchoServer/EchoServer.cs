@@ -31,8 +31,14 @@ namespace Epam.FixAntenna.Example
 		// If configuration contains 'echoMode = true' then all received application messages will be sent back
 		private static bool _echoMode;
 
-		public static void Main()
+		public static void Main(string[] args)
 		{
+			// Configure path where fixengine.properties is located
+			if (args.Length > 0)
+			{
+				Config.ConfigurationDirectory = args[0];
+			}
+
 			// loading configuration file
 			var configuration = new Config(Config.DefaultEngineProperties);
 			// loading 'echoMode' setting

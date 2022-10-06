@@ -27,8 +27,14 @@ namespace Epam.FixAntenna.Example
 	{
 		private static readonly ILog Logger = LogFactory.GetLog(typeof(ConnectToGateway));
 
-		public static void Main()
+		public static void Main(string[] args)
 		{
+			// Configure path where fixengine.properties is located
+			if (args.Length > 0)
+			{
+				Config.ConfigurationDirectory = args[0];
+			}
+
 			// loading list of pre-configured sessions from the fixengine.properties file
 			var configuredSessions = SessionParametersBuilder.BuildSessionParametersList(Config.DefaultEngineProperties);
 			var sessions = new List<IFixSession>();
