@@ -148,6 +148,22 @@ namespace Epam.FixAntenna.NetCore.Message.Rg
 		/// <param name="tag"> tag for add </param>
 		/// <param name="value"> value for add </param>
 		/// <returns> index in message (not in group or entry) in which value was added </returns>
+		public virtual int AddTag(int tag, char value)
+		{
+			var index = PrepareAdd(tag);
+
+			//TBD! implement in right way!
+			var bytes = new[] { (byte)value };
+			Storage.UpdateValueAtIndex(index, bytes);
+
+			return index;
+		}
+
+		/// <summary>
+		/// Adds tag to entry. </summary>
+		/// <param name="tag"> tag for add </param>
+		/// <param name="value"> value for add </param>
+		/// <returns> index in message (not in group or entry) in which value was added </returns>
 		public virtual int AddTag(int tag, bool value)
 		{
 			var index = PrepareAdd(tag);
