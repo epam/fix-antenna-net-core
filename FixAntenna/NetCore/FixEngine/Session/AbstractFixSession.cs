@@ -426,7 +426,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				//set OutOfTurn mode to prevent sending messages with invalid seq
 				Queue.OutOfTurnOnlyMode = true;
 
-			    SequenceManager.SetResetSeqNumFlagIntoOutgoingLogon();
+				SequenceManager.SetResetSeqNumFlagIntoOutgoingLogon();
 	
 				//reset sequences before send logon
 				SequenceManager.ApplyOutSeqnum(1);
