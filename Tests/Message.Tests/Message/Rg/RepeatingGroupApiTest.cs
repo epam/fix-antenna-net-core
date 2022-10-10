@@ -59,9 +59,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			entry.AddTag(128, 1.0001, 4);
 			entry.AddTag(129, 25);
 			entry.AddTag(130, "value");
+
 			var date = DateTime.SpecifyKind(new DateTime(2015, 10, 7), DateTimeKind.Utc);
 
 			entry.AddCalendarTag(131, date, FixDateFormatterFactory.FixDateType.Date40);
+			entry.AddTag(132, 'o');
 
 			entry = group.AddEntry();
 			entry.AddTag(124, 163);
@@ -290,7 +292,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			Update(entry, IndexedStorage.MissingTagHandling.AddIfNotExists);
 			var expectedMessage =
 				"8=FIX.4.3\u00019=94\u000135=8\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u0001" +
-				"123=2\u0001124=abc\u0001125=bytevalue\u0001126=N\u0001127=teva\u0001128=1.0001\u0001129=25\u0001130=value\u0001131=20151007\u0001" +
+				"123=2\u0001124=abc\u0001125=bytevalue\u0001126=N\u0001127=teva\u0001128=1.0001\u0001129=25\u0001130=value\u0001131=20151007\u0001132=o\u0001" +
 				"124=bytevalue\u0001126=Y\u0001129=123\u0001125=updatedValue\u0001127=date\u0001128=2.0058\u0001130=updatedStrValue\u0001131=20140303\u0001" +
 				"454=1\u0001455=5\u0001456=abc\u0001" + "232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001" +
 				"518=1\u0001519=10\u0001520=11\u000110=124\u0001";
@@ -306,7 +308,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			Update(entry, IndexedStorage.MissingTagHandling.AlwaysAdd);
 			var expectedMessage =
 				"8=FIX.4.3\u00019=94\u000135=8\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u0001"
-				+ "123=3\u0001124=abc\u0001125=bytevalue\u0001126=N\u0001127=teva\u0001128=1.0001\u0001129=25\u0001130=value\u0001131=20151007\u0001"
+				+ "123=3\u0001124=abc\u0001125=bytevalue\u0001126=N\u0001127=teva\u0001128=1.0001\u0001129=25\u0001130=value\u0001131=20151007\u0001132=o\u0001"
 				+ "124=163\u0001126=Y\u0001129=35\u0001"
 				+ "124=bytevalue\u0001125=updatedValue\u0001126=Y\u0001127=date\u0001128=2.0058\u0001129=123\u0001130=updatedStrValue\u0001131=20140303\u0001"
 				+ "454=1\u0001455=5\u0001456=abc\u0001"
@@ -323,7 +325,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			Update(entry, IndexedStorage.MissingTagHandling.DontAddIfNotExists);
 			var expectedMessage =
 				"8=FIX.4.3\u00019=94\u000135=8\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u0001" +
-				"123=2\u0001124=abc\u0001125=bytevalue\u0001126=N\u0001127=teva\u0001128=1.0001\u0001129=25\u0001130=value\u0001131=20151007\u0001" +
+				"123=2\u0001124=abc\u0001125=bytevalue\u0001126=N\u0001127=teva\u0001128=1.0001\u0001129=25\u0001130=value\u0001131=20151007\u0001132=o\u0001" +
 				"124=bytevalue\u0001126=Y\u0001129=123\u0001" + "454=1\u0001455=5\u0001456=abc\u0001" +
 				"232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001" +
 				"518=1\u0001519=10\u0001520=11\u000110=124\u0001";
