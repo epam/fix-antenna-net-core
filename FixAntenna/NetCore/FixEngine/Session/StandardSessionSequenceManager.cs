@@ -808,10 +808,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		private void ResetSeqNumAndOptionallySetResetSeqNumFlag()
 		{
 			ResetRuntimeSequences();
-			if (!_ignoreResetSeqNumFlagOnReset)
+			if (!_ignoreResetSeqNumFlagOnReset && IsInitiatorOrAcceptorWithResetFlag())
 			{
 				SetResetSeqNumFlagIntoOutgoingLogon();
 			}
+		}
+
+		private bool IsInitiatorOrAcceptorWithResetFlag()
+		{
+			return _session is InitiatorFixSession || (_session is AcceptorFixSession && InLogonHasResetFlag());
 		}
 
 		/// <inheritdoc />
