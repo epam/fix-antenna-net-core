@@ -60,7 +60,7 @@ namespace Epam.FixAntenna.NetCore.Message.Storage
 
 		public override void Add(int tagIndex, byte[] value, int offset, int length)
 		{
-			Array.Copy(value, 0, _origBuffer, offset, length);
+			throw new NotSupportedException($"Adding a tag is not supported for {nameof(ByteArrayMessageStorage)}");
 		}
 
 		public override void SetValue(int tagIndex, long value, int length)
