@@ -22,10 +22,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 		/// <inheritdoc />
 		public override void OnNewMessage(FixMessage message)
 		{
-			if (Log.IsDebugEnabled)
-			{
-				Log.Debug("Skipping message: " + message);
-			}
 		}
 	}
 }
