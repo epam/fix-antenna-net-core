@@ -21,6 +21,7 @@ using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads.Bean;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
+using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.FixEngine.Storage;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
@@ -226,51 +227,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 				}
 				catch (GarbledMessageException ex)
 				{
-					if (ex.IsCritical())
-					{
-						// garbled message, ignore and read next one
-						_fixSession.ErrorHandler.OnError("Garbled message detected and will be ignored: " + buf, ex);
-					}
-					else
-					{
-						_fixSession.ErrorHandler.OnWarn("Garbled message detected and will be ignored: " + buf, ex);
-					}
+					LogGarbledMessageException(ex, buf);
 				}
 				catch (SkipMessageException ex)
 				{
-					if (ex.IsLogToLoggingSystem())
-					{
-						if (Log.IsDebugEnabled)
-						{
-							Log.Info("Skip message: " + buf + (ex.Message == null ? "" : ". Reason: " + ex.Message), ex);
-						}
-						else
-						{
-							Log.Info("Skip message: " + buf + (ex.Message == null ? "" : ". Reason: " + ex.Message));
-						}
-					}
+					LogSkipMessageException(ex, buf);
 				}
 				catch (ArgumentException ex)
 				{
-					if (Log.IsDebugEnabled)
-					{
-						Log.Warn("Invalid message received: " + buf, ex);
-					}
-					else
-					{
-						Log.Warn("Invalid message received: " + buf + ". Reason: " + ex.Message);
-					}
+					LogArgumentException(ex, buf);
+				}
+				catch (SequenceToLowException ex)
+				{
+					LogSequenceToLowException(ex, buf);
 				}
 				catch (SystemHandlerException ex)
 				{
-					if (Log.IsDebugEnabled)
-					{
-						Log.Warn("System problem detected: " + ex.ToString(), ex);
-					}
-					else
-					{
-						Log.Warn("System problem detected: " + ex.ToString());
-					}
+					LogSystemHandlerException(ex);
 				}
 				catch (Exception ex)
 				{
@@ -294,6 +267,70 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 			}
 
 			Thread.EndThreadAffinity();
+		}
+
+		private void LogGarbledMessageException(GarbledMessageException ex, MsgBuf buf)
+		{
+			if (ex.IsCritical())
+			{
+				// garbled message, ignore and read next one
+				_fixSession.ErrorHandler.OnError("Garbled message detected and will be ignored: " + buf, ex);
+			}
+			else
+			{
+				_fixSession.ErrorHandler.OnWarn("Garbled message detected and will be ignored: " + buf, ex);
+			}
+		}
+
+		private static void LogSkipMessageException(SkipMessageException ex, MsgBuf buf)
+		{
+			if (ex.IsLogToLoggingSystem())
+			{
+				if (Log.IsDebugEnabled)
+				{
+					Log.Info("Skip message: " + buf + (ex.Message == null ? "" : ". Reason: " + ex.Message), ex);
+				}
+				else
+				{
+					Log.Info("Skip message: " + buf + (ex.Message == null ? "" : ". Reason: " + ex.Message));
+				}
+			}
+		}
+
+		private static void LogArgumentException(ArgumentException ex, MsgBuf buf)
+		{
+			if (Log.IsDebugEnabled)
+			{
+				Log.Warn("Invalid message received: " + buf, ex);
+			}
+			else
+			{
+				Log.Warn("Invalid message received: " + buf + ". Reason: " + ex.Message);
+			}
+		}
+
+		private static void LogSequenceToLowException(SequenceToLowException ex, MsgBuf buf)
+		{
+			if (Log.IsDebugEnabled)
+			{
+				Log.Error("Invalid message received: " + buf, ex);
+			}
+			else
+			{
+				Log.Error("Invalid message received: " + buf + ". Reason: " + ex.Message);
+			}
+		}
+
+		private static void LogSystemHandlerException(SystemHandlerException ex)
+		{
+			if (Log.IsDebugEnabled)
+			{
+				Log.Warn("System problem detected: " + ex.ToString(), ex);
+			}
+			else
+			{
+				Log.Warn("System problem detected: " + ex.ToString());
+			}
 		}
 
 		/// <summary>

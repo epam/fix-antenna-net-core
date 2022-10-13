@@ -12,17 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Epam.FixAntenna.NetCore.Message;
+using System;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
-	internal class SequenceToLowException : GarbledMessageException
+	internal class SequenceToLowException : Exception
 	{
-		public SequenceToLowException(string message) : base(message, true)
-		{
-		}
-
-		public SequenceToLowException(string description, string garbledMessage) : base(description, garbledMessage, true)
+		public SequenceToLowException(string errorMessage, string fixMessage) : base($"{errorMessage}: {fixMessage}")
 		{
 		}
 	}
