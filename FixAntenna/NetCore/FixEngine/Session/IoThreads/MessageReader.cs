@@ -119,7 +119,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 				catch (ThreadInterruptedException e)
 				{
 					Log.Debug("Problem with closing of MessageReader", e);
-					//interrupt();
 					// intentionally blank
 				}
 
@@ -309,27 +308,20 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 			}
 		}
 
-		private static void LogSequenceToLowException(SequenceToLowException ex, MsgBuf buf)
+		private void LogSequenceToLowException(SequenceToLowException ex, MsgBuf buf)
 		{
-			if (Log.IsDebugEnabled)
-			{
-				Log.Error("Invalid message received: " + buf, ex);
-			}
-			else
-			{
-				Log.Error("Invalid message received: " + buf + ". Reason: " + ex.Message);
-			}
+			_fixSession.ErrorHandler.OnError("Invalid message received: " + buf, ex);
 		}
 
 		private static void LogSystemHandlerException(SystemHandlerException ex)
 		{
 			if (Log.IsDebugEnabled)
 			{
-				Log.Warn("System problem detected: " + ex.ToString(), ex);
+				Log.Warn("System problem detected: " + ex, ex);
 			}
 			else
 			{
-				Log.Warn("System problem detected: " + ex.ToString());
+				Log.Warn("System problem detected: " + ex);
 			}
 		}
 
