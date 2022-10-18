@@ -90,7 +90,7 @@ namespace Epam.FixAntenna.NetCore.Common
 		public void Load(Stream inStream)
 		{
 			var loaded = ReadStream(inStream);
-			_props = new ConcurrentDictionary<string, string>(loaded);
+			_props = new ConcurrentDictionary<string, string>(loaded, StringComparer.OrdinalIgnoreCase);
 		}
 
 		public static string PrepareEvPrefix(string sessionId = null)
@@ -107,7 +107,7 @@ namespace Epam.FixAntenna.NetCore.Common
 
 		private static Dictionary<string, string> ReadStream(Stream stream)
 		{
-			var loaded = new Dictionary<string, string>();
+			var loaded = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 			using (var reader = new StreamReader(stream))
 			{
 				while (reader.Peek() > 0)
