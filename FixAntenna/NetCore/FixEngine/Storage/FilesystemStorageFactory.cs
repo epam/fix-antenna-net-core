@@ -64,8 +64,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 		/// </summary>
 		protected ILogFileLocator QueueFileLocator;
 
-		private ILogFileLocator _stateFileLocator;
-
 		private static readonly object SyncObj = new object();
 
 		/// <summary>
@@ -140,6 +138,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 		/// Stores session parameters to file.
 		/// </summary>
 		/// <param name="sessionParameters"> the session parameters </param>
+		/// <param name="state"> session runtime state </param>
 		/// <exception cref="IOException"> if I/O error occurred </exception>
 		public virtual void SaveSessionParameters(SessionParameters sessionParameters, FixSessionRuntimeState state)
 		{
@@ -165,6 +164,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 		/// Loads session parameters from file.
 		/// </summary>
 		/// <param name="sessionParameters"> the session parameters</param>
+		/// <param name="state"> session runtime state </param>
 		/// <returns>true if loaded</returns>
 		public virtual bool LoadSessionParameters(SessionParameters sessionParameters, FixSessionRuntimeState state)
 		{
@@ -179,7 +179,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 				IDictionary<string, string> properties;
 				lock (SyncObj)
 				{
-					properties = Properties.FromFile(fileName).ToDictionary();
+					using (var stream = new BufferedStream(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+					{
+						properties = new Properties(stream).ToDictionary();
+					}
+				}
+
+				if (Log.IsDebugEnabled)
+				{
+					Log.Debug($"Load session parameters: {fileName}");
 				}
 
 				if (properties == null)
@@ -213,8 +221,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 
 			_propertyFileLocator = new DefaultLogFileLocator(directory, ConfigAdapter.PropertiesTemplate);
 			QueueFileLocator = new DefaultLogFileLocator(directory, ConfigAdapter.OutgoingQueueTemplate);
-
-			_stateFileLocator = new DefaultLogFileLocator(directory, ConfigAdapter.StateTemplate);
 		}
 
 		private void CheckDirectories()
