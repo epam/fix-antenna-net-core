@@ -1010,10 +1010,6 @@ namespace Epam.FixAntenna.NetCore.Message
 				}
 
 				var year = ParseNumberPart(buffer, offset, offset + 4);
-				if (year < 1582)
-				{
-					return true;
-				}
 
 				var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 				if (month < 0 || month > 11)
@@ -1082,12 +1078,6 @@ namespace Epam.FixAntenna.NetCore.Message
 					return true;
 				}
 
-				var year = ParseNumberPart(buffer, offset, offset + 4);
-				if (year < 1582)
-				{
-					return true;
-				}
-
 				var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 				if (month < 0 || month > 11)
 				{
@@ -1146,11 +1136,6 @@ namespace Epam.FixAntenna.NetCore.Message
 				}
 
 				var year = ParseNumberPart(buffer, offset, offset + 4);
-				if (year < 1582)
-				{
-					return true;
-				}
-
 				var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 				if (month < 0 || month > 11)
 				{
@@ -1714,11 +1699,6 @@ namespace Epam.FixAntenna.NetCore.Message
 		internal static int ParseYearPart(byte[] block, int offset)
 		{
 			var year = ParseNumberPart(block, offset, offset + 4);
-			if (year < 1582)
-			{
-				var value = StringHelper.NewString(block, offset, 4);
-				throw new ArgumentException("Gregorian calendar starts from year 1583, but value has '" + value + "'");
-			}
 
 			return year;
 		}
