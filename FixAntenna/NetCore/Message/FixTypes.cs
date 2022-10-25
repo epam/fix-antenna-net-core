@@ -321,11 +321,8 @@ namespace Epam.FixAntenna.NetCore.Message
 					return true;
 				}
 
-				var year = ParseNumberPart(buffer, offset, offset + 4);
-				if (year < 1583)
-				{
-					return true;
-				}
+				var parsedYear = ParseNumberPart(buffer, offset, offset + 4);
+				var year = parsedYear == 0 ? DateTime.UtcNow.Year : parsedYear;
 
 				var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 				if (month < 0 || month > 11)
@@ -400,11 +397,8 @@ namespace Epam.FixAntenna.NetCore.Message
 				return true;
 			}
 
-			var year = ParseNumberPart(buffer, offset, offset + 4);
-			if (year < 1583)
-			{
-				return true;
-			}
+			var parsedYear = ParseNumberPart(buffer, offset, offset + 4);
+			var year = parsedYear == 0 ? DateTime.UtcNow.Year : parsedYear;
 
 			var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 			if (month < 0 || month > 11)
@@ -1009,7 +1003,8 @@ namespace Epam.FixAntenna.NetCore.Message
 					return true;
 				}
 
-				var year = ParseNumberPart(buffer, offset, offset + 4);
+				var parsedYear = ParseNumberPart(buffer, offset, offset + 4);
+				var year = parsedYear == 0 ? DateTime.UtcNow.Year : parsedYear;
 
 				var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 				if (month < 0 || month > 11)
@@ -1300,11 +1295,8 @@ namespace Epam.FixAntenna.NetCore.Message
 					return true;
 				}
 
-				var year = ParseNumberPart(buffer, offset, offset + 4);
-				if (year < 1583)
-				{
-					return true;
-				}
+				var parsedYear = ParseNumberPart(buffer, offset, offset + 4);
+				var year = parsedYear == 0 ? DateTime.UtcNow.Year : parsedYear;
 
 				var month = ParseNumberPart(buffer, offset + 4, offset + 6) - 1;
 				if (month < 0 || month > 11)
