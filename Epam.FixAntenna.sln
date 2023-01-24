@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToGateway", "Samples
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2524C5BA-6E6D-4DD6-9558-3F5CCAFA68EE}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
+		FixAntenna\.editorconfig = FixAntenna\.editorconfig
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
