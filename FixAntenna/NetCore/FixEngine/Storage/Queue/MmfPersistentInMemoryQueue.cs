@@ -33,10 +33,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		private readonly string _filename;
 
 		private readonly ILog _log;
-		private MemoryMappedViewStream _mappedBuffer;
-		private readonly ByteBuffer _buffer = new ByteBuffer();
 
+		// The fields are disposing too deep to be detected by the analyzer
+		#pragma warning disable CA2213
+		private MemoryMappedViewStream _mappedBuffer;
 		protected internal MemoryMappedFile AccessFile;
+		#pragma warning restore CA2213
+
+		private readonly ByteBuffer _buffer = new ByteBuffer();
 
 		public MmfPersistentInMemoryQueue(string filename, IQueueableFactory<T> factory)
 		{
@@ -367,7 +371,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 				try
 				{
 					_mappedBuffer.Flush();
-					_mappedBuffer.Close();
+					_mappedBuffer.Dispose();
 				}
 				finally
 				{
@@ -375,5 +379,5 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 				}
 			}
 		}
-	}
+    }
 }
