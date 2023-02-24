@@ -40,7 +40,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		private readonly ILog _log;
 		private readonly ByteBuffer _buffer;
 		private byte[] _messageHolder;
+
+		// The field is disposing too deep to be detected by the analyzer
+		#pragma warning disable CA2213
 		private FileStream _queueOutputStream;
+		#pragma warning restore CA2213
 
 		public PersistentInMemoryQueue(string filename, IQueueableFactory<T> factory)
 		{
