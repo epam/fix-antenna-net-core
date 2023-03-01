@@ -1313,7 +1313,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			Scheduler?.Shutdown();
 			Scheduler = null;
 
-			Pumper.Dispose();
+			Pumper?.Dispose();
 		}
 
 		/// <summary>
