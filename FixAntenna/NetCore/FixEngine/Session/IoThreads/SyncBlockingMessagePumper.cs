@@ -70,11 +70,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 
 		internal bool IsTransportBlockingSend;
 
-		// The field is disposing too deep to be detected by the analyzer
-		#pragma warning disable CA2213
 		private readonly SemaphoreSlim _msgBufferSemaphore = new SemaphoreSlim(1);
-		#pragma warning restore CA2213
-
 
 		/// <summary>
 		/// Creates the <c>SyncBlockingMessagePumper</c>.
@@ -221,7 +217,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 			}
 			finally
 			{
-				ReleaseResources();
+				CloseOutgoingLog();
 				if (Log.IsTraceEnabled)
 				{
 					Log.Trace("Stop MPThread: " + _fixSession);
@@ -605,7 +601,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 				// intentionally blank
 			}
 
-			ReleaseResources();
+			CloseOutgoingLog();
 			Log.Debug("Pumper stopped");
 
 			if (_enableMessageRejecting)
@@ -1005,18 +1001,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && !_shutdownFlag)
-			{
-				Shutdown();
-			}
-
 			base.Dispose(disposing);
-		}
 
-		private void ReleaseResources()
-		{
-			CloseOutgoingLog();
-			_msgBufferSemaphore.Dispose();
+			if (disposing)
+			{
+				_msgBufferSemaphore.Dispose();
+			}
 		}
 	}
 }

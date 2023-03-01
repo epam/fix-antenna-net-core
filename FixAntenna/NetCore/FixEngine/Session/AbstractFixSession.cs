@@ -740,6 +740,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			OutgoingStorage = StorageFactory.CreateOutgoingMessageStorage(Parameters);
 
 			Queue.Initialize();
+			Pumper?.Dispose();
 			Pumper = BuildMessagePumper(ConfigAdapter, Queue, OutgoingStorage, MessageFactory, Transport, SequenceManager);
 			var nextOutStorageSeqNum = Pumper.Init();
 

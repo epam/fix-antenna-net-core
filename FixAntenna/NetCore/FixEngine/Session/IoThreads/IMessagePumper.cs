@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Epam.FixAntenna.NetCore.Common.Threading.Runnable;
 using Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads.Bean;
 using Epam.FixAntenna.NetCore.Message;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 {
-	internal interface IMessagePumper : IWorkerThread
+	internal interface IMessagePumper : IWorkerThread, IDisposable
 	{
 		long Init();
 

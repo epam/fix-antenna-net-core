@@ -273,6 +273,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IoThreads
 			throw new InvalidOperationException("Should not be used in the context");
 		}
 
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+		}
+
 		private bool SendOrWait(string msgType, FixMessage content, ChangesType? changesType)
 		{
 			try

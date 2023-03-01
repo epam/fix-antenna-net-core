@@ -431,6 +431,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				}
 
 				public Thread WorkerThread { get; }
+
+				public void Dispose()
+				{
+				}
 			}
 		}
 	}
