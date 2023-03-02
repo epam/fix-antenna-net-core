@@ -356,7 +356,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		private void ClearBuffer(long toPoint)
 		{
 			_mappedBuffer.Position = 0;
-			for (var i = 0; i > toPoint; i++)
+			for (var i = 0; i < toPoint; i++)
 			{
 				_mappedBuffer.WriteByte(EmptyByte);
 			}
