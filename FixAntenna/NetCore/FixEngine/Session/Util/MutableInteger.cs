@@ -30,32 +30,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			return _number;
 		}
 
-		public override bool Equals(object o)
-		{
-			if (this == o)
-			{
-				return true;
-			}
-			if (o == null || this.GetType() != o.GetType())
-			{
-				return false;
-			}
-
-			var that = (MutableInteger) o;
-
-			if (_number != that._number)
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-		public override int GetHashCode()
-		{
-			return _number;
-		}
-
 		public override string ToString()
 		{
 			return Convert.ToString(_number);
