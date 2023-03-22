@@ -1057,7 +1057,7 @@ namespace Epam.FixAntenna.NetCore.Configuration
 		private static readonly TemplatePropertiesWrapper DefaultProperties = new TemplatePropertiesWrapper();
 
 		private IDictionary<string, CustomFixVersionConfig> _customFixVersionConfigs = new ConcurrentDictionary<string, CustomFixVersionConfig>();
-		private TemplatePropertiesWrapper _properties;
+		private readonly TemplatePropertiesWrapper _properties;
 
 		static Config()
 		{
@@ -1127,6 +1127,12 @@ namespace Epam.FixAntenna.NetCore.Configuration
 			PrepareCustomFixVersionConfigs();
 		}
 
+		private Config(Config config)
+		{
+			_properties = (TemplatePropertiesWrapper)config._properties.Clone();
+			_customFixVersionConfigs = new Dictionary<string, CustomFixVersionConfig>(config._customFixVersionConfigs);
+		}
+
 		private void PrepareCustomFixVersionConfigs()
 		{
 			var customFixVersions = _properties.GetProperty(CustomFixVersions);
@@ -1165,10 +1171,7 @@ namespace Epam.FixAntenna.NetCore.Configuration
 
 		public object Clone()
 		{
-			var configuration = MemberwiseClone() as Config;
-			configuration._properties = (TemplatePropertiesWrapper)_properties.Clone();
-			configuration._customFixVersionConfigs = new Dictionary<string, CustomFixVersionConfig>(_customFixVersionConfigs);
-			return configuration;
+			return new Config(this);
 		}
 
 		/// <summary>
@@ -1778,9 +1781,7 @@ namespace Epam.FixAntenna.NetCore.Configuration
 
 		public override int GetHashCode()
 		{
-			var result = _properties != null ? _properties.GetHashCode() : 0;
-			//        result = 31 * result + (exceptionRuntimeValues != null ? exceptionRuntimeValues.hashCode() : 0);
-			return result;
+			return _properties != null ? _properties.GetHashCode() : 0;
 		}
 
 		public virtual bool Exists(string propertyName)

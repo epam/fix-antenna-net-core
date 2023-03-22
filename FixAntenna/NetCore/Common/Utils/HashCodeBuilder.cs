@@ -44,7 +44,7 @@ namespace Epam.FixAntenna.NetCore.Common.Utils
 			return Append(obj?.GetHashCode() ?? 0);
 		}
 
-		public override int GetHashCode()
+		public int Build()
 		{
 			return _hashCode;
 		}

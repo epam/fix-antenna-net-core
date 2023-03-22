@@ -731,7 +731,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 				.Append(Configuration)
 				.Append(Destinations)
 				.Append(CustomLoader)
-				.GetHashCode();
+				.Build();
 		}
 
 		private void ReplaceDestination(string oldHost, int oldPort, string newHost, int newPort)
