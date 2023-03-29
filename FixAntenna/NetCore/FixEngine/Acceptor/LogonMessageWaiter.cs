@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.IO;
 using System.Threading;
 using Epam.FixAntenna.NetCore.Common.Logging;
@@ -49,14 +50,22 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 		{
 			try
 			{
-				_tempMessage.Clear();
-				_fixTransport.ReadMessage(_message);
-				// TBD we need add all or set and replace
-				_logon.AddAll(_tempMessage);
+				try
+				{
+					_tempMessage.Clear();
+					_fixTransport.ReadMessage(_message);
+					// TBD we need add all or set and replace
+					_logon.AddAll(_tempMessage);
+				}
+				catch (IOException)
+				{
+					CloseTransport();
+				}
 			}
-			catch (IOException)
+			catch (ThreadInterruptedException)
 			{
-				CloseTransport();
+				// It is expected.
+				// Another thread interrupted this one.
 			}
 		}
 
