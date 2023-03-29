@@ -9,7 +9,7 @@ jobs:
   deploy:
     
     runs-on: ubuntu-latest
-    if: github.event.base_ref == 'refs/heads/main'
+    if: github.event.base_ref == 'refs/heads/hotfix_1.2.1'
     
     steps:
       - uses: actions/checkout@v2
