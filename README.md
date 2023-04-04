@@ -109,7 +109,7 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 ## License
 ![b2bits.com](Docs/b2bits.png)
 
-Copyright © 2020-2022 [EPAM Systems, Inc.](https://www.epam.com/)
+Copyright © 2020-2023 [EPAM Systems, Inc.](https://www.epam.com/)
 
 Distributed under [the Apache License](LICENSE), Version 2.0.
 
