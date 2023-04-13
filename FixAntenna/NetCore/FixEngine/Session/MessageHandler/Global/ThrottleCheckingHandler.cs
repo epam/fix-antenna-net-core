@@ -207,7 +207,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 
 			public bool IsEquals(byte[] src, int srcStart, int srcLen, byte[] dest, int destStart, int destLen)
 			{
-				if (src == null && dest == null)
+				if (src == null || dest == null)
 				{
 					return true;
 				}
