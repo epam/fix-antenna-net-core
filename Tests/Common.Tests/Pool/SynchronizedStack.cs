@@ -26,6 +26,8 @@ namespace Epam.FixAntenna.Common.Pool
 		private int _index;
 		private T[] _items;
 
+		private readonly object _sync = new object();
+
 		public SynchronizedStack(int initSize)
 		{
 			_initSize = initSize;
@@ -38,7 +40,7 @@ namespace Epam.FixAntenna.Common.Pool
 		{
 			get
 			{
-				lock (this)
+				lock (_sync)
 				{
 					return _index + 1;
 				}
@@ -52,13 +54,13 @@ namespace Epam.FixAntenna.Common.Pool
 				return;
 			}
 
-			lock (this)
+			lock (_sync)
 			{
 				if (_index > 100)
 				{
 					try
 					{
-						Monitor.Wait(this, TimeSpan.FromMilliseconds(0 + 1 / 1000d));
+						Monitor.Wait(_sync, TimeSpan.FromMilliseconds(0 + 1 / 1000d));
 					}
 					catch (Exception)
 					{
@@ -78,7 +80,7 @@ namespace Epam.FixAntenna.Common.Pool
 
 		public virtual void Clear()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				for (var i = 0; i < _items.Length; i++)
 				{
@@ -122,7 +124,7 @@ namespace Epam.FixAntenna.Common.Pool
 
 		public virtual T Remove()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				T @object = null;
 				if (_index >= 0)

@@ -37,6 +37,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		private readonly Thread _thread; //TODO: implement logic
 		private readonly Stopwatch _stopWatch;
 
+		private readonly object _sync = new object();
+
 		/// <summary>
 		/// Creates the <c>SessionStatusCheckerThread</c>.
 		/// </summary>
@@ -72,11 +74,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 			while (_stopWatch.ElapsedMilliseconds / Second <= _timeout && _session.SessionState == _state)
 			{
-				lock (this)
+				lock (_sync)
 				{
 					try
 					{
-						Monitor.Wait(this, TimeSpan.FromMilliseconds(Second));
+						Monitor.Wait(_sync, TimeSpan.FromMilliseconds(Second));
 					}
 					catch (ThreadInterruptedException)
 					{
