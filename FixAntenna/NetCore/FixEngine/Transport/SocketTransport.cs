@@ -27,6 +27,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 	/// </summary>
 	internal abstract class SocketTransport : ITransport
 	{
+		private readonly object _sync = new object();
+
 		protected readonly ILog Log;
 		protected internal Stream Is;
 		protected internal Stream Os;
@@ -37,7 +39,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 
 		public const int SocketReadSize = 32768;
 
-		public SocketTransport()
+		protected SocketTransport()
 		{
 			Log = LogFactory.GetLog(GetType());
 		}
@@ -151,7 +153,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 		{
 			try
 			{
-				lock (this)
+				lock (_sync)
 				{
 					if (Is == Os)
 					{

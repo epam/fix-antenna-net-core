@@ -64,13 +64,14 @@ namespace Epam.FixAntenna.NetCore.Common.Threading
 			}
 		}
 
-		private class PoolThread
+		private sealed class PoolThread
 		{
 			private readonly string _name;
 			private readonly ThreadPool _pool;
 			private readonly Thread _runThread;
 
 			private volatile bool _isStopped;
+			private readonly object _sync = new object();
 
 			internal PoolThread(ThreadPool pool, string name)
 			{
@@ -122,7 +123,7 @@ namespace Epam.FixAntenna.NetCore.Common.Threading
 
 			public void StopTread(in bool interrupt)
 			{
-				lock (this)
+				lock (_sync)
 				{
 					_isStopped = true;
 					if (interrupt)

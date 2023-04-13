@@ -26,6 +26,7 @@ namespace Epam.FixAntenna.NetCore.Common.Pool
 		private int _index;
 
 		private T[] _items;
+		private readonly object _sync = new object();
 
 		public SynchronizedPoolableStack(int initSize, int maxSize, IPoolableProvider<T> poolableProvider)
 		{
@@ -42,7 +43,7 @@ namespace Epam.FixAntenna.NetCore.Common.Pool
 			get
 			{
 				T @object;
-				lock (this)
+				lock (_sync)
 				{
 					if (_index >= 0)
 					{
@@ -73,7 +74,7 @@ namespace Epam.FixAntenna.NetCore.Common.Pool
 				_poolableProvider.Passivate(@object);
 
 				var toDestroy = false;
-				lock (this)
+				lock (_sync)
 				{
 					if (_index == _items.Length - 1)
 					{
@@ -109,7 +110,7 @@ namespace Epam.FixAntenna.NetCore.Common.Pool
 
 		public virtual void Clean()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				for (var i = 0; i < _items.Length; i++)
 				{
