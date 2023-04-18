@@ -168,7 +168,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		{
 			// Arrange
 			const string envVariableSessionDefault = "FANET_sessions__default__forceSeqNumReset";
-			const string envVariableSessionDefaultValue = "OneTime";
+			const string envVariableSessionDefaultValue = "Always";
 			Environment.SetEnvironmentVariable(envVariableSessionDefault, envVariableSessionDefaultValue, EnvironmentVariableTarget.Process);
 
 			// Arrange
@@ -188,7 +188,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 				var secondSessionParameters = sessionParameters["secondSession"];
 				Assert.IsNotNull(secondSessionParameters);
-				Assert.AreEqual(envVariableSessionSpecificValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+				Assert.AreEqual(envVariableSessionDefaultValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
 			}
 			finally
 			{
@@ -207,7 +207,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 			// Arrange
 			const string envVariableSessionDefault = "FANET_sessions__default__forceSeqNumReset";
-			const string envVariableSessionDefaultValue = "OneTime";
+			const string envVariableSessionDefaultValue = "Always";
 			Environment.SetEnvironmentVariable(envVariableSessionDefault, envVariableSessionDefaultValue, EnvironmentVariableTarget.Process);
 
 			// Arrange
@@ -227,7 +227,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 				var secondSessionParameters = sessionParameters["secondSession"];
 				Assert.IsNotNull(secondSessionParameters);
-				Assert.AreEqual(envVariableSessionSpecificValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+				Assert.AreEqual(envVariableSessionDefaultValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
 			}
 			finally
 			{
