@@ -130,6 +130,114 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		}
 
 		[Test]
+		public virtual void TestEnvironmentVariablesPriorityWhenNoDefaultValueSet()
+		{
+			// Arrange
+			const string envVariableGlobal = "FANET_forceSeqNumReset";
+			const string envVariableGlobalValue = "Always";
+			Environment.SetEnvironmentVariable(envVariableGlobal, envVariableGlobalValue, EnvironmentVariableTarget.Process);
+
+			// Arrange
+			const string envVariableSessionSpecific = "FANET_sessions__testSession__forceSeqNumReset";
+			const string envVariableSessionSpecificValue = "OneTime";
+			Environment.SetEnvironmentVariable(envVariableSessionSpecific, envVariableSessionSpecificValue, EnvironmentVariableTarget.Process);
+
+			// Act
+			var sessionParameters = SessionParametersBuilder.BuildInitiatorSessionParametersList("FixEngine/Session/Util/sample_config_env_var_priority.properties");
+
+			// Assert
+			try
+			{
+				var testSessionParameters = sessionParameters["testSession"];
+				Assert.IsNotNull(testSessionParameters);
+				Assert.AreEqual(envVariableSessionSpecificValue, testSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+
+				var secondSessionParameters = sessionParameters["secondSession"];
+				Assert.IsNotNull(secondSessionParameters);
+				Assert.AreEqual(envVariableGlobalValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+			}
+			finally
+			{
+				Environment.SetEnvironmentVariable(envVariableGlobal, null, EnvironmentVariableTarget.Process);
+				Environment.SetEnvironmentVariable(envVariableSessionSpecific, null, EnvironmentVariableTarget.Process);
+			}
+		}
+
+		[Test]
+		public virtual void TestEnvironmentVariablesPriorityWhenDefaultValueSet()
+		{
+			// Arrange
+			const string envVariableSessionDefault = "FANET_sessions__default__forceSeqNumReset";
+			const string envVariableSessionDefaultValue = "Always";
+			Environment.SetEnvironmentVariable(envVariableSessionDefault, envVariableSessionDefaultValue, EnvironmentVariableTarget.Process);
+
+			// Arrange
+			const string envVariableSessionSpecific = "FANET_sessions__testSession__forceSeqNumReset";
+			const string envVariableSessionSpecificValue = "OneTime";
+			Environment.SetEnvironmentVariable(envVariableSessionSpecific, envVariableSessionSpecificValue, EnvironmentVariableTarget.Process);
+
+			// Act
+			var sessionParameters = SessionParametersBuilder.BuildInitiatorSessionParametersList("FixEngine/Session/Util/sample_config_env_var_priority.properties");
+
+			// Assert
+			try
+			{
+				var testSessionParameters = sessionParameters["testSession"];
+				Assert.IsNotNull(testSessionParameters);
+				Assert.AreEqual(envVariableSessionSpecificValue, testSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+
+				var secondSessionParameters = sessionParameters["secondSession"];
+				Assert.IsNotNull(secondSessionParameters);
+				Assert.AreEqual(envVariableSessionDefaultValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+			}
+			finally
+			{
+				Environment.SetEnvironmentVariable(envVariableSessionSpecific, null, EnvironmentVariableTarget.Process);
+				Environment.SetEnvironmentVariable(envVariableSessionDefault, null, EnvironmentVariableTarget.Process);
+			}
+		}
+
+		[Test]
+		public virtual void TestEnvironmentVariablesPriorityWhenAllLevelsSet()
+		{
+			// Arrange
+			const string envVariableGlobal = "FANET_forceSeqNumReset";
+			const string envVariableGlobalValue = "Never";
+			Environment.SetEnvironmentVariable(envVariableGlobal, envVariableGlobalValue, EnvironmentVariableTarget.Process);
+
+			// Arrange
+			const string envVariableSessionDefault = "FANET_sessions__default__forceSeqNumReset";
+			const string envVariableSessionDefaultValue = "Always";
+			Environment.SetEnvironmentVariable(envVariableSessionDefault, envVariableSessionDefaultValue, EnvironmentVariableTarget.Process);
+
+			// Arrange
+			const string envVariableSessionSpecific = "FANET_sessions__testSession__forceSeqNumReset";
+			const string envVariableSessionSpecificValue = "OneTime";
+			Environment.SetEnvironmentVariable(envVariableSessionSpecific, envVariableSessionSpecificValue, EnvironmentVariableTarget.Process);
+
+			// Act
+			var sessionParameters = SessionParametersBuilder.BuildInitiatorSessionParametersList("FixEngine/Session/Util/sample_config_env_var_priority.properties");
+
+			// Assert
+			try
+			{
+				var testSessionParameters = sessionParameters["testSession"];
+				Assert.IsNotNull(testSessionParameters);
+				Assert.AreEqual(envVariableSessionSpecificValue, testSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+
+				var secondSessionParameters = sessionParameters["secondSession"];
+				Assert.IsNotNull(secondSessionParameters);
+				Assert.AreEqual(envVariableSessionDefaultValue, secondSessionParameters.Configuration.GetProperty("forceSeqNumReset"));
+			}
+			finally
+			{
+				Environment.SetEnvironmentVariable(envVariableGlobal, null, EnvironmentVariableTarget.Process);
+				Environment.SetEnvironmentVariable(envVariableSessionSpecific, null, EnvironmentVariableTarget.Process);
+				Environment.SetEnvironmentVariable(envVariableSessionDefault, null, EnvironmentVariableTarget.Process);
+			}
+		}
+
+		[Test]
 		public virtual void TestBuildInitiatorParameters()
 		{
 			var sessionParameters = SessionParametersBuilder.BuildInitiatorSessionParametersList("FixEngine/Session/Util/sample_config_sessiontypes.properties");

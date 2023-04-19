@@ -469,7 +469,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 			}
 			if (IsCustomSessionId)
 			{
-				properties.Add("sessionID", SessionId.ToString());
+				properties.Add(Properties.SessionIdKey, SessionId.ToString());
 			}
 
 			if (Host != null)
@@ -492,9 +492,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 		/// <param name="properties"> the properties </param>
 		public void FromProperties(IDictionary<string, string> properties)
 		{
-			if (properties.ContainsKey("sessionID"))
+			if (properties.ContainsKey(Properties.SessionIdKey))
 			{
-				SetSessionId(properties.GetValueOrDefault("sessionID"));
+				SetSessionId(properties.GetValueOrDefault(Properties.SessionIdKey));
 			}
 
 			SenderCompId = properties.GetValueOrDefault("senderCompID");

@@ -44,6 +44,9 @@
 		<None Update="FixEngine\Session\Util\duplicate_session.properties">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="FixEngine\Session\Util\sample_config_env_var_priority.properties">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="FixEngine\Session\Util\sample_config_case_insensitivity.properties">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
