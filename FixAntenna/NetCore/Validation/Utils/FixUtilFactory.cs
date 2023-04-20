@@ -73,8 +73,8 @@ namespace Epam.FixAntenna.NetCore.Validation.Utils
 
 		internal class Key
 		{
-			internal FixVersionContainer AppFixVersion;
-			internal FixVersionContainer Version;
+			internal readonly FixVersionContainer AppFixVersion;
+			internal readonly FixVersionContainer Version;
 
 			public Key(FixVersionContainer version, FixVersionContainer appFixVersion)
 			{

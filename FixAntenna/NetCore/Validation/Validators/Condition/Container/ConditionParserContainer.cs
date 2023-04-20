@@ -16,8 +16,8 @@ namespace Epam.FixAntenna.NetCore.Validation.Validators.Condition.Container
 {
 	internal sealed class ConditionParserContainer
 	{
-		private int _carriage;
-		private string _condition;
+		private readonly int _carriage;
+		private readonly string _condition;
 
 		public ConditionParserContainer(string condition, int carriage)
 		{
@@ -30,19 +30,10 @@ namespace Epam.FixAntenna.NetCore.Validation.Validators.Condition.Container
 			return _condition;
 		}
 
-		public void SetCondition(string condition)
-		{
-			_condition = condition;
-		}
 
 		public int GetCarriage()
 		{
 			return _carriage;
-		}
-
-		public void SetCarriage(int carriage)
-		{
-			_carriage = carriage;
 		}
 
 		public override bool Equals(object o)

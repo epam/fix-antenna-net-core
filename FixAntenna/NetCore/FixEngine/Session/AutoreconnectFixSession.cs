@@ -43,6 +43,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		private readonly int _maxAttempts;
 		private readonly int _delay;
 
+		private readonly object _sync = new object();
+
 		public AutoreconnectFixSession(IFixMessageFactory factory, SessionParameters sessionParameters, HandlerChain fixSessionListener)
 			: base(factory, sessionParameters, fixSessionListener)
 		{
@@ -87,11 +89,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			base.SetFixSessionListener(sessionHandler);
 		}
 
-		private class ExtendedListenerImpl : IExtendedFixSessionListener
+		private sealed class ExtendedListenerImpl : IExtendedFixSessionListener
 		{
 			private readonly AutoreconnectFixSession _session;
 			private readonly IFixSessionListener _listener;
 			private readonly IExtendedFixSessionListener _clientExtendedListener;
+
+			private readonly object _sync = new object();
 
 			public ExtendedListenerImpl(AutoreconnectFixSession session, IFixSessionListener listener,
 				IExtendedFixSessionListener clientExtendedListener)
@@ -124,7 +128,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 						if (previousSessionState != SessionState.Dead)
 						{
 							//if user disposed session in previous callback
-							lock (this)
+							lock (_sync)
 							{
 								_session.SessionState = SessionState.Reconnecting;
 								_session.AutoChangeDestination();
@@ -194,23 +198,20 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 						}
 					}
 				}
-				else if (_destinationIndex > 0)
+				else if (_destinationIndex > 0 && _resetBackup)
 				{
-					if (_resetBackup)
+					if (Log.IsDebugEnabled)
 					{
-						if (Log.IsDebugEnabled)
-						{
-							Log.Debug("Resetting sequences for backup connection");
-						}
+						Log.Debug("Resetting sequences for backup connection");
+					}
 
-						try
-						{
-							SequenceManager.ResetSeqNumForNextConnect();
-						}
-						catch (IOException e)
-						{
-							Log.Error("Can't reset sequence numbers before connect to primary host", e);
-						}
+					try
+					{
+						SequenceManager.ResetSeqNumForNextConnect();
+					}
+					catch (IOException e)
+					{
+						Log.Error("Can't reset sequence numbers before connect to primary host", e);
 					}
 				}
 
@@ -272,12 +273,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 			catch (Exception)
 			{
+				// An exception can be thrown as the result of the invoking "interrupt" from another thread.
+				// Ignore.
 			}
 		}
 
 		private void AutoChangeDestination()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				if (_destinations.Count == 1)
 				{
@@ -309,7 +312,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		private void ChangeDestination(int newIndex)
 		{
-			lock (this)
+			lock (_sync)
 			{
 				if (_destinationIndex == newIndex)
 				{
@@ -439,7 +442,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			get
 			{
-				lock (this)
+				lock (_sync)
 				{
 					return _destinationIndex != 0;
 				}
@@ -450,7 +453,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			get
 			{
-				lock (this)
+				lock (_sync)
 				{
 					return (_destinationIndex != 0) && (_destinations.Count == 2);
 				}

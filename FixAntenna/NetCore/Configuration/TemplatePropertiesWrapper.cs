@@ -90,7 +90,7 @@ namespace Epam.FixAntenna.NetCore.Configuration
 		/// <returns> String </returns>
 		public string GetProperty(string key, string defaultValue = null)
 		{
-			var evValue = Properties.ReadEnvironmentVariable(key);
+			var evValue = ReadEnvironmentVariable(key);
 			if (!string.IsNullOrWhiteSpace(evValue))
 			{
 				ParamSources.Instance.Set(key, ParamSource.Environment);
@@ -106,6 +106,51 @@ namespace Epam.FixAntenna.NetCore.Configuration
 				ParamSources.Instance.Set(key, ParamSource.Default);
 				return defaultValue;
 			}
+		}
+
+		private string ReadEnvironmentVariable(string key)
+		{
+			// try to read session level environment variable first
+			// if no success, then try to read default session environment variable
+			// if no success, then try to read global environment variable
+			var sessionId = GetSessionId();
+			var readFuncs = new Func<string>[]
+			{
+				() => Properties.ReadEnvironmentVariable(key, sessionId),
+				() => Properties.ReadEnvironmentVariable(key, Properties.DefaultSessionId),
+				() => Properties.ReadEnvironmentVariable(key),
+			};
+			var canReadFuncs = new Func<bool>[]
+			{
+				() => !string.IsNullOrWhiteSpace(sessionId),
+				// if no session id, then this is not a config for a session
+				// so, don't read the session default values
+				() => !string.IsNullOrWhiteSpace(sessionId),
+				() => true
+			};
+
+			string value = null;
+			for (var index = 0; index < readFuncs.Length; index++)
+			{
+				if (canReadFuncs[index]())
+				{
+					value = readFuncs[index]();
+				}
+
+				if (!string.IsNullOrWhiteSpace(value))
+				{
+					break;
+				}
+			}
+
+			return value;
+		}
+
+		private string GetSessionId()
+		{
+			return _properties.TryGetValue(Properties.SessionIdKey, out var res)
+				? res.Item2
+				: null;
 		}
 
 		public void Clear()

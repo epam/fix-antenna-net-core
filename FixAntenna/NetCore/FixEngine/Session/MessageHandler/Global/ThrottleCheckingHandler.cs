@@ -211,6 +211,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				{
 					return true;
 				}
+
+				if (src == null || dest == null)
+				{
+					return false;
+				}
+
 				if (srcLen != destLen)
 				{
 					return false;

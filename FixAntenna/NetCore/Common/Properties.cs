@@ -25,6 +25,9 @@ namespace Epam.FixAntenna.NetCore.Common
 {
 	internal sealed class Properties : IEnumerable
 	{
+		internal const string SessionIdKey = "sessionID";
+		internal const string DefaultSessionId = "default";
+
 		private static readonly ILog Log = LogFactory.GetLog(typeof(Properties));
 		private ConcurrentDictionary<string, string> _props = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 		private readonly Properties _defaults;
@@ -99,9 +102,9 @@ namespace Epam.FixAntenna.NetCore.Common
 			return $"FANET_{sessionPrefix}";
 		}
 
-		public static string ReadEnvironmentVariable(string key)
+		public static string ReadEnvironmentVariable(string key, string sessionId = null)
 		{
-			var ev = $"{PrepareEvPrefix()}{key.Replace(".", "__")}";
+			var ev = $"{PrepareEvPrefix(sessionId)}{key.Replace(".", "__")}";
 			return Environment.GetEnvironmentVariable(ev);
 	}
 
