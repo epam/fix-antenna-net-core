@@ -1320,7 +1320,7 @@ For example, if 'nic' is '::1', then IPv6 will be used to create a network socke
 like '127.0.0.1'.
 
 ### Environment variables for configuration
-FIX Anenna configuration properties can be set in environment variables
+FIX Antenna configuration properties can be set in environment variables
 To be applied, an environment variable must comply with the following rules:
 - Variable name must start with the prefix FANET_
 - For hierarchical properties, double underscore '__' should be used instead of the '.' symbol as a delimiter
