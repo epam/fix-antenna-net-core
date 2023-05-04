@@ -62,7 +62,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Common
 			{
 				message.AddTag(Tags.RefTagID, refTagId);
 			}
-			if (rejectMessage.MsgType != null)
+			if (rejectMessage?.MsgType != null)
 			{
 				message.AddTag(Tags.RefMsgType, rejectMessage.MsgType);
 			}

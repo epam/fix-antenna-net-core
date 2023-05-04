@@ -118,7 +118,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				return sessionParamsMap;
 			}
 			var propertiesMap = new Dictionary<string, Properties>();
-			var defaultProps = GetSessionProperties(properties, "default");
+			var defaultProps = GetSessionProperties(properties, Properties.DefaultSessionId);
 			foreach (var splittedId in sessionIdsParam.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
 			{
 				var sessionId = splittedId.Trim();
@@ -148,7 +148,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 		private static SessionParameters ConstructFromProperties(Properties properties, string sessionId)
 		{
-			var defaultProps = GetSessionProperties(properties, "default");
+			var defaultProps = GetSessionProperties(properties, Properties.DefaultSessionId);
 			var props = new Properties();
 			props.PutAll(defaultProps);
 			props.PutAll(GetSessionProperties(properties, sessionId));
@@ -183,7 +183,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				}
 			}
 
-			pr.Put("sessionID", sessionId);
+			pr.Put(Properties.SessionIdKey, sessionId);
 			return pr;
 		}
 

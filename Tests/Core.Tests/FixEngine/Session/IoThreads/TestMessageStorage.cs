@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Storage;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
@@ -23,10 +22,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 	{
 		private IList<object> _messages = new List<object>();
 		private volatile bool _disposed;
+		private readonly object _sync = new object();
 
 		public virtual void AppendMessage(byte[] message, int offset, int length)
 		{
-			lock (this)
+			lock (_sync)
 			{
 				var destMessage = new byte[length];
 				Array.Copy(message, 0, destMessage, 0, length);
@@ -36,7 +36,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 
 		public virtual void AppendMessage(byte[] message)
 		{
-			lock (this)
+			lock (_sync)
 			{
 				_messages.Add(message);
 			}
@@ -63,7 +63,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 
 		public virtual IList<object> GetMessages()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				return new List<object>(_messages);
 			}

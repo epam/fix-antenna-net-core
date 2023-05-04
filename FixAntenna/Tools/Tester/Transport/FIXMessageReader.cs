@@ -57,6 +57,8 @@ namespace Epam.FixAntenna.Tester.Transport
 		/// </summary>
 		private int _maxMsgSize;
 
+		private readonly object _sync = new object();
+
 		public FIXMessageReader(Stream @in, int maxMsgSize)
 		{
 			this.@in = @in;
@@ -66,7 +68,7 @@ namespace Epam.FixAntenna.Tester.Transport
 
 		public virtual byte[] ReadMessage()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				// State of reader FSM
 				int state = 0;

@@ -73,7 +73,7 @@ namespace Epam.FixAntenna.AdminTool.Builder
 			Type commandClass = null;
 			if (!string.IsNullOrWhiteSpace(externalPackage))
 			{
-				var mapKey = new MapKey { CommandName = name, PackageName = externalPackage };
+				var mapKey = new MapKey(commandName: name, packageName: externalPackage);
 				if (!ClassCommandCash.TryGetValue(mapKey, out commandClass))
 				{
 					commandClass = GetCommandClass(externalPackage, name);
@@ -89,7 +89,7 @@ namespace Epam.FixAntenna.AdminTool.Builder
 			if (commandClass == null)
 			{
 				// try get from default package
-				var mapKey = new MapKey { CommandName = name, PackageName = AdminConstants.DefaultCommandPackage };
+				var mapKey = new MapKey(commandName: name, packageName: AdminConstants.DefaultCommandPackage);
 				if (!ClassCommandCash.TryGetValue(mapKey, out commandClass))
 				{
 					commandClass = GetCommandClass(AdminConstants.DefaultCommandPackage, name);
@@ -97,7 +97,7 @@ namespace Epam.FixAntenna.AdminTool.Builder
 					{
 					   throw new ArgumentException();
 					}
-					mapKey.PackageName = AdminConstants.DefaultCommandPackage;
+
 					ClassCommandCash[mapKey] = commandClass;
 				}
 			}
@@ -137,8 +137,14 @@ namespace Epam.FixAntenna.AdminTool.Builder
 		/// </summary>
 		protected internal class MapKey
 		{
-			internal string PackageName;
-			internal string CommandName;
+			internal string PackageName { get; }
+			internal string CommandName { get; }
+
+			public MapKey(string commandName, string packageName)
+			{
+				CommandName = commandName;
+				PackageName = packageName;
+			}
 
 			public override bool Equals(object o)
 			{
@@ -167,7 +173,7 @@ namespace Epam.FixAntenna.AdminTool.Builder
 			public override int GetHashCode()
 			{
 				var result = PackageName != null ? PackageName.GetHashCode() : 0;
-				result = 31 * result + CommandName != null ? CommandName.GetHashCode() : 0;
+				result = 31 * result + (CommandName != null ? CommandName.GetHashCode() : 0);
 				return result;
 			}
 		}

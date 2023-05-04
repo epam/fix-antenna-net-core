@@ -40,6 +40,8 @@ namespace Epam.FixAntenna.NetCore.Common.Threading.Queue
 		/// </summary>
 		private int _takeIndex;
 
+		private readonly object _sync = new object();
+
 		public SynchronizeBlockingQueue(int limit)
 		{
 			_items = new TE[limit];
@@ -47,7 +49,7 @@ namespace Epam.FixAntenna.NetCore.Common.Threading.Queue
 
 		public virtual void Put(TE item)
 		{
-			lock (this)
+			lock (_sync)
 			{
 				if (EqualityComparer<TE>.Default.Equals(item, default))
 				{
@@ -58,44 +60,44 @@ namespace Epam.FixAntenna.NetCore.Common.Threading.Queue
 				{
 					while (_count == _items.Length)
 					{
-						Monitor.Wait(this);
+						Monitor.Wait(_sync);
 					}
 				}
 				catch (ThreadInterruptedException)
 				{
-					Monitor.PulseAll(this);
+					Monitor.PulseAll(_sync);
 					throw;
 				}
 
 				Insert(item);
-				Monitor.PulseAll(this);
+				Monitor.PulseAll(_sync);
 			}
 		}
 
 		public virtual TE Take()
 		{
-			lock (this)
+			lock (_sync)
 			{
 				try
 				{
 					while (_count == 0)
 					{
-						Monitor.Wait(this);
+						Monitor.Wait(_sync);
 					}
 				}
 				catch (ThreadAbortException)
 				{
-					Monitor.PulseAll(this);
+					Monitor.PulseAll(_sync);
 					throw;
 				}
 				catch (ThreadInterruptedException)
 				{
-					Monitor.PulseAll(this);
+					Monitor.PulseAll(_sync);
 					throw;
 				}
 
 				var item = ExtractItem();
-				Monitor.PulseAll(this);
+				Monitor.PulseAll(_sync);
 				return item;
 			}
 		}
@@ -111,7 +113,7 @@ namespace Epam.FixAntenna.NetCore.Common.Threading.Queue
 		{
 			get
 			{
-				lock (this)
+				lock (_sync)
 				{
 					return _count;
 				}
