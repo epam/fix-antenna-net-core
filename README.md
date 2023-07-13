@@ -7,6 +7,8 @@
 # FIX Antenna™ .NET Core Community Edition
 FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.  Ideal solution for buy side and proprietary trading companies.
 
+Here you can find out more about [our other products](https://github.com/epam/fix-antenna-net-core/wiki/Other-B2Bits-products).
+
 ## [Fast response time](Docs/benchmarking.md)
 
 ![Responce time](Docs/fanet_response_time-1.0.0.png)
