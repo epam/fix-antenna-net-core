@@ -147,9 +147,6 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var precision = (new ConfigurationAdapter(config)).TimestampsPrecisionInTags;
 			switch (precision)
 			{
-				case TimestampPrecision.Second:
-					st = new SendingTimeSecond();
-					break;
 				case TimestampPrecision.Milli:
 					st = new SendingTimeMilli();
 					break;
@@ -159,6 +156,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				case TimestampPrecision.Nano:
 					st = new SendingTimeNano();
 					break;
+				case TimestampPrecision.Second:
 				default:
 					st = new SendingTimeSecond();
 					break;
@@ -300,15 +298,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				case ChangesType.AddSmhAndSmt:
 					SerializeWithAddedHeaderAndTrailerWithoutMessageTypeField(content, buffer, context);
 					break;
-				case ChangesType.UpdateSmhAndSmt:
-					SerializeWithUpdatedHeaderAndTrailer(content, buffer, context);
-					break;
 				case ChangesType.UpdateSmhAndSmtDonotUpdateSndr:
 					SerializeWithUpdatedHeaderAndTrailerWithoutSenderIfExist(content, buffer, context);
 					break;
 				case ChangesType.UpdateSmhAndSmtExceptCompids:
 					LeaveIdsSerializationStrategy.Serialize(content, buffer, context, RuntimeState);
 					break;
+				case ChangesType.UpdateSmhAndSmt:
 				default:
 					SerializeWithUpdatedHeaderAndTrailer(content, buffer, context);
 					break;
