@@ -224,7 +224,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 		/// <summary>
 		/// Gets or sets the file.
 		/// </summary>
-		public string FileName
+		public virtual string FileName
 		{
 			get
 			{
