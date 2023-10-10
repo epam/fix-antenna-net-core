@@ -60,6 +60,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			ValidateBackupResult();
 		}
 
+        [Test]
+        public virtual void TestDoubleInitialization()
+        {
+            UpMessageStorage();
+
+            MessageStorage.Initialize();
+
+            ValidateInitializationResult();
+        }
+
 		[Test]
 		public virtual void TestDelete()
 		{
@@ -114,6 +124,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 
 			Assert.IsTrue(helper.CountFilesInBackStorage(Sender) <= 0);
 		}
+
+        public virtual void ValidateInitializationResult()
+        {
+            var helper = new FileHelper(this);
+            Assert.AreEqual(1, helper.CountFilesInStorage(Sender));
+        }
 
 		protected override void AssertEqualsMessages(params string[] expectMessages)
 		{
@@ -232,6 +248,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				var files = dir.GetFiles().Where(x => ShouldFileBeSelected(x.Name, sender)).ToList();
 				return files.Count;
 			}
-		}
+
+            public virtual int CountFilesInStorage(string sender)
+            {
+                var directoryName = _outerInstance.ConfigurationAdapter.StorageDirectory;
+                var dir = new DirectoryInfo(directoryName);
+                var files = dir.GetFiles().Where(x => ShouldFileBeSelected(x.Name, sender)).ToList();
+                return files.Count;
+            }
+        }
 	}
 }

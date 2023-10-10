@@ -27,6 +27,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 		private static readonly ILog Log = LogFactory.GetLog(typeof(SlicedFileMessageStorage));
 		protected internal SlicedFileManager FileManager;
 		protected internal long MaxFileSize;
+        private string _originalFile;
+
+        public override string FileName
+        {
+            get => base.FileName;
+            set
+            {
+                if (_originalFile == null)
+                {
+                    _originalFile = value;
+                }
+
+                base.FileName = value;
+            }
+        }
 
 		public SlicedFileMessageStorage(Config config) : base(config)
 		{
@@ -42,7 +57,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 		/// <inheritdoc />
 		public override long Initialize()
 		{
-			FileManager = new SlicedFileManager(FileName);
+			FileManager = new SlicedFileManager(_originalFile);
 			FileManager.Initialize();
 			FileName = FileManager.GetFileName();
 			return base.Initialize();
