@@ -333,7 +333,15 @@ The table below specifies the server behavior settings.
             <li>Always - the session will send logon with 34= 1 and 141=Y every time (during connection and
                 reconnection).
             </li>
-            <li>OneTime - the session will send logon with 34= 1 and 141=Y only one time (during connection).</li>
+            <li>OneTime - the session will send logon with 34= 1 and 141=Y only one time (during connection). It works within the session object lifetime.
+                <br>
+<pre>session.Connect(); // Reset
+...
+session.Disconnect("Disconnect message");
+...
+session.Connect(); // Reconnection. No reset
+</pre>
+            </li>
             <li>Never - the user can set 34= 1 and 141=Y from the session parameters by hand.</li>
         </ul>
     </td>
