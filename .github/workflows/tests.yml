@@ -55,7 +55,7 @@ jobs:
       run: dotnet build ${{ env.solution_path }} --no-restore -c ReleaseTests
 
     - name: Run tests
-      run: dotnet test ${{matrix.test_proj}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release --collect:"XPlat Code Coverage" -r '${{env.test_result_dir}}' --settings coverlet.runsettings
+      run: dotnet test ${{matrix.test_proj}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release --collect:"XPlat Code Coverage" --results-directory:'${{env.test_result_dir}}' --settings coverlet.runsettings
 
     - name: Upload coverage xml
       if: ${{matrix.os == 'ubuntu-latest'}}
