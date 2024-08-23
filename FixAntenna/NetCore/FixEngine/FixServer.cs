@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Acceptor;
