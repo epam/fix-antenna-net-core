@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Acceptor;
@@ -31,6 +32,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 	/// </summary>
 	public class FixServer
 	{
+        public ITcpListenerFactory TcpListenerFactory {get; set;} = new DefaultTcpListenerFactory();
+
 		private static readonly ILog Log = LogFactory.GetLog(typeof(FixServer));
 
 		private readonly IConnectionHandler _connectionHandler;
@@ -201,11 +204,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 				if (_servers.ContainsKey(port))
 				{
 					Log.Warn($"Server on port {port} has been configured already. Configuration will be overriden.");
-					_servers[port] = new TcpServer(Nic, port, ConfigAdapter);
+					_servers[port] = new TcpServer(Nic, port, ConfigAdapter, TcpListenerFactory);
 				}
 				else
 				{
-					_servers.Add(port, new TcpServer(Nic, port, ConfigAdapter));
+					_servers.Add(port, new TcpServer(Nic, port, ConfigAdapter, TcpListenerFactory));
 				}
 			}
 		}

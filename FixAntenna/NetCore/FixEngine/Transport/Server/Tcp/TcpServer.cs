@@ -25,6 +25,25 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 {
+    public interface ITcpListenerFactory
+    {
+        TcpListener Create(int port);
+        TcpListener Create(IPAddress port, int i);
+    }
+
+    class DefaultTcpListenerFactory : ITcpListenerFactory
+    {
+        public TcpListener Create(int port)
+        {
+            return TcpListener.Create(port);
+        }
+        
+        public TcpListener Create(IPAddress address, int port)
+        {
+            return new TcpListener(address, port);
+        }
+    }
+
 	/// <summary>
 	/// TCP server implementation.
 	/// </summary>
@@ -33,6 +52,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		private static ILog _log = LogFactory.GetLog(typeof(TcpServer));
 		private IConnectionListener _listener;
 		private TcpListener _serverSocket;
+        private ITcpListenerFactory _tcpListenerFactory;
 		private ConfigurationAdapter _confAdapter;
 
 		private object _lock = new object();
@@ -66,10 +86,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		/// <param name="host"></param>
 		/// <param name="port"></param>
 		/// <param name="configAdapter"></param>
-		public TcpServer(string host, int port, ConfigurationAdapter configAdapter)
+		public TcpServer(string host, int port, ConfigurationAdapter configAdapter, ITcpListenerFactory tcpListenerFactory)
 		{
 			_confAdapter = configAdapter;
-
+            _tcpListenerFactory = tcpListenerFactory;
 			ConnectAddress = host;
 			Port = port;
 		}
@@ -208,11 +228,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 			{
 				if (string.IsNullOrEmpty(address))
 				{
-					return TcpListener.Create(port);
+					return _tcpListenerFactory.Create(port);
 				}
 
 				var ip = IPAddress.Parse(address);
-				return new TcpListener(ip, port);
+				return _tcpListenerFactory.Create(ip, port);
 			}
 			catch (SocketException ex)
 			{
