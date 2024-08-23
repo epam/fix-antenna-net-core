@@ -76,7 +76,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		public TcpServer(int port)
 		{
 			_confAdapter = new ConfigurationAdapter(Config.GlobalConfiguration);
-
+            _tcpListenerFactory = new DefaultTcpListenerFactory();
 			Port = port;
 		}
 
