@@ -25,24 +25,24 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 {
-    public interface ITcpListenerFactory
-    {
-        TcpListener Create(int port);
-        TcpListener Create(IPAddress port, int i);
-    }
+	public interface ITcpListenerFactory
+	{
+		TcpListener Create(int port);
+		TcpListener Create(IPAddress address, int port);
+	}
 
-    class DefaultTcpListenerFactory : ITcpListenerFactory
-    {
-        public TcpListener Create(int port)
-        {
-            return TcpListener.Create(port);
-        }
-        
-        public TcpListener Create(IPAddress address, int port)
-        {
-            return new TcpListener(address, port);
-        }
-    }
+	class DefaultTcpListenerFactory : ITcpListenerFactory
+	{
+		public TcpListener Create(int port)
+		{
+			return TcpListener.Create(port);
+		}
+
+		public TcpListener Create(IPAddress address, int port)
+		{
+			return new TcpListener(address, port);
+		}
+	}
 
 	/// <summary>
 	/// TCP server implementation.
@@ -52,7 +52,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		private static ILog _log = LogFactory.GetLog(typeof(TcpServer));
 		private IConnectionListener _listener;
 		private TcpListener _serverSocket;
-        private ITcpListenerFactory _tcpListenerFactory;
+		private ITcpListenerFactory _tcpListenerFactory;
 		private ConfigurationAdapter _confAdapter;
 
 		private object _lock = new object();
@@ -76,7 +76,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		public TcpServer(int port)
 		{
 			_confAdapter = new ConfigurationAdapter(Config.GlobalConfiguration);
-            _tcpListenerFactory = new DefaultTcpListenerFactory();
+			_tcpListenerFactory = new DefaultTcpListenerFactory();
 			Port = port;
 		}
 
@@ -89,7 +89,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 		public TcpServer(string host, int port, ConfigurationAdapter configAdapter, ITcpListenerFactory tcpListenerFactory)
 		{
 			_confAdapter = configAdapter;
-            _tcpListenerFactory = tcpListenerFactory;
+			_tcpListenerFactory = tcpListenerFactory;
 			ConnectAddress = host;
 			Port = port;
 		}
