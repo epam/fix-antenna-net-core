@@ -31,7 +31,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine
 	/// </summary>
 	public class FixServer
 	{
-        public ITcpListenerFactory TcpListenerFactory {get; set;} = new DefaultTcpListenerFactory();
+		public ITcpListenerFactory TcpListenerFactory { get; set; } = new DefaultTcpListenerFactory();
 
 		private static readonly ILog Log = LogFactory.GetLog(typeof(FixServer));
 
