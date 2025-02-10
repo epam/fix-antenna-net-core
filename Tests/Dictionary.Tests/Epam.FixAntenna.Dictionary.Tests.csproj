@@ -59,6 +59,8 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 		<PackageReference Include="NunitXml.TestLogger" Version="3.0.117" />
+		<PackageReference Include="System.Drawing.Common" Version="9.0.1" />
+		<PackageReference Include="System.Text.Json" Version="9.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETFramework' ">
