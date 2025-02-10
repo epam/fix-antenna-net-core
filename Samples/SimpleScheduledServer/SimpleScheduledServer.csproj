@@ -2,8 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net6.0;net48</TargetFrameworks>
+		<TargetFrameworks>net8.0;net48</TargetFrameworks>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
+	  <PackageReference Include="System.Text.Json" Version="9.0.1" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\FixAntenna\AdminTool\Epam.FixAntenna.AdminTool.csproj" />
