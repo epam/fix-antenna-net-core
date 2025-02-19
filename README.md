@@ -14,11 +14,11 @@ Here you can find out more about [our other products](https://github.com/epam/fi
 ![Responce time](Docs/fanet_response_time-1.0.0.png)
 
 ## Requirements & Compatibility
-The engine is based on .NET Standard 2.0 and is compatible with any platform that supports .NET Standard 2.0 e.g. .NET Framework 4.8, .NET Core 3.1, .NET 5, .NET 6.0.
+The engine is based on .NET Standard 2.0 and is compatible with any platform that supports .NET Standard 2.0 e.g. .NET Framework 4.8, .NET Core 3.1, .NET 5, .NET 6.0, .NET 8.0.
 
-Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Windows 10 and Linux Ubuntu 16.04.
+Samples and libraries were tested with .NET Framework 4.8, .NET 6.0 and .NET 8.0 under Windows 10 and Linux Ubuntu 16.04.
 
-.NET SDK 6.0 is required to build and run samples
+.NET SDK 8.0 is required to build and run samples
 
 ## [Quick start guide](Docs/QuickStart.md)
 
@@ -31,7 +31,7 @@ Samples and libraries were tested with .NET Framework 4.8 and .NET 6.0 under Win
 - [Security](Docs/features.md#security)
 
 ## Current State
-2022 – FIX Antenna .NET Core 1.0 Community Edition (open source)
+2025 – FIX Antenna .NET Core 1.2.3 Community Edition (open source)
 
 ## [Changelog](CHANGELOG.md)
 
@@ -60,14 +60,14 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 1. Open `FixAntenna\Epam.FixAntenna.sln` in Visual Studio
 2. Choose Debug configuration
 3. Build → Rebuild solution
-4. Find the `Samples\EchoServer\bin\Debug\net6.0\EchoServer.exe` and run
-5. Find the `Samples\ConnectToGateway\bin\Debug\net6.0\ConnectToGateway.exe` and run
+4. Find the `Samples\EchoServer\bin\Debug\net8.0\EchoServer.exe` and run
+5. Find the `Samples\ConnectToGateway\bin\Debug\net8.0\ConnectToGateway.exe` and run
 
 #### With CLI
-1. Make sure you have .NET SDK 6.0 installed
-2. `dotnet build Epam.FixAntenna.sln -c Debug -f net6.0`
-3. Find the `Samples\EchoServer\bin\Debug\net6.0\EchoServer.exe` and run
-4. Find the `Samples\ConnectToGateway\bin\Debug\net6.0\ConnectToGateway.exe` and run
+1. Make sure you have .NET SDK 8.0 installed
+2. `dotnet build Epam.FixAntenna.sln -c Debug -f net8.0`
+3. Find the `Samples\EchoServer\bin\Debug\net8.0\EchoServer.exe` and run
+4. Find the `Samples\ConnectToGateway\bin\Debug\net8.0\ConnectToGateway.exe` and run
 
 ## Documentation
 - [Backgrounder](Docs/Backgrounder.md)
@@ -111,7 +111,7 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 ## License
 ![b2bits.com](Docs/b2bits.png)
 
-Copyright © 2020-2023 [EPAM Systems, Inc.](https://www.epam.com/)
+Copyright © 2020-2025 [EPAM Systems, Inc.](https://www.epam.com/)
 
 Distributed under [the Apache License](LICENSE), Version 2.0.
 
