@@ -59,7 +59,7 @@ jobs:
 
     - name: Upload coverage xml
       if: ${{matrix.os == 'ubuntu-latest'}}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.artifact_name}}_${{matrix.os}}_${{matrix.framework}}
         path: ${{env.test_result_dir}}
