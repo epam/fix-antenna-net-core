@@ -92,7 +92,7 @@ jobs:
     - name: Generate html report
       uses: danielpalme/ReportGenerator-GitHub-Action@5.1.9
       with:
-        reports: '${{env.test_result_dir}}/*.xml'
+        reports: '${{env.test_result_dir}}/**/**/*.xml'
         targetdir: '${{env.report_dir}}'
         reporttypes: 'HtmlSummary'
 
