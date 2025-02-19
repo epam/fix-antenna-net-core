@@ -15,8 +15,7 @@
 using System;
 using System.IO;
 using System.Xml;
-using NUnit.Framework; 
-using NUnit.Framework.Legacy;
+using NUnit.Framework;
 
 namespace Epam.FixAntenna.Tester
 {
@@ -40,7 +39,7 @@ namespace Epam.FixAntenna.Tester
 			using (var handler = new CasesConfigHandler(Path.GetFileNameWithoutExtension(path)))
 			{
 				ProcessDocument(reader, handler);
-				ClassicAssert.IsFalse(handler.GetCounter().HasFaults);
+				Assert.IsFalse(handler.GetCounter().HasFaults);
 			}
 		}
 
