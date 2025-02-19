@@ -87,7 +87,7 @@ jobs:
     - name: Download coverage xml
       uses: actions/download-artifact@v4
       with:
-        name: ${{env.artifact_name}}_ubuntu-latest_net8.0
+        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.projects.proj_name }}
         path: ${{env.test_result_dir}}
 
     - name: Generate html report
