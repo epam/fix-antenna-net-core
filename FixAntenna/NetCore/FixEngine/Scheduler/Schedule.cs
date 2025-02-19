@@ -35,7 +35,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 
 		public bool IsInsideOrAtBeginningOfInterval(DateTimeOffset date)
 		{
-			ClassicAssertTradingPeriodDefined();
+			AssertTradingPeriodDefined();
 
 			var isIntervalStart = TradePeriodBegin.IsSatisfiedBy(date);
 			var isInsideInterval = IsInsideInterval(date);
@@ -49,7 +49,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		/// </summary>
 		public bool IsInsideInterval(DateTimeOffset date)
 		{
-			ClassicAssertTradingPeriodDefined();
+			AssertTradingPeriodDefined();
 
 			var startLastExecutionDate = TradePeriodBegin.GetTimeBefore(date);
 			var stopLastExecutionDate = TradePeriodEnd.GetTimeBefore(date);
@@ -108,7 +108,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			return utcTimestampInMilliseconds >= date.ToUniversalTime().TotalMilliseconds();
 		}
 
-		private void ClassicAssertTradingPeriodDefined()
+		private void AssertTradingPeriodDefined()
 		{
 			if (!IsTradingPeriodDefined())
 			{
