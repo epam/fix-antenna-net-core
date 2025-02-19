@@ -5,7 +5,7 @@
 ![FIX Antenna](Docs/fa.png)
 
 # FIX Antenna™ .NET Core Community Edition
-FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.  Ideal solution for buy side and proprietary trading companies.
+FIX Antenna™ .NET Core is a high-performance low latency .NET [FIX](https://btobits.com/fixopaedia/index.html) Engine.  Ideal solution for buy-side and proprietary trading companies.
 
 Here you can find out more about [our other products](https://github.com/epam/fix-antenna-net-core/wiki/Other-B2Bits-products).
 
@@ -16,7 +16,7 @@ Here you can find out more about [our other products](https://github.com/epam/fi
 ## Requirements & Compatibility
 The engine is based on .NET Standard 2.0 and is compatible with any platform that supports .NET Standard 2.0 e.g. .NET Framework 4.8, .NET Core 3.1, .NET 5, .NET 6.0, .NET 8.0.
 
-Samples and libraries were tested with .NET Framework 4.8, .NET 6.0 and .NET 8.0 under Windows 10 and Linux Ubuntu 16.04.
+Samples and libraries were tested with .NET Framework 4.8 and .NET 8.0 under Windows 11 and Linux Ubuntu 16.04.
 
 .NET SDK 8.0 is required to build and run samples
 
