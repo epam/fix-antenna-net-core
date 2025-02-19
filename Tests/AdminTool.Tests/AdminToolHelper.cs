@@ -69,7 +69,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 		[TearDown]
 		public virtual void After()
 		{
-			LogAppender.ClassicAssertIfErrorExist();
+			LogAppender.AssertIfErrorExist();
 			ConfiguredSessionRegister.DeleteAll();
 			FixSessionManager.DisposeAllSession();
 		}

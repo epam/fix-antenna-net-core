@@ -29,7 +29,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Xml
 		[TearDown]
 		public void After()
 		{
-			LogAppender.ClassicAssertIfErrorExist();
+			LogAppender.AssertIfErrorExist();
 		}
 
 		[Test]

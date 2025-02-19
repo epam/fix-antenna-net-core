@@ -91,7 +91,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Util
 #endif
 		}
 
-		public static void ClassicAssertIfErrorExist()
+		public static void AssertIfErrorExist()
 		{
 			ClassicAssert.IsTrue(Errors.IsEmpty, AsString(Errors));
 		}
