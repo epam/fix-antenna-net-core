@@ -14,8 +14,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework; 
-using NUnit.Framework.Legacy;
+using NUnit.Framework;
 using System.Linq;
 using System.Xml;
 using System;
