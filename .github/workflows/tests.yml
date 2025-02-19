@@ -85,7 +85,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Download coverage xml
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{env.artifact_name}}_ubuntu-latest_net8.0
         path: ${{env.test_result_dir}}
