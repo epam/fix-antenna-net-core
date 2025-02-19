@@ -93,5 +93,5 @@ jobs:
     - name: Upload html report
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ env.PROJECT_NAME }}
+        name: CoverageHtmlReport ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ env.PROJECT_NAME }}
         path: ${{env.report_dir}}
