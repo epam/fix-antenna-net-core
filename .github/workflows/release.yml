@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.0.x'
           source-url: https://nuget.pkg.github.com/epam/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -27,21 +27,21 @@ jobs:
         run: dotnet build ./Epam.FixAntenna.sln --no-restore -c ReleaseTests
       
       - name: Run AdminTool.Tests
-        run: dotnet test ./Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Common.Tests
-        run: dotnet test ./Tests/Common.Tests/Epam.FixAntenna.Common.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Common.Tests/Epam.FixAntenna.Common.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Configuration.Tests
-        run: dotnet test ./Tests/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Core.Tests
-        run: dotnet test ./Tests/Core.Tests/Epam.FixAntenna.Core.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Core.Tests/Epam.FixAntenna.Core.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Dictionary.Tests
-        run: dotnet test ./Tests/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Message.Tests
-        run: dotnet test ./Tests/Message.Tests/Epam.FixAntenna.Message.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Message.Tests/Epam.FixAntenna.Message.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Validation.Tests
-        run: dotnet test ./Tests/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
       - name: Run Tester.Tests
-        run: dotnet test ./Tests/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj --no-build --verbosity normal -f net6.0 -c Release
+        run: dotnet test ./Tests/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj --no-build --verbosity normal -f net8.0 -c Release
 
       - name: Pack
         run: dotnet pack ./Epam.FixAntenna.sln -c Release -o ./nupkgs --include-symbols --no-build

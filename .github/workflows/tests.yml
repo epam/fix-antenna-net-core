@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        framework: [net6.0, net48]
+        framework: [net8.0, net48]
         platform: [x64]
         test_proj: 
           - './Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj'
@@ -46,7 +46,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
 
     - name: Restore dependencies
       run: dotnet restore ${{ env.solution_path }}
@@ -75,12 +75,12 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
 
     - name: Download coverage xml
       uses: actions/download-artifact@v3
       with:
-        name: ${{env.artifact_name}}_ubuntu-latest_net6.0
+        name: ${{env.artifact_name}}_ubuntu-latest_net8.0
         path: ${{env.test_result_dir}}
 
     - name: Generate html report
@@ -91,7 +91,7 @@ jobs:
         reporttypes: 'HtmlSummary'
 
     - name: Upload html report
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v4
       with:
         name: CoverageHtmlReport
         path: ${{env.report_dir}}
