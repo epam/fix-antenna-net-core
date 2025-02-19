@@ -34,6 +34,15 @@ jobs:
           - './Tests/Message.Tests/Epam.FixAntenna.Message.Tests.csproj'
           - './Tests/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj'
           - './Tests/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj'
+        proj_name: 
+          - 'Tests_AdminTool_Tests_Epam_FixAntenna_AdminTool_Tests'
+          - 'Tests_Common_Tests_Epam_FixAntenna_Common_Tests'
+          - 'Tests_Configuration_Tests_Epam_FixAntenna_Configuration_Tests'
+          - 'Tests_Core_Tests_Epam_FixAntenna_Core_Tests'
+          - 'Tests_Dictionary_Tests_Epam_FixAntenna_Dictionary_Tests'
+          - 'Tests_Message_Tests_Epam_FixAntenna_Message_Tests'
+          - 'Tests_Validation_Tests_Epam_FixAntenna_Validation_Tests'
+          - 'Tests_Tester_Tests_Epam_FixAntenna_Tester_Tests'
         exclude:
           - os: ubuntu-latest
             framework: net48
@@ -61,7 +70,7 @@ jobs:
       if: ${{matrix.os == 'ubuntu-latest'}}
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ replace(matrix.test_proj, '/', '_') }}
+        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.proj_name }}
         path: ${{env.test_result_dir}}
         retention-days: 5
 
