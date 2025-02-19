@@ -61,7 +61,15 @@ jobs:
       if: ${{matrix.os == 'ubuntu-latest'}}
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ env.PROJECT_NAME }}
+        name: ${{ 
+        format(
+        '{0}_{1}_{2}_{3}',
+        env.artifact_name,
+        matrix.os,
+        matrix.framework,
+        replace(matrix.test_proj, '/', '_')
+        ) 
+        }}
         path: ${{env.test_result_dir}}
         retention-days: 5
 
@@ -93,5 +101,13 @@ jobs:
     - name: Upload html report
       uses: actions/upload-artifact@v4
       with:
-        name: CoverageHtmlReport ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ env.PROJECT_NAME }}
+        name: CoverageHtmlReport ${{ 
+        format(
+        '{0}_{1}_{2}_{3}',
+        env.artifact_name,
+        matrix.os,
+        matrix.framework,
+        replace(matrix.test_proj, '/', '_')
+        ) 
+        }}
         path: ${{env.report_dir}}
