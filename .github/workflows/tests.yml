@@ -24,7 +24,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
         framework: [net8.0, net48]
         platform: [x64]
-        include:
+        projects:
           - test_proj: './Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj'
             proj_name: 'Tests_AdminTool_Tests_Epam_FixAntenna_AdminTool_Tests'
           - test_proj: './Tests/Common.Tests/Epam.FixAntenna.Common.Tests.csproj'
@@ -62,13 +62,13 @@ jobs:
       run: dotnet build ${{ env.solution_path }} --no-restore -c ReleaseTests
 
     - name: Run tests
-      run: dotnet test ${{matrix.include.test_proj}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release --collect:"XPlat Code Coverage" --results-directory:'${{env.test_result_dir}}' --settings coverlet.runsettings
+      run: dotnet test ${{matrix.projects.test_proj}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release --collect:"XPlat Code Coverage" --results-directory:'${{env.test_result_dir}}' --settings coverlet.runsettings
 
     - name: Upload coverage xml
       if: ${{matrix.os == 'ubuntu-latest'}}
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.include.proj_name }}
+        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.projects.proj_name }}
         path: ${{env.test_result_dir}}
         retention-days: 5
 
@@ -100,5 +100,5 @@ jobs:
     - name: Upload html report
       uses: actions/upload-artifact@v4
       with:
-        name: CoverageHtmlReport ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.include.proj_name }}
+        name: CoverageHtmlReport ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.projects.proj_name }}
         path: ${{env.report_dir}}
