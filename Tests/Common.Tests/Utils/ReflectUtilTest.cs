@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Common.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Utils
 {
@@ -35,15 +36,15 @@ namespace Epam.FixAntenna.Common.Utils
 		public virtual void TestCreateWithDefaultConstructor()
 		{
 			var emptyObj = _reflectUtilObj.GetInstance(new Type[] { }, new object[] { });
-			Assert.IsNotNull(emptyObj);
+			ClassicAssert.IsNotNull(emptyObj);
 		}
 
 		[Test]
 		public virtual void TestCreateWithExtendedConstructor()
 		{
 			var emptyString = _reflectUtil.GetInstance(new[] { typeof(char[]) }, new object[] { "1".ToCharArray() });
-			Assert.IsNotNull(emptyString);
-			Assert.AreEqual("1", emptyString);
+			ClassicAssert.IsNotNull(emptyString);
+			ClassicAssert.AreEqual("1", emptyString);
 		}
 	}
 }

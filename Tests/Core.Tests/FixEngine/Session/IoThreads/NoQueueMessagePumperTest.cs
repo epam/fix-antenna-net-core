@@ -20,7 +20,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.Queue;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 {
@@ -74,7 +75,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				_messagePumper.Send("D", _message);
 			}
 
-			Assert.AreEqual(5, _transport.GetMessages().Count);
+			ClassicAssert.AreEqual(5, _transport.GetMessages().Count);
 		}
 
 		[Test, Timeout(5000)]
@@ -112,7 +113,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				}
 
 				//check that there are no sent app messages
-				Assert.AreEqual(0, _transport.GetMessages().Count);
+				ClassicAssert.AreEqual(0, _transport.GetMessages().Count);
 
 				//send Logon out of turn (like during connecting)
 				var logon = "8=FIX.4.2#9=0#35=A#34=1#49=ME#56=YOU#52=20090320-11:00:35.027#98=0#108=5#10=000#".Replace('#', '\u0001');
@@ -120,7 +121,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				_messagePumper.SendOutOfTurn("", fixFields);
 
 				//check that still there are no sent app messages
-				Assert.AreEqual(0, _transport.GetMessages().Count);
+				ClassicAssert.AreEqual(0, _transport.GetMessages().Count);
 
 				//start pumper (start session)
 				_messagePumper.Start();
@@ -131,7 +132,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				}
 
 				//check that first message is Logon
-				Assert.AreEqual("A", StringHelper.NewString(RawFixUtil.GetMessageType(_transport.GetMessages()[0])),
+				ClassicAssert.AreEqual("A", StringHelper.NewString(RawFixUtil.GetMessageType(_transport.GetMessages()[0])),
 					"First message not a Logon: " + StringHelper.NewString(_transport.GetMessages()[0]));
 			}
 			finally
@@ -151,7 +152,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				}
 				catch (Exception e)
 				{
-					Assert.Fail($"Exception while sending: {e.Message}");
+					ClassicAssert.Fail($"Exception while sending: {e.Message}");
 				}
 			});
 
@@ -170,7 +171,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				Thread.Sleep(1);
 			}
 
-			Assert.AreEqual(0, _transport.GetMessages().Count);
+			ClassicAssert.AreEqual(0, _transport.GetMessages().Count);
 
 			//send other system level message (RR) out of turn
 			var anotherSysMessage = "8=FIX.4.2#9=0#35=2#34=11#49=ME#56=YOU#52=20031027-14:29:11#7=1#16=100#10=000#".Replace('#', '\u0001');
@@ -184,7 +185,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 				Thread.Sleep(1);
 			}
 
-			Assert.AreEqual(0, _transport.GetMessages().Count);
+			ClassicAssert.AreEqual(0, _transport.GetMessages().Count);
 
 			_messagePumper.Start();
 			while (sender.IsAlive)
@@ -200,7 +201,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			}
 
 			//check that first message is Logon
-			Assert.AreEqual("A", StringHelper.NewString(RawFixUtil.GetMessageType(_transport.GetMessages()[0])),
+			ClassicAssert.AreEqual("A", StringHelper.NewString(RawFixUtil.GetMessageType(_transport.GetMessages()[0])),
 				"First message not a Logon: " + StringHelper.NewString(_transport.GetMessages()[0]));
 		}
 
@@ -217,7 +218,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			{
 				return;
 			}
-			Assert.Fail();
+			ClassicAssert.Fail();
 		}
 
 		[Test]
@@ -233,7 +234,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			{
 				return;
 			}
-			Assert.Fail();
+			ClassicAssert.Fail();
 		}
 
 		[Test]
@@ -243,9 +244,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			{
 				_messagePumper.SendOutOfTurn("0", _message);
 			}
-			Assert.AreEqual(0, _transport.GetMessages().Count);
+			ClassicAssert.AreEqual(0, _transport.GetMessages().Count);
 			_messagePumper.Start();
-			Assert.AreEqual(5, _transport.GetMessages().Count);
+			ClassicAssert.AreEqual(5, _transport.GetMessages().Count);
 		}
 	}
 }

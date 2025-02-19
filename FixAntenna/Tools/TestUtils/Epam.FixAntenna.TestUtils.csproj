@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>net8.0;net48</TargetFrameworks>
 		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="nunit" Version="3.13.3" />
-	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="nunit" Version="4.3.2" />
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
 	</ItemGroup>
 
 	<ItemGroup>

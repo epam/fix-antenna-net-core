@@ -17,7 +17,8 @@ using System.IO;
 using System.Text;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 {

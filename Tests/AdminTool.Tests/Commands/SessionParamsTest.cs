@@ -15,7 +15,8 @@
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -45,11 +46,11 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			var sessionParamsData = response.SessionParamsData;
 
 			// sender and target
-			Assert.AreEqual(sessionParamsData.SenderCompID, TestSessionID.Sender);
-			Assert.AreEqual(sessionParamsData.TargetCompID, TestSessionID.Target);
+			ClassicAssert.AreEqual(sessionParamsData.SenderCompID, TestSessionID.Sender);
+			ClassicAssert.AreEqual(sessionParamsData.TargetCompID, TestSessionID.Target);
 
 			// session type
-			Assert.AreEqual(SessionRole.INITIATOR, sessionParamsData.Role);
+			ClassicAssert.AreEqual(SessionRole.INITIATOR, sessionParamsData.Role);
 
 			ValidateSessionParams(GetSession(TestSessionID).Parameters, sessionParamsData.ExtraSessionParams);
 		}
@@ -65,12 +66,12 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 
 			var sessionParamsData = response.SessionParamsData;
 			// sender and target
-			Assert.AreEqual(sessionParamsData.SenderCompID, TestSessionIdQualifier.Sender);
-			Assert.AreEqual(sessionParamsData.TargetCompID, TestSessionIdQualifier.Target);
-			Assert.AreEqual(sessionParamsData.SessionQualifier, TestSessionIdQualifier.Qualifier);
+			ClassicAssert.AreEqual(sessionParamsData.SenderCompID, TestSessionIdQualifier.Sender);
+			ClassicAssert.AreEqual(sessionParamsData.TargetCompID, TestSessionIdQualifier.Target);
+			ClassicAssert.AreEqual(sessionParamsData.SessionQualifier, TestSessionIdQualifier.Qualifier);
 
 			// session type
-			Assert.AreEqual(SessionRole.INITIATOR, sessionParamsData.Role);
+			ClassicAssert.AreEqual(SessionRole.INITIATOR, sessionParamsData.Role);
 
 			ValidateSessionParams(GetSession(TestSessionIdQualifier).Parameters, sessionParamsData.ExtraSessionParams);
 		}
@@ -86,21 +87,21 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 
 			var sessionParamsData = response.SessionParamsData;
 			// sender and target
-			Assert.AreEqual(sessionParamsData.SenderCompID, TestSessionIdQualifier.Sender);
-			Assert.AreEqual(sessionParamsData.TargetCompID, TestSessionIdQualifier.Target);
-			Assert.AreEqual(sessionParamsData.SessionQualifier, TestSessionIdQualifier.Qualifier);
+			ClassicAssert.AreEqual(sessionParamsData.SenderCompID, TestSessionIdQualifier.Sender);
+			ClassicAssert.AreEqual(sessionParamsData.TargetCompID, TestSessionIdQualifier.Target);
+			ClassicAssert.AreEqual(sessionParamsData.SessionQualifier, TestSessionIdQualifier.Qualifier);
 
 			// session type
-			Assert.AreEqual(SessionRole.INITIATOR, sessionParamsData.Role);
+			ClassicAssert.AreEqual(SessionRole.INITIATOR, sessionParamsData.Role);
 
 			var sessionParameters = GetSession(TestSessionIdQualifier).Parameters;
 			var configuration = sessionParameters.Configuration;
 			var outgoingLoginFixMsg = sessionParameters.OutgoingLoginMessage;
 			var configuredQualifierTag = configuration.GetPropertyAsInt(Config.LogonMessageSessionQualifierTag);
 
-			Assert.AreEqual(configuredQualifierTag.ToString(), sessionParamsData.ExtraSessionParams.LogonMessageSessionQualifierTag);
+			ClassicAssert.AreEqual(configuredQualifierTag.ToString(), sessionParamsData.ExtraSessionParams.LogonMessageSessionQualifierTag);
 
-			Assert.AreEqual(outgoingLoginFixMsg.GetTagValueAsString(configuredQualifierTag), sessionParamsData.SessionQualifier);
+			ClassicAssert.AreEqual(outgoingLoginFixMsg.GetTagValueAsString(configuredQualifierTag), sessionParamsData.SessionQualifier);
 
 			ValidateSessionParams(sessionParameters, sessionParamsData.ExtraSessionParams);
 		}
@@ -108,19 +109,19 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 
 		private void ValidateSessionParams(SessionParameters testedSessionParameters, ExtraSessionParams extraSessionParams)
 		{
-			Assert.AreEqual(extraSessionParams.Username, testedSessionParameters.OutgoingLoginMessage.GetTagValueAsString(553));
-			Assert.AreEqual(extraSessionParams.Password, testedSessionParameters.OutgoingLoginMessage.GetTagValueAsString(554));
-			Assert.AreEqual(extraSessionParams.ForcedReconnect, testedSessionParameters.Configuration.GetPropertyAsInt(Config.AutoreconnectAttempts) >= 0);
-			Assert.AreEqual(extraSessionParams.EnableMessageRejecting, testedSessionParameters.Configuration.GetPropertyAsBoolean(Config.EnableMessageRejecting));
+			ClassicAssert.AreEqual(extraSessionParams.Username, testedSessionParameters.OutgoingLoginMessage.GetTagValueAsString(553));
+			ClassicAssert.AreEqual(extraSessionParams.Password, testedSessionParameters.OutgoingLoginMessage.GetTagValueAsString(554));
+			ClassicAssert.AreEqual(extraSessionParams.ForcedReconnect, testedSessionParameters.Configuration.GetPropertyAsInt(Config.AutoreconnectAttempts) >= 0);
+			ClassicAssert.AreEqual(extraSessionParams.EnableMessageRejecting, testedSessionParameters.Configuration.GetPropertyAsBoolean(Config.EnableMessageRejecting));
 			var batchSize = testedSessionParameters.Configuration.GetPropertyAsInt(Config.MaxMessagesToSendInBatch, 0);
 			if (batchSize > 0)
 			{
-				Assert.IsNotNull(extraSessionParams.MaxMessagesAmountInBunch);
-				Assert.AreEqual(extraSessionParams.MaxMessagesAmountInBunch.Value, batchSize);
+				ClassicAssert.IsNotNull(extraSessionParams.MaxMessagesAmountInBunch);
+				ClassicAssert.AreEqual(extraSessionParams.MaxMessagesAmountInBunch.Value, batchSize);
 			}
 			else
 			{
-				Assert.IsNull(extraSessionParams.MaxMessagesAmountInBunch);
+				ClassicAssert.IsNull(extraSessionParams.MaxMessagesAmountInBunch);
 			}
 		}
 
@@ -133,7 +134,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionParams.RequestID = null;
 
 			var response = GetReponse(_sessionParams);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 	}
 }

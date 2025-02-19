@@ -56,21 +56,21 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			DateTimeOffset actual = ffl.GetTagValueAsTimestamp(tagId);
-			AssertCalendarsEquals(1, actual);
+			ClassicAssertCalendarsEquals(1, actual);
 		}
 
 		[ExpectedExceptionOnFail(typeof(FieldNotFoundException))]
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			DateTimeOffset actual = ffl.GetTagValueAsTimestamp(tagId, occurrence);
-			AssertCalendarsEquals(occurrence, actual);
+			ClassicAssertCalendarsEquals(occurrence, actual);
 		}
 
 		[ExpectedExceptionOnFail(typeof(IndexOutOfRangeException))]
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			DateTimeOffset actual = ffl.GetTagValueAsTimestampAtIndex(firstTagIndex);
-			AssertCalendarsEquals(occurrence, actual);
+			ClassicAssertCalendarsEquals(occurrence, actual);
 		}
 
 		private DateTimeOffset GetCalendar(int occurrence)
@@ -78,9 +78,9 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 			return UtcCalendars[occurrence - 1];
 		}
 
-		private void AssertCalendarsEquals(int occurrence, DateTimeOffset actual)
+		private void ClassicAssertCalendarsEquals(int occurrence, DateTimeOffset actual)
 		{
-			AssertCalendarsEquals(GetCalendar(occurrence), actual, Sdfs[occurrence - 1]);
+			ClassicAssertCalendarsEquals(GetCalendar(occurrence), actual, Sdfs[occurrence - 1]);
 		}
 
 		public override FixMessage AddTag(FixMessage msg, int tagId, int occurrence)

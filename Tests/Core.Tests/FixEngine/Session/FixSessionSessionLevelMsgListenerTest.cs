@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -35,7 +36,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		[SetUp]
 		public void SetUp()
 		{
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 			_server = new FixServer();
 			_server.SetPort(Port);
 			_server.SetListener(new FixServerListenerAnonymousInnerClass(this));
@@ -106,7 +107,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			FixSessionManager.DisposeAllSession();
 			_server.Stop();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()
@@ -124,14 +125,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(gen.GetLogonMessage().AsByteArray());
 			helper.WaitForMessages(10000);
-			Assert.AreEqual("A", helper.GetMessages()[0].GetTagValueAsString(35), "First message not Logon");
+			ClassicAssert.AreEqual("A", helper.GetMessages()[0].GetTagValueAsString(35), "First message not Logon");
 
 			const string testReqId = "myTestReqID";
 			var testRequestFlag = new System.Threading.CountdownEvent(1);
 			_acceptorSession.AddInSessionLevelMessageListener(new FixMessageListenerAnonymousInnerClass(testReqId, testRequestFlag));
 
 			helper.SendMessage(gen.GetTestRequest(2, testReqId).AsByteArray());
-			Assert.IsTrue(testRequestFlag.Wait(TimeSpan.FromSeconds(10)), "We did not received Test Request on user listener");
+			ClassicAssert.IsTrue(testRequestFlag.Wait(TimeSpan.FromSeconds(10)), "We did not received Test Request on user listener");
 
 			helper.Disconnect();
 		}
@@ -166,16 +167,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(gen.GetLogonMessage().AsByteArray());
 			helper.WaitForMessages(10000);
-			Assert.AreEqual("A", helper.GetMessages()[0].GetTagValueAsString(35), "First message not Logon");
-			Assert.IsTrue(helper.GetMessages()[0].HasTagValue(58), "Logon doesn't modified with tag 58");
+			ClassicAssert.AreEqual("A", helper.GetMessages()[0].GetTagValueAsString(35), "First message not Logon");
+			ClassicAssert.IsTrue(helper.GetMessages()[0].HasTagValue(58), "Logon doesn't modified with tag 58");
 
 			helper.PrepareToReceiveMessages(1);
 			_acceptorSession.Disconnect("Normal disconnect");
 			helper.WaitForMessages(10000);
 
-			Assert.AreEqual("5", helper.GetMessages()[0].GetTagValueAsString(35), "First message not Logout");
-			Assert.IsTrue(!helper.GetMessages()[0].HasTagValue(58), "Logout doesn't modified, tag 58 still present");
-			Assert.IsTrue(helper.GetMessages()[0].HasTagValue(1409), "Logout doesn't modified with tag 1409");
+			ClassicAssert.AreEqual("5", helper.GetMessages()[0].GetTagValueAsString(35), "First message not Logout");
+			ClassicAssert.IsTrue(!helper.GetMessages()[0].HasTagValue(58), "Logout doesn't modified, tag 58 still present");
+			ClassicAssert.IsTrue(helper.GetMessages()[0].HasTagValue(1409), "Logout doesn't modified with tag 1409");
 		}
 	}
 }

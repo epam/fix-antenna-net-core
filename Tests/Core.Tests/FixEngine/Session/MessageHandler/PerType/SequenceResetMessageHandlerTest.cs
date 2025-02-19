@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 {
@@ -41,7 +42,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 		{
 			_fixSession.Dispose();
 			ClearLogs();
-			Assert.IsTrue(ClearLogs(), "Can't Clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't Clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()
@@ -64,8 +65,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			sequenceReset.AddTag(Tags.MsgSeqNum, (long)100);
 			sequenceReset.AddTag(Tags.NewSeqNo, (long)200);
 			_sequenceResetMessageHandler.OnNewMessage(sequenceReset);
-			Assert.AreEqual(0, _fixSession.GetMessageQueueSize());
-			Assert.AreEqual(200 - 1, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
+			ClassicAssert.AreEqual(0, _fixSession.GetMessageQueueSize());
+			ClassicAssert.AreEqual(200 - 1, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
 		}
 
 		/// <summary>
@@ -85,8 +86,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			sequenceReset.AddTag(Tags.GapFillFlag, "Y");
 			sequenceReset.AddTag(Tags.NewSeqNo, (long)200);
 			_sequenceResetMessageHandler.OnNewMessage(sequenceReset);
-			Assert.AreEqual(0, _fixSession.GetMessageQueueSize());
-			Assert.AreEqual(98, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
+			ClassicAssert.AreEqual(0, _fixSession.GetMessageQueueSize());
+			ClassicAssert.AreEqual(98, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
 		}
 
 		/// <summary>
@@ -108,9 +109,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			sequenceReset.AddTag(Tags.GapFillFlag, "Y");
 			_sequenceResetMessageHandler.OnNewMessage(sequenceReset);
 			var messageFromQueue = _fixSession.GetMessageWithTypeFromQueue();
-			Assert.AreEqual("3", messageFromQueue.MessageType);
-			Assert.AreEqual("Attempt to lower sequence number, invalid value NewSeqNum=100", messageFromQueue.FixMessage.GetTagValueAsString(Tags.Text));
-			Assert.AreEqual(100, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
+			ClassicAssert.AreEqual("3", messageFromQueue.MessageType);
+			ClassicAssert.AreEqual("Attempt to lower sequence number, invalid value NewSeqNum=100", messageFromQueue.FixMessage.GetTagValueAsString(Tags.Text));
+			ClassicAssert.AreEqual(100, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
 		}
 
 		/// <summary>
@@ -132,11 +133,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			sequenceReset.AddTag(Tags.MsgSeqNum, (long)100);
 			sequenceReset.AddTag(Tags.NewSeqNo, (long)50);
 			_sequenceResetMessageHandler.OnNewMessage(sequenceReset);
-			Assert.AreEqual(1, _fixSession.GetMessageQueueSize());
+			ClassicAssert.AreEqual(1, _fixSession.GetMessageQueueSize());
 			var messageFromQueue = _fixSession.GetMessageWithTypeFromQueue();
-			Assert.AreEqual("3", messageFromQueue.MessageType);
-			Assert.AreEqual("Value 50 is incorrect (out of range) for this tag 36", messageFromQueue.FixMessage.GetTagValueAsString(Tags.Text));
-			Assert.AreEqual(100 - 1, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
+			ClassicAssert.AreEqual("3", messageFromQueue.MessageType);
+			ClassicAssert.AreEqual("Value 50 is incorrect (out of range) for this tag 36", messageFromQueue.FixMessage.GetTagValueAsString(Tags.Text));
+			ClassicAssert.AreEqual(100 - 1, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
 		}
 
 		/// <summary>
@@ -154,8 +155,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			sequenceReset.AddTag(Tags.MsgSeqNum, (long)100);
 			sequenceReset.AddTag(Tags.NewSeqNo, (long)100);
 			_sequenceResetMessageHandler.OnNewMessage(sequenceReset);
-			Assert.AreEqual(0, _fixSession.GetMessageQueueSize());
-			Assert.AreEqual(100 - 1, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
+			ClassicAssert.AreEqual(0, _fixSession.GetMessageQueueSize());
+			ClassicAssert.AreEqual(100 - 1, _fixSession.InSeqNum); //in real flow it will be incremented by next handler before receiving next message
 		}
 
 		[Test]
@@ -170,10 +171,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			_fixSession.InSeqNum = 99;
 
 			_sequenceResetMessageHandler.OnNewMessage(sequenceReset);
-			Assert.AreEqual(1, _fixSession.GetMessageQueueSize());
+			ClassicAssert.AreEqual(1, _fixSession.GetMessageQueueSize());
 			var messageFromQueue = _fixSession.GetMessageWithTypeFromQueue();
-			Assert.AreEqual("3", messageFromQueue.MessageType);
-			Assert.AreEqual("Value 50 is incorrect (out of range) for this tag 36", messageFromQueue.FixMessage.GetTagValueAsString(Tags.Text));
+			ClassicAssert.AreEqual("3", messageFromQueue.MessageType);
+			ClassicAssert.AreEqual("Value 50 is incorrect (out of range) for this tag 36", messageFromQueue.FixMessage.GetTagValueAsString(Tags.Text));
 		}
 
 	}

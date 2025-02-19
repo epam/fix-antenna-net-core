@@ -15,7 +15,8 @@
 using System;
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 {
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_configuration = new TemplatePropertiesWrapper(_props);
 
 			var value = _configuration.GetProperty(Config.StorageDirectory);
-			Assert.AreEqual(value, "root//logs");
+			ClassicAssert.AreEqual(value, "root//logs");
 		}
 
 		[Test]
@@ -57,7 +58,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 				_configuration = new TemplatePropertiesWrapper(_props);
 				Environment.SetEnvironmentVariable(FaHome, "test/");
 				var value = _configuration.GetProperty(Config.StorageDirectory);
-				Assert.AreEqual("test//logs", value);
+				ClassicAssert.AreEqual("test//logs", value);
 			}
 			finally
 			{
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 		{
 			_configuration = new TemplatePropertiesWrapper(_props);
 			var value = _configuration.GetProperty(Config.RequireSsl);
-			Assert.IsNull(value);
+			ClassicAssert.IsNull(value);
 		}
 
 		[Test]
@@ -79,7 +80,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_configuration = new TemplatePropertiesWrapper(_props);
 			_configuration.Put(Config.StorageDirectory, "${TEMP}/log");
 			var value = _configuration.GetProperty(Config.StorageDirectory);
-			Assert.AreNotSame("tmp//logs", value);
+			ClassicAssert.AreNotSame("tmp//logs", value);
 		}
 
 		[Test]
@@ -87,7 +88,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 		{
 			_configuration = new TemplatePropertiesWrapper(_props);
 			var value = _configuration.GetProperty("Hi", "hi");
-			Assert.AreEqual(value, "hi");
+			ClassicAssert.AreEqual(value, "hi");
 		}
 
 		/// <summary>
@@ -101,7 +102,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_configuration = new TemplatePropertiesWrapper(_props);
 
 			var value = _configuration.GetProperty(Config.StorageDirectory);
-			Assert.AreEqual("${DOTNET.home}/logs", value);
+			ClassicAssert.AreEqual("${DOTNET.home}/logs", value);
 		}
 
 		/// <summary>
@@ -112,7 +113,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 		{
 			_configuration = new TemplatePropertiesWrapper(_props);
 			var value = _configuration.GetProperty(Config.StorageDirectory, ".");
-			Assert.AreEqual("/logs", value);
+			ClassicAssert.AreEqual("/logs", value);
 		}
 
 		/// <summary>
@@ -125,7 +126,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_configuration = new TemplatePropertiesWrapper(_props);
 
 			var value = _configuration.GetProperty(Config.StorageDirectory);
-			Assert.AreEqual("${storageDirectory}/logs", value);
+			ClassicAssert.AreEqual("${storageDirectory}/logs", value);
 		}
 
 		[Test]
@@ -136,9 +137,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			var keys = _configuration.GetKeys();
 
-			Assert.AreEqual("notLowCaseValue", _configuration.GetProperty("notLowCaseKey"));
-			Assert.AreEqual("notLowCaseValue", _configuration.GetProperty("notlowcasekey"));
-			Assert.IsTrue(keys.Contains("notLowCaseKey"));
+			ClassicAssert.AreEqual("notLowCaseValue", _configuration.GetProperty("notLowCaseKey"));
+			ClassicAssert.AreEqual("notLowCaseValue", _configuration.GetProperty("notlowcasekey"));
+			ClassicAssert.IsTrue(keys.Contains("notLowCaseKey"));
 		}
 	}
 }

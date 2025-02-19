@@ -15,7 +15,8 @@
 using System;
 using System.IO;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -56,7 +57,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 
 			_fileManager = new SlicedFileManager(_file.FullName);
 			_fileManager.Initialize();
-			Assert.AreEqual(4, _fileManager.GetChunkId());
+			ClassicAssert.AreEqual(4, _fileManager.GetChunkId());
 		}
 
 		private void WriteToFile(string file, string data)

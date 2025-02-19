@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 {
@@ -25,8 +26,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			ResetSeqNums();
 
 			var message = AcceptorSessionEmulator.GetLastReceivedMessage();
-			Assert.AreEqual(message.MsgSeqNumber, 1);
-			Assert.AreEqual(message.GetTagValueAsString(141), "Y");
+			ClassicAssert.AreEqual(message.MsgSeqNumber, 1);
+			ClassicAssert.AreEqual(message.GetTagValueAsString(141), "Y");
 		}
 
 		[Test]
@@ -38,8 +39,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			AcceptorSessionEmulator.ReceiveAnyMessage();
 
 			var message = AcceptorSessionEmulator.GetLastReceivedMessage();
-			Assert.AreEqual(message.MsgSeqNumber, 2);
-			Assert.AreEqual(message.GetTagValueAsString(35), "0");
+			ClassicAssert.AreEqual(message.MsgSeqNumber, 2);
+			ClassicAssert.AreEqual(message.GetTagValueAsString(35), "0");
 		}
 	}
 }

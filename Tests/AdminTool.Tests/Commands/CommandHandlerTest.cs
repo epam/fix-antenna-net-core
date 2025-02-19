@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.AdminTool.Commands;
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -27,14 +28,14 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 		{
 			IMessage sessionsList = new SessionsList();
 			var className = _commandHandler.GetCanonicalCommandClassName(sessionsList);
-			Assert.AreEqual(typeof(SessionsList).Name, className);
+			ClassicAssert.AreEqual(typeof(SessionsList).Name, className);
 		}
 
 		[Test]
 		public void ReplaceInvalidCharacters()
 		{
 			var result = _commandHandler.ReplaceInvalidCharacters("4\u0001Hello&");
-			Assert.AreEqual("4&amp;#01;Hello&amp;", result);
+			ClassicAssert.AreEqual("4&amp;#01;Hello&amp;", result);
 		}
 	}
 }

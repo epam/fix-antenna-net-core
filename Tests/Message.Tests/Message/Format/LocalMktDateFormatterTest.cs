@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Format
 {
@@ -33,7 +34,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		[Test]
 		public virtual void TestFormattedStringLength()
 		{
-			Assert.AreEqual("YYYYMMDD".Length, FixDateFormatter.GetFormattedStringLength(DateTime.Now),
+			ClassicAssert.AreEqual("YYYYMMDD".Length, FixDateFormatter.GetFormattedStringLength(DateTime.Now),
 				"Wrong format length");
 		}
 

@@ -18,7 +18,8 @@ using System.Linq;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -57,12 +58,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 		protected virtual void ValidateBackupResult()
 		{
 			var helper = new FileHelper(this);
-			Assert.IsTrue(helper.GetBackupStorageFileSize(Sender) > 0);
-			Assert.IsTrue(helper.GetBackupStorageIndexFileSize(Sender) > MmfIndexedMessageStorage.PositionLength);
+			ClassicAssert.IsTrue(helper.GetBackupStorageFileSize(Sender) > 0);
+			ClassicAssert.IsTrue(helper.GetBackupStorageIndexFileSize(Sender) > MmfIndexedMessageStorage.PositionLength);
 
-			Assert.AreEqual(0, helper.GetStorageFileSize(Sender));
+			ClassicAssert.AreEqual(0, helper.GetStorageFileSize(Sender));
 			var indLength = helper.GetStorageIndexFileSize(Sender);
-			Assert.IsTrue((indLength == 0) | (indLength == MmfIndexedMessageStorage.PositionLength));
+			ClassicAssert.IsTrue((indLength == 0) | (indLength == MmfIndexedMessageStorage.PositionLength));
 		}
 
 		[Test]
@@ -86,7 +87,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			WriteSomeDataAndBackup();
 			ValidateBackupResult();
 			UpMessageStorage();
-			Assert.AreEqual(1L, GetInitializedSeqId());
+			ClassicAssert.AreEqual(1L, GetInitializedSeqId());
 		}
 
 		[Test]
@@ -102,13 +103,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			WriteDummyMessageToStorage();
 
 			var helper = new FileHelper(this);
-			Assert.IsTrue(helper.GetStorageFileSize(Sender) > 0);
+			ClassicAssert.IsTrue(helper.GetStorageFileSize(Sender) > 0);
 		}
 
 		public virtual void ValidateDeleteResult()
 		{
 			var helper = new FileHelper(this);
-			Assert.AreEqual(0, helper.GetStorageFileSize(Sender));
+			ClassicAssert.AreEqual(0, helper.GetStorageFileSize(Sender));
 		}
 
 		private class FileHelper
@@ -154,7 +155,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 								x.Name.StartsWith(prefix, StringComparison.Ordinal))
 					.Select(x => x.Name)
 					.ToList();
-				Assert.AreEqual(1, files.Count);
+				ClassicAssert.AreEqual(1, files.Count);
 				return GetLastChannelPosition(dir + Path.DirectorySeparatorChar + files[0]);
 			}
 

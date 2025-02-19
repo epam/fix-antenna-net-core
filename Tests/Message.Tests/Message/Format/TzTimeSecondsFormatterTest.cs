@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Format
 {
@@ -27,7 +28,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		public virtual void TestFormattedStringLengthForHourTz()
 		{
 			var cal = CalendarHelper.GetUtcShiftedTestCalendar(TimeSpan.FromHours(-2));
-			Assert.AreEqual("HH:MM:SS-hh".Length, FixDateFormatter.GetFormattedStringLength(cal),
+			ClassicAssert.AreEqual("HH:MM:SS-hh".Length, FixDateFormatter.GetFormattedStringLength(cal),
 				"Wrong format length");
 		}
 
@@ -35,7 +36,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		public virtual void TestFormattedStringLengthForMinTz()
 		{
 			var cal = CalendarHelper.GetUtcShiftedTestCalendar(TimeSpan.FromMinutes(-150));
-			Assert.AreEqual("HH:MM:SS-hh:mm".Length, FixDateFormatter.GetFormattedStringLength(cal),
+			ClassicAssert.AreEqual("HH:MM:SS-hh:mm".Length, FixDateFormatter.GetFormattedStringLength(cal),
 				"Wrong format length");
 		}
 
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		public virtual void TestFormattedStringLengthForUtc()
 		{
 			var cal = CalendarHelper.GetUtcTestCalendar();
-			Assert.AreEqual("HH:MM:SSZ".Length, FixDateFormatter.GetFormattedStringLength(cal), "Wrong format length");
+			ClassicAssert.AreEqual("HH:MM:SSZ".Length, FixDateFormatter.GetFormattedStringLength(cal), "Wrong format length");
 		}
 
 		[Test]

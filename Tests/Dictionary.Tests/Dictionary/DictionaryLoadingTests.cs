@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.Common.ResourceLoading;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Dictionary;
 using Epam.FixAntenna.NetCore.Validation.Entities;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Dictionary.Tests.Dictionary
 {
@@ -35,7 +36,7 @@ namespace Epam.FixAntenna.Dictionary.Tests.Dictionary
 		[MethodImpl(MethodImplOptions.NoOptimization)]
 		public void EmbeddedDictionaryLoaded()
 		{
-			Assert.DoesNotThrow(() =>
+			ClassicAssert.DoesNotThrow(() =>
 			{
 				var fix40 = new FixVersionContainer("myfix40_embedded_resource", FixVersion.Fix40,
 					"Loading/EmbeddedResources/base40.xml");
@@ -46,7 +47,7 @@ namespace Epam.FixAntenna.Dictionary.Tests.Dictionary
 		[Test]
 		public void OutputDictionaryLoaded()
 		{
-			Assert.DoesNotThrow(() =>
+			ClassicAssert.DoesNotThrow(() =>
 			{
 				var fix40 = new FixVersionContainer("myfix40_output_resource", FixVersion.Fix40,
 					"Loading/OutputResources/base40.xml");
@@ -64,13 +65,13 @@ namespace Epam.FixAntenna.Dictionary.Tests.Dictionary
 				"Loading/LoadingOrder/base40.xml");
 			var dictionary = (Fixdic)_builder.BuildDictionary(fix40, false);
 
-			Assert.AreEqual("FIX 4.0 Output Resource", dictionary.Title);
+			ClassicAssert.AreEqual("FIX 4.0 Output Resource", dictionary.Title);
 		}
 
 		[Test]
 		public void DictionaryNotFound()
 		{
-			Assert.Throws<ResourceNotFoundException>(() =>
+			ClassicAssert.Throws<ResourceNotFoundException>(() =>
 			{
 				var fix40 = new FixVersionContainer("myfix40", FixVersion.Fix40,
 					"Loading/does_not_exist.xml");

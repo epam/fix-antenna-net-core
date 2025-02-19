@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Helpers;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 using System.Collections.Generic;
 using System.IO;
@@ -47,7 +48,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				messages[i] = StringHelper.NewString(arrMsg);
 			}
 
-			AssertEqualsMessages(messages);
+			ClassicAssertEqualsMessages(messages);
 		}
 
 		[Test]
@@ -93,7 +94,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			ValidateBackupResult();
 
 			UpMessageStorage();
-			Assert.AreEqual(1L, GetInitializedSeqId());
+			ClassicAssert.AreEqual(1L, GetInitializedSeqId());
 		}
 
 		public virtual void WriteSomeDataAndBackup()
@@ -112,32 +113,32 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 		public virtual void ValidateBackupResult()
 		{
 			var helper = new FileHelper(this);
-			Assert.AreEqual(0, helper.GetStorageFileSize(Sender));
+			ClassicAssert.AreEqual(0, helper.GetStorageFileSize(Sender));
 
-			Assert.IsTrue(helper.CountFilesInBackStorage(Sender) > 0);
+			ClassicAssert.IsTrue(helper.CountFilesInBackStorage(Sender) > 0);
 		}
 
 		public virtual void ValidateDeleteResult()
 		{
 			var helper = new FileHelper(this);
-			Assert.AreEqual(0, helper.GetStorageFileSize(Sender));
+			ClassicAssert.AreEqual(0, helper.GetStorageFileSize(Sender));
 
-			Assert.IsTrue(helper.CountFilesInBackStorage(Sender) <= 0);
+			ClassicAssert.IsTrue(helper.CountFilesInBackStorage(Sender) <= 0);
 		}
 
         public virtual void ValidateInitializationResult()
         {
             var helper = new FileHelper(this);
-            Assert.AreEqual(1, helper.CountFilesInStorage(Sender));
+            ClassicAssert.AreEqual(1, helper.CountFilesInStorage(Sender));
         }
 
-		protected override void AssertEqualsMessages(params string[] expectMessages)
+		protected override void ClassicAssertEqualsMessages(params string[] expectMessages)
 		{
 			var dir = new DirectoryInfo(ConfigurationAdapter.StorageDirectory);
 			var listFiles = dir.GetFiles().Where(x => ShouldFileBeSelected(x.Name, Sender)).Select(x => x.Name)
 				.ToList();
 
-			Assert.IsTrue(listFiles.Count >= 1, "Storage files not found");
+			ClassicAssert.IsTrue(listFiles.Count >= 1, "Storage files not found");
 			var sortedList = SortFiles(listFiles);
 			StreamReader br = null;
 			var fileCount = 0;
@@ -156,8 +157,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 						actualMsg = br.ReadLine();
 					}
 
-					Assert.IsNotNull("Not all messages are written to the storage.", actualMsg);
-					Assert.AreEqual(expMsg, actualMsg.Substring(24)); // get fix message without timestamp
+					ClassicAssert.IsNotNull("Not all messages are written to the storage.", actualMsg);
+					ClassicAssert.AreEqual(expMsg, actualMsg.Substring(24)); // get fix message without timestamp
 				}
 			}
 			finally

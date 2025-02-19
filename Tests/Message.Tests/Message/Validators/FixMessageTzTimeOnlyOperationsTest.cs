@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -63,21 +64,21 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.getTagValueAsTZTimeOnly(tagId);
-			AssertCalendarsEquals(1, actual);
+			ClassicAssertCalendarsEquals(1, actual);
 		}
 
 		[ExpectedExceptionOnFail(typeof(FieldNotFoundException))]
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			var actual = ffl.getTagValueAsTZTimeOnly(tagId, occurrence);
-			AssertCalendarsEquals(occurrence, actual);
+			ClassicAssertCalendarsEquals(occurrence, actual);
 		}
 
 		[ExpectedExceptionOnFail(typeof(IndexOutOfRangeException))]
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			var actual = ffl.getTagValueAsTZTimeOnlyAtIndex(firstTagIndex);
-			AssertCalendarsEquals(occurrence, actual);
+			ClassicAssertCalendarsEquals(occurrence, actual);
 		}
 
 		private DateTimeOffset GetCalendar(int occurrence)
@@ -85,9 +86,9 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 			return Calendars[occurrence - 1];
 		}
 
-		private void AssertCalendarsEquals(int occurrence, DateTimeOffset actual)
+		private void ClassicAssertCalendarsEquals(int occurrence, DateTimeOffset actual)
 		{
-			AssertCalendarsEquals(GetCalendar(occurrence), actual, Sdfs[occurrence - 1]);
+			ClassicAssertCalendarsEquals(GetCalendar(occurrence), actual, Sdfs[occurrence - 1]);
 		}
 
 		public override FixMessage AddTag(FixMessage msg, int tagId, int occurrence)

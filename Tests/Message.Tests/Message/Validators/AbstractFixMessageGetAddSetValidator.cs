@@ -16,7 +16,8 @@ using System;
 using System.Reflection;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -55,7 +56,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 
 			var resultMsg = PrepareTagValueForCheckAfterWrite(TestMessageWithAdd, TestAddTagId, 1);
 			var expectedMsg = RawFixUtil.GetFixMessage(resultMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 
 		[Test]
@@ -66,7 +67,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 
 			var resultMsg = PrepareTagValueForCheckAfterWrite(TestMessageWithInsert, TestAddTagId, 1);
 			var expectedMsg = RawFixUtil.GetFixMessage(resultMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 
 		[Test]
@@ -78,7 +79,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 			var resultMsg =
 				PrepareTagValueForCheckAfterWrite(TestMessage + UnexistTestTag + "=1\u0001", UnexistTestTag, 1);
 			var expectedMsg = RawFixUtil.GetFixMessage(resultMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 
 		[Test]
@@ -98,11 +99,11 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				{
 					var msg = RawFixUtil.GetFixMessage(TestMessage.AsByteArray());
 					AddTagAtIndex(msg, 1000, TestAddTagId, 1);
-					Assert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
+					ClassicAssert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
 				}
 				catch (Exception e)
 				{
-					Assert.AreEqual(failAnnotation.Value, e.GetType(),
+					ClassicAssert.AreEqual(failAnnotation.Value, e.GetType(),
 						GetValidatorName() + " Invalid exception thrown: " + e.ToString());
 				}
 			}
@@ -126,7 +127,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 			}
 
 			var expectedMsg = RawFixUtil.GetFixMessage(testMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 
 		[Test]
@@ -147,11 +148,11 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				try
 				{
 					SetTagAtIndex(msg, 1000, 1);
-					Assert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
+					ClassicAssert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
 				}
 				catch (Exception e)
 				{
-					Assert.AreEqual(failAnnotation.Value, e.GetType(),
+					ClassicAssert.AreEqual(failAnnotation.Value, e.GetType(),
 						GetValidatorName() + " Invalid exception thrown: " + e.ToString());
 				}
 			}
@@ -165,7 +166,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 
 			var resultMsg = PrepareTagValueForCheckAfterWrite(TestMessage, TestTag, 1);
 			var expectedMsg = RawFixUtil.GetFixMessage(resultMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 
 		[Test]
@@ -176,7 +177,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 
 			var resultMsg = PrepareTagValueForCheckAfterWrite(TestMessage, TestTag, 1);
 			var expectedMsg = RawFixUtil.GetFixMessage(resultMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 
 		[Test]
@@ -196,7 +197,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 			}
 
 			var expectedMsg = RawFixUtil.GetFixMessage(resultMsg.AsByteArray());
-			Assert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsg.ToString(), actualMsg.ToString());
 		}
 	}
 }

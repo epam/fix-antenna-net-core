@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -68,7 +69,7 @@ namespace Epam.FixAntenna.Message.Tests
 				index = RawFixUtil.GetStartValueFromEndBuffer(message.AsByteArray(), 0, message.Length, tagId);
 			}
 
-			Assert.AreEqual(expectValueIndex, index);
+			ClassicAssert.AreEqual(expectValueIndex, index);
 		}
 
 		[Test]
@@ -76,15 +77,15 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var buffer = "81225-1".AsByteArray();
 			var value = RawFixUtil.GetRawValue(buffer, 0, buffer.Length, 35);
-			Assert.IsNull(value);
+			ClassicAssert.IsNull(value);
 			value = RawFixUtil.GetRawValue(buffer, 0, buffer.Length, 34);
-			Assert.IsNull(value);
+			ClassicAssert.IsNull(value);
 
 			buffer = "8:32:15\u000110=13".AsByteArray();
 			value = RawFixUtil.GetRawValue(buffer, 0, buffer.Length, 35);
-			Assert.IsNull(value);
+			ClassicAssert.IsNull(value);
 			value = RawFixUtil.GetRawValue(buffer, 0, buffer.Length, 34);
-			Assert.IsNull(value);
+			ClassicAssert.IsNull(value);
 		}
 
 		[Test]
@@ -98,14 +99,14 @@ namespace Epam.FixAntenna.Message.Tests
 				"8=FIX.4.4\u00019=73\u000135=h\u000134=44\u000149=Test\u000156=Server\u000152=20081205-16:01:53.078\u0001336=PRE-OPEN\u0001340=2\u000110=130\u0001";
 			var oneMessLength = message1.Length;
 			var seqNum = RawFixUtil.GetSequenceNumber(message1.AsByteArray(), 0, oneMessLength);
-			Assert.AreEqual(42, seqNum);
+			ClassicAssert.AreEqual(42, seqNum);
 
 			seqNum = RawFixUtil.GetSequenceNumber((message1 + message2).AsByteArray(), oneMessLength, oneMessLength);
-			Assert.AreEqual(43, seqNum);
+			ClassicAssert.AreEqual(43, seqNum);
 
 			seqNum = RawFixUtil.GetSequenceNumber((message1 + message2 + message3).AsByteArray(), 2 * oneMessLength,
 				oneMessLength);
-			Assert.AreEqual(44, seqNum);
+			ClassicAssert.AreEqual(44, seqNum);
 		}
 
 		[Test]
@@ -138,9 +139,9 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void ParseStartOfMessageWithInvalidEndBuffer()
 		{
 			var msg = RawFixUtil.GetFixMessageUntilTagsExists("8=FIX.4.4\u00019=73\u0001".AsByteArray());
-			Assert.IsTrue(msg.Length == 2);
+			ClassicAssert.IsTrue(msg.Length == 2);
 			msg = RawFixUtil.GetFixMessageUntilTagsExists("8=FIX.4.4\u00019=73\u0001fdgsdf".AsByteArray());
-			Assert.IsTrue(msg.Length == 2);
+			ClassicAssert.IsTrue(msg.Length == 2);
 		}
 
 		[Test]
@@ -149,8 +150,8 @@ namespace Epam.FixAntenna.Message.Tests
 			var msg =
 				"8=FIX.4.2\u00019=58\u000135=0\u000149=Sender=CompID\u000156=TargetCompID\u000134=143550\u000152=20101126-13:39:50.563\u000110=185\u0001";
 			var fieldList = RawFixUtil.GetFixMessage(msg.AsByteArray());
-			Assert.That("Sender=CompID".AsByteArray(), Is.EquivalentTo(fieldList.GetTag(49).Value));
-			Assert.AreEqual("Sender=CompID", fieldList.GetTag(49).StringValue);
+			ClassicAssert.That("Sender=CompID".AsByteArray(), Is.EquivalentTo(fieldList.GetTag(49).Value));
+			ClassicAssert.AreEqual("Sender=CompID", fieldList.GetTag(49).StringValue);
 		}
 
 		[Test]
@@ -159,9 +160,9 @@ namespace Epam.FixAntenna.Message.Tests
 			var secureMsg =
 				"8=FIX.4.4\u00019=94\u000135=D\u000149=TRGT\u000156=SNDR\u000134=2\u000150=30737\u000197=Y\u000152=20110303-13:55:03.691\u0001369=6\u000190=15\u000191=IIZZKK\u000110=160\u000110=160\u0001";
 			var msg = RawFixUtil.GetFixMessage(secureMsg.AsByteArray());
-			Assert.AreEqual(15, msg.GetTag(90).LongValue);
-			Assert.AreEqual("IIZZKK\u000110=160\u000110=160", msg.GetTag(91).StringValue);
-			Assert.IsNull(msg.GetTag(10));
+			ClassicAssert.AreEqual(15, msg.GetTag(90).LongValue);
+			ClassicAssert.AreEqual("IIZZKK\u000110=160\u000110=160", msg.GetTag(91).StringValue);
+			ClassicAssert.IsNull(msg.GetTag(10));
 		}
 
 		[Test]
@@ -170,8 +171,8 @@ namespace Epam.FixAntenna.Message.Tests
 			var secureMsg =
 				"8=FIX.4.4\u00019=94\u000135=D\u000149=TRGT\u000156=SNDR\u000134=2\u000150=30737\u000197=Y\u000152=20110303-13:55:03.691\u0001369=6\u000190=11\u000191=IIZZKK\u000110=160\u000110=160\u0001";
 			var msg = RawFixUtil.GetFixMessage(secureMsg.AsByteArray());
-			Assert.AreEqual(11, msg.GetTag(90).LongValue);
-			Assert.AreEqual("IIZZKK\u000110=160", msg.GetTag(91).StringValue);
+			ClassicAssert.AreEqual(11, msg.GetTag(90).LongValue);
+			ClassicAssert.AreEqual("IIZZKK\u000110=160", msg.GetTag(91).StringValue);
 		}
 
 		[Test]
@@ -180,15 +181,15 @@ namespace Epam.FixAntenna.Message.Tests
 			var secureMsg =
 				"8=FIX.4.4\u00019=94\u000135=D\u000149=TRGT\u000156=SNDR\u000134=2\u000150=30737\u000197=Y\u000152=20110303-13:55:03.691\u0001369=6\u000190=13\u000191=IIZZKK\u000110=160\u000110=160\u0001";
 			var msg = RawFixUtil.GetFixMessage(secureMsg.AsByteArray());
-			Assert.AreEqual(13, msg.GetTag(90).LongValue);
-			Assert.AreEqual("IIZZKK\u000110=160", msg.GetTag(91).StringValue);
+			ClassicAssert.AreEqual(13, msg.GetTag(90).LongValue);
+			ClassicAssert.AreEqual("IIZZKK\u000110=160", msg.GetTag(91).StringValue);
 		}
 
 		[Test]
 		public virtual void TestCheckSumAndLength()
 		{
-			Assert.AreEqual(106, RawFixUtil.GetFixMessage(_testMessage).CalculateChecksum());
-			Assert.AreEqual(146, RawFixUtil.GetFixMessage(_testMessage).CalculateBodyLength());
+			ClassicAssert.AreEqual(106, RawFixUtil.GetFixMessage(_testMessage).CalculateChecksum());
+			ClassicAssert.AreEqual(146, RawFixUtil.GetFixMessage(_testMessage).CalculateBodyLength());
 		}
 
 		[Test]
@@ -208,34 +209,34 @@ namespace Epam.FixAntenna.Message.Tests
 			largeMsg.AddTag(111, largeBuff);
 
 			long actual = largeMsg.CalculateChecksum();
-			Assert.IsTrue(actual > 0, "Checksum overflow");
-			Assert.AreEqual(209, actual);
+			ClassicAssert.IsTrue(actual > 0, "Checksum overflow");
+			ClassicAssert.AreEqual(209, actual);
 		}
 
 		[Test]
 		public virtual void TestGarbled2()
 		{
-			Assert.Throws<GarbledMessageException>(() => { RawFixUtil.GetFixMessage(GarbledMessage2.AsByteArray()); });
+			ClassicAssert.Throws<GarbledMessageException>(() => { RawFixUtil.GetFixMessage(GarbledMessage2.AsByteArray()); });
 		}
 
 		[Test]
 		public virtual void TestGarbledMessageWithoutStartAndEndTags()
 		{
-			Assert.Throws<GarbledMessageException>(() => { RawFixUtil.GetFixMessage(GarbledMessage1.AsByteArray()); });
+			ClassicAssert.Throws<GarbledMessageException>(() => { RawFixUtil.GetFixMessage(GarbledMessage1.AsByteArray()); });
 		}
 
 		[Test]
 		public virtual void TestGetAllRawValue()
 		{
 			var allRawValues = RawFixUtil.GetAllRawValues(_messageWithRg, 0, _messageWithRg.Length, 872);
-			Assert.IsNotNull(allRawValues);
-			Assert.AreEqual(4, allRawValues.Count);
+			ClassicAssert.IsNotNull(allRawValues);
+			ClassicAssert.AreEqual(4, allRawValues.Count);
 			string[] expectedValues = { "1", "3", "4", "11" };
 			for (var i = 0; i < expectedValues.Length; i++)
 			{
 				var expectedValue = expectedValues[i];
 				var actualValue = StringHelper.NewString(allRawValues[i]);
-				Assert.AreEqual(expectedValue, actualValue);
+				ClassicAssert.AreEqual(expectedValue, actualValue);
 			}
 		}
 
@@ -243,14 +244,14 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestGetAllRawValueReturnsEmptyArrayForNonExistentTags()
 		{
 			var allRawValues = RawFixUtil.GetAllRawValues(_messageWithRg, 0, _messageWithRg.Length, 72);
-			Assert.IsNotNull(allRawValues);
-			Assert.AreEqual(0, allRawValues.Count);
+			ClassicAssert.IsNotNull(allRawValues);
+			ClassicAssert.AreEqual(0, allRawValues.Count);
 		}
 
 		[Test]
 		public virtual void TestGetFieldListForRawFieldsWithoutLength()
 		{
-			Assert.Throws<GarbledMessageException>(() =>
+			ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				RawFixUtil.GetFixMessage(GarbledMessageWithInvalidRawTagLength.AsByteArray());
 			});
@@ -260,14 +261,14 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestGetFieldListWithout35Tag()
 		{
 			var list = RawFixUtil.GetFixMessage("8=FIX.4.1\u00019=0\u0001".AsByteArray());
-			Assert.AreEqual(2, list.Length);
+			ClassicAssert.AreEqual(2, list.Length);
 		}
 
 		[Test]
 		public virtual void TestGetFixMessageForRawFields()
 		{
 			var rawMessage = RawFixUtil.GetFixMessage(_messageWithRawMessage).GetTag(96).StringValue;
-			Assert.AreEqual(_etalonRawMessage, rawMessage);
+			ClassicAssert.AreEqual(_etalonRawMessage, rawMessage);
 		}
 
 		[Test]
@@ -276,7 +277,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var msgBuffer =
 				"!!!!!!!!!!8=FIX.4.2\u00019=110\u000135=B\u000134=4\u000149=acceptor\u000156=initiator\u000152=20110110-15:43:32.470\u0001148=Hello there:2\u000133=3\u000158=line1\u000158=line2\u000158=line3\u000110=001\u0001!!!!!!!!!";
 			var rawMessage = RawFixUtil.GetFixMessage(msgBuffer.AsByteArray(), 10, 133);
-			Assert.AreEqual(13, rawMessage.Length);
+			ClassicAssert.AreEqual(13, rawMessage.Length);
 		}
 
 		[Test]
@@ -286,7 +287,7 @@ namespace Epam.FixAntenna.Message.Tests
 				"8=FIX.4.0\u00019=0\u000135=B\u000149=C\u000156=C\u000190=1\u000191=D\u000134=0\u000150=C\u000157=C\u000152=20020101-00:00:00\u0001122=20020101-00:00:00\u000142=20020101-00:00:00\u000161=0\u000146=C\u000133=1\u000158=C\u000195=1\u000196=D\u000110=000\u0001"
 					.AsByteArray();
 			var list = RawFixUtil.GetFixMessage(buffer);
-			Assert.AreEqual("D", list.GetTag(96).StringValue);
+			ClassicAssert.AreEqual("D", list.GetTag(96).StringValue);
 		}
 
 		[Test]
@@ -296,7 +297,7 @@ namespace Epam.FixAntenna.Message.Tests
 				"8=FIX.4.0\u00019=0\u000135=B\u000149=C\u000156=C\u000190=1\u000191=D\u000134=0\u000150=C\u000157=C\u000152=20020101-00:00:00\u0001122=20020101-00:00:00\u000142=20020101-00:00:00\u000161=0\u000146=C\u000133=1\u000158=C\u000195=5\u000196=D==\u0001=\u000110=000\u0001"
 					.AsByteArray();
 			var list = RawFixUtil.GetFixMessage(buffer);
-			Assert.AreEqual("D==\u0001=", list.GetTag(96).StringValue);
+			ClassicAssert.AreEqual("D==\u0001=", list.GetTag(96).StringValue);
 		}
 
 		[Test]
@@ -304,29 +305,29 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var buffer = "\u000110=0\u0001".AsByteArray();
 			var value = RawFixUtil.GetRawValue(buffer, 0, buffer.Length, 10);
-			Assert.IsNotNull(value);
-			Assert.That("0".AsByteArray(), Is.EquivalentTo(value));
+			ClassicAssert.IsNotNull(value);
+			ClassicAssert.That("0".AsByteArray(), Is.EquivalentTo(value));
 		}
 
 		[Test]
 		public virtual void TestGetRawValueReturnsCorrectValue()
 		{
-			Assert.AreEqual("9",
+			ClassicAssert.AreEqual("9",
 				StringHelper.NewString(RawFixUtil.GetRawValue(_testMessage, 0, _testMessage.Length, 34)));
-			Assert.AreEqual("target",
+			ClassicAssert.AreEqual("target",
 				StringHelper.NewString(RawFixUtil.GetRawValue(_testMessage, 0, _testMessage.Length, 49)));
 		}
 
 		[Test]
 		public virtual void TestGetRawValueReturnsNullForNonExistentTags()
 		{
-			Assert.IsNull(RawFixUtil.GetRawValue(_testMessage, 0, _testMessage.Length, 4));
+			ClassicAssert.IsNull(RawFixUtil.GetRawValue(_testMessage, 0, _testMessage.Length, 4));
 		}
 
 		[Test]
 		public virtual void TestGetSequenceNumberWith340Tag()
 		{
-			Assert.That("9".AsByteArray(),
+			ClassicAssert.That("9".AsByteArray(),
 				Is.EquivalentTo(RawFixUtil.GetRawValue(_testMessage, 0, _testMessage.Length, 34)));
 		}
 
@@ -335,15 +336,15 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var buffer = "34=2\u000134=\u000110=190\u0001".AsByteArray();
 			var value = RawFixUtil.GetRawValue(buffer, 0, buffer.Length, 34, true);
-			Assert.IsNotNull(value);
+			ClassicAssert.IsNotNull(value);
 			long? sequence = FixTypes.ParseInt(value);
-			Assert.IsTrue(sequence.Equals(2L));
+			ClassicAssert.IsTrue(sequence.Equals(2L));
 		}
 
 		[Test]
 		public virtual void TestMessageHasEqualsAtEnd()
 		{
-			Assert.Throws<GarbledMessageException>(() =>
+			ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				var message = GarbledMessageInvalidTagAtEnd + "=";
 				RawFixUtil.GetFixMessage(message.AsByteArray());
@@ -353,7 +354,7 @@ namespace Epam.FixAntenna.Message.Tests
 		[Test]
 		public virtual void testMessageHasInvalid_112_field()
 		{
-			Assert.Throws<GarbledMessageException>(() =>
+			ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				RawFixUtil.GetFixMessage(GarbledMessageInvalidField.AsByteArray());
 			});
@@ -362,7 +363,7 @@ namespace Epam.FixAntenna.Message.Tests
 		[Test]
 		public virtual void TestMessageHasInvalidTagAtEnd()
 		{
-			Assert.Throws<GarbledMessageException>(() =>
+			ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				RawFixUtil.GetFixMessage(GarbledMessageInvalidTagAtEnd.AsByteArray());
 			});
@@ -371,7 +372,7 @@ namespace Epam.FixAntenna.Message.Tests
 		[Test]
 		public virtual void TestNoSohAtTheEndOfMessage()
 		{
-			Assert.Throws<GarbledMessageException>(() =>
+			ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				RawFixUtil.GetFixMessage(GarbledMessageNotSohAtEnd.AsByteArray());
 			});

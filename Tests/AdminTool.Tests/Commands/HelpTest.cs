@@ -15,7 +15,8 @@
 using Epam.FixAntenna.AdminTool.Tests.Util;
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -32,13 +33,13 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			help.RequestID = RequestID;
 
 			var response = GetReponse(help);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 			var helpData = response.HelpData;
-			Assert.IsNotNull(helpData);
-			Assert.IsNotNull(helpData.SupportedRequest);
-			Assert.IsTrue(helpData.SupportedRequest.Count > 0);
-			Assert.IsTrue(helpData.SupportedRequest[0].ToString().Length > 1);
+			ClassicAssert.IsNotNull(helpData);
+			ClassicAssert.IsNotNull(helpData.SupportedRequest);
+			ClassicAssert.IsTrue(helpData.SupportedRequest.Count > 0);
+			ClassicAssert.IsTrue(helpData.SupportedRequest[0].ToString().Length > 1);
 		}
 
 		[Test]
@@ -52,11 +53,11 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			help.RequestID = RequestID;
 
 			var response = GetReponse(help);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 			var helpData = response.HelpData;
-			Assert.IsNotNull(helpData);
-			Assert.IsTrue(helpData.SupportedRequest.Count > 1);
+			ClassicAssert.IsNotNull(helpData);
+			ClassicAssert.IsTrue(helpData.SupportedRequest.Count > 1);
 		}
 
 		[Test]
@@ -77,7 +78,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			FixSession.Parameters.Configuration
 				.SetProperty(Config.AutostartAcceptorCommandPackage, "");
 
-			Assert.IsNotNull(response, "no response");
+			ClassicAssert.IsNotNull(response, "no response");
 
 			LogAppender.Clear();
 		}
@@ -93,13 +94,13 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			help.RequestID = RequestID;
 
 			var response = GetReponse(help);
-			Assert.IsNotNull(response, "no response");
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.IsNotNull(response, "no response");
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
 			var helpData = response.HelpData;
-			Assert.IsNotNull(helpData);
-			Assert.IsTrue(helpData.SupportedRequest.Count > 1);
+			ClassicAssert.IsNotNull(helpData);
+			ClassicAssert.IsTrue(helpData.SupportedRequest.Count > 1);
 		}
 	}
 }

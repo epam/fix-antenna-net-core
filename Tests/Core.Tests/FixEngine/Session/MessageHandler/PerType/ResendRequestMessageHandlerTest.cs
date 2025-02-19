@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 {
@@ -41,9 +42,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 		{
 			_resendRequestMessageHandler.OnNewMessage(_message);
 
-			Assert.IsTrue(_session.Messages.Count > 0);
+			ClassicAssert.IsTrue(_session.Messages.Count > 0);
 			var message = _session.Messages[0];
-			Assert.AreEqual(4, message.GetTagAsInt(35));
+			ClassicAssert.AreEqual(4, message.GetTagAsInt(35));
 		}
 
 		[Test]
@@ -54,11 +55,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			_resendRequestMessageHandler.Session = _session;
 			_resendRequestMessageHandler.OnNewMessage(_message);
 
-			Assert.IsTrue(_session.Messages.Count > 0);
+			ClassicAssert.IsTrue(_session.Messages.Count > 0);
 			var message = _session.Messages[0];
 			// the first message should be seq reset
-			Assert.AreEqual(4, message.GetTagAsInt(35)); // seq reset
-			Assert.AreEqual(4000, message.GetTagAsInt(36));
+			ClassicAssert.AreEqual(4, message.GetTagAsInt(35)); // seq reset
+			ClassicAssert.AreEqual(4000, message.GetTagAsInt(36));
 		}
 	}
 }

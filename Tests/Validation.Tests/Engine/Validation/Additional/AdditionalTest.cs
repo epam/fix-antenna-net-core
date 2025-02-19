@@ -20,7 +20,8 @@ using Epam.FixAntenna.NetCore.Validation;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional.Util;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional
 {
@@ -78,7 +79,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional
 			_validationEngine = ValidatorEngineHelper.CreateValidator(FixVersion.Fix42);
 			var content = RawFixUtil.GetFixMessage(D2.AsByteArray());
 			var errorContainer = _validationEngine.ValidateFixMessage("D", content);
-			Assert.IsTrue(errorContainer.IsEmpty);
+			ClassicAssert.IsTrue(errorContainer.IsEmpty);
 		}
 
 		[Test]
@@ -90,7 +91,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional
 			_validationEngine = ValidatorEngineHelper.CreateValidator(FixVersion.Fix42);
 			var content = RawFixUtil.GetFixMessage(D2.AsByteArray());
 			var errorContainer = _validationEngine.ValidateFixMessage("D", content);
-			Assert.IsTrue(errorContainer.IsEmpty);
+			ClassicAssert.IsTrue(errorContainer.IsEmpty);
 		}
 
 		[Test]
@@ -102,7 +103,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional
 			_validationEngine = ValidatorEngineHelper.CreateValidator(FixVersion.Fix42);
 			var content = RawFixUtil.GetFixMessage(D1.AsByteArray());
 			var errorContainer = _validationEngine.ValidateFixMessage("D", content);
-			Assert.IsTrue(errorContainer.IsEmpty);
+			ClassicAssert.IsTrue(errorContainer.IsEmpty);
 		}
 
 		[Test]
@@ -114,7 +115,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional
 			_validationEngine = ValidatorEngineHelper.CreateValidator(FixVersion.Fix42);
 			var content = RawFixUtil.GetFixMessage(D1.AsByteArray());
 			var errorContainer = _validationEngine.ValidateFixMessage("D", content);
-			Assert.IsFalse(errorContainer.IsEmpty);
+			ClassicAssert.IsFalse(errorContainer.IsEmpty);
 		}
 	}
 }

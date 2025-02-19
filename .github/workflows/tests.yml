@@ -18,22 +18,29 @@ env:
 
 jobs:
   tests:
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        framework: [net6.0, net48]
+        framework: [net8.0, net48]
         platform: [x64]
-        test_proj: 
-          - './Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj'
-          - './Tests/Common.Tests/Epam.FixAntenna.Common.Tests.csproj'
-          - './Tests/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj'
-          - './Tests/Core.Tests/Epam.FixAntenna.Core.Tests.csproj'
-          - './Tests/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj'
-          - './Tests/Message.Tests/Epam.FixAntenna.Message.Tests.csproj'
-          - './Tests/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj'
-          - './Tests/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj'
+        projects:
+          - proj_path: './Tests/AdminTool.Tests/Epam.FixAntenna.AdminTool.Tests.csproj'
+            proj_name: 'Tests_AdminTool_Tests_Epam_FixAntenna_AdminTool_Tests'
+          - proj_path: './Tests/Common.Tests/Epam.FixAntenna.Common.Tests.csproj'
+            proj_name: 'Tests_Common_Tests_Epam_FixAntenna_Common_Tests'
+          - proj_path: './Tests/Configuration.Tests/Epam.FixAntenna.Configuration.Tests.csproj'
+            proj_name: 'Tests_Configuration_Tests_Epam_FixAntenna_Configuration_Tests'
+          - proj_path: './Tests/Core.Tests/Epam.FixAntenna.Core.Tests.csproj'
+            proj_name: 'Tests_Core_Tests_Epam_FixAntenna_Core_Tests'
+          - proj_path: './Tests/Dictionary.Tests/Epam.FixAntenna.Dictionary.Tests.csproj'
+            proj_name: 'Tests_Dictionary_Tests_Epam_FixAntenna_Dictionary_Tests'
+          - proj_path: './Tests/Message.Tests/Epam.FixAntenna.Message.Tests.csproj'
+            proj_name: 'Tests_Message_Tests_Epam_FixAntenna_Message_Tests'
+          - proj_path: './Tests/Validation.Tests/Epam.FixAntenna.Validation.Tests.csproj'
+            proj_name: 'Tests_Validation_Tests_Epam_FixAntenna_Validation_Tests'
+          - proj_path: './Tests/Tester.Tests/Epam.FixAntenna.Tester.Tests.csproj'
+            proj_name: 'Tests_Tester_Tests_Epam_FixAntenna_Tester_Tests'
         exclude:
           - os: ubuntu-latest
             framework: net48
@@ -46,7 +53,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
 
     - name: Restore dependencies
       run: dotnet restore ${{ env.solution_path }}
@@ -55,13 +62,13 @@ jobs:
       run: dotnet build ${{ env.solution_path }} --no-restore -c ReleaseTests
 
     - name: Run tests
-      run: dotnet test ${{matrix.test_proj}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release --collect:"XPlat Code Coverage" --results-directory:'${{env.test_result_dir}}' --settings coverlet.runsettings
+      run: dotnet test ${{matrix.projects.proj_path}} --no-build --verbosity normal -f ${{matrix.framework}} -c Release --collect:"XPlat Code Coverage" --results-directory:'${{env.test_result_dir}}' --settings coverlet.runsettings
 
     - name: Upload coverage xml
       if: ${{matrix.os == 'ubuntu-latest'}}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: ${{env.artifact_name}}_${{matrix.os}}_${{matrix.framework}}
+        name: ${{ env.artifact_name }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.projects.proj_name }}
         path: ${{env.test_result_dir}}
         retention-days: 5
 
@@ -75,23 +82,22 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
 
     - name: Download coverage xml
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: ${{env.artifact_name}}_ubuntu-latest_net6.0
         path: ${{env.test_result_dir}}
 
     - name: Generate html report
       uses: danielpalme/ReportGenerator-GitHub-Action@5.1.9
       with:
-        reports: '${{env.test_result_dir}}/*/*.xml'
+        reports: '${{env.test_result_dir}}/**/**/*.xml'
         targetdir: '${{env.report_dir}}'
         reporttypes: 'HtmlSummary'
 
     - name: Upload html report
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v4
       with:
         name: CoverageHtmlReport
         path: ${{env.report_dir}}

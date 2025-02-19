@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -33,7 +34,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(887, 1);
 			msg.Set(888, "b");
 
-			Assert.AreEqual("b",
+			ClassicAssert.AreEqual("b",
 				msg.GetRepeatingGroup(711).GetEntry(0).GetRepeatingGroup(887).GetEntry(0).GetTagValueAsString(888));
 		}
 	}

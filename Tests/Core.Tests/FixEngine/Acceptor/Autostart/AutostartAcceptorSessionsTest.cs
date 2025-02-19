@@ -16,7 +16,8 @@ using System;
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Acceptor.Autostart;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor.AutoStart
 {
@@ -34,12 +35,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor.AutoStart
 			var conf = new Config(props);
 			var details = new AutostartAcceptorSessions(conf, null);
 			var t = details.Map["t"];
-			Assert.IsNotNull(t);
-			Assert.IsTrue(t.AllowedIp("192.168.0.100"));
-			Assert.IsTrue(t.AllowedIp("74.24.8.100"));
-			Assert.IsFalse(t.AllowedIp("74.24.0.0"));
-			Assert.IsFalse(t.AllowedIp("74.24.255.255"));
-			Assert.IsFalse(t.AllowedIp("168.24.0.100"));
+			ClassicAssert.IsNotNull(t);
+			ClassicAssert.IsTrue(t.AllowedIp("192.168.0.100"));
+			ClassicAssert.IsTrue(t.AllowedIp("74.24.8.100"));
+			ClassicAssert.IsFalse(t.AllowedIp("74.24.0.0"));
+			ClassicAssert.IsFalse(t.AllowedIp("74.24.255.255"));
+			ClassicAssert.IsFalse(t.AllowedIp("168.24.0.100"));
 		}
 
 		[Test]
@@ -53,13 +54,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor.AutoStart
 			var conf = new Config(props);
 			var details = new AutostartAcceptorSessions(conf, null);
 			var t = details.Map["t"];
-			Assert.IsNotNull(t);
-			Assert.IsTrue(t.AllowedIp("192.168.0.100"));
-			Assert.IsTrue(t.AllowedIp("74.24.8.100"));
-			Assert.IsTrue(t.AllowedIp("74.24.0.0"));
-			Assert.IsTrue(t.AllowedIp("74.24.255.255"));
-			Assert.IsTrue(t.AllowedIp("168.24.0.100"));
-			Assert.IsTrue(t.AllowedIp("aaa"));
+			ClassicAssert.IsNotNull(t);
+			ClassicAssert.IsTrue(t.AllowedIp("192.168.0.100"));
+			ClassicAssert.IsTrue(t.AllowedIp("74.24.8.100"));
+			ClassicAssert.IsTrue(t.AllowedIp("74.24.0.0"));
+			ClassicAssert.IsTrue(t.AllowedIp("74.24.255.255"));
+			ClassicAssert.IsTrue(t.AllowedIp("168.24.0.100"));
+			ClassicAssert.IsTrue(t.AllowedIp("aaa"));
 		}
 
 
@@ -72,7 +73,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor.AutoStart
 			props[AutostartAcceptorSessions.Prefix + ".t.fixServerListener"] = "System.String";
 
 			var conf = new Config(props);
-			Assert.Throws<ArgumentException>(() => new AutostartAcceptorSessions(conf, null));
+			ClassicAssert.Throws<ArgumentException>(() => new AutostartAcceptorSessions(conf, null));
 		}
 	}
 }

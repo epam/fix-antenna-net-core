@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using Version = Epam.FixAntenna.NetCore.Common.Utils.Version;
 
 namespace Epam.FixAntenna.AdminTool.Tests
@@ -73,8 +74,8 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Thread.Sleep(TEST_SLEEP);
 
 			// this admin session
-			Assert.IsNull(_createdSession);
-			Assert.AreEqual(SessionState.Connected, _fixSession.SessionState);
+			ClassicAssert.IsNull(_createdSession);
+			ClassicAssert.AreEqual(SessionState.Connected, _fixSession.SessionState);
 		}
 
 		[Test]
@@ -88,12 +89,12 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Thread.Sleep(TEST_SLEEP);
 
 			// this admin session
-			Assert.IsNull(_createdSession);
-			Assert.AreEqual(SessionState.Connected, _fixSession.SessionState);
+			ClassicAssert.IsNull(_createdSession);
+			ClassicAssert.AreEqual(SessionState.Connected, _fixSession.SessionState);
 
 			var inLogon = _fixSession.Parameters.IncomingLoginMessage;
-			Assert.AreEqual(Version.GetProductVersion(typeof(IMessage)), inLogon.GetTagValueAsString(AdminConstants.AdminProtocolVersionTag));
-			Assert.AreEqual(AdminTool.GetFormattedTimeZone(), inLogon.GetTagValueAsString(AdminConstants.TimezoneTag));
+			ClassicAssert.AreEqual(Version.GetProductVersion(typeof(IMessage)), inLogon.GetTagValueAsString(AdminConstants.AdminProtocolVersionTag));
+			ClassicAssert.AreEqual(AdminTool.GetFormattedTimeZone(), inLogon.GetTagValueAsString(AdminConstants.TimezoneTag));
 		}
 
 		[Test]
@@ -108,8 +109,8 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Thread.Sleep(TEST_SLEEP);
 
 			// this admin session
-			Assert.IsNull(_createdSession);
-			Assert.AreEqual(SessionState.DisconnectedAbnormally, _fixSession.SessionState);
+			ClassicAssert.IsNull(_createdSession);
+			ClassicAssert.AreEqual(SessionState.DisconnectedAbnormally, _fixSession.SessionState);
 			ThereIsWarn("Username/password for session admin-admin3 is different from expected.");
 		}
 
@@ -125,8 +126,8 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Thread.Sleep(TEST_SLEEP);
 
 			// this admin session
-			Assert.IsNull(_createdSession);
-			Assert.AreEqual(SessionState.DisconnectedAbnormally, _fixSession.SessionState);
+			ClassicAssert.IsNull(_createdSession);
+			ClassicAssert.AreEqual(SessionState.DisconnectedAbnormally, _fixSession.SessionState);
 			ThereIsWarn("Username/password for session admin-admin3 is different from expected.");
 		}
 
@@ -143,8 +144,8 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			Thread.Sleep(TEST_SLEEP);
 
 			// this admin session
-			Assert.IsNull(_createdSession);
-			Assert.AreEqual(SessionState.DisconnectedAbnormally, _fixSession.SessionState);
+			ClassicAssert.IsNull(_createdSession);
+			ClassicAssert.AreEqual(SessionState.DisconnectedAbnormally, _fixSession.SessionState);
 			ThereIsWarn($"Connection from {Localhost} not allowed for session admin2-admin3.");
 		}
 
@@ -159,7 +160,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 					return;
 				}
 			}
-			Assert.AreEqual(expectedWarning, warnings, "There is no expected warning");
+			ClassicAssert.AreEqual(expectedWarning, warnings, "There is no expected warning");
 		}
 
 		public void NewFixSession(IFixSession session)

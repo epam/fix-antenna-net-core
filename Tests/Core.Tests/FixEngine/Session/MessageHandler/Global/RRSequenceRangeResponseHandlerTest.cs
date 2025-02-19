@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		[Test]
 		public virtual void TestMsgWithoutPossDupInRangeRr()
 		{
-			Assert.Throws<SequenceToLowException>(() => { TestInRangeRr(_message); });
+			ClassicAssert.Throws<SequenceToLowException>(() => { TestInRangeRr(_message); });
 		}
 
 		[Test]
@@ -89,7 +90,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		{
 			AddPossDupFlag(_message);
 			TestRangeRr(_message, 10, 15, 15);
-			Assert.IsFalse(_testFixSession.SequenceManager.IsRRangeExists());
+			ClassicAssert.IsFalse(_testFixSession.SequenceManager.IsRRangeExists());
 		}
 
 		private FixMessage GetMessageWithType(string type)
@@ -115,7 +116,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		private void TestInRangeRr(FixMessage message)
 		{
 			TestRangeRr(message, 10, 15, 12);
-			Assert.IsTrue(_testFixSession.SequenceManager.IsRRangeExists());
+			ClassicAssert.IsTrue(_testFixSession.SequenceManager.IsRRangeExists());
 		}
 
 		private void AddPossDupFlag(FixMessage message)
@@ -129,14 +130,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_testFixSession.SetAttribute(ExtendedFixSessionAttribute.EndOfRrRange, end);
 			message.Set(Tags.MsgSeqNum, current);
 			_rrHandler.OnNewMessage(message);
-			AssertMsgNextHandlerEquals(message);
+			ClassicAssertMsgNextHandlerEquals(message);
 		}
 
-		private void AssertMsgNextHandlerEquals(FixMessage message)
+		private void ClassicAssertMsgNextHandlerEquals(FixMessage message)
 		{
 			var processed = _nextHandler.Message;
-			Assert.IsNotNull(processed);
-			Assert.AreEqual(message.ToString(), processed.ToString());
+			ClassicAssert.IsNotNull(processed);
+			ClassicAssert.AreEqual(message.ToString(), processed.ToString());
 		}
 
 		private class NextHandler : AbstractGlobalMessageHandler

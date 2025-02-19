@@ -15,7 +15,8 @@
 using Epam.FixAntenna.AdminTool.Tests.Util;
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Message
 {
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Message
 				.NewString(receiveMessage.Message)
 				.ReplaceAll("&#01;", "\u0001");
 
-			Assert.AreEqual(etalonMessage, transformMessage);
+			ClassicAssert.AreEqual(etalonMessage, transformMessage);
 		}
 	}
 }

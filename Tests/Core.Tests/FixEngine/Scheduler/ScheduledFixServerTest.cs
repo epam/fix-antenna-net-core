@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
@@ -54,8 +55,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.AreEqual(SessionState.Connected, _session.SessionState);
+			// ClassicAssert
+			ClassicAssert.AreEqual(SessionState.Connected, _session.SessionState);
 		}
 
 		[Test]
@@ -71,8 +72,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.AreEqual(SessionState.Connected, _session.SessionState);
+			// ClassicAssert
+			ClassicAssert.AreEqual(SessionState.Connected, _session.SessionState);
 		}
 
 		[Test]
@@ -88,7 +89,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
+			// ClassicAssert
 			CheckingUtils.CheckWithinTimeout(
 				() => _acceptorSession.IsDisconnectScheduled(), TimeSpan.FromSeconds(3));
 		}
@@ -106,7 +107,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
+			// ClassicAssert
 			CheckingUtils.CheckWithinTimeout(
 				() => _acceptorSession.IsDisconnectScheduled(), TimeSpan.FromSeconds(3));
 		}
@@ -124,8 +125,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.AreEqual(SessionState.Connected, _session.SessionState);
+			// ClassicAssert
+			ClassicAssert.AreEqual(SessionState.Connected, _session.SessionState);
 		}
 
 		[Test]
@@ -143,8 +144,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.IsTrue(_disconnectedAbnormally.IsSet);
+			// ClassicAssert
+			ClassicAssert.IsTrue(_disconnectedAbnormally.IsSet);
 		}
 
 		[Test]
@@ -166,8 +167,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.AreEqual(SessionState.Connected, _session.SessionState);
+			// ClassicAssert
+			ClassicAssert.AreEqual(SessionState.Connected, _session.SessionState);
 		}
 
 		[Test]
@@ -184,8 +185,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.IsTrue(_disconnectedAbnormally.IsSet);
+			// ClassicAssert
+			ClassicAssert.IsTrue(_disconnectedAbnormally.IsSet);
 		}
 
 		[Test]
@@ -203,8 +204,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.AreEqual(SessionState.Connected, _session.SessionState);
+			// ClassicAssert
+			ClassicAssert.AreEqual(SessionState.Connected, _session.SessionState);
 		}
 
 		[Test]
@@ -223,8 +224,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_disconnectedAbnormally.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.IsTrue(_disconnectedAbnormally.IsSet);
+			// ClassicAssert
+			ClassicAssert.IsTrue(_disconnectedAbnormally.IsSet);
 		}
 
 		[Test]
@@ -246,8 +247,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			_session.Connect();
 			_connected.Wait(TimeSpan.FromSeconds(5));
 
-			// Assert
-			Assert.IsTrue(_connected.IsSet);
+			// ClassicAssert
+			ClassicAssert.IsTrue(_connected.IsSet);
 		}
 
 		private void CreateSessionConfigFile(DateTimeOffset startTime, DateTimeOffset stopTime, int timeShiftInHours)

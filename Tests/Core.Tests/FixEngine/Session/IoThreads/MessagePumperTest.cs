@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 {
@@ -83,10 +84,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 
 			var msgCount = _messagePumper.FillBuffer(5);
 			_messagePumper.SendMessages(msgCount);
-			Assert.AreEqual(1, _transport.GetChunks().Count);
+			ClassicAssert.AreEqual(1, _transport.GetChunks().Count);
 			var fixMessageChopper = new FixMessageChopper(new MemoryStream(_transport.GetMessages()[0]), 10000, 1000000);
 
-			Assert.IsTrue(_transport.GetMessages().Count == 5, "Expected: 5, but was: " + _transport.GetMessages().Count);
+			ClassicAssert.IsTrue(_transport.GetMessages().Count == 5, "Expected: 5, but was: " + _transport.GetMessages().Count);
 		}
 
 		[Test]
@@ -98,17 +99,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			_messagePumper.Send("", _message, FixSessionSendingType.SendSync);
 			Thread.Sleep(1000);
 			var actualMsgCount = _transport.GetMessages().Count;
-			Assert.IsTrue(actualMsgCount == 1, "Sending of application messages was blocked, Expected: 1, but was: " + actualMsgCount);
+			ClassicAssert.IsTrue(actualMsgCount == 1, "Sending of application messages was blocked, Expected: 1, but was: " + actualMsgCount);
 
 			_messagePumper.SendOutOfTurn("", _message);
 			Thread.Sleep(1000);
 			actualMsgCount = _transport.GetMessages().Count;
-			Assert.IsTrue(actualMsgCount == 2, "Sent message with priority, Expected: 1, but was: " + actualMsgCount);
+			ClassicAssert.IsTrue(actualMsgCount == 2, "Sent message with priority, Expected: 1, but was: " + actualMsgCount);
 
 			Queue.OutOfTurnOnlyMode = false;
 			Thread.Sleep(1000);
 			actualMsgCount = _transport.GetMessages().Count;
-			Assert.IsTrue(actualMsgCount == 3, "Sending is free, Expected: 4, but was: " + actualMsgCount);
+			ClassicAssert.IsTrue(actualMsgCount == 3, "Sending is free, Expected: 4, but was: " + actualMsgCount);
 		}
 	}
 }

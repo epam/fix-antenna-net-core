@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -41,10 +42,10 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_stopSession.TargetCompID = session.Parameters.TargetCompId;
 
 			var response = GetReponse(_stopSession);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 			// is it correct to dispose session on stop command?
-			Assert.IsTrue(session.IsDisposed());
+			ClassicAssert.IsTrue(session.IsDisposed());
 		}
 
 		[Test]
@@ -56,10 +57,10 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_stopSession.SessionQualifier = session.Parameters.SessionQualifier;
 
 			var response = GetReponse(_stopSession);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 			// is it correct to dispose session on stop command?
-			Assert.IsTrue(session.IsDisposed());
+			ClassicAssert.IsTrue(session.IsDisposed());
 		}
 
 
@@ -69,9 +70,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_stopSession.TargetCompID = FixSession.Parameters.TargetCompId;
 
 			var response = GetReponse(_stopSession);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("SenderCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("SenderCompID is required"));
 		}
 
 		[Test]
@@ -80,9 +81,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_stopSession.SenderCompID = FixSession.Parameters.SenderCompId;
 
 			var response = GetReponse(_stopSession);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("TargetCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("TargetCompID is required"));
 		}
 	}
 }

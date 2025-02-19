@@ -15,7 +15,8 @@
 using Epam.FixAntenna.AdminTool.Tests.Util;
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 {
@@ -56,10 +57,10 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 		public void TestProcess()
 		{
 			var adminSession = _acceptorHelper.Session;
-			Assert.IsNotNull(adminSession, "acceptor not started");
+			ClassicAssert.IsNotNull(adminSession, "acceptor not started");
 
 			var fixSession = _initiatorHelper.Session;
-			Assert.IsNotNull(fixSession, "initiator not started");
+			ClassicAssert.IsNotNull(fixSession, "initiator not started");
 
 			var sessionStatus = new SessionStatus();
 			sessionStatus.RequestID = 1L;
@@ -69,18 +70,18 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 			_initiatorHelper.SendRequest(sessionStatus);
 			var response = _initiatorHelper.GetResponse();
 
-			Assert.IsNotNull(response, "no response");
-			Assert.AreEqual(1L, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.IsNotNull(response, "no response");
+			ClassicAssert.AreEqual(1L, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
 			var sessionStatusResponse = response.SessionStatusData;
-			Assert.IsNotNull(sessionStatusResponse);
-			Assert.AreEqual(Target, sessionStatusResponse.SenderCompID);
-			Assert.AreEqual(Sender, sessionStatusResponse.TargetCompID);
-			Assert.IsNotNull(sessionStatusResponse.InSeqNum);
-			Assert.IsNotNull(sessionStatusResponse.OutSeqNum);
-			Assert.IsNotNull(sessionStatusResponse.Status);
-			Assert.AreEqual(SessionState.Connected.ToString(), sessionStatusResponse.Status);
+			ClassicAssert.IsNotNull(sessionStatusResponse);
+			ClassicAssert.AreEqual(Target, sessionStatusResponse.SenderCompID);
+			ClassicAssert.AreEqual(Sender, sessionStatusResponse.TargetCompID);
+			ClassicAssert.IsNotNull(sessionStatusResponse.InSeqNum);
+			ClassicAssert.IsNotNull(sessionStatusResponse.OutSeqNum);
+			ClassicAssert.IsNotNull(sessionStatusResponse.Status);
+			ClassicAssert.AreEqual(SessionState.Connected.ToString(), sessionStatusResponse.Status);
 		}
 	}
 }

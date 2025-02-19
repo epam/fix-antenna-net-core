@@ -20,7 +20,8 @@ using Epam.FixAntenna.Fix.Message;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 {
@@ -64,9 +65,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var buf = new MsgBuf();
 
 			messageChopper.ReadMessage(buf);
-			Assert.IsFalse(messageChopper.IsMessageGarbled);
+			ClassicAssert.IsFalse(messageChopper.IsMessageGarbled);
 			var readMessage = StringHelper.NewString(buf.Buffer, buf.Offset, buf.Length);
-			Assert.That(readMessage, Is.EqualTo(msg));
+			ClassicAssert.That(readMessage, Is.EqualTo(msg));
 		}
 
 		[Test]
@@ -81,10 +82,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			{
 				messageChopper.ReadMessage(buf);
 				UpdateMessage(i);
-				AssertValidMessage(buf, Message.AsByteArray());
+				ClassicAssertValidMessage(buf, Message.AsByteArray());
 				buf.FixMessage.Clear();
 			}
-			AssertEndOfFile(messageChopper);
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test]
@@ -112,9 +113,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				previousOffset = buf.Offset;
 				buf.FixMessage.Clear();
 			}
-			Assert.IsFalse(alwaysShiftBuf, "Chopper make unnecessary shift");
-			Assert.IsFalse(alwaysIncreaseBuf, "Chopper don't make shift");
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.IsFalse(alwaysShiftBuf, "Chopper make unnecessary shift");
+			ClassicAssert.IsFalse(alwaysIncreaseBuf, "Chopper don't make shift");
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test]
@@ -124,11 +125,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			{
 				var messages = Message.ToString();
 				var messageChopper = GetInstanceChopper(messages.AsByteArray(), 10, 10000);
-				Assert.Throws<GarbledMessageException>(() => messageChopper.ReadMessage(new MsgBuf()));
+				ClassicAssert.Throws<GarbledMessageException>(() => messageChopper.ReadMessage(new MsgBuf()));
 			}
 			catch (IOException e)
 			{
-				Assert.That(e.Message, Does.StartWith(MessageChopperFields.MessageIsTooLongError));
+				ClassicAssert.That(e.Message, Does.StartWith(MessageChopperFields.MessageIsTooLongError));
 				throw;
 			}
 		}
@@ -140,8 +141,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var messageChopper = GetInstanceChopper(messages.AsByteArray(), -1, 10000);
 
 			var readMessage = ReadAsString(messageChopper, new MsgBuf());
-			Assert.That(readMessage, Is.EqualTo(Message.ToString()));
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.That(readMessage, Is.EqualTo(Message.ToString()));
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		private string GenerateManyMessages(int size)
@@ -173,21 +174,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			try
 			{
 				messageChopper.ReadMessage(buf);
-				Assert.Fail("Expected IOException with following error message: " + MessageChopperFields.MessageIsTooLongError);
+				ClassicAssert.Fail("Expected IOException with following error message: " + MessageChopperFields.MessageIsTooLongError);
 			}
 			catch (GarbledMessageException ex)
 			{
 				Console.WriteLine(ex.ToString());
 				Console.Write(ex.StackTrace);
-				Assert.That(ex.Message, Does.StartWith(MessageChopperFields.MessageIsTooLongError));
+				ClassicAssert.That(ex.Message, Does.StartWith(MessageChopperFields.MessageIsTooLongError));
 			}
 			string readMessage;
 			do
 			{
 				readMessage = ReadAsString(messageChopper, buf);
 			} while (messageChopper.IsMessageGarbled);
-			Assert.That(readMessage, Is.EqualTo(msg));
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.That(readMessage, Is.EqualTo(msg));
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test]
@@ -197,7 +198,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var messageChopper = GetInstanceChopper(longMsg.AsByteArray(), 1024 * 1024, longMsg.Length / 3);
 			var buf = new MsgBuf();
 			messageChopper.ReadMessage(buf);
-			AssertValidMessage(buf, longMsg.AsByteArray());
+			ClassicAssertValidMessage(buf, longMsg.AsByteArray());
 		}
 
 		[Test]
@@ -222,9 +223,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 
 			var messageChopper = GetInstanceChopper(expectedMessage.AsByteArray(), 1024, 100, false);
 			var actualMessage = ReadAsString(messageChopper, new MsgBuf());
-			Assert.IsNull(messageChopper.Error, "Should be no parsing errors but " + messageChopper.Error);
-			Assert.AreEqual(expectedMessage, actualMessage);
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.IsNull(messageChopper.Error, "Should be no parsing errors but " + messageChopper.Error);
+			ClassicAssert.AreEqual(expectedMessage, actualMessage);
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test]
@@ -233,10 +234,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var instance = GetInstanceChopper(Msg1.AsByteArray(), 1024 * 1024, 512, true);
 			instance.SetUserParserListener(new FixParserListenerAnonymousInnerClass());
 			var list = ReadMessage(instance, new MsgBuf());
-			Assert.AreEqual(12, list.Length);
+			ClassicAssert.AreEqual(12, list.Length);
 			foreach (var f in list)
 			{
-				Assert.IsTrue(ParseRequiredTags.IsRequired(f.TagId));
+				ClassicAssert.IsTrue(ParseRequiredTags.IsRequired(f.TagId));
 			}
 		}
 
@@ -262,12 +263,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var instance = GetInstanceChopper(Msg1.AsByteArray(), 1024 * 1024, 512, true);
 			instance.SetUserParserListener(new FixParserListenerAnonymousInnerClass2());
 			var list = ReadMessage(instance, new MsgBuf());
-			Assert.AreEqual(14, list.Length);
+			ClassicAssert.AreEqual(14, list.Length);
 			foreach (var f in list)
 			{
 				if (!ParseRequiredTags.IsRequired(f.TagId))
 				{
-					Assert.IsTrue(f.TagId == 11 || f.TagId == 37);
+					ClassicAssert.IsTrue(f.TagId == 11 || f.TagId == 37);
 				}
 			}
 		}
@@ -312,16 +313,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var actual = ReadMessage(instance, new MsgBuf());
 			var expected = RawFixUtil.GetFixMessage(Msg1.AsByteArray());
 
-			Assert.AreEqual(expected.Length - 1, actual.Length);
+			ClassicAssert.AreEqual(expected.Length - 1, actual.Length);
 			foreach (var f in expected)
 			{
 				if (f.TagId == 37)
 				{
-					Assert.IsFalse(actual.IsTagExists(f.TagId));
+					ClassicAssert.IsFalse(actual.IsTagExists(f.TagId));
 				}
 				else
 				{
-					Assert.IsTrue(actual.IsTagExists(f.TagId));
+					ClassicAssert.IsTrue(actual.IsTagExists(f.TagId));
 				}
 			}
 		}
@@ -353,10 +354,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				messageChopper.ReadMessage(buf);
 			} while (messageChopper.IsMessageGarbled);
 			var readMessage = StringHelper.NewString(buf.Buffer, buf.Offset, buf.Length);
-			Assert.That(readMessage, Is.EqualTo(msg));
-			Assert.That(buf.FixMessage.ToString(), Is.EqualTo(msg));
-			Assert.That(buf.FixMessage.GetTagValueAsString(213), Is.EqualTo("<t>t</t>"));
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.That(readMessage, Is.EqualTo(msg));
+			ClassicAssert.That(buf.FixMessage.ToString(), Is.EqualTo(msg));
+			ClassicAssert.That(buf.FixMessage.GetTagValueAsString(213), Is.EqualTo("<t>t</t>"));
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test] public virtual void RawTagParsing()
@@ -369,10 +370,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				messageChopper.ReadMessage(buf);
 			} while (messageChopper.IsMessageGarbled);
 			var readMessage = StringHelper.NewString(buf.Buffer, buf.Offset, buf.Length);
-			Assert.That(readMessage, Is.EqualTo(msg));
-			Assert.That(buf.FixMessage.ToString(), Is.EqualTo(msg));
-			Assert.That(buf.FixMessage.GetTagValueAsString(96), Is.EqualTo("test\u0001test\u0001"));
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.That(readMessage, Is.EqualTo(msg));
+			ClassicAssert.That(buf.FixMessage.ToString(), Is.EqualTo(msg));
+			ClassicAssert.That(buf.FixMessage.GetTagValueAsString(96), Is.EqualTo("test\u0001test\u0001"));
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test]
@@ -383,7 +384,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				var msg = "8=FIX.4.4\u00019=127\u000135=B\u000134=2\u000149=senderId\u000156=targetId\u000152=20151204-08:36:01.580\u0001148=Hello there\u000133=3\u000158=line1\u000158=line2\u000158=line3\u000195=" + int.MaxValue + "\u000196=test\u0001test\u0001\u000110=034\u0001";
 				var messageChopper = GetInstanceChopper(msg.AsByteArray(), 1024, 1024);
 				var buf = new MsgBuf();
-				Assert.Throws<GarbledMessageException>(() =>
+				ClassicAssert.Throws<GarbledMessageException>(() =>
 				{
 					do
 					{
@@ -422,34 +423,34 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			{
 				var readMessage = ReadAsString(messageChopper, msgBuf);
 				var messageState = messageChopper.IsMessageGarbled ? MessageState.Garbled : MessageState.NonGarbled;
-				Assert.That(messageState + ": " + readMessage, Is.EqualTo(expectedMessageStates[i] + ": " + expectedMessages[i]));
+				ClassicAssert.That(messageState + ": " + readMessage, Is.EqualTo(expectedMessageStates[i] + ": " + expectedMessages[i]));
 				if (messageState == MessageState.Garbled)
 				{
-					Assert.IsTrue(msgBuf.FixMessage.IsMessageIncomplete, "Message is garbled. Must be flag 'incomplete'");
+					ClassicAssert.IsTrue(msgBuf.FixMessage.IsMessageIncomplete, "Message is garbled. Must be flag 'incomplete'");
 				}
 				else
 				{
-					Assert.IsFalse(msgBuf.FixMessage.IsMessageIncomplete, "Message is not garbled, but have flag 'incomplete'");
-					Assert.AreEqual(expectedMessages[i], msgBuf.FixMessage.ToString());
-					Assert.AreEqual(expectedMessages[i], IndexedStorageTestHelper.GetMessageBufferAsString(msgBuf.FixMessage));
+					ClassicAssert.IsFalse(msgBuf.FixMessage.IsMessageIncomplete, "Message is not garbled, but have flag 'incomplete'");
+					ClassicAssert.AreEqual(expectedMessages[i], msgBuf.FixMessage.ToString());
+					ClassicAssert.AreEqual(expectedMessages[i], IndexedStorageTestHelper.GetMessageBufferAsString(msgBuf.FixMessage));
 				}
 				msgBuf.FixMessage.Clear();
 			}
-			AssertEndOfFile(messageChopper);
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
-		public virtual void AssertValidMessage(MsgBuf msgBuf, byte[] expectedBytes)
+		public virtual void ClassicAssertValidMessage(MsgBuf msgBuf, byte[] expectedBytes)
 		{
-			AssertValidMessage(msgBuf, expectedBytes, 0, expectedBytes.Length);
+			ClassicAssertValidMessage(msgBuf, expectedBytes, 0, expectedBytes.Length);
 		}
 
-		public virtual void AssertValidMessage(MsgBuf msgBuf, byte[] expectedBytes, int offset, int length)
+		public virtual void ClassicAssertValidMessage(MsgBuf msgBuf, byte[] expectedBytes, int offset, int length)
 		{
-			Assert.IsFalse(msgBuf.FixMessage.IsMessageIncomplete, "Message is not garbled, but have flag 'incomplete'");
+			ClassicAssert.IsFalse(msgBuf.FixMessage.IsMessageIncomplete, "Message is not garbled, but have flag 'incomplete'");
 			var expectedMsg = StringHelper.NewString(expectedBytes, offset, length);
-			Assert.AreEqual(expectedMsg, StringHelper.NewString(msgBuf.Buffer, msgBuf.Offset, msgBuf.Length));
-			Assert.AreEqual(expectedMsg, msgBuf.FixMessage.ToString());
-			Assert.AreEqual(expectedMsg, IndexedStorageTestHelper.GetMessageBufferAsString(msgBuf.FixMessage));
+			ClassicAssert.AreEqual(expectedMsg, StringHelper.NewString(msgBuf.Buffer, msgBuf.Offset, msgBuf.Length));
+			ClassicAssert.AreEqual(expectedMsg, msgBuf.FixMessage.ToString());
+			ClassicAssert.AreEqual(expectedMsg, IndexedStorageTestHelper.GetMessageBufferAsString(msgBuf.FixMessage));
 		}
 
 		public virtual void TestChoppingWithEndOfFile(string[] expectedMessages, MessageState[] expectedMessageStates)
@@ -463,13 +464,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				{
 					var readMessage = ReadAsString(messageChopper, msgBuf);
 					var messageState = messageChopper.IsMessageGarbled ? MessageState.Garbled : MessageState.NonGarbled;
-					Assert.That(messageState + ": " + readMessage, Is.EqualTo(expectedMessageStates[i] + ": " + expectedMessages[i]));
+					ClassicAssert.That(messageState + ": " + readMessage, Is.EqualTo(expectedMessageStates[i] + ": " + expectedMessages[i]));
 				}
-				Assert.Fail("Should be EOF error");
+				ClassicAssert.Fail("Should be EOF error");
 			}
 			catch (IOException e)
 			{
-				Assert.That(e.Message, Is.EqualTo(MessageChopperFields.EofReadError));
+				ClassicAssert.That(e.Message, Is.EqualTo(MessageChopperFields.EofReadError));
 			}
 		}
 
@@ -477,18 +478,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 		{
 			var messageChopper = GetInstanceChopper(expectedMessage.AsByteArray(), 1024, 100);
 			var message = ReadAsString(messageChopper, new MsgBuf());
-			Assert.That(Format(message, messageChopper.Error, messageChopper.ErrorPosition), Is.EqualTo(Format(expectedMessage, expectedError, expectedErrorPosition)));
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.That(Format(message, messageChopper.Error, messageChopper.ErrorPosition), Is.EqualTo(Format(expectedMessage, expectedError, expectedErrorPosition)));
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		public virtual void TestErrorReportingWithoutEof(string expectedMessage, GarbledMessageError expectedError, int expectedErrorPosition)
 		{
 			var messageChopper = GetInstanceChopper((expectedMessage + CreateValidMessage()).AsByteArray(), 1024, 100);
 			var message = ReadAsString(messageChopper, new MsgBuf());
-			Assert.That(Format(message, messageChopper.Error, messageChopper.ErrorPosition), Is.EqualTo(Format(expectedMessage, expectedError, expectedErrorPosition)));
+			ClassicAssert.That(Format(message, messageChopper.Error, messageChopper.ErrorPosition), Is.EqualTo(Format(expectedMessage, expectedError, expectedErrorPosition)));
 
 			ReadAsString(messageChopper, new MsgBuf()); // this is valid message
-			AssertEndOfFile(messageChopper);
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		public virtual string Format(string message, GarbledMessageError error, int errorPosition)
@@ -512,17 +513,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			NonGarbled
 		}
 
-		public virtual void AssertEndOfFile(IMessageChopper messageChopper)
+		public virtual void ClassicAssertEndOfFile(IMessageChopper messageChopper)
 		{
 			try
 			{
 				var buf = new MsgBuf();
 				messageChopper.ReadMessage(buf);
-				Assert.Fail("Expected IOException with following error message: " + MessageChopperFields.EofReadError + " but occurred: " + StringHelper.NewString(buf.Buffer, buf.Offset, buf.Length));
+				ClassicAssert.Fail("Expected IOException with following error message: " + MessageChopperFields.EofReadError + " but occurred: " + StringHelper.NewString(buf.Buffer, buf.Offset, buf.Length));
 			}
 			catch (IOException ex)
 			{
-				Assert.That(ex.Message, Is.EqualTo(MessageChopperFields.EofReadError));
+				ClassicAssert.That(ex.Message, Is.EqualTo(MessageChopperFields.EofReadError));
 			}
 		}
 
@@ -576,8 +577,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			{
 				var inMessage = ReadAsString(messageChopper, new MsgBuf());
 				var timeEnd = DateTimeHelper.CurrentTicks;
-				Assert.AreEqual(messages[i], inMessage);
-				Assert.Less(Math.Abs(timeEnd - messageChopper.MessageReadTimeInTicks), milliseconds * TimeSpan.TicksPerMillisecond);
+				ClassicAssert.AreEqual(messages[i], inMessage);
+				ClassicAssert.Less(Math.Abs(timeEnd - messageChopper.MessageReadTimeInTicks), milliseconds * TimeSpan.TicksPerMillisecond);
 			}
 		}
 	}

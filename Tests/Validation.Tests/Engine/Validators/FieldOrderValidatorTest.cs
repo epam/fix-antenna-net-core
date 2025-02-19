@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.Validation.Tests.Engine.Validators.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 {
@@ -53,7 +54,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(message), false);
 
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.TagSpecifiedOutOfRequiredOrder, 34, "B", fixField)));
 		}
 
@@ -66,7 +67,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("A", CreateValidationMessage(message), false);
 
-			Assert.IsTrue(!errorContainer.Errors.Any(),
+			ClassicAssert.IsTrue(!errorContainer.Errors.Any(),
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -79,7 +80,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("0", CreateValidationMessage(message), false);
 
-			Assert.IsTrue(!errorContainer.Errors.Any(),
+			ClassicAssert.IsTrue(!errorContainer.Errors.Any(),
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -90,7 +91,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(message), false);
 
-			Assert.IsTrue(!errorContainer.Errors.Any(),
+			ClassicAssert.IsTrue(!errorContainer.Errors.Any(),
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 	}

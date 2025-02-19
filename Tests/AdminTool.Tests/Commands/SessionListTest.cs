@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -40,15 +41,15 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			var response = GetReponse(_sessionsList);
 
 			var sessionsListData = response.SessionsListData;
-			Assert.AreEqual(sessionsListData.Session.Count, FixSessionManager.Instance.SessionListCopy.Count);
+			ClassicAssert.AreEqual(sessionsListData.Session.Count, FixSessionManager.Instance.SessionListCopy.Count);
 			SessionsListDataSession senderSession1 = null;
 			SessionsListDataSession senderSession2 = null;
 			foreach (var session in sessionsListData.Session)
 			{
-				Assert.AreEqual(Action.NEW, session.Action);
-				Assert.AreEqual(StatusGroup.ESTABLISHED, session.StatusGroup);
-				Assert.IsNotNull(session.Timestamp);
-				Assert.IsNotNull(session.Status);
+				ClassicAssert.AreEqual(Action.NEW, session.Action);
+				ClassicAssert.AreEqual(StatusGroup.ESTABLISHED, session.StatusGroup);
+				ClassicAssert.IsNotNull(session.Timestamp);
+				ClassicAssert.IsNotNull(session.Status);
 
 				if (TestSessionID.Sender.Equals(session.SenderCompID)
 						&& TestSessionID.Target.Equals(session.TargetCompID)
@@ -64,11 +65,11 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 				}
 			}
 
-			Assert.IsNotNull(senderSession1, "Can't find sender session in received response.");
-			Assert.AreEqual(GetSession(TestSessionID).SessionState.ToString(), senderSession1.Status);
+			ClassicAssert.IsNotNull(senderSession1, "Can't find sender session in received response.");
+			ClassicAssert.AreEqual(GetSession(TestSessionID).SessionState.ToString(), senderSession1.Status);
 
-			Assert.IsNotNull(senderSession2, "Can't find sender session in received response.");
-			Assert.AreEqual(GetSession(TestSessionIdQualifier).SessionState.ToString(), senderSession2.Status);
+			ClassicAssert.IsNotNull(senderSession2, "Can't find sender session in received response.");
+			ClassicAssert.AreEqual(GetSession(TestSessionIdQualifier).SessionState.ToString(), senderSession2.Status);
 		}
 	}
 }

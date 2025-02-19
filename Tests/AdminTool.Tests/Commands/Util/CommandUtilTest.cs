@@ -15,7 +15,8 @@
 using System.Collections.Generic;
 using Epam.FixAntenna.AdminTool.Commands.Util;
 using Epam.FixAntenna.NetCore.Common;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands.Util
 {
@@ -24,26 +25,26 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands.Util
 		[Test]
 		public void TestGetFixVersion()
 		{
-			Assert.AreEqual(FixVersion.Fix40, CommandUtil.GetFixVersion("FIX40"));
-			Assert.AreEqual(FixVersion.Fix42, CommandUtil.GetFixVersion("FIX42"));
-			Assert.AreEqual(FixVersion.Fix44, CommandUtil.GetFixVersion("FIX44"));
+			ClassicAssert.AreEqual(FixVersion.Fix40, CommandUtil.GetFixVersion("FIX40"));
+			ClassicAssert.AreEqual(FixVersion.Fix42, CommandUtil.GetFixVersion("FIX42"));
+			ClassicAssert.AreEqual(FixVersion.Fix44, CommandUtil.GetFixVersion("FIX44"));
 		}
 
 		[Test]
 		public void TestGetFixVersionTransport()
 		{
-			Assert.AreEqual(FixVersion.Fixt11, CommandUtil.GetFixVersion("FIXT11"));
-			Assert.AreEqual(FixVersion.Fixt11, CommandUtil.GetFixVersion("FIXT11:FIX40"));
-			Assert.AreEqual(FixVersion.Fixt11, CommandUtil.GetFixVersion("FIXT11:FIX50SP2"));
+			ClassicAssert.AreEqual(FixVersion.Fixt11, CommandUtil.GetFixVersion("FIXT11"));
+			ClassicAssert.AreEqual(FixVersion.Fixt11, CommandUtil.GetFixVersion("FIXT11:FIX40"));
+			ClassicAssert.AreEqual(FixVersion.Fixt11, CommandUtil.GetFixVersion("FIXT11:FIX50SP2"));
 		}
 
 		[Test]
 		public void TestGetAppVersion()
 		{
-			Assert.AreEqual(FixVersion.Fix40, CommandUtil.GetAppVersion("FIXT11:FIX40"));
-			Assert.AreEqual(FixVersion.Fix44, CommandUtil.GetAppVersion("FIXT11:FIX44"));
-			Assert.AreEqual(FixVersion.Fix50, CommandUtil.GetAppVersion("FIXT11:FIX50"));
-			Assert.AreEqual(FixVersion.Fix50Sp2, CommandUtil.GetAppVersion("FIXT11:FIX50SP2"));
+			ClassicAssert.AreEqual(FixVersion.Fix40, CommandUtil.GetAppVersion("FIXT11:FIX40"));
+			ClassicAssert.AreEqual(FixVersion.Fix44, CommandUtil.GetAppVersion("FIXT11:FIX44"));
+			ClassicAssert.AreEqual(FixVersion.Fix50, CommandUtil.GetAppVersion("FIXT11:FIX50"));
+			ClassicAssert.AreEqual(FixVersion.Fix50Sp2, CommandUtil.GetAppVersion("FIXT11:FIX50SP2"));
 		}
 
 		[Test]
@@ -52,20 +53,20 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands.Util
 			var versions = CommandUtil.GetSupportedVersions();
 			var versionsMap = new HashSet<string>(versions);
 
-			Assert.AreEqual(versions.Count, 13);
-			Assert.IsNotNull(versionsMap.Contains("FIX40"));
-			Assert.IsNotNull(versionsMap.Contains("FIX41"));
-			Assert.IsNotNull(versionsMap.Contains("FIX42"));
-			Assert.IsNotNull(versionsMap.Contains("FIX43"));
-			Assert.IsNotNull(versionsMap.Contains("FIX44"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX40"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX41"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX42"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX43"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX44"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX50"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX50SP1"));
-			Assert.IsNotNull(versionsMap.Contains("FIXT11:FIX50SP2"));
+			ClassicAssert.AreEqual(versions.Count, 13);
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIX40"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIX41"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIX42"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIX43"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIX44"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX40"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX41"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX42"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX43"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX44"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX50"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX50SP1"));
+			ClassicAssert.IsNotNull(versionsMap.Contains("FIXT11:FIX50SP2"));
 		}
 	}
 }

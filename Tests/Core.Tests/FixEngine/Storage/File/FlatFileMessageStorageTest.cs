@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.Timestamp;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -63,7 +64,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 #endif
 			}
 
-			Assert.AreEqual(2,
+			ClassicAssert.AreEqual(2,
 				FlatFileMessageStorage.RetrieveSequenceNumber(
 					FileNameHelper.GetStorageFileName(ConfigurationAdapter.StorageDirectory)));
 		}
@@ -94,7 +95,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var foundSequenceNumber =
 				FlatFileMessageStorage.RetrieveSequenceNumber(
 					FileNameHelper.GetStorageFileName(ConfigurationAdapter.StorageDirectory));
-			Assert.AreEqual(55, foundSequenceNumber);
+			ClassicAssert.AreEqual(55, foundSequenceNumber);
 		}
 
 		[Test]
@@ -110,7 +111,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				messages[i] = StringHelper.NewString(arrMsg);
 			}
 
-			AssertEqualsMessages(messages);
+			ClassicAssertEqualsMessages(messages);
 		}
 
 		[Test]
@@ -133,7 +134,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				messages[i] = StringHelper.NewString(arrMsg);
 			}
 
-			AssertEqualsMessagesWithTimestamps(messages, expectedTimeStr);
+			ClassicAssertEqualsMessagesWithTimestamps(messages, expectedTimeStr);
 		}
 
 		[Test]
@@ -152,7 +153,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var nextMsg = GetNextMessage().ToString();
 			MessageStorage.AppendMessage(nextMsg.AsByteArray());
 
-			AssertEqualsMessages(longMsg, nextMsg);
+			ClassicAssertEqualsMessages(longMsg, nextMsg);
 		}
 
 		[Test]
@@ -165,7 +166,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var timestamp = GetStorageTimestampPrefixFromStorage(_instant);
 
 			var dateTime = new DateTimeOffset(_instant, TimeSpan.Zero).LocalDateTime;
-			Assert.AreEqual(dateTime.ToString(PrefixFormatMilli), timestamp);
+			ClassicAssert.AreEqual(dateTime.ToString(PrefixFormatMilli), timestamp);
 		}
 
 		[Test]
@@ -180,7 +181,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var timestamp = GetStorageTimestampPrefixFromStorage(_instant);
 
 			var dateTime = new DateTimeOffset(_instant, TimeSpan.Zero).LocalDateTime;
-			Assert.AreEqual(dateTime.ToString(PrefixFormatMicro), timestamp);
+			ClassicAssert.AreEqual(dateTime.ToString(PrefixFormatMicro), timestamp);
 		}
 
 		[Test]
@@ -195,7 +196,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var timestamp = GetStorageTimestampPrefixFromStorage(_instant);
 
 			var dateTime = new DateTimeOffset(_instant, TimeSpan.Zero).LocalDateTime;
-			Assert.AreEqual(dateTime.ToString(PrefixFormatNano), timestamp);
+			ClassicAssert.AreEqual(dateTime.ToString(PrefixFormatNano), timestamp);
 		}
 
 		[Test]
@@ -210,7 +211,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var timestamp = GetStorageTimestampPrefixFromStorage(_instant);
 
 			var dateTime = new DateTimeOffset(_instant, DateTimeHelper.UtcOffset);
-			Assert.AreEqual(dateTime.ToString(PrefixFormatMilli), timestamp);
+			ClassicAssert.AreEqual(dateTime.ToString(PrefixFormatMilli), timestamp);
 		}
 
 		[Test]
@@ -225,7 +226,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var timestamp = GetStorageTimestampPrefixFromStorage(_instant);
 
 			var dateTime = new DateTimeOffset(_instant, TimeSpan.Zero).ToOffset(TimeSpan.FromHours(5));
-			Assert.AreEqual(dateTime.ToString(PrefixFormatMicro), timestamp);
+			ClassicAssert.AreEqual(dateTime.ToString(PrefixFormatMicro), timestamp);
 		}
 
 		[Test]
@@ -240,7 +241,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var timestamp = GetStorageTimestampPrefixFromStorage(_instant);
 
 			var dateTime = new DateTimeOffset(_instant, TimeSpan.Zero).ToOffset(new TimeSpan(-5, -30, 0));
-			Assert.AreEqual(dateTime.ToString(PrefixFormatNano), timestamp);
+			ClassicAssert.AreEqual(dateTime.ToString(PrefixFormatNano), timestamp);
 		}
 
 		private string GetStorageTimestampPrefixFromStorage(long time)
@@ -249,7 +250,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			MessageStorage.AppendMessageInternal(time, fixMessage.AsByteArray(), 0,
 				fixMessage.AsByteArray().Length);
 			var message = RetrieveMessage();
-			Assert.IsTrue(message.Length > 24);
+			ClassicAssert.IsTrue(message.Length > 24);
 			return StringHelper.NewString(message, 0, MessageStorage.CalculateFormatLength());
 		}
 

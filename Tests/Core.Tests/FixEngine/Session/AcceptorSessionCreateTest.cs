@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.TestUtils;
 using Moq;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using System;
 using System.Threading.Tasks;
 using Epam.FixAntenna.NetCore.Common.Utils;

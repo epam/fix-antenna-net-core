@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation.Validators.Condition;
 using Epam.FixAntenna.NetCore.Validation.Validators.Condition.Operators;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 {
@@ -27,11 +28,11 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 		{
 			var parser = new ConditionValidateParser("existtags(T$91)");
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 			var existTagsOperator = (ExistTagsValidateOperator)rootCondition;
-			Assert.AreEqual(existTagsOperator.GetTags().Count, 1, "Only 1 tag required");
-			Assert.AreEqual(existTagsOperator.GetTags()[0], 91, "Required tag 91");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags().Count, 1, "Only 1 tag required");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[0], 91, "Required tag 91");
 		}
 
 		[Test]
@@ -39,13 +40,13 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 		{
 			var parser = new ConditionValidateParser("existtags(T$91, T$92,T$93)");
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 			var existTagsOperator = (ExistTagsValidateOperator)rootCondition;
-			Assert.AreEqual(existTagsOperator.GetTags().Count, 3, "3 tags required");
-			Assert.AreEqual(existTagsOperator.GetTags()[0], 91, "Required tag 91");
-			Assert.AreEqual(existTagsOperator.GetTags()[1], 92, "Required tag 92");
-			Assert.AreEqual(existTagsOperator.GetTags()[2], 93, "Required tag 93");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags().Count, 3, "3 tags required");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[0], 91, "Required tag 91");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[1], 92, "Required tag 92");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[2], 93, "Required tag 93");
 		}
 
 		[Test]
@@ -54,11 +55,11 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 			var parser = new ConditionValidateParser("T$91 ");
 
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 			var existTagsOperator = (ExistTagsValidateOperator)rootCondition;
-			Assert.AreEqual(existTagsOperator.GetTags().Count, 1, "Only 1 tag required");
-			Assert.AreEqual(existTagsOperator.GetTags()[0], 91, "Required tag 91");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags().Count, 1, "Only 1 tag required");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[0], 91, "Required tag 91");
 		}
 
 		[Test]
@@ -67,12 +68,12 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 			var parser = new ConditionValidateParser("existtags(G$199(T$104))");
 
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 			var existTagsOperator = (ExistTagsValidateOperator)rootCondition;
-			Assert.AreEqual(existTagsOperator.GetTags().Count, 2, "Only 1 tag required");
-			Assert.AreEqual(existTagsOperator.GetTags()[0], 199, "Required tag 199");
-			Assert.AreEqual(existTagsOperator.GetTags()[1], 104, "Required tag 104");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags().Count, 2, "Only 1 tag required");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[0], 199, "Required tag 199");
+			ClassicAssert.AreEqual(existTagsOperator.GetTags()[1], 104, "Required tag 104");
 		}
 
 		[Test]
@@ -81,29 +82,29 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 			var parser = new ConditionValidateParser("existtags(G$199(T$104)) and T$91");
 
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is AndValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is AndValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 
 			var andValidateOperator = (AndValidateOperator)rootCondition;
 
 			//Operator 1 from AND condition
-			Assert.IsTrue(andValidateOperator.GetOperand1() is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(andValidateOperator.GetOperand1() is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " +
 				andValidateOperator.GetOperand1().GetType().FullName);
 
 			var existTagsOperator1 = (ExistTagsValidateOperator)andValidateOperator.GetOperand1();
-			Assert.AreEqual(existTagsOperator1.GetTags().Count, 2, "Only 2 tags required");
-			Assert.AreEqual(existTagsOperator1.GetTags()[0], 199, "Required tag 199");
-			Assert.AreEqual(existTagsOperator1.GetTags()[1], 104, "Required tag 104");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags().Count, 2, "Only 2 tags required");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags()[0], 199, "Required tag 199");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags()[1], 104, "Required tag 104");
 
 			//Operator 2 from AND condition
-			Assert.IsTrue(andValidateOperator.GetOperand2() is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(andValidateOperator.GetOperand2() is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " +
 				andValidateOperator.GetOperand1().GetType().FullName);
 
 			var existTagsOperator2 = (ExistTagsValidateOperator)andValidateOperator.GetOperand2();
-			Assert.AreEqual(existTagsOperator2.GetTags().Count, 1, "Only 1 tag required");
-			Assert.AreEqual(existTagsOperator2.GetTags()[0], 91, "Required tag 91");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags().Count, 1, "Only 1 tag required");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags()[0], 91, "Required tag 91");
 		}
 
 		[Test]
@@ -112,29 +113,29 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 			var parser = new ConditionValidateParser("existtags(G$199(T$104)) and existtags(T$91)");
 
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is AndValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is AndValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 
 			var andValidateOperator = (AndValidateOperator)rootCondition;
 
 			//Operator 1 from AND condition
-			Assert.IsTrue(andValidateOperator.GetOperand1() is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(andValidateOperator.GetOperand1() is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " +
 				andValidateOperator.GetOperand1().GetType().FullName);
 
 			var existTagsOperator1 = (ExistTagsValidateOperator)andValidateOperator.GetOperand1();
-			Assert.AreEqual(existTagsOperator1.GetTags().Count, 2, "Only 2 tags required");
-			Assert.AreEqual(existTagsOperator1.GetTags()[0], 199, "Required tag 199");
-			Assert.AreEqual(existTagsOperator1.GetTags()[1], 104, "Required tag 104");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags().Count, 2, "Only 2 tags required");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags()[0], 199, "Required tag 199");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags()[1], 104, "Required tag 104");
 
 			//Operator 2 from AND condition
-			Assert.IsTrue(andValidateOperator.GetOperand2() is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(andValidateOperator.GetOperand2() is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " +
 				andValidateOperator.GetOperand1().GetType().FullName);
 
 			var existTagsOperator2 = (ExistTagsValidateOperator)andValidateOperator.GetOperand2();
-			Assert.AreEqual(existTagsOperator2.GetTags().Count, 1, "Only 1 tag required");
-			Assert.AreEqual(existTagsOperator2.GetTags()[0], 91, "Required tag 91");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags().Count, 1, "Only 1 tag required");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags()[0], 91, "Required tag 91");
 		}
 
 		[Test]
@@ -145,36 +146,36 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 					"existtags(G$136(T$137)) or existtags(G$136(T$138)) or existtags(G$136(T$139))");
 
 			var rootCondition = parser.GetCondition();
-			Assert.IsTrue(rootCondition is OrValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is OrValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " + rootCondition.GetType().FullName);
 			var orOperator = (OrValidateOperator)rootCondition;
 
-			Assert.IsTrue(orOperator.GetOperand1() is OrValidateOperator,
+			ClassicAssert.IsTrue(orOperator.GetOperand1() is OrValidateOperator,
 				"Condition should have type OrValidateOperator, but has " +
 				orOperator.GetOperand1().GetType().FullName);
 
 			var orOperator1 = (OrValidateOperator)orOperator.GetOperand1();
 
-			Assert.IsTrue(orOperator1.GetOperand1() is ExistTagsValidateOperator,
+			ClassicAssert.IsTrue(orOperator1.GetOperand1() is ExistTagsValidateOperator,
 				"Condition should have type ExistTagsOperator, but has " +
 				orOperator1.GetOperand1().GetType().FullName);
 
 			var existTagsOperator1 = (ExistTagsValidateOperator)orOperator1.GetOperand1();
-			Assert.AreEqual(existTagsOperator1.GetTags().Count, 2, "Only 2 tags required");
-			Assert.AreEqual(existTagsOperator1.GetTags()[0], 136, "Required tag 136");
-			Assert.AreEqual(existTagsOperator1.GetTags()[1], 137, "Required tag 137");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags().Count, 2, "Only 2 tags required");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags()[0], 136, "Required tag 136");
+			ClassicAssert.AreEqual(existTagsOperator1.GetTags()[1], 137, "Required tag 137");
 
 			var existTagsOperator2 = (ExistTagsValidateOperator)orOperator1.GetOperand2();
-			Assert.AreEqual(existTagsOperator2.GetTags().Count, 2, "Only 2 tags required");
-			Assert.AreEqual(existTagsOperator2.GetTags()[0], 136, "Required tag 136");
-			Assert.AreEqual(existTagsOperator2.GetTags()[1], 138, "Required tag 138");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags().Count, 2, "Only 2 tags required");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags()[0], 136, "Required tag 136");
+			ClassicAssert.AreEqual(existTagsOperator2.GetTags()[1], 138, "Required tag 138");
 
 			//Operator 2 from or condition
 			var orOperator2 = (ExistTagsValidateOperator)orOperator.GetOperand2();
 
-			Assert.AreEqual(orOperator2.GetTags().Count, 2, "Only 2 tags required");
-			Assert.AreEqual(orOperator2.GetTags()[0], 136, "Required tag 136");
-			Assert.AreEqual(orOperator2.GetTags()[1], 139, "Required tag 139");
+			ClassicAssert.AreEqual(orOperator2.GetTags().Count, 2, "Only 2 tags required");
+			ClassicAssert.AreEqual(orOperator2.GetTags()[0], 136, "Required tag 136");
+			ClassicAssert.AreEqual(orOperator2.GetTags()[1], 139, "Required tag 139");
 		}
 
 		[Test]
@@ -184,26 +185,26 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 
 			var rootCondition = parser.GetCondition();
 
-			Assert.IsTrue(rootCondition is OrValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is OrValidateOperator,
 				"Condition should have type OrValidateOperator, but has " + rootCondition.GetType().FullName);
 			var orOperator = (OrValidateOperator)rootCondition;
 
-			Assert.IsTrue(orOperator.GetOperand1() is OrValidateOperator,
+			ClassicAssert.IsTrue(orOperator.GetOperand1() is OrValidateOperator,
 				"Condition should have type OrValidateOperator, but has " +
 				orOperator.GetOperand1().GetType().FullName);
 
 			var greatThanValidateOperator =
 				(GreatThanValidateOperator)((OrValidateOperator)orOperator.GetOperand1()).GetOperand1();
-			Assert.AreEqual(0, greatThanValidateOperator.GetValue());
-			Assert.AreEqual(146, greatThanValidateOperator.GetTag());
+			ClassicAssert.AreEqual(0, greatThanValidateOperator.GetValue());
+			ClassicAssert.AreEqual(146, greatThanValidateOperator.GetTag());
 
 			var eqValidateOperator = (EqValidateOperator)((OrValidateOperator)orOperator.GetOperand1()).GetOperand2();
-			Assert.AreEqual(eqValidateOperator.GetValue(), "FUT");
-			Assert.AreEqual(167, eqValidateOperator.GetTag());
+			ClassicAssert.AreEqual(eqValidateOperator.GetValue(), "FUT");
+			ClassicAssert.AreEqual(167, eqValidateOperator.GetTag());
 
 			eqValidateOperator = (EqValidateOperator)orOperator.GetOperand2();
-			Assert.AreEqual(eqValidateOperator.GetValue(), "OPT");
-			Assert.AreEqual(167, eqValidateOperator.GetTag());
+			ClassicAssert.AreEqual(eqValidateOperator.GetValue(), "OPT");
+			ClassicAssert.AreEqual(167, eqValidateOperator.GetTag());
 		}
 
 		[Test]
@@ -213,15 +214,15 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 
 			var rootCondition = parser.GetCondition();
 
-			Assert.IsTrue(rootCondition is AndValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is AndValidateOperator,
 				"Condition should have type NOTOperator, but has " + rootCondition.GetType().FullName);
 			var andOperator = (AndValidateOperator)rootCondition;
 
-			Assert.IsTrue(andOperator.GetOperand1() is EqValidateOperator,
+			ClassicAssert.IsTrue(andOperator.GetOperand1() is EqValidateOperator,
 				"Condition should have type EQOperator, but has " + andOperator.GetOperand1().GetType().FullName);
 
 			var eqOperator = (NotValidateOperator)andOperator.GetOperand2();
-			Assert.AreEqual(eqOperator.GetTags()[0], 126, "Required tag 126");
+			ClassicAssert.AreEqual(eqOperator.GetTags()[0], 126, "Required tag 126");
 		}
 
 		[Test]
@@ -231,16 +232,16 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 
 			var rootCondition = parser.GetCondition();
 
-			Assert.IsTrue(rootCondition is NotValidateOperator,
+			ClassicAssert.IsTrue(rootCondition is NotValidateOperator,
 				"Condition should have type NOTOperator, but has " + rootCondition.GetType().FullName);
 			var notOperator = (NotValidateOperator)rootCondition;
 
-			Assert.IsTrue(notOperator.GetOperand() is EqValidateOperator,
+			ClassicAssert.IsTrue(notOperator.GetOperand() is EqValidateOperator,
 				"Condition should have type EQOperator, but has " + notOperator.GetOperand().GetType().FullName);
 
 			var eqOperator = (EqValidateOperator)notOperator.GetOperand();
-			Assert.AreEqual(eqOperator.GetTag(), 20, "Required tag 91");
-			Assert.AreEqual(eqOperator.GetValue(), "3", "Required value '3'");
+			ClassicAssert.AreEqual(eqOperator.GetTag(), 20, "Required tag 91");
+			ClassicAssert.AreEqual(eqOperator.GetValue(), "3", "Required value '3'");
 		}
 
 		[Test]
@@ -252,10 +253,10 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators.Condition
 
 			var msg = new FixMessage();
 			msg.AddTag(150, "8");
-			Assert.IsFalse(rootCondition.IsRequired(msg));
+			ClassicAssert.IsFalse(rootCondition.IsRequired(msg));
 
 			msg.Set(150, "7");
-			Assert.IsTrue(rootCondition.IsRequired(msg));
+			ClassicAssert.IsTrue(rootCondition.IsRequired(msg));
 		}
 	}
 }

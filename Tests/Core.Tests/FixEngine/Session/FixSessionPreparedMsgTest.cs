@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -41,14 +42,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			SessionHelper.SendMessage(pm);
 			var pmMessage = SessionHelper.Messages[0];
 			SessionHelper.Messages.Remove(pmMessage);
-			Assert.AreEqual(pm, pmMessage);
+			ClassicAssert.AreEqual(pm, pmMessage);
 			pm.ReleaseInstance();
 
 			//get message from pool - it should be clean and not prepared
 			var pooledMsg = FixMessageFactory.NewInstanceFromPool();
-			Assert.AreEqual("", pooledMsg.ToString());
-			Assert.IsTrue(pooledMsg.IsEmpty);
-			Assert.IsFalse(pooledMsg.IsPreparedMessage);
+			ClassicAssert.AreEqual("", pooledMsg.ToString());
+			ClassicAssert.IsTrue(pooledMsg.IsEmpty);
+			ClassicAssert.IsFalse(pooledMsg.IsPreparedMessage);
 		}
 	}
 }

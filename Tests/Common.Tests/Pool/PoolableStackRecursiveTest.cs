@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Common.Pool;
 using Epam.FixAntenna.NetCore.Common.Pool.Provider;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Pool
 {

@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -39,25 +40,25 @@ namespace Epam.FixAntenna.Message.Tests
 		[Test]
 		public virtual void TestEquals()
 		{
-			Assert.AreEqual(_value1, _value1Same);
+			ClassicAssert.AreEqual(_value1, _value1Same);
 		}
 
 		[Test]
 		public virtual void TestHashCodeEquals()
 		{
-			Assert.AreEqual(_value1.GetHashCode(), _value1Same.GetHashCode());
+			ClassicAssert.AreEqual(_value1.GetHashCode(), _value1Same.GetHashCode());
 		}
 
 		[Test]
 		public virtual void TestHashCodeNotEquals()
 		{
-			Assert.IsFalse(_value1.GetHashCode() == _value2.GetHashCode());
+			ClassicAssert.IsFalse(_value1.GetHashCode() == _value2.GetHashCode());
 		}
 
 		[Test]
 		public virtual void TestNotEquals()
 		{
-			Assert.IsFalse(_value1.Equals((object)_value2), "Two object is different. Equals method must return false");
+			ClassicAssert.IsFalse(_value1.Equals((object)_value2), "Two object is different. Equals method must return false");
 		}
 
 		#region Migrated from FixFieldTest
@@ -65,53 +66,53 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestDouble()
 		{
 			var f = new TagValue(51, 33.123456, 3);
-			Assert.That(f.ToString(), Is.EqualTo("51=33.123"));
-			Assert.AreEqual(33.123, f.DoubleValue, 0.0001);
+			ClassicAssert.That(f.ToString(), Is.EqualTo("51=33.123"));
+			ClassicAssert.AreEqual(33.123, f.DoubleValue, 0.0001);
 		}
 
 		[Test]
 		public virtual void TestEqualsEx()
 		{
-			Assert.That(new TagValue(0, ""), Is.EqualTo(new TagValue(0, "")));
-			Assert.That(new TagValue(1, ""), Is.EqualTo(new TagValue(1, "")));
-			Assert.That(new TagValue(10, ""), Is.EqualTo(new TagValue(10, "")));
-			Assert.That(new TagValue(9999, ""), Is.EqualTo(new TagValue(9999, "")));
+			ClassicAssert.That(new TagValue(0, ""), Is.EqualTo(new TagValue(0, "")));
+			ClassicAssert.That(new TagValue(1, ""), Is.EqualTo(new TagValue(1, "")));
+			ClassicAssert.That(new TagValue(10, ""), Is.EqualTo(new TagValue(10, "")));
+			ClassicAssert.That(new TagValue(9999, ""), Is.EqualTo(new TagValue(9999, "")));
 		}
 
 		[Test]
 		public virtual void TestExactDouble()
 		{
 			var f = new TagValue(51, "33.123");
-			Assert.That(f.ToString(), Is.EqualTo("51=33.123"));
-			Assert.AreEqual(33.123, f.DoubleValue, 0);
+			ClassicAssert.That(f.ToString(), Is.EqualTo("51=33.123"));
+			ClassicAssert.AreEqual(33.123, f.DoubleValue, 0);
 		}
 
 		[Test]
 		public virtual void TestHasCode()
 		{
-			Assert.AreEqual(new TagValue(0, "").GetHashCode(), new TagValue(0, "").GetHashCode());
-			Assert.AreEqual(new TagValue(1, "").GetHashCode(), new TagValue(1, "").GetHashCode());
-			Assert.AreEqual(new TagValue(10, "001").GetHashCode(), new TagValue(10, "001").GetHashCode());
-			Assert.AreEqual(new TagValue(9999, "999").GetHashCode(), new TagValue(9999, "999").GetHashCode());
-			Assert.AreNotEqual(new TagValue(1, "").GetHashCode(), new TagValue(0, "").GetHashCode());
+			ClassicAssert.AreEqual(new TagValue(0, "").GetHashCode(), new TagValue(0, "").GetHashCode());
+			ClassicAssert.AreEqual(new TagValue(1, "").GetHashCode(), new TagValue(1, "").GetHashCode());
+			ClassicAssert.AreEqual(new TagValue(10, "001").GetHashCode(), new TagValue(10, "001").GetHashCode());
+			ClassicAssert.AreEqual(new TagValue(9999, "999").GetHashCode(), new TagValue(9999, "999").GetHashCode());
+			ClassicAssert.AreNotEqual(new TagValue(1, "").GetHashCode(), new TagValue(0, "").GetHashCode());
 		}
 
 		[Test]
 		public virtual void TestSize()
 		{
-			Assert.That(new TagValue(0, "").FullSize, Is.EqualTo(2));
-			Assert.That(new TagValue(1, "").FullSize, Is.EqualTo(2));
-			Assert.That(new TagValue(10, "").FullSize, Is.EqualTo(3));
-			Assert.That(new TagValue(9999, "9999").FullSize, Is.EqualTo(9));
+			ClassicAssert.That(new TagValue(0, "").FullSize, Is.EqualTo(2));
+			ClassicAssert.That(new TagValue(1, "").FullSize, Is.EqualTo(2));
+			ClassicAssert.That(new TagValue(10, "").FullSize, Is.EqualTo(3));
+			ClassicAssert.That(new TagValue(9999, "9999").FullSize, Is.EqualTo(9));
 		}
 
 		[Test]
 		public virtual void TestToString()
 		{
-			Assert.That(new TagValue(0, "").ToString(), Is.EqualTo("0="));
-			Assert.That(new TagValue(1, "").ToString(), Is.EqualTo("1="));
-			Assert.That(new TagValue(10, "").ToString(), Is.EqualTo("10="));
-			Assert.That(new TagValue(9999, "9999").ToString(), Is.EqualTo("9999=9999"));
+			ClassicAssert.That(new TagValue(0, "").ToString(), Is.EqualTo("0="));
+			ClassicAssert.That(new TagValue(1, "").ToString(), Is.EqualTo("1="));
+			ClassicAssert.That(new TagValue(10, "").ToString(), Is.EqualTo("10="));
+			ClassicAssert.That(new TagValue(9999, "9999").ToString(), Is.EqualTo("9999=9999"));
 		}
 		#endregion
 	}

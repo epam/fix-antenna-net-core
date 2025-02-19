@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Common;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common
 {
@@ -64,8 +65,8 @@ namespace Epam.FixAntenna.Common
 			}
 
 			var result = DateTimeHelper.TryParseTimeZoneOffset(timeZoneId, out var offset);
-			Assert.That(result, Is.EqualTo(good), $"Wrong behaviour for {timeZoneId} time zone.");
-			Assert.That(offset, Is.EqualTo(expected), $"Cannot parse {timeZoneId} time zone.");
+			ClassicAssert.That(result, Is.EqualTo(good), $"Wrong behaviour for {timeZoneId} time zone.");
+			ClassicAssert.That(offset, Is.EqualTo(expected), $"Cannot parse {timeZoneId} time zone.");
 		}
 	}
 }

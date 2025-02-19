@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 {
@@ -35,7 +36,7 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 		public void SetUp()
 		{
 			ConfigurationHelper.StoreGlobalConfig();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 
 			var config = Config.GlobalConfiguration;
 			config.SetProperty(Config.SeqNumLength, "9");
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 		{
 			_sessionHelper?.Dispose();
 			ConfigurationHelper.RestoreGlobalConfig();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		private static bool ClearLogs()
@@ -68,20 +69,20 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 
 			_sessionHelper.ResetSequenceNumbers(false);
 			var logon = _sessionHelper.GetMessageFromQueue();
-			Assert.IsNotNull(logon);
+			ClassicAssert.IsNotNull(logon);
 			var buffer = new ByteBuffer();
 			_sessionHelper.MessageFactory.Serialize(null, "", logon, buffer, new SerializationContext());
 			logon = RawFixUtil.GetFixMessage(buffer.GetByteArray(), 0, buffer.Offset);
 
 			// 1 -> 000001
 			var seqNum = logon.GetTag(Tags.MsgSeqNum).StringValue;
-			Assert.That(seqNum, Is.EqualTo("000000001"));
+			ClassicAssert.That(seqNum, Is.EqualTo("000000001"));
 			// -1 -> -000001
 			var lastSeqNum = logon.GetTag(Tags.LastMsgSeqNumProcessed)?.StringValue;
-			Assert.That(lastSeqNum, Is.EqualTo("-00000001"));
+			ClassicAssert.That(lastSeqNum, Is.EqualTo("-00000001"));
 			// 0 -> 000000
 			var nextSeqNum = logon.GetTag(Tags.NextExpectedMsgSeqNum).StringValue;
-			Assert.That(nextSeqNum, Is.EqualTo("000000000"));
+			ClassicAssert.That(nextSeqNum, Is.EqualTo("000000000"));
 		}
 
 		[Test, Property("JIRA", "BBP-24520")]
@@ -99,9 +100,9 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 			handler.OnNewMessage(sequenceReset);
 
 			var reject = _sessionHelper.GetMessageFromQueue();
-			Assert.IsNotNull(reject);
+			ClassicAssert.IsNotNull(reject);
 			var nextSeqNum = reject.GetTag(Tags.RefSeqNum).StringValue;
-			Assert.That(nextSeqNum, Is.EqualTo("000000100"));
+			ClassicAssert.That(nextSeqNum, Is.EqualTo("000000100"));
 		}
 
 		[Test, Property("JIRA", "BBP-24520")]
@@ -115,11 +116,11 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 
 			handler.OnNewMessage(message);
 
-			Assert.IsTrue(session.Messages.Count > 0);
+			ClassicAssert.IsTrue(session.Messages.Count > 0);
 			var msg = session.Messages[0];
-			Assert.AreEqual(4, msg.GetTagAsInt(Tags.MsgType));
+			ClassicAssert.AreEqual(4, msg.GetTagAsInt(Tags.MsgType));
 			var newSeqNum = msg.GetTagValueAsString(Tags.NewSeqNo);
-			Assert.That(newSeqNum, Is.EqualTo("000005000"));
+			ClassicAssert.That(newSeqNum, Is.EqualTo("000005000"));
 		}
 
 		[Test, Property("JIRA", "BBP-24520")]
@@ -139,13 +140,13 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Session.Impl
 			handler.OnNewMessage(message);
 
 			var resendSeqMessage = session.Messages[0];
-			Assert.IsNotNull(resendSeqMessage);
+			ClassicAssert.IsNotNull(resendSeqMessage);
 
 			var beginSeqNo = resendSeqMessage.GetTagValueAsString(Tags.BeginSeqNo);
-			Assert.That(beginSeqNo, Is.EqualTo("000000005"));
+			ClassicAssert.That(beginSeqNo, Is.EqualTo("000000005"));
 
 			var endSeqNo = resendSeqMessage.GetTagValueAsString(Tags.EndSeqNo);
-			Assert.That(endSeqNo, Is.EqualTo("000000000"));
+			ClassicAssert.That(endSeqNo, Is.EqualTo("000000000"));
 		}
 	}
 }

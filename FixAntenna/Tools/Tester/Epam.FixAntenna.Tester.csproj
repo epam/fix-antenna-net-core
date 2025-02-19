@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>net8.0;net48</TargetFrameworks>
 		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
@@ -16,7 +16,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit" Version="4.3.2" />
 		<PackageReference Include="System.Collections" Version="4.3.0" />
 	</ItemGroup>
 

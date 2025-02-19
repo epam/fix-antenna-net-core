@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Storage;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -109,7 +110,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			return message;
 		}
 
-		protected virtual void AssertEqualsMessages(params string[] expectMessages)
+		protected virtual void ClassicAssertEqualsMessages(params string[] expectMessages)
 		{
 			var storageFileName = FileNameHelper.GetStorageFileName(ConfigurationAdapter.StorageDirectory);
 			using (var inputStream =
@@ -119,13 +120,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				foreach (var expMsg in expectMessages)
 				{
 					var actualMsg = br.ReadLine();
-					Assert.AreEqual(expMsg,
+					ClassicAssert.AreEqual(expMsg,
 						actualMsg.Substring(MessageStorage.CalculateFormatLength())); // get fix message without timestamp
 				}
 			}
 		}
 
-		protected virtual void AssertEqualsMessagesWithTimestamps(string[] expectMessages, string expectedTimestamp)
+		protected virtual void ClassicAssertEqualsMessagesWithTimestamps(string[] expectMessages, string expectedTimestamp)
 		{
 			var storageFileName = FileNameHelper.GetStorageFileName(ConfigurationAdapter.StorageDirectory);
 			using (var inputStream =
@@ -137,8 +138,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 					var actualMsgRecord = br.ReadLine();
 					var actualMsg = actualMsgRecord.Substring(expectedTimestamp.Length);
 					var actualTimestamp = actualMsgRecord.Substring(0, actualMsgRecord.Length - actualMsg.Length);
-					Assert.AreEqual(expMsg, actualMsg);
-					Assert.AreEqual(actualTimestamp, expectedTimestamp);
+					ClassicAssert.AreEqual(expMsg, actualMsg);
+					ClassicAssert.AreEqual(actualTimestamp, expectedTimestamp);
 				}
 			}
 		}

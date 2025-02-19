@@ -15,7 +15,8 @@
 using System.Reflection;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 {
@@ -24,35 +25,35 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 		[Test]
 		public virtual void TestEqualsContractMet()
 		{
-			Assert.AreEqual(BuildDefault(), BuildDefault());
-			Assert.IsFalse(BuildDefault().Equals(BuildCustom(nameof(FixVersionContainer.DictionaryId), "custom")));
-			Assert.AreEqual(BuildDefault(), BuildCustom(nameof(FixVersionContainer.FixVersion), FixVersion.Fix50));
-			Assert.AreEqual(BuildDefault(), BuildCustom(nameof(FixVersionContainer.DictionaryFile), "dict"));
-			Assert.AreEqual(BuildDefault(), BuildCustom(nameof(FixVersionContainer.ExtensionFile), "ext"));
+			ClassicAssert.AreEqual(BuildDefault(), BuildDefault());
+			ClassicAssert.IsFalse(BuildDefault().Equals(BuildCustom(nameof(FixVersionContainer.DictionaryId), "custom")));
+			ClassicAssert.AreEqual(BuildDefault(), BuildCustom(nameof(FixVersionContainer.FixVersion), FixVersion.Fix50));
+			ClassicAssert.AreEqual(BuildDefault(), BuildCustom(nameof(FixVersionContainer.DictionaryFile), "dict"));
+			ClassicAssert.AreEqual(BuildDefault(), BuildCustom(nameof(FixVersionContainer.ExtensionFile), "ext"));
 		}
 
 		[Test]
 		public virtual void TestHashCodeContractMet()
 		{
-			Assert.AreEqual(BuildDefault().GetHashCode(), BuildDefault().GetHashCode());
-			Assert.IsTrue(BuildDefault().GetHashCode() != BuildCustom(nameof(FixVersionContainer.DictionaryId), "custom").GetHashCode());
-			Assert.AreEqual(BuildDefault().GetHashCode(), BuildCustom(nameof(FixVersionContainer.FixVersion), FixVersion.Fix50).GetHashCode());
-			Assert.AreEqual(BuildDefault().GetHashCode(), BuildCustom(nameof(FixVersionContainer.DictionaryFile), "dict").GetHashCode());
-			Assert.AreEqual(BuildDefault().GetHashCode(), BuildCustom(nameof(FixVersionContainer.ExtensionFile), "ext").GetHashCode());
+			ClassicAssert.AreEqual(BuildDefault().GetHashCode(), BuildDefault().GetHashCode());
+			ClassicAssert.IsTrue(BuildDefault().GetHashCode() != BuildCustom(nameof(FixVersionContainer.DictionaryId), "custom").GetHashCode());
+			ClassicAssert.AreEqual(BuildDefault().GetHashCode(), BuildCustom(nameof(FixVersionContainer.FixVersion), FixVersion.Fix50).GetHashCode());
+			ClassicAssert.AreEqual(BuildDefault().GetHashCode(), BuildCustom(nameof(FixVersionContainer.DictionaryFile), "dict").GetHashCode());
+			ClassicAssert.AreEqual(BuildDefault().GetHashCode(), BuildCustom(nameof(FixVersionContainer.ExtensionFile), "ext").GetHashCode());
 		}
 
 		[Test]
 		public virtual void ItShouldDetermineFixVersionAutomaticallyIfItIsUnknownT11()
 		{
 			var fixVersionContainer = FixVersionContainer.NewBuilder().SetDictionaryFile("fixdict11.xml").Build();
-			Assert.AreEqual(FixVersion.Fixt11, fixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fixt11, fixVersionContainer.FixVersion);
 		}
 
 		[Test]
 		public virtual void ItShouldDetermineFixVersionAutomaticallyIfItIsUnknown44()
 		{
 			var fixVersionContainer = FixVersionContainer.NewBuilder().SetDictionaryFile("fixdic44.xml").Build();
-			Assert.AreEqual(FixVersion.Fix44, fixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix44, fixVersionContainer.FixVersion);
 		}
 
 		private FixVersionContainer BuildDefault()

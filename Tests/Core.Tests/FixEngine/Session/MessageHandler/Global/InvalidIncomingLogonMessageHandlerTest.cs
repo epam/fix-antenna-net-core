@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global.Helper;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -39,19 +40,19 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		public virtual void FirstMessageLogin()
 		{
 			_messageHandler.ProcessMessage(MessageHelper.GetLoginMessage());
-			Assert.IsNotNull(_messageHandler.GetMessage());
+			ClassicAssert.IsNotNull(_messageHandler.GetMessage());
 		}
 
 		[Test]
 		public virtual void FirstMessageIsNotLogin()
 		{
-			var ex = Assert.Throws<InvalidMessageException>(() =>
+			var ex = ClassicAssert.Throws<InvalidMessageException>(() =>
 			{
 				_messageHandler.ProcessMessage(MessageHelper.GetHbMessage());
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.IsNull(_messageHandler.GetMessage());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.IsNull(_messageHandler.GetMessage());
 		}
 	}
 

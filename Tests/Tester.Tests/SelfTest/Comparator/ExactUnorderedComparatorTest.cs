@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Tester.Comparator;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -35,7 +36,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string message = "8=FIX.4.2\x00019=115\x000135=A\x000149=ADAPTOR\x000156=123\x000134=1\x000150=SENDERSUBID\x0001142=SENDERLOCATIONID\x000157=TARGETSUBID\x000152=20040219-11:02:43.334\x000198=0\x0001108=0\x000110=207\x0001";
 			string message2 = "8=FIX.4.2#9=115#35=A#49=ADAPTOR#56=123#34=1#50=SENDERSUBID#142=SENDERLOCATIONID#57=TARGETSUBID#52=20040219-11:02:43.334#98=0#108=0#10=207#";
 			GenericUnorderedComparator.SetEtalonMessage(message2);
-			Assert.AreEqual(true, GenericUnorderedComparator.IsMessageOk(message));
+			ClassicAssert.AreEqual(true, GenericUnorderedComparator.IsMessageOk(message));
 		}
 
 		[Test]
@@ -44,7 +45,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string message = "8=FIX.4.2\x00019=115\x000135=A\x000149=ADAPTOR\x000156=123\x000134=1\x000150=SENDERSUBID\x0001142=SENDERLOCATIONID\x000157=TARGETSUBID\x000152=20040219-11:02:43.334\x000198=0\x0001108=0\x000110=207\x0001";
 			string message2 = "8=FIX.4.2#9=115#35=A#56=123#49=ADAPTOR#34=1#50=SENDERSUBID#142=SENDERLOCATIONID#57=TARGETSUBID#52=20040219-11:02:43.334#98=0#108=0#10=207#";
 			GenericUnorderedComparator.SetEtalonMessage(message2);
-			Assert.AreEqual(true, GenericUnorderedComparator.IsMessageOk(message));
+			ClassicAssert.AreEqual(true, GenericUnorderedComparator.IsMessageOk(message));
 		}
 
 		[Test]
@@ -53,7 +54,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string message = "8=FIX.4.2\x00019=115\x000135=A\x000149=ADAPTOR\x000156=123\x000134=1\x000150=SENDERSUBID\x0001142=SENDERLOCATIONID\x000157=TARGETSUBID\x000152=20040219-11:02:43.334\x000198=0\x0001108=0\x000110=207\x0001";
 			string message2 = "8=FIX.4.2#35=A#49=ADAPTOR#56=123#34=1#50=SENDERSUBID#142=SENDERLOCATIONID#57=TARGETSUBID#52=20040219-11:02:43.334#98=0#108=0#10=207#";
 			GenericUnorderedComparator.SetEtalonMessage(message2);
-			Assert.AreEqual(false, GenericUnorderedComparator.IsMessageOk(message));
+			ClassicAssert.AreEqual(false, GenericUnorderedComparator.IsMessageOk(message));
 		}
 
 		[Test]
@@ -62,7 +63,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string message = "8=FIX.4.2\x00019=115\x000135=A\x000149=ADAPTOR\x000156=123\x000134=1\x000150=SENDERSUBID\x0001142=SENDERLOCATIONID\x000157=TARGETSUBID\x000152=20040219-11:02:43.334\x000198=0\x0001108=0\x000110=207\x0001";
 			string message2 = "8=FIX.4.2#19=116#35=A#49=ADAPTOR#56=123#34=1#50=SENDERSUBID#142=SENDERLOCATIONID#57=TARGETSUBID#52=20040219-11:02:43.334#98=0#108=0#10=207#";
 			GenericUnorderedComparator.SetEtalonMessage(message2);
-			Assert.AreEqual(false, GenericUnorderedComparator.IsMessageOk(message));
+			ClassicAssert.AreEqual(false, GenericUnorderedComparator.IsMessageOk(message));
 		}
 	}
 }

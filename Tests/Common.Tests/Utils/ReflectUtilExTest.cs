@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.NetCore.Common.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Utils
 {
@@ -25,7 +26,7 @@ namespace Epam.FixAntenna.Common.Utils
 		{
 			var objUtil = new ReflectUtilEx(typeof(object));
 			var objObj = objUtil.GetInstance(new object[] {});
-			Assert.IsNotNull(objObj);
+			ClassicAssert.IsNotNull(objObj);
 		}
 
 		[Test]
@@ -33,8 +34,8 @@ namespace Epam.FixAntenna.Common.Utils
 		{
 			var strUtil = new ReflectUtilEx(typeof(string));
 			var strObj = strUtil.GetInstance(new object[]{"1".ToCharArray()});
-			Assert.IsNotNull(strObj);
-			Assert.AreEqual("1", strObj);
+			ClassicAssert.IsNotNull(strObj);
+			ClassicAssert.AreEqual("1", strObj);
 		}
 	}
 }

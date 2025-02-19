@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.Validation.Tests.Engine.Validators.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 {
@@ -47,7 +48,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			var message = FixMessageDuplicateHelper.GetMessage(FixVersion.Fix43, "D");
 			var errorContainer = Validator.Validate("D", CreateValidationMessage(message), false);
 			message.AddTag(5001, "a");
-			Assert.IsTrue(!errorContainer.Errors.Any(),
+			ClassicAssert.IsTrue(!errorContainer.Errors.Any(),
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -57,7 +58,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			var message = FixMessageDuplicateHelper.GetMessage(FixVersion.Fix43, "D");
 			message.AddTag(654, "a");
 			var errorContainer = Validator.Validate("D", CreateValidationMessage(message), false);
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.TagNotDefinedForThisMessageType, 34, "D", message.GetTag(654))));
 		}
 
@@ -67,7 +68,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			var message = FixMessageDuplicateHelper.GetMessage(FixVersion.Fix43, "D");
 			var errorContainer = Validator.Validate("D", CreateValidationMessage(message), false);
 
-			Assert.IsTrue(!errorContainer.Errors.Any(),
+			ClassicAssert.IsTrue(!errorContainer.Errors.Any(),
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 	}

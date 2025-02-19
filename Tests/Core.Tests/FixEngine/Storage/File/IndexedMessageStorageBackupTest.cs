@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Storage;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -76,7 +77,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var listener = new MessageStorageListener();
 			MessageStorage.RetrieveMessages(1, 10, listener, true);
 
-			Assert.IsTrue(listener.Count == 0);
+			ClassicAssert.IsTrue(listener.Count == 0);
 		}
 
 		private class MessageStorageListener : IMessageStorageListener

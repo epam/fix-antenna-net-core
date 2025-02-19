@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global.Helper;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Post.Helper;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Post
 {
@@ -46,9 +47,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Post
 				FixMessage = MessageHelper.GetHbMessage()
 			};
 
-			Assert.IsNull(_messageHandler.GetLastLoggedMsgTimestamp());
+			ClassicAssert.IsNull(_messageHandler.GetLastLoggedMsgTimestamp());
 			_messageHandler.ProcessMessage(msgBuf);
-			Assert.IsNotNull(_messageHandler.GetLastLoggedMsgTimestamp());
+			ClassicAssert.IsNotNull(_messageHandler.GetLastLoggedMsgTimestamp());
 		}
 	}
 }

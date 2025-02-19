@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.Fix.Message.validators;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				throw new NullValueException();
 			}
 
-			Assert.AreEqual(Values[0], StringHelper.NewString(actual),
+			ClassicAssert.AreEqual(Values[0], StringHelper.NewString(actual),
 				GetValidatorName() + "invalid value for getTagValueAsBytes(" + tagId + ")");
 		}
 
@@ -56,7 +57,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				throw new NullValueException();
 			}
 
-			Assert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
+			ClassicAssert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
 				GetValidatorName() + "invalid value for getTagValueAsBytes(" + tagId + ", " + occurrence + ")");
 		}
 
@@ -64,7 +65,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterAtIndex(FixMessage msg, int occurrence, int firstTagIndex)
 		{
 			var actual = msg.GetTagValueAsBytesAtIndex(firstTagIndex);
-			Assert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
+			ClassicAssert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
 				GetValidatorName() + "invalid value for getTagValueAsBytesAtIndex(" + firstTagIndex + ")");
 		}
 

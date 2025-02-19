@@ -16,7 +16,8 @@ using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType.Util;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType.Util
 {
@@ -40,9 +41,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType.Util
 		{
 			var preparedMessage = _messageRrCarrierSender.PrepareForResendRequest(_message);
 
-			Assert.IsTrue(preparedMessage.GetTag(Tags.OrigSendingTime) != null);
-			Assert.IsTrue(preparedMessage.GetTag(Tags.PossDupFlag) != null);
-			Assert.AreEqual(preparedMessage.CalculateBodyLength(), preparedMessage.GetTagAsInt(Tags.BodyLength));
+			ClassicAssert.IsTrue(preparedMessage.GetTag(Tags.OrigSendingTime) != null);
+			ClassicAssert.IsTrue(preparedMessage.GetTag(Tags.PossDupFlag) != null);
+			ClassicAssert.AreEqual(preparedMessage.CalculateBodyLength(), preparedMessage.GetTagAsInt(Tags.BodyLength));
 		}
 	}
 }

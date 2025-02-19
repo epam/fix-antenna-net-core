@@ -17,7 +17,8 @@ using System.Text;
 using System.Threading;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Common.Threading.Queue;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Threading.Queue
 {
@@ -28,7 +29,7 @@ namespace Epam.FixAntenna.Common.Threading.Queue
 		public virtual void Init()
 		{
 			_queue = new SynchronizeBlockingQueue<string>(Limit);
-			Assert.True(_queue.IsEmpty);
+			ClassicAssert.True(_queue.IsEmpty);
 		}
 
 		private SynchronizeBlockingQueue<string> _queue;
@@ -85,7 +86,7 @@ namespace Epam.FixAntenna.Common.Threading.Queue
 			internal override void Action()
 			{
 				var str = _outerInstance._queue.Take();
-				Assert.AreEqual(Convert.ToString(_i), str);
+				ClassicAssert.AreEqual(Convert.ToString(_i), str);
 				_i++;
 			}
 		}
@@ -197,17 +198,17 @@ namespace Epam.FixAntenna.Common.Threading.Queue
 				_queue.Put(Convert.ToString(i));
 			}
 
-			Assert.IsFalse(TimeIsCome(timeControlPoint),
+			ClassicAssert.IsFalse(TimeIsCome(timeControlPoint),
 				"Queue fill with lock, but should without. " + takeThread.GetErr());
 			// in this point test must be wait
 			_queue.Put(Convert.ToString(Limit + 1));
-			Assert.IsTrue(TimeIsCome(timeControlPoint),
+			ClassicAssert.IsTrue(TimeIsCome(timeControlPoint),
 				"Queue fill without lock, but should with. " + takeThread.GetErr());
 			takeThread.Thread.Join();
-			Assert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
-			Assert.AreEqual(itemsNum, takeThread.Count, "Not all items were taken.");
+			ClassicAssert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
+			ClassicAssert.AreEqual(itemsNum, takeThread.Count, "Not all items were taken.");
 			var errStr = takeThread.GetErr();
-			Assert.IsTrue(errStr.Length == 0, "Some errors in TakeThread: " + errStr);
+			ClassicAssert.IsTrue(errStr.Length == 0, "Some errors in TakeThread: " + errStr);
 		}
 
 		[Test]
@@ -216,22 +217,22 @@ namespace Epam.FixAntenna.Common.Threading.Queue
 			_queue.Put("1");
 			_queue.Put("2");
 			_queue.Put("3");
-			Assert.AreEqual(3, _queue.Size);
+			ClassicAssert.AreEqual(3, _queue.Size);
 
-			Assert.AreEqual("1", _queue.Take());
-			Assert.AreEqual("2", _queue.Take());
-			Assert.AreEqual("3", _queue.Take());
-			Assert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
+			ClassicAssert.AreEqual("1", _queue.Take());
+			ClassicAssert.AreEqual("2", _queue.Take());
+			ClassicAssert.AreEqual("3", _queue.Take());
+			ClassicAssert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
 		}
 
 		[Test]
 		public virtual void TestSize()
 		{
 			_queue.Put("1");
-			Assert.AreEqual(1, _queue.Size);
+			ClassicAssert.AreEqual(1, _queue.Size);
 			_queue.Put("2");
 			_queue.Put("3");
-			Assert.AreEqual(3, _queue.Size);
+			ClassicAssert.AreEqual(3, _queue.Size);
 		}
 
 		[Test]
@@ -245,13 +246,13 @@ namespace Epam.FixAntenna.Common.Threading.Queue
 			putThread.Thread.Start();
 			takeThread.Thread.Join();
 			putThread.Thread.Join();
-			Assert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
-			Assert.AreEqual(itemsNum, putThread.Count, "Not all items were put.");
-			Assert.AreEqual(itemsNum, takeThread.Count, "Not all items were taken.");
+			ClassicAssert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
+			ClassicAssert.AreEqual(itemsNum, putThread.Count, "Not all items were put.");
+			ClassicAssert.AreEqual(itemsNum, takeThread.Count, "Not all items were taken.");
 			var errStrTake = takeThread.GetErr();
-			Assert.IsTrue(errStrTake.Length == 0, "Some errors in TakeThread: " + errStrTake);
+			ClassicAssert.IsTrue(errStrTake.Length == 0, "Some errors in TakeThread: " + errStrTake);
 			var errStrPut = takeThread.GetErr();
-			Assert.IsTrue(errStrPut.Length == 0, "Some errors in TestPut: " + errStrPut);
+			ClassicAssert.IsTrue(errStrPut.Length == 0, "Some errors in TestPut: " + errStrPut);
 		}
 
 		[Test]
@@ -272,13 +273,13 @@ namespace Epam.FixAntenna.Common.Threading.Queue
 				_queue.Take();
 			}
 
-			Assert.IsTrue(TimeIsCome(timeControlPoint),
+			ClassicAssert.IsTrue(TimeIsCome(timeControlPoint),
 				"Take operation from queue was without lock, but should with. " + putThread.GetErr());
 			putThread.Thread.Join();
-			Assert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
-			Assert.AreEqual(itemsNum, putThread.Count, "Not all items were put.");
+			ClassicAssert.IsTrue(_queue.IsEmpty, "In this point queue must be empty");
+			ClassicAssert.AreEqual(itemsNum, putThread.Count, "Not all items were put.");
 			var errStr = putThread.GetErr();
-			Assert.IsTrue(errStr.Length == 0, "Some errors in TakeThread: " + errStr);
+			ClassicAssert.IsTrue(errStr.Length == 0, "Some errors in TakeThread: " + errStr);
 		}
 	}
 }

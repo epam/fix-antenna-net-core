@@ -16,7 +16,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Fixicc
 {
@@ -40,7 +41,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Fixicc
 			};
 			var messageStr = MessageUtils.ToXml(importConfig);
 			importConfig = (ImportConfig)MessageUtils.FromXml(messageStr);
-			Assert.That(importConfig.Config, Is.EqualTo(config), "Config file was changed during roundtrip conversion");
+			ClassicAssert.That(importConfig.Config, Is.EqualTo(config), "Config file was changed during roundtrip conversion");
 		}
 
 		[Test]
@@ -50,7 +51,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Fixicc
 				"<?xml version=\"1.0\" encoding=\"UTF- 8\"?>\n" +
 				"<!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxx SYSTEM \"file:///tmp/asdf\">]>\n" +
 				"<ServerStatus RequestID=\"1\"><ToAgent>true</ToAgent><SubscriptionRequestType>&xxx;</SubscriptionRequestType></ServerStatus>";
-			Assert.Throws<InvalidOperationException>(() => MessageUtils.FromXml(data));
+			ClassicAssert.Throws<InvalidOperationException>(() => MessageUtils.FromXml(data));
 		}
 	}
 }

@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 [SetUpFixture]
 internal class GlobalNUnitConfig

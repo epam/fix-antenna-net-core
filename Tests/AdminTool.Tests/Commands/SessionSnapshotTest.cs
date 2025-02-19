@@ -15,7 +15,8 @@
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -43,21 +44,21 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.View = View.STATUS;
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.IsNotNull(response.SessionsSnapshotData);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.IsNotNull(response.SessionsSnapshotData);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			foreach (var session in receivedStatData.Session)
 			{
 				var statusData = session.StatusData;
-				Assert.IsNotNull(statusData);
-				Assert.IsTrue(statusData.InSeqNum > 0);
-				Assert.IsTrue(statusData.OutSeqNum > 0);
-				Assert.IsNotNull(statusData.BackupState);
-				Assert.AreEqual(BackupState.PRIMARY, statusData.BackupState);
-				Assert.AreEqual(SessionState.Connected.ToString(), statusData.Status);
+				ClassicAssert.IsNotNull(statusData);
+				ClassicAssert.IsTrue(statusData.InSeqNum > 0);
+				ClassicAssert.IsTrue(statusData.OutSeqNum > 0);
+				ClassicAssert.IsNotNull(statusData.BackupState);
+				ClassicAssert.AreEqual(BackupState.PRIMARY, statusData.BackupState);
+				ClassicAssert.AreEqual(SessionState.Connected.ToString(), statusData.Status);
 			}
 		}
 
@@ -66,34 +67,34 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 		{
 			_sessionsSnapshot.View = View.STATUS_PARAMS;
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.IsNotNull(response.SessionsSnapshotData);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.IsNotNull(response.SessionsSnapshotData);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			foreach (var session in receivedStatData.Session)
 			{
 				var paramsData = session.ParamsData;
-				Assert.IsNotNull(paramsData);
-				Assert.AreEqual(FIXVersion.FIX44.ToString(), paramsData.Version);
-				Assert.IsNotNull(paramsData.ExtraSessionParams);
+				ClassicAssert.IsNotNull(paramsData);
+				ClassicAssert.AreEqual(FIXVersion.FIX44.ToString(), paramsData.Version);
+				ClassicAssert.IsNotNull(paramsData.ExtraSessionParams);
 				var sessionParams = paramsData.ExtraSessionParams;
-				Assert.IsNotNull(paramsData.Role);
+				ClassicAssert.IsNotNull(paramsData.Role);
 				if (paramsData.Role == SessionRole.INITIATOR)
 				{
-					Assert.IsNotNull(paramsData.RemoteHost);
-					Assert.IsNotNull(paramsData.RemotePort);
-					Assert.IsNull(paramsData.Backup);
-					Assert.IsNotNull(sessionParams.HBI);
-					Assert.AreEqual(new int?(30), sessionParams.HBI);
+					ClassicAssert.IsNotNull(paramsData.RemoteHost);
+					ClassicAssert.IsNotNull(paramsData.RemotePort);
+					ClassicAssert.IsNull(paramsData.Backup);
+					ClassicAssert.IsNotNull(sessionParams.HBI);
+					ClassicAssert.AreEqual(new int?(30), sessionParams.HBI);
 				}
-				Assert.IsNotNull(sessionParams.InSeqNum);
-				Assert.IsTrue(sessionParams.InSeqNum > 0);
-				Assert.IsNotNull(sessionParams.OutSeqNum);
-				Assert.IsTrue(sessionParams.OutSeqNum > 0);
-	//            assertNotNull(sessionParams.getPassword());
-	//            assertEquals(StorageType.TRANSIENT, sessionParams.getStorageType());
+				ClassicAssert.IsNotNull(sessionParams.InSeqNum);
+				ClassicAssert.IsTrue(sessionParams.InSeqNum > 0);
+				ClassicAssert.IsNotNull(sessionParams.OutSeqNum);
+				ClassicAssert.IsTrue(sessionParams.OutSeqNum > 0);
+	//            ClassicAssertNotNull(sessionParams.getPassword());
+	//            ClassicAssertEquals(StorageType.TRANSIENT, sessionParams.getStorageType());
 			}
 		}
 
@@ -103,18 +104,18 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.View = View.STATUS_PARAMS_STAT;
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			foreach (var session in receivedStatData.Session)
 			{
 				var statData = session.StatData;
-				Assert.IsNotNull(statData);
-				Assert.IsNotNull(statData.LastReceivedMessage);
-				Assert.IsNotNull(statData.LastSentMessage);
-				Assert.IsNotNull(statData.Established);
+				ClassicAssert.IsNotNull(statData);
+				ClassicAssert.IsNotNull(statData.LastReceivedMessage);
+				ClassicAssert.IsNotNull(statData.LastSentMessage);
+				ClassicAssert.IsNotNull(statData.Established);
 			}
 		}
 
@@ -130,23 +131,23 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.SessionView.Add(sessionView);
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			StatData statData = null;
 			foreach (var session in receivedStatData.Session)
 			{
-				Assert.IsNotNull(session.StatusData);
+				ClassicAssert.IsNotNull(session.StatusData);
 				if (session.SenderCompID.Equals(FixSession.Parameters.SenderCompId)
 						&& session.TargetCompID.Equals(FixSession.Parameters.TargetCompId))
 				{
 					statData = session.StatData;
-					Assert.IsNull(session.ParamsData);
+					ClassicAssert.IsNull(session.ParamsData);
 				}
 			}
-			Assert.IsNotNull(statData);
+			ClassicAssert.IsNotNull(statData);
 		}
 
 		[Test]
@@ -162,24 +163,24 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.SessionView.Add(sessionView);
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			StatData statData = null;
 			foreach (var session in receivedStatData.Session)
 			{
-				Assert.IsNotNull(session.StatusData);
+				ClassicAssert.IsNotNull(session.StatusData);
 				if (session.SenderCompID.Equals(TestSessionIdQualifier.Sender)
 						&& session.TargetCompID.Equals(TestSessionIdQualifier.Target)
 						&& IsEquals(session.SessionQualifier, TestSessionIdQualifier.Qualifier))
 				{
 					statData = session.StatData;
-					Assert.IsNull(session.ParamsData);
+					ClassicAssert.IsNull(session.ParamsData);
 				}
 			}
-			Assert.IsNotNull(statData);
+			ClassicAssert.IsNotNull(statData);
 		}
 
 		[Test]
@@ -194,23 +195,23 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.SessionView.Add(sessionView);
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			StatData statData = null;
 			foreach (var session in receivedStatData.Session)
 			{
-				Assert.IsNotNull(session.ParamsData);
+				ClassicAssert.IsNotNull(session.ParamsData);
 				if (session.SenderCompID.Equals(FixSession.Parameters.SenderCompId)
 						&& session.TargetCompID.Equals(FixSession.Parameters.TargetCompId))
 				{
 					statData = session.StatData;
-					Assert.IsNull(session.StatusData);
+					ClassicAssert.IsNull(session.StatusData);
 				}
 			}
-			Assert.IsNotNull(statData);
+			ClassicAssert.IsNotNull(statData);
 		}
 
 		[Test]
@@ -225,23 +226,23 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.SessionView.Add(sessionView);
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			StatusData statusData = null;
 			foreach (var session in receivedStatData.Session)
 			{
-				Assert.IsNotNull(session.ParamsData);
+				ClassicAssert.IsNotNull(session.ParamsData);
 				if (session.SenderCompID.Equals(FixSession.Parameters.SenderCompId)
 						&& session.TargetCompID.Equals(FixSession.Parameters.TargetCompId))
 				{
 					statusData = session.StatusData;
-					Assert.IsNull(session.StatData);
+					ClassicAssert.IsNull(session.StatData);
 				}
 			}
-			Assert.IsNotNull(statusData);
+			ClassicAssert.IsNotNull(statusData);
 		}
 
 		[Test]
@@ -256,23 +257,23 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sessionsSnapshot.SessionView.Add(sessionView);
 
 			var response = GetReponse(_sessionsSnapshot);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
 			var receivedStatData = response.SessionsSnapshotData;
-			Assert.IsNotNull(receivedStatData.Session);
-			Assert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
+			ClassicAssert.IsNotNull(receivedStatData.Session);
+			ClassicAssert.AreEqual(FixSessionManager.Instance.SessionsCount, receivedStatData.Session.Count);
 			StatusData statusData = null;
 			foreach (var session in receivedStatData.Session)
 			{
-				Assert.IsNotNull(session.StatData);
+				ClassicAssert.IsNotNull(session.StatData);
 				if (session.SenderCompID.Equals(FixSession.Parameters.SenderCompId)
 						&& session.TargetCompID.Equals(FixSession.Parameters.TargetCompId))
 				{
 					statusData = session.StatusData;
-					Assert.IsNull(session.ParamsData);
+					ClassicAssert.IsNull(session.ParamsData);
 				}
 			}
-			Assert.IsNotNull(statusData);
+			ClassicAssert.IsNotNull(statusData);
 		}
 
 		private bool IsEquals(string s1, string s2)

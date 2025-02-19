@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using System.Reflection;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Utils
 {
@@ -26,11 +27,11 @@ namespace Epam.FixAntenna.Common.Utils
 			if (expected == null && actual == null)
 				return;
 
-			Assert.IsNotNull(expected);
-			Assert.IsNotNull(actual);
+			ClassicAssert.IsNotNull(expected);
+			ClassicAssert.IsNotNull(actual);
 
 			var type = expected.GetType();
-			Assert.IsInstanceOf(type, actual);
+			ClassicAssert.IsInstanceOf(type, actual);
 
 			foreach (var field in type.GetFields(bindingFlags))
 			{
@@ -42,7 +43,7 @@ namespace Epam.FixAntenna.Common.Utils
 				{
 					var expectedStringValue = expectedValue.ToString();
 					var actualStringlValue = actualValue.ToString();
-					Assert.AreEqual(expectedStringValue, actualStringlValue, fieldPath + field.Name);
+					ClassicAssert.AreEqual(expectedStringValue, actualStringlValue, fieldPath + field.Name);
 				}
 				if (fieldType.IsClass)
 					RefletionEqual(expectedValue, actualValue, fieldPath + field.Name + ".");

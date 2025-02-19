@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.GetTagValueAsLong(tagId);
-			Assert.AreEqual(LongValues[0], actual,
+			ClassicAssert.AreEqual(LongValues[0], actual,
 				GetValidatorName() + "invalid value for getTagValueAsLong(" + tagId + ")");
 		}
 
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			var actual = ffl.GetTagValueAsLong(tagId, occurrence);
-			Assert.AreEqual(LongValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(LongValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for getTagValueAsLong(" + tagId + ", " + occurrence + ")");
 		}
 
@@ -59,7 +60,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			var actual = ffl.GetTagValueAsLongAtIndex(firstTagIndex);
-			Assert.AreEqual(LongValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(LongValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for getTagValueAsLongAtIndex(" + firstTagIndex + ")");
 		}
 

@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 {
@@ -40,7 +41,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			_buffer.ResetBuffer();
 			_list.SerializeTo(_buffer);
 			var actual = StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset);
-			Assert.AreEqual(expected, actual);
+			ClassicAssert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			_buffer.ResetBuffer();
 			_list.SerializeTo(_buffer);
 			var actual = StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset);
-			Assert.AreEqual(expected, actual);
+			ClassicAssert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -62,7 +63,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		{
 			_list = new FixMessageWithType();
 			_list.FromBytes("\u00000\u0001".AsByteArray(), 0, 2);
-			Assert.AreEqual("0", _list.MessageType);
+			ClassicAssert.AreEqual("0", _list.MessageType);
 		}
 
 		[Test]
@@ -71,8 +72,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			_list = new FixMessageWithType();
 			var encoded = "\u00000\u00018=FIX.4.0\u0001".AsByteArray();
 			_list.FromBytes(encoded, 0, encoded.Length);
-			Assert.AreEqual("0", _list.MessageType);
-			Assert.AreEqual("FIX.4.0", _list.FixMessage.GetTag(8).StringValue);
+			ClassicAssert.AreEqual("0", _list.MessageType);
+			ClassicAssert.AreEqual("FIX.4.0", _list.FixMessage.GetTag(8).StringValue);
 		}
 
 		[Test]
@@ -80,8 +81,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		{
 			_list = new FixMessageWithType();
 			_list.FromBytes(UserRequest.AsByteArray(), 0, UserRequest.Length);
-			Assert.AreEqual("5", _list.MessageType);
-			Assert.AreEqual("User request", _list.FixMessage.GetTag(58).StringValue);
+			ClassicAssert.AreEqual("5", _list.MessageType);
+			ClassicAssert.AreEqual("User request", _list.FixMessage.GetTag(58).StringValue);
 		}
 
 		[Test]
@@ -96,7 +97,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			_buffer.ResetBuffer();
 			list.SerializeTo(_buffer);
 
-			Assert.AreEqual("\u0000\u0001\u000B\u000158=Hello\u00011=1\u0001", StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset));
+			ClassicAssert.AreEqual("\u0000\u0001\u000B\u000158=Hello\u00011=1\u0001", StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset));
 			var restoredList = new FixMessageWithType();
 			restoredList.FromBytes(_buffer.GetByteArray(), 0, _buffer.Offset);
 			EqualUtils.RefletionEqual(list, restoredList);
@@ -112,7 +113,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			_buffer.ResetBuffer();
 			list.SerializeTo(_buffer);
 
-			Assert.AreEqual("\u0000\u0001\u000B\u0001", StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset));
+			ClassicAssert.AreEqual("\u0000\u0001\u000B\u0001", StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset));
 			var restoredList = new FixMessageWithType();
 			restoredList.FromBytes(_buffer.GetByteArray(), 0, _buffer.Offset);
 			EqualUtils.RefletionEqual(list, restoredList);
@@ -129,7 +130,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			_buffer.ResetBuffer();
 			list.SerializeTo(_buffer);
 
-			Assert.AreEqual("\u0000\u0001\u000B\u000135=0\u0001", StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset));
+			ClassicAssert.AreEqual("\u0000\u0001\u000B\u000135=0\u0001", StringHelper.NewString(_buffer.GetByteArray(), 0, _buffer.Offset));
 			var restoredList = new FixMessageWithType();
 			restoredList.FromBytes(_buffer.GetByteArray(), 0, _buffer.Offset);
 			EqualUtils.RefletionEqual(list, restoredList);
@@ -145,61 +146,61 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 			//test init(FixMessage content, String type)
 			list.Init(null, (string) null);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(null, "A");
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(null, "W");
-			Assert.IsTrue(list.IsApplicationLevelMessage());
+			ClassicAssert.IsTrue(list.IsApplicationLevelMessage());
 
 
 			list.Init(emptyMsg, (string) null);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(emptyMsg, "A");
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(emptyMsg, "W");
-			Assert.IsTrue(list.IsApplicationLevelMessage());
+			ClassicAssert.IsTrue(list.IsApplicationLevelMessage());
 
 			list.Init(appMsg, (string) null);
-			Assert.IsTrue(list.IsApplicationLevelMessage());
+			ClassicAssert.IsTrue(list.IsApplicationLevelMessage());
 
 			list.Init(appMsg, "A");
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(appMsg, "W");
-			Assert.IsTrue(list.IsApplicationLevelMessage());
+			ClassicAssert.IsTrue(list.IsApplicationLevelMessage());
 
 
 			//test (FixMessage content, ChangesType changesType)
 			list.Init(null, (ChangesType?) null);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(null, ChangesType.DeleteAndAddSmhAndSmt);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 
 			list.Init(emptyMsg, (ChangesType?) null);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(emptyMsg, ChangesType.DeleteAndAddSmhAndSmt);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 
 			list.Init(sessionMsg, (ChangesType?) null);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 			list.Init(sessionMsg, ChangesType.DeleteAndAddSmhAndSmt);
-			Assert.IsFalse(list.IsApplicationLevelMessage());
+			ClassicAssert.IsFalse(list.IsApplicationLevelMessage());
 
 
 			list.Init(appMsg, (ChangesType?) null);
-			Assert.IsTrue(list.IsApplicationLevelMessage());
+			ClassicAssert.IsTrue(list.IsApplicationLevelMessage());
 
 			list.Init(appMsg, ChangesType.DeleteAndAddSmhAndSmt);
-			Assert.IsTrue(list.IsApplicationLevelMessage());
+			ClassicAssert.IsTrue(list.IsApplicationLevelMessage());
 		}
 	}
 }

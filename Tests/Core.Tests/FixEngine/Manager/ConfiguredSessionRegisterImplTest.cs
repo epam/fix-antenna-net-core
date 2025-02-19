@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 {
@@ -40,8 +41,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 			_register.RegisterSession(@params);
 			_eventChecker.CheckAddSessionEvent(@params);
 			var sessions = _register.RegisteredSessions;
-			Assert.AreEqual(1, sessions.Count);
-			Assert.AreEqual(@params, sessions[0]);
+			ClassicAssert.AreEqual(1, sessions.Count);
+			ClassicAssert.AreEqual(@params, sessions[0]);
 		}
 
 		[Test]
@@ -53,8 +54,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 			_register.RegisterSession(@params.SessionId, @params);
 			_eventChecker.CheckAddSessionEvent(@params);
 			var sessions = _register.RegisteredSessions;
-			Assert.AreEqual(1, sessions.Count);
-			Assert.AreEqual(@params, sessions[0]);
+			ClassicAssert.AreEqual(1, sessions.Count);
+			ClassicAssert.AreEqual(@params, sessions[0]);
 		}
 
 		[Test]
@@ -66,7 +67,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 
 			var duplicate = BuildParams("S", "SS", "SL", "T", "TS", "TL");
 			//duplicate
-			Assert.Throws<DuplicateSessionException>(() => _register.RegisterSession(duplicate));
+			ClassicAssert.Throws<DuplicateSessionException>(() => _register.RegisterSession(duplicate));
 		}
 
 		[Test]
@@ -74,18 +75,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		{
 			var @params = BuildParams("s", "ss", "sl", "t", "ts", "tl");
 			_register.RegisterSession(@params);
-			Assert.AreEqual(1, _register.RegisteredSessions.Count);
+			ClassicAssert.AreEqual(1, _register.RegisteredSessions.Count);
 
-			Assert.IsTrue(_register.IsSessionRegistered(@params.SessionId));
-			Assert.IsTrue(_register.IsSessionRegistered("s", "t"));
-			Assert.IsTrue(_register.IsSessionRegistered("S", "T"));
-			Assert.IsFalse(_register.IsSessionRegistered("s", "A"));
-			Assert.IsFalse(_register.IsSessionRegistered("t", "t"));
+			ClassicAssert.IsTrue(_register.IsSessionRegistered(@params.SessionId));
+			ClassicAssert.IsTrue(_register.IsSessionRegistered("s", "t"));
+			ClassicAssert.IsTrue(_register.IsSessionRegistered("S", "T"));
+			ClassicAssert.IsFalse(_register.IsSessionRegistered("s", "A"));
+			ClassicAssert.IsFalse(_register.IsSessionRegistered("t", "t"));
 
-			Assert.IsTrue(_register.IsSessionRegistered(new SessionId("s", "t", null, "someId")));
-			Assert.IsTrue(_register.IsSessionRegistered(new SessionId("S", "T", null, "someId")));
-			Assert.IsFalse(_register.IsSessionRegistered(new SessionId("A", "t", null, "someId")));
-			Assert.IsFalse(_register.IsSessionRegistered(new SessionId("s", "A", null, "someId")));
+			ClassicAssert.IsTrue(_register.IsSessionRegistered(new SessionId("s", "t", null, "someId")));
+			ClassicAssert.IsTrue(_register.IsSessionRegistered(new SessionId("S", "T", null, "someId")));
+			ClassicAssert.IsFalse(_register.IsSessionRegistered(new SessionId("A", "t", null, "someId")));
+			ClassicAssert.IsFalse(_register.IsSessionRegistered(new SessionId("s", "A", null, "someId")));
 		}
 
 
@@ -96,13 +97,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 			@params.SetSessionId("CustomSessionID");
 			_register.RegisterSession(@params.SessionId, @params);
 
-			Assert.AreEqual(@params, _register.GetSessionParams("s", "t"));
-			Assert.AreEqual(@params, _register.GetSessionParams("S", "T"));
-			Assert.AreEqual(@params, _register.GetSessionParams(new SessionId("s", "t", null, "CustomSessionID")));
-			Assert.AreEqual(@params, _register.GetSessionParams(new SessionId("S", "T", null, "CUSTOMSESSIONID")));
-			Assert.AreEqual(@params, _register.GetSessionParams(new SessionId("S", "T", null, "ANY")));
-			Assert.IsNull(_register.GetSessionParams("S", "A"));
-			Assert.IsNull(_register.GetSessionParams("A", "T"));
+			ClassicAssert.AreEqual(@params, _register.GetSessionParams("s", "t"));
+			ClassicAssert.AreEqual(@params, _register.GetSessionParams("S", "T"));
+			ClassicAssert.AreEqual(@params, _register.GetSessionParams(new SessionId("s", "t", null, "CustomSessionID")));
+			ClassicAssert.AreEqual(@params, _register.GetSessionParams(new SessionId("S", "T", null, "CUSTOMSESSIONID")));
+			ClassicAssert.AreEqual(@params, _register.GetSessionParams(new SessionId("S", "T", null, "ANY")));
+			ClassicAssert.IsNull(_register.GetSessionParams("S", "A"));
+			ClassicAssert.IsNull(_register.GetSessionParams("A", "T"));
 		}
 
 		[Test]
@@ -110,12 +111,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 		{
 			var params1 = BuildParams("s", "ss", "sl", "t", "ts", "tl");
 			_register.RegisterSession(params1);
-			Assert.AreEqual(1, _register.RegisteredSessions.Count);
+			ClassicAssert.AreEqual(1, _register.RegisteredSessions.Count);
 			_eventChecker.ClearEvents();
 
 			var params2 = BuildParams("S", "SS", "SL", "T", "TS", "TL");
 			_register.UnregisterSession(params2);
-			Assert.AreEqual(0, _register.RegisteredSessions.Count);
+			ClassicAssert.AreEqual(0, _register.RegisteredSessions.Count);
 			_eventChecker.CheckRemoveSessionEvent(params1);
 		}
 
@@ -128,12 +129,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 			_register.RegisterSession(params1);
 			var params2 = BuildParams("s2", "ss2", "sl2", "t2", "ts2", "tl2");
 			_register.RegisterSession(params2);
-			Assert.AreEqual(2, _register.RegisteredSessions.Count);
+			ClassicAssert.AreEqual(2, _register.RegisteredSessions.Count);
 			_eventChecker.ClearEvents();
 
 
 			_register.DeleteAll();
-			Assert.AreEqual(0, _register.RegisteredSessions.Count);
+			ClassicAssert.AreEqual(0, _register.RegisteredSessions.Count);
 			if (_eventChecker.Events.First.Value.GetParams().Equals(params1))
 			{
 				_eventChecker.CheckRemoveSessionEvent(params1);

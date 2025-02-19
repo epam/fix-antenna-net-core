@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -165,7 +166,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			ConfigurationHelper.RestoreGlobalConfig();
 
-			Assert.IsTrue(new LogsCleaner().Clean("./logs") && new LogsCleaner().Clean("./logs/backup"), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(new LogsCleaner().Clean("./logs") && new LogsCleaner().Clean("./logs/backup"), "Can't clean logs after tests");
 
 			ConnectionAuthenticator.ClearCertCache();
 		}
@@ -290,7 +291,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_server.SetListener(new DummyServerListener());
 
 			// same port for regular and secure connection. Should be secure connection in result.
-			Assert.DoesNotThrow(() =>
+			ClassicAssert.DoesNotThrow(() =>
 			{
 				_server.Ports = new[] { _sslPort, _sslPort };
 				_server.SslPorts = new[] { _sslPort, _sslPort };

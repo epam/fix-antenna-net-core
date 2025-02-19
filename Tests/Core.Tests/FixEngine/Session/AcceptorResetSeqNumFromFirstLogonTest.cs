@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using static Epam.FixAntenna.NetCore.FixEngine.Session.TestMessageHelper;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
@@ -79,8 +80,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -119,8 +120,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Reset by Logon is applied as there was no reset in current trading period
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
 		}
 
 		[Test, Timeout(30000)]
@@ -158,8 +159,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Rest by Logon is applied as the session is new and there was no reset in current trading period
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
 		}
 
 		[Test, Timeout(30000)]
@@ -186,8 +187,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(5, "141=N#789=8#"));
 			helper.SendMessage(GetNewsMessage(6));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
 		}
 
 		[Test, Timeout(30000)]
@@ -214,8 +215,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(5, "141=N#789=8#"));
 			helper.SendMessage(GetNewsMessage(6));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
 		}
 
 		[Test, Timeout(30000)]
@@ -252,8 +253,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Rest by Logon is applied as the session is new and there was no reset in current trading period
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 9);
 		}
 
 		[Test, Timeout(30000)]
@@ -272,9 +273,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(5, "789=8#"));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
-			Assert.IsTrue(helper.GetMessages()[0].IsTagExists(789));
-			Assert.AreEqual(6, helper.GetMessages()[0].GetTagAsInt(789));
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 8);
+			ClassicAssert.IsTrue(helper.GetMessages()[0].IsTagExists(789));
+			ClassicAssert.AreEqual(6, helper.GetMessages()[0].GetTagAsInt(789));
 			Config.GlobalConfiguration.SetProperty(Config.HandleSeqnumAtLogon, "false");
 		}
 
@@ -308,7 +309,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Reset by Logon not applied because it was made in current trading period
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
 		}
 
 		[Test, Timeout(30000)]
@@ -341,7 +342,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Reset by Logon not applied for mode NEVER
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
 		}
 
 		[Test, Timeout(30000)]
@@ -374,9 +375,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Reset by Logon not applied for mode NEVER and RR is sent for each message with too high sequence
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "2", 5);
-			AssertTypeAndSeqNum(helper.GetMessages()[2], "2", 6);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "2", 5);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[2], "2", 6);
 		}
 
 		[Test, Timeout(30000)]
@@ -409,7 +410,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Reset by Logon not applied for mode NEVER and the session is closed due to low incoming sequence
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
 		}
 
 		[Test, Timeout(30000)]
@@ -442,8 +443,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Reset is applied due to forced sequence reset flag
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 		}
 
 		[Test, Timeout(30000)]
@@ -476,8 +477,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//The reset by incoming Logon is applied as there was no reset in current trading period
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 		}
 		
 		[Test, Timeout(30000)]
@@ -511,8 +512,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//Then
 			// Reset by Logon is not applied as it was done in this trading period
 			// The gap should be recovered
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "2", 5);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "2", 5);
 		}
 
 		[Test, Timeout(30000)]
@@ -545,7 +546,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//Then
 			//Reset by Logon is not applied as it was done in this trading period
 			//The session is closed due to low incoming sequence
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
 		}
 
 		[Test, Timeout(30000)]
@@ -578,7 +579,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//The session is closed as an internal state (last reset timestamp) is invalid
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
 		}
 
 		[Test, Timeout(30000)]
@@ -598,7 +599,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//Then
 			//The session is worked, but seq num is not reset. 789 tag will be ignored
 			// (trading period not defined)
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
 		}
 
 		[Test, Timeout(30000)]
@@ -631,8 +632,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			//Then
 			//Rest by Logon is applied as the session is new and there was no reset in current trading period
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 5);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 6);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 5);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 6);
 		}
 
 		[Test, Timeout(30000)]
@@ -665,7 +666,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//Then
 			//Reset by Logon is not applied as it was done in this trading period
 			//The session is closed due to low incoming sequence
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "5", 4);
 		}
 
 		private class ServerListener: IFixServerListener

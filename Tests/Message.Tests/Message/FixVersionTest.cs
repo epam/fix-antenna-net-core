@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Common;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -29,29 +30,29 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var fix41 = FixVersion.Fix41;
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix41) == 0);
-			Assert.IsTrue(FixVersion.Fix41.CompareTo(fix41) == 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix41) == 0);
+			ClassicAssert.IsTrue(FixVersion.Fix41.CompareTo(fix41) == 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix42) < 0);
-			Assert.IsTrue(FixVersion.Fix42.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix42) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix42.CompareTo(fix41) > 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix43) < 0);
-			Assert.IsTrue(FixVersion.Fix43.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix43) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix43.CompareTo(fix41) > 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix44) < 0);
-			Assert.IsTrue(FixVersion.Fix44.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix44) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix44.CompareTo(fix41) > 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix50) < 0);
-			Assert.IsTrue(FixVersion.Fix50.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix50) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50.CompareTo(fix41) > 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix50Sp1) < 0);
-			Assert.IsTrue(FixVersion.Fix50Sp1.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix50Sp1) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50Sp1.CompareTo(fix41) > 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fix50Sp2) < 0);
-			Assert.IsTrue(FixVersion.Fix50Sp2.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fix50Sp2) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50Sp2.CompareTo(fix41) > 0);
 
-			Assert.IsTrue(fix41.CompareTo(FixVersion.Fixt11) < 0);
-			Assert.IsTrue(FixVersion.Fixt11.CompareTo(fix41) > 0);
+			ClassicAssert.IsTrue(fix41.CompareTo(FixVersion.Fixt11) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fixt11.CompareTo(fix41) > 0);
 		}
 
 		[Test]
@@ -59,29 +60,29 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var fix44 = FixVersion.Fix44;
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix41) > 0);
-			Assert.IsTrue(FixVersion.Fix41.CompareTo(fix44) < 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix41) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix41.CompareTo(fix44) < 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix42) > 0);
-			Assert.IsTrue(FixVersion.Fix42.CompareTo(fix44) < 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix42) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix42.CompareTo(fix44) < 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix43) > 0);
-			Assert.IsTrue(FixVersion.Fix43.CompareTo(fix44) < 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix43) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix43.CompareTo(fix44) < 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix44) == 0);
-			Assert.IsTrue(FixVersion.Fix44.CompareTo(fix44) == 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix44) == 0);
+			ClassicAssert.IsTrue(FixVersion.Fix44.CompareTo(fix44) == 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix50) < 0);
-			Assert.IsTrue(FixVersion.Fix50.CompareTo(fix44) > 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix50) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50.CompareTo(fix44) > 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix50Sp1) < 0);
-			Assert.IsTrue(FixVersion.Fix50Sp1.CompareTo(fix44) > 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix50Sp1) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50Sp1.CompareTo(fix44) > 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fix50Sp2) < 0);
-			Assert.IsTrue(FixVersion.Fix50Sp2.CompareTo(fix44) > 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fix50Sp2) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50Sp2.CompareTo(fix44) > 0);
 
-			Assert.IsTrue(fix44.CompareTo(FixVersion.Fixt11) < 0);
-			Assert.IsTrue(FixVersion.Fixt11.CompareTo(fix44) > 0);
+			ClassicAssert.IsTrue(fix44.CompareTo(FixVersion.Fixt11) < 0);
+			ClassicAssert.IsTrue(FixVersion.Fixt11.CompareTo(fix44) > 0);
 		}
 
 		[Test]
@@ -89,29 +90,29 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var fixt = FixVersion.Fixt11;
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix41) > 0);
-			Assert.IsTrue(FixVersion.Fix41.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix41) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix41.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix42) > 0);
-			Assert.IsTrue(FixVersion.Fix42.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix42) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix42.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix43) > 0);
-			Assert.IsTrue(FixVersion.Fix43.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix43) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix43.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix44) > 0);
-			Assert.IsTrue(FixVersion.Fix44.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix44) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix44.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix50) > 0);
-			Assert.IsTrue(FixVersion.Fix50.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix50) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix50Sp1) > 0);
-			Assert.IsTrue(FixVersion.Fix50Sp1.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix50Sp1) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50Sp1.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fix50Sp2) > 0);
-			Assert.IsTrue(FixVersion.Fix50Sp2.CompareTo(fixt) < 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fix50Sp2) > 0);
+			ClassicAssert.IsTrue(FixVersion.Fix50Sp2.CompareTo(fixt) < 0);
 
-			Assert.IsTrue(fixt.CompareTo(FixVersion.Fixt11) == 0);
-			Assert.IsTrue(FixVersion.Fixt11.CompareTo(fixt) == 0);
+			ClassicAssert.IsTrue(fixt.CompareTo(FixVersion.Fixt11) == 0);
+			ClassicAssert.IsTrue(FixVersion.Fixt11.CompareTo(fixt) == 0);
 		}
 	}
 }

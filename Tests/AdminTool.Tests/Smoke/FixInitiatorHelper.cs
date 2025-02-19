@@ -18,7 +18,8 @@ using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 {
@@ -49,7 +50,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 			}
 			catch (Exception e)
 			{
-				Assert.Fail(e.Message);
+				ClassicAssert.Fail(e.Message);
 			}
 			return _response;
 		}
@@ -98,7 +99,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 			}
 			catch (Exception e)
 			{
-				Assert.Fail(e.Message);
+				ClassicAssert.Fail(e.Message);
 			}
 		}
 
@@ -121,9 +122,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 			{
 				Console.WriteLine(e.ToString());
 				Console.Write(e.StackTrace);
-				Assert.Fail("Unknown exception : " + e.Message);
+				ClassicAssert.Fail("Unknown exception : " + e.Message);
 			}
-			Assert.IsNotNull(_response);
+			ClassicAssert.IsNotNull(_response);
 		}
 
 		public void OnSessionStateChange(SessionState sessionState)

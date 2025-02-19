@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Tester.Comparator;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -37,7 +38,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string message2 = "8=FIX\\.4\\.2#19=115#35=A#49=ADAPTOR#56=123#34=1#50=SENDERSUBID#142=SENDERLOCATIONID#57=TARGETSUBID#52=\\d{8}-\\d{2}:\\d{2}:\\d{2}\\.\\d{3}#98=0#108=0#10=207#";
 
 			_comparator.SetEtalonMessage(message2);
-			Assert.AreEqual(false, _comparator.IsMessageOk(message));
+			ClassicAssert.AreEqual(false, _comparator.IsMessageOk(message));
 		}
 	}
 }

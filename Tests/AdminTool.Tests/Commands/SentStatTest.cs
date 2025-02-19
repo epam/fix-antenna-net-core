@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -36,12 +37,12 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 		public void TestSentStat()
 		{
 			var response = GetReponse(_sentStat);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.IsNotNull(response.SentStatData);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.IsNotNull(response.SentStatData);
 
 			var sentStatData = response.SentStatData;
-			Assert.IsNotNull(sentStatData.SentMessages);
-			Assert.IsTrue(sentStatData.SentMessages > 1);
+			ClassicAssert.IsNotNull(sentStatData.SentMessages);
+			ClassicAssert.IsTrue(sentStatData.SentMessages > 1);
 		}
 	}
 }

@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation.Error;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -41,7 +42,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		[Test]
 		public virtual void InvalidTargetProduceException()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var message = new FixMessage();
 				message.AddTag(8, "FIX.4.4");
@@ -52,27 +53,27 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_senderTargetHandler.OnNewMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.TargetCompID, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.CompidProblem, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.TargetCompID, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.CompidProblem, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(35));
-			Assert.AreEqual("Invalid SenderCompID or TargetCompID",
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(35));
+			ClassicAssert.AreEqual("Invalid SenderCompID or TargetCompID",
 				responseMessage.GetTagValueAsString(Tags.Text));
-			Assert.AreEqual(Tags.TargetCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
+			ClassicAssert.AreEqual(Tags.TargetCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
 
-			Assert.AreEqual("Invalid SenderCompID or TargetCompID", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
-			Assert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
+			ClassicAssert.AreEqual("Invalid SenderCompID or TargetCompID", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
 		}
 
 		[Test]
 		public virtual void InvalidSenderProduceException()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var message = new FixMessage();
 				message.AddTag(8, "FIX.4.4");
@@ -83,27 +84,27 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_senderTargetHandler.OnNewMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.SenderCompID, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.CompidProblem, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.SenderCompID, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.CompidProblem, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(35));
-			Assert.AreEqual("Invalid SenderCompID or TargetCompID",
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(35));
+			ClassicAssert.AreEqual("Invalid SenderCompID or TargetCompID",
 				responseMessage.GetTagValueAsString(Tags.Text));
-			Assert.AreEqual(Tags.SenderCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
+			ClassicAssert.AreEqual(Tags.SenderCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
 
-			Assert.AreEqual("Invalid SenderCompID or TargetCompID", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
-			Assert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
+			ClassicAssert.AreEqual("Invalid SenderCompID or TargetCompID", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
 		}
 
 		[Test]
 		public virtual void AbsentTargetProduceException()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var message = new FixMessage();
 				message.AddTag(8, "FIX.4.4");
@@ -114,26 +115,26 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_senderTargetHandler.OnNewMessage(message);
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			Assert.AreEqual(Tags.TargetCompID, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.TargetCompID, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(35));
-			Assert.AreEqual(responseMessage.GetTagValueAsString(Tags.Text), "Missed SenderCompID or TargetCompID");
-			Assert.AreEqual(Tags.TargetCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(35));
+			ClassicAssert.AreEqual(responseMessage.GetTagValueAsString(Tags.Text), "Missed SenderCompID or TargetCompID");
+			ClassicAssert.AreEqual(Tags.TargetCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
 
 			//session state not changed
-			Assert.IsNull(_testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.Dead, _testFixSession.SessionState);
+			ClassicAssert.IsNull(_testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.Dead, _testFixSession.SessionState);
 		}
 
 		[Test]
 		public virtual void AbsentSenderProduceException()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var message = new FixMessage();
 				message.AddTag(8, "FIX.4.4");
@@ -144,21 +145,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_senderTargetHandler.OnNewMessage(message);
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			Assert.AreEqual(Tags.SenderCompID, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.SenderCompID, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(35));
-			Assert.AreEqual("Missed SenderCompID or TargetCompID",
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(35));
+			ClassicAssert.AreEqual("Missed SenderCompID or TargetCompID",
 				responseMessage.GetTagValueAsString(Tags.Text));
-			Assert.AreEqual(Tags.SenderCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
+			ClassicAssert.AreEqual(Tags.SenderCompID, responseMessage.GetTagValueAsLong(Tags.RefTagID));
 
 			//session state not changed
-			Assert.IsNull(_testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.Dead, _testFixSession.SessionState);
+			ClassicAssert.IsNull(_testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.Dead, _testFixSession.SessionState);
 		}
 	}
 }

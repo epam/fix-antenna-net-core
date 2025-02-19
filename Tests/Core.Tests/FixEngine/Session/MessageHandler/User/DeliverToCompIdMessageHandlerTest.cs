@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 {
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 		{
 			ClearLogs();
 			FixSessionManager.Instance.RemoveAllSessions();
-			Assert.IsTrue(ClearLogs(), "Can't Clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't Clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()
@@ -63,7 +64,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 			message.AddTag(10, (long)20);
 
 			handler.OnNewMessage(message);
-			Assert.IsNotNull(_nextHandler.Message);
+			ClassicAssert.IsNotNull(_nextHandler.Message);
 			handler.Session.Dispose();
 		}
 
@@ -80,7 +81,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 			message.AddTag(10, (long)20);
 
 			handler.OnNewMessage(message);
-			Assert.IsNotNull(_nextHandler.Message);
+			ClassicAssert.IsNotNull(_nextHandler.Message);
 			handler.Session.Dispose();
 		}
 
@@ -133,26 +134,26 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 				var sentMessage = PrepareMessage(senderCompId, senderSubId, senderLocationId, targetCompId, targetSubId, targetLocationId, deliverCompId, deliverSubId, deliverLocationId);
 
 				handler.OnNewMessage(sentMessage);
-				Assert.IsNull(_nextHandler.Message);
-				Assert.AreEqual(1, targetSession.Messages.Count);
+				ClassicAssert.IsNull(_nextHandler.Message);
+				ClassicAssert.AreEqual(1, targetSession.Messages.Count);
 				var fixMessage = targetSession.Messages[0];
 
 				Log.Info("Delivered message: " + fixMessage.ToString());
 
-				Assert.AreEqual(targetCompId, fixMessage.GetTagValueAsString(Tags.SenderCompID));
-				Assert.AreEqual(targetSubId, fixMessage.GetTagValueAsString(Tags.SenderSubID));
-				Assert.AreEqual(targetLocationId, fixMessage.GetTagValueAsString(Tags.SenderLocationID));
+				ClassicAssert.AreEqual(targetCompId, fixMessage.GetTagValueAsString(Tags.SenderCompID));
+				ClassicAssert.AreEqual(targetSubId, fixMessage.GetTagValueAsString(Tags.SenderSubID));
+				ClassicAssert.AreEqual(targetLocationId, fixMessage.GetTagValueAsString(Tags.SenderLocationID));
 
-				Assert.AreEqual(deliverCompId, fixMessage.GetTagValueAsString(Tags.TargetCompID));
-				Assert.AreEqual(deliverSubId, fixMessage.GetTagValueAsString(Tags.TargetSubID));
-				Assert.AreEqual(deliverLocationId, fixMessage.GetTagValueAsString(Tags.TargetLocationID));
+				ClassicAssert.AreEqual(deliverCompId, fixMessage.GetTagValueAsString(Tags.TargetCompID));
+				ClassicAssert.AreEqual(deliverSubId, fixMessage.GetTagValueAsString(Tags.TargetSubID));
+				ClassicAssert.AreEqual(deliverLocationId, fixMessage.GetTagValueAsString(Tags.TargetLocationID));
 
-				Assert.AreEqual(senderCompId, fixMessage.GetTagValueAsString(Tags.OnBehalfOfCompID));
-				Assert.AreEqual(senderSubId, fixMessage.GetTagValueAsString(Tags.OnBehalfOfSubID));
-				Assert.AreEqual(senderLocationId, fixMessage.GetTagValueAsString(Tags.OnBehalfOfLocationID));
+				ClassicAssert.AreEqual(senderCompId, fixMessage.GetTagValueAsString(Tags.OnBehalfOfCompID));
+				ClassicAssert.AreEqual(senderSubId, fixMessage.GetTagValueAsString(Tags.OnBehalfOfSubID));
+				ClassicAssert.AreEqual(senderLocationId, fixMessage.GetTagValueAsString(Tags.OnBehalfOfLocationID));
 
-				Assert.AreEqual("Header End", fixMessage.GetTagValueAsString(53));
-				Assert.IsNull(fixMessage.GetTagValueAsString(53, 2));
+				ClassicAssert.AreEqual("Header End", fixMessage.GetTagValueAsString(53));
+				ClassicAssert.IsNull(fixMessage.GetTagValueAsString(53, 2));
 			}
 			finally
 			{

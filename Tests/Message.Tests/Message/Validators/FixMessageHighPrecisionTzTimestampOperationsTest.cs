@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -58,21 +59,21 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.GetTagValueAsTzTimestamp(tagId);
-			Assert.IsTrue(OffsetDateTimes[0].Equals(actual));
+			ClassicAssert.IsTrue(OffsetDateTimes[0].Equals(actual));
 		}
 
 		[ExpectedExceptionOnFail(typeof(FieldNotFoundException))]
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			var actual = ffl.GetTagValueAsTzTimestamp(tagId, occurrence);
-			Assert.IsTrue(OffsetDateTimes[occurrence - 1].Equals(actual));
+			ClassicAssert.IsTrue(OffsetDateTimes[occurrence - 1].Equals(actual));
 		}
 
 		[ExpectedExceptionOnFail(typeof(IndexOutOfRangeException))]
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			var actual = ffl.GetTagValueAsTzTimestampAtIndex(firstTagIndex);
-			Assert.IsTrue(OffsetDateTimes[occurrence - 1].Equals(actual));
+			ClassicAssert.IsTrue(OffsetDateTimes[occurrence - 1].Equals(actual));
 		}
 
 		public override FixMessage AddTag(FixMessage msg, int tagId, int occurrence)

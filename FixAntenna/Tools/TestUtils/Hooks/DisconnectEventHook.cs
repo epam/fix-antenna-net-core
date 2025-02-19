@@ -15,6 +15,7 @@
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 using System.Collections.Generic;
 using System.Threading;
@@ -64,7 +65,7 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 						firstReason = _reasons.First.Value;
 						_reasons.RemoveFirst();
 					}
-					Assert.AreEqual(expectedReason, firstReason, "Incorrect reason");
+                    ClassicAssert.AreEqual(expectedReason, firstReason, "Incorrect reason");
 				}
 				return raised;
 			}
@@ -104,7 +105,7 @@ namespace Epam.FixAntenna.TestUtils.Hooks
 						firstReason = _reasons.First.Value;
 						_reasons.RemoveFirst();
 					}
-					Assert.AreEqual(expectedReason, firstReason, "Incorrect reason");
+					ClassicAssert.AreEqual(expectedReason, firstReason, "Incorrect reason");
 				}
 				return raised;
 			}

@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils.Hooks;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using ForceSeqNumReset = Epam.FixAntenna.NetCore.FixEngine.ForceSeqNumReset;
 
 namespace Epam.FixAntenna.AdminTool.Tests
@@ -127,13 +128,13 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			var testableSession = new TestableSession(testingSessionParams);
 			testableSession.Init();
 			testableSession.Connect();
-			testableSession.AssertConnected();
-			Assert.IsNotNull(_primarySession, "Not initialized primary connection");
+			testableSession.ClassicAssertConnected();
+			ClassicAssert.IsNotNull(_primarySession, "Not initialized primary connection");
 
 			var adminSession = new TestableSession(GetAdminSessionParams());
 			adminSession.Init();
 			adminSession.Connect();
-			adminSession.AssertConnected();
+			adminSession.ClassicAssertConnected();
 
 			var toBackup = new ToBackup();
 			toBackup.RequestID = 2L;
@@ -142,14 +143,14 @@ namespace Epam.FixAntenna.AdminTool.Tests
 
 			SmokeUtil.SendRequest(toBackup, adminSession.Session);
 
-			Assert.IsTrue
+			ClassicAssert.IsTrue
 			(
 				_backup1ConnectedHook.IsEventRaised(),
 				$"Backup connection not established({_backup1ConnectedHook.TimeToWait}ms)"
 			);
 
-			Assert.IsNotNull(_backupSession);
-			Assert.AreEqual(SessionState.Dead, _primarySession.SessionState);
+			ClassicAssert.IsNotNull(_backupSession);
+			ClassicAssert.AreEqual(SessionState.Dead, _primarySession.SessionState);
 		}
 
 		private SessionParameters GetMultipleBackupSessionParams()
@@ -173,13 +174,13 @@ namespace Epam.FixAntenna.AdminTool.Tests
 			var testableSession = new TestableSession(testingSessionParams);
 			testableSession.Init();
 			testableSession.Connect();
-			testableSession.AssertConnected();
-			Assert.IsNotNull(_primarySession, "Not initialized primary connection");
+			testableSession.ClassicAssertConnected();
+			ClassicAssert.IsNotNull(_primarySession, "Not initialized primary connection");
 
 			var adminSession = new TestableSession(GetAdminSessionParams());
 			adminSession.Init();
 			adminSession.Connect();
-			adminSession.AssertConnected();
+			adminSession.ClassicAssertConnected();
 
 			var toBackup = new ToBackup();
 			toBackup.RequestID = 2L;
@@ -188,14 +189,14 @@ namespace Epam.FixAntenna.AdminTool.Tests
 
 			SmokeUtil.SendRequest(toBackup, adminSession.Session);
 
-			Assert.IsTrue
+			ClassicAssert.IsTrue
 			(
 				_backup1ConnectedHook.IsEventRaised(),
 				$"Backup connection not established({_backup1ConnectedHook.TimeToWait}ms)"
 			);
 
-			Assert.IsNotNull(_backupSession);
-			Assert.AreEqual(SessionState.Dead, _primarySession.SessionState);
+			ClassicAssert.IsNotNull(_backupSession);
+			ClassicAssert.AreEqual(SessionState.Dead, _primarySession.SessionState);
 
 			toBackup.RequestID = 3L;
 			toBackup.SenderCompID = testingSessionParams.SenderCompId;
@@ -203,7 +204,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 
 			SmokeUtil.SendRequest(toBackup, adminSession.Session);
 
-			Assert.IsTrue
+			ClassicAssert.IsTrue
 			(
 				_backup2ConnectedHook.IsEventRaised(),
 				$"Backup connection not established({_backup2ConnectedHook.TimeToWait}ms)"
@@ -218,7 +219,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 
 			SmokeUtil.SendRequest(toBackup, adminSession.Session);
 
-			Assert.IsTrue
+			ClassicAssert.IsTrue
 			(
 				_backup1ConnectedHook.IsEventRaised(),
 				$"Backup connection not established({_backup1ConnectedHook.TimeToWait}ms)"
@@ -358,18 +359,18 @@ namespace Epam.FixAntenna.AdminTool.Tests
 				DisconnectedEventHook.ResetEvent();
 			}
 
-			public virtual void AssertDisconnected()
+			public virtual void ClassicAssertDisconnected()
 			{
-				Assert.IsTrue
+				ClassicAssert.IsTrue
 				(
 					DisconnectedEventHook.IsEventRaised(),
 					$"Could not disconnect({DisconnectedEventHook.TimeToWait}ms)"
 				);
 			}
 
-			public virtual void AssertConnected()
+			public virtual void ClassicAssertConnected()
 			{
-				Assert.IsTrue
+				ClassicAssert.IsTrue
 				(
 					ConnectedEventHook.IsEventRaised(),
 					$"Could not connect({ConnectedEventHook.TimeToWait}ms)"

@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler
 {
@@ -48,19 +49,19 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler
 			_messageInNextHandler = null;
 		}
 
-		public virtual void AssertNoMessagePassedForNext()
+		public virtual void ClassicAssertNoMessagePassedForNext()
 		{
-			Assert.IsNull(_messageInNextHandler);
+			ClassicAssert.IsNull(_messageInNextHandler);
 		}
 
-		public virtual void AssertThatMessagePassedToNextHandlerIs(FixMessage message)
+		public virtual void ClassicAssertThatMessagePassedToNextHandlerIs(FixMessage message)
 		{
-			Assert.AreEqual(message.ToString(), _messageInNextHandler.ToString());
+			ClassicAssert.AreEqual(message.ToString(), _messageInNextHandler.ToString());
 		}
 
-		public virtual void AssertThatMessagePassedToNextHandlerIs(string message)
+		public virtual void ClassicAssertThatMessagePassedToNextHandlerIs(string message)
 		{
-			Assert.AreEqual(message, _messageInNextHandler.ToString());
+			ClassicAssert.AreEqual(message, _messageInNextHandler.ToString());
 		}
 
 		public virtual IExtendedFixSession Session

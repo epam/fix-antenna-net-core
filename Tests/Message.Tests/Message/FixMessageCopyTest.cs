@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -24,12 +25,12 @@ namespace Epam.FixAntenna.Message.Tests
 		private const string Message =
 			"8=FIX.4.3\u00019=94\u000135=A\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u000198=0\u0001108=600\u000110=124\u0001";
 
-		private void AssertFieldsInStorage(FixMessage msg, int storageType)
+		private void ClassicAssertFieldsInStorage(FixMessage msg, int storageType)
 		{
 			for (var i = 0; i < msg.Count; i++)
 			{
 				var stType = msg.GetStorageType(i);
-				Assert.AreEqual(storageType, stType,
+				ClassicAssert.AreEqual(storageType, stType,
 					"Tag " + msg.GetTagIndex(i) + " has storage type " + stType + " instead of " + storageType);
 			}
 		}
@@ -39,15 +40,15 @@ namespace Epam.FixAntenna.Message.Tests
 			return RawFixUtil.GetFixMessage(message.AsByteArray(), true, false);
 		}
 
-		private void AssertFieldsEquals(FixMessage expected, FixMessage actual)
+		private void ClassicAssertFieldsEquals(FixMessage expected, FixMessage actual)
 		{
 			var size = expected.Length;
-			Assert.AreEqual(size, actual.Length, "Invalid size ");
+			ClassicAssert.AreEqual(size, actual.Length, "Invalid size ");
 			for (var i = 0; i < size; i++)
 			{
 				var expectedField = expected[i];
 				var actualField = actual[i];
-				Assert.IsTrue(expectedField.Equals(actualField),
+				ClassicAssert.IsTrue(expectedField.Equals(actualField),
 					"Tags no equals. Expected " + expectedField.ToString() + " but there is " + actualField.ToString());
 			}
 		}
@@ -64,29 +65,29 @@ namespace Epam.FixAntenna.Message.Tests
 			m2.AddTag(58, "Invalid Price");
 
 			m2.DeepCopyTo(m1);
-			Assert.That(m2.ToString(), Is.EqualTo(m1.ToString()));
+			ClassicAssert.That(m2.ToString(), Is.EqualTo(m1.ToString()));
 		}
 
 		[Test]
 		public virtual void TestDeepCopyIndependence()
 		{
 			var parsedMsg = GetParsedMessage(Message);
-			Assert.IsFalse(parsedMsg.Standalone);
-			AssertFieldsInStorage(parsedMsg, FieldIndex.FlagOrigbufStorage);
+			ClassicAssert.IsFalse(parsedMsg.Standalone);
+			ClassicAssertFieldsInStorage(parsedMsg, FieldIndex.FlagOrigbufStorage);
 
 			var clonedMsg = parsedMsg.DeepClone(true, true);
-			AssertFieldsEquals(parsedMsg, clonedMsg);
+			ClassicAssertFieldsEquals(parsedMsg, clonedMsg);
 
-			Assert.IsTrue(clonedMsg.Standalone);
-			AssertFieldsInStorage(clonedMsg, FieldIndex.FlagArenaStorage);
+			ClassicAssert.IsTrue(clonedMsg.Standalone);
+			ClassicAssertFieldsInStorage(clonedMsg, FieldIndex.FlagArenaStorage);
 
-			Assert.IsNull(clonedMsg.GetOriginalStorage().Buffer,
+			ClassicAssert.IsNull(clonedMsg.GetOriginalStorage().Buffer,
 				"Cloned message shouldn't have link to original buffer");
 
 			((AbstractFixMessage)clonedMsg).Clear();
 			clonedMsg.AddTag(1, (long)1);
 			clonedMsg.AddTag(2, (long)2);
-			Assert.AreEqual(Message, parsedMsg.ToString());
+			ClassicAssert.AreEqual(Message, parsedMsg.ToString());
 		}
 
 		[Test]
@@ -96,10 +97,10 @@ namespace Epam.FixAntenna.Message.Tests
 			var clonedMsg1 = parsedMsg.DeepClone(true, true);
 			var clonedMsg2 = clonedMsg1.DeepClone(true, true);
 
-			Assert.IsTrue(clonedMsg2.Standalone);
-			AssertFieldsInStorage(clonedMsg2, FieldIndex.FlagArenaStorage);
+			ClassicAssert.IsTrue(clonedMsg2.Standalone);
+			ClassicAssertFieldsInStorage(clonedMsg2, FieldIndex.FlagArenaStorage);
 
-			Assert.IsFalse(
+			ClassicAssert.IsFalse(
 				clonedMsg1.GetArenaStorage().Buffer.GetHashCode() ==
 				clonedMsg2.GetArenaStorage().Buffer.GetHashCode(),
 				"cloned message should have copy of arena storage");

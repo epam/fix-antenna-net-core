@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using Quartz;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
@@ -67,8 +68,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var actual = cronExpression.GetTimeBefore(date);
 
-			// Assert
-			Assert.AreEqual(expected, actual, "Wrong behaviour.");
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, actual, "Wrong behaviour.");
 		}
 
 		private static readonly object[] TestCasesForGetTimeAfter =
@@ -96,8 +97,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var actual = cronExpression.GetTimeAfter(date);
 
-			// Assert
-			Assert.AreEqual(expected, actual, "Wrong behaviour.");
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, actual, "Wrong behaviour.");
 		}
 
 		[TestCase("0 32 4 * * ?", true)]
@@ -108,8 +109,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var actual = MultipartCronExpression.IsValidCronExpression(pipedCronExpression);
 
-			// Assert
-			Assert.AreEqual(expectedResult, actual);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expectedResult, actual);
 		}
 
 		[TestCase("0 32 4 * * ?", "0 32 4 * * ?")]
@@ -120,8 +121,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var actual = MultipartCronExpression.ExtractCronExpressions(pipedCronExpression);
 
-			// Assert
-			Assert.AreEqual(expected, actual);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, actual);
 		}
 
 		[TestCase("12/07/2022 4:33:01 +0", "1 33 4 * * ?", true)]
@@ -131,7 +132,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 		[TestCase("12/07/2022 4:33:01 +1", "1 33 4 * * ?", true)]
 		public void TestIsSatisfiedBy(string dateString, string pipedCronExpressionString, bool expectedResult)
 		{
-			// Assert
+			// ClassicAssert
 			var dateFormat = "d/M/yyyy H:m:s z";
 			var date = DateTimeOffset.ParseExact(dateString, dateFormat, null);
 			var timeZone = TimeZoneInfo.CreateCustomTimeZone("Test TZ", date.Offset, "", "");
@@ -140,8 +141,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var actual = cronExpression.IsSatisfiedBy(date);
 
-			// Assert
-			Assert.AreEqual(expectedResult, actual);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expectedResult, actual);
 		}
 	}
 }

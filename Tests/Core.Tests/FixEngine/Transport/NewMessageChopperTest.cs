@@ -16,7 +16,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 {
@@ -40,7 +41,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 		[Ignore("Fixed max message size in new chopper")]
 		public override void CheckMaxMessageSize()
 		{
-			Assert.Throws<IOException>(() => { });
+			ClassicAssert.Throws<IOException>(() => { });
 		}
 
 		[Test]
@@ -71,7 +72,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				buf.FixMessage.Clear();
 			}
 
-			AssertEndOfFile(messageChopper);
+			ClassicAssertEndOfFile(messageChopper);
 		}
 	}
 }

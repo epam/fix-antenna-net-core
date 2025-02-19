@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.Tester.Stage;
 using Epam.FixAntenna.Tester.Updater;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -31,7 +32,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string correctChecksum = "240\x0001";
 			string incorrectChecksum = "000\x0001";
 			OutgoingMessage = new OutgoingMessage(message + incorrectChecksum, new SmartUpdater());
-			Assert.AreEqual(OutgoingMessage.GetUpdatedMessage(), message + correctChecksum);
+			ClassicAssert.AreEqual(OutgoingMessage.GetUpdatedMessage(), message + correctChecksum);
 		}
 	}
 }

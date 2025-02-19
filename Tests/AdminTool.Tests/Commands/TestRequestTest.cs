@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -46,13 +47,13 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_testRequest.TestReqID = "2";
 
 			var response = GetReponse(_testRequest);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
-			Assert.IsNotNull(session.Message);
+			ClassicAssert.IsNotNull(session.Message);
 
-			Assert.AreEqual("1", session.Message.GetTagValueAsString(35));
-			Assert.AreEqual("2", session.Message.GetTagValueAsString(112));
+			ClassicAssert.AreEqual("1", session.Message.GetTagValueAsString(35));
+			ClassicAssert.AreEqual("2", session.Message.GetTagValueAsString(112));
 		}
 
 		[Test]
@@ -65,13 +66,13 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_testRequest.TestReqID = "2";
 
 			var response = GetReponse(_testRequest);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
-			Assert.IsNotNull(session.Message);
+			ClassicAssert.IsNotNull(session.Message);
 
-			Assert.AreEqual("1", session.Message.GetTagValueAsString(35));
-			Assert.AreEqual("2", session.Message.GetTagValueAsString(112));
+			ClassicAssert.AreEqual("1", session.Message.GetTagValueAsString(35));
+			ClassicAssert.AreEqual("2", session.Message.GetTagValueAsString(112));
 		}
 
 		[Test]
@@ -81,8 +82,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_testRequest.TargetCompID = _extendedFIXSession.Parameters.TargetCompId;
 
 			var response = GetReponse(_testRequest);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, response.Description);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, response.Description);
 		}
 
 		[Test]
@@ -92,9 +93,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_testRequest.TestReqID = "11";
 
 			var response = GetReponse(_testRequest);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, response.Description);
-			Assert.That(response.Description, Does.Contain("SenderCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, response.Description);
+			ClassicAssert.That(response.Description, Does.Contain("SenderCompID is required"));
 		}
 
 		[Test]
@@ -104,9 +105,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_testRequest.TestReqID = "22";
 
 			var response = GetReponse(_testRequest);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, response.Description);
-			Assert.That(response.Description, Does.Contain("TargetCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, response.Description);
+			ClassicAssert.That(response.Description, Does.Contain("TargetCompID is required"));
 		}
 	}
 }

@@ -16,7 +16,8 @@ using Epam.FixAntenna.AdminTool.Builder;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.CustomTags
 {
@@ -35,15 +36,15 @@ namespace Epam.FixAntenna.AdminTool.Tests.CustomTags
 
 			sessionParameters.OutgoingLoginMessage.AddAll(fieldListCustom);
 
-			Assert.IsNotNull(sessionParameters.SenderCompId, "sender must exist");
-			Assert.IsNotNull(sessionParameters.TargetCompId, "target must exist");
-			Assert.IsNotNull(sessionParameters.TargetSubId, "target must exist");
+			ClassicAssert.IsNotNull(sessionParameters.SenderCompId, "sender must exist");
+			ClassicAssert.IsNotNull(sessionParameters.TargetCompId, "target must exist");
+			ClassicAssert.IsNotNull(sessionParameters.TargetSubId, "target must exist");
 
 			// check custom tags
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(553), "user tag must exist");
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(554), "password tag must exist");
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(1004), "tag 1000 must exist");
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(98), "tag 98 must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(553), "user tag must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(554), "password tag must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(1004), "tag 1000 must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(98), "tag 98 must exist");
 		}
 
 		[Test]
@@ -64,15 +65,15 @@ namespace Epam.FixAntenna.AdminTool.Tests.CustomTags
 			sessionParameters.OutgoingLoginMessage
 				.AddAll(fieldListCustom);
 
-			Assert.AreEqual("sender", sessionParameters.SenderCompId);
-			Assert.AreEqual("target", sessionParameters.TargetCompId);
-			Assert.AreEqual("subid", sessionParameters.TargetSubId);
+			ClassicAssert.AreEqual("sender", sessionParameters.SenderCompId);
+			ClassicAssert.AreEqual("target", sessionParameters.TargetCompId);
+			ClassicAssert.AreEqual("subid", sessionParameters.TargetSubId);
 
 			// check custom tags
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(553), "user tag must exist");
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(554), "password tag must exist");
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(1004), "tag 1000 must exist");
-			Assert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(98), "tag 98 must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(553), "user tag must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(554), "password tag must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(1004), "tag 1000 must exist");
+			ClassicAssert.IsNotNull(sessionParameters.OutgoingLoginMessage.GetTag(98), "tag 98 must exist");
 		}
 	}
 }

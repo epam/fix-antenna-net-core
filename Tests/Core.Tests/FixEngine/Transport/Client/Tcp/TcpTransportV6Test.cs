@@ -15,7 +15,8 @@
 using System.IO;
 using System.Net.Sockets;
 using Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 {
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 			_server.Start();
 
 			_transport.Open();
-			Assert.IsTrue(_transport.IsOpen);
+			ClassicAssert.IsTrue(_transport.IsOpen);
 		}
 
 		[Test]
@@ -65,7 +66,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 			_server.Start();
 
 			_transport.Open();
-			Assert.IsTrue(_transport.IsOpen);
+			ClassicAssert.IsTrue(_transport.IsOpen);
 		}
 
 		[Test]
@@ -77,7 +78,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 			_server.Start();
 
 			_transport.Open();
-			Assert.IsTrue(_transport.IsOpen);
+			ClassicAssert.IsTrue(_transport.IsOpen);
 		}
 
 		[Test]
@@ -91,7 +92,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 			_server.Start();
 
 			_transport.Open();
-			Assert.IsTrue(_transport.IsOpen);
+			ClassicAssert.IsTrue(_transport.IsOpen);
 		}
 
 		[Test]
@@ -104,7 +105,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 
 			_server.Start();
 
-			Assert.Throws<IOException>(() => _transport.Open());
+			ClassicAssert.Throws<IOException>(() => _transport.Open());
 		}
 
 		[Test]
@@ -117,7 +118,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 
 			_server.Start();
 
-			Assert.Throws<IOException>(() => _transport.Open());
+			ClassicAssert.Throws<IOException>(() => _transport.Open());
 		}
 	}
 }

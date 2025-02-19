@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.Validation.Tests.Engine.Validators.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 {
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			}
 
 			var errorContainer = Validator.Validate("0", CreateValidationMessage(subList), false);
-			Assert.That(
+			ClassicAssert.That(
 				errorContainer.Errors,
 				Does.Contain(
 					GetError(FixErrorCode.RequiredTagMissing, -1, "0", new TagValue(49))));
@@ -66,7 +67,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			var fieldList = FixMessageDuplicateHelper.GetMessage(FixVersion.Fixt11, "0");
 
 			var errorContainer = Validator.Validate("0", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Any());
+			ClassicAssert.IsFalse(errorContainer.Errors.Any());
 		}
 	}
 }

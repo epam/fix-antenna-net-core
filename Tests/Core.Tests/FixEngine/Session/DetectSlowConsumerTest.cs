@@ -27,7 +27,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		[SetUp]
 		public void SetUp()
 		{
-			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 		}
 
 		[TearDown]
@@ -53,7 +54,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			StopCounterparties();
 			FixSessionManager.DisposeAllSession();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		private bool ClearLogs()
@@ -88,7 +89,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					_slowSenderInitiator.SendMessage("B", list);
 				}
 
-				Assert.IsTrue(slowConsumerDetectionLatch.Wait(SlowConsumerWriteDelayThreshold * msgNum * 5));
+				ClassicAssert.IsTrue(slowConsumerDetectionLatch.Wait(SlowConsumerWriteDelayThreshold * msgNum * 5));
 			}
 		}
 

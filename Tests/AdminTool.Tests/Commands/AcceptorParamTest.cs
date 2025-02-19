@@ -17,7 +17,8 @@ using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using ForceSeqNumReset = Epam.FixAntenna.Fixicc.Message.ForceSeqNumReset;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
@@ -68,16 +69,16 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			createInitiator.ExtraSessionParams.TargetLocationID = targetLocId;
 		}
 
-		private void AssertValidSession(CreateAcceptor exceptedSessionData, SessionParameters actualSessionParameters)
+		private void ClassicAssertValidSession(CreateAcceptor exceptedSessionData, SessionParameters actualSessionParameters)
 		{
-			Assert.AreEqual(actualSessionParameters.SenderCompId, exceptedSessionData.SenderCompID);
-			Assert.AreEqual(actualSessionParameters.TargetCompId, exceptedSessionData.TargetCompID);
-			Assert.AreEqual(actualSessionParameters.ForceSeqNumReset, NetCore.FixEngine.ForceSeqNumReset.OneTime);
+			ClassicAssert.AreEqual(actualSessionParameters.SenderCompId, exceptedSessionData.SenderCompID);
+			ClassicAssert.AreEqual(actualSessionParameters.TargetCompId, exceptedSessionData.TargetCompID);
+			ClassicAssert.AreEqual(actualSessionParameters.ForceSeqNumReset, NetCore.FixEngine.ForceSeqNumReset.OneTime);
 			var configurationAdaptor = new ConfigurationAdapter(actualSessionParameters.Configuration);
-			Assert.IsTrue(configurationAdaptor.IsAutoSwitchToBackupConnectionEnabled);
-			Assert.IsTrue(configurationAdaptor.IsCyclicSwitchBackupConnectionEnabled);
-			Assert.IsTrue(configurationAdaptor.IsEnableMessageRejecting);
-			Assert.IsTrue
+			ClassicAssert.IsTrue(configurationAdaptor.IsAutoSwitchToBackupConnectionEnabled);
+			ClassicAssert.IsTrue(configurationAdaptor.IsCyclicSwitchBackupConnectionEnabled);
+			ClassicAssert.IsTrue(configurationAdaptor.IsEnableMessageRejecting);
+			ClassicAssert.IsTrue
 			(
 				configurationAdaptor.StorageFactoryClass.Contains("Memory"),
 				configurationAdaptor.StorageFactoryClass
@@ -92,8 +93,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			ConfiguredSessionRegister.AddSessionManagerListener(new ConfiguredSessionListenerAnonymousInnerClass(this, created));
 
 			var response = GetReponse(_createAcceptor);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-			Assert.IsTrue(created.Value);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.IsTrue(created.Value);
 
 			LogAppender.Clear();
 			FixSessionManager.DisposeAllSession();
@@ -115,7 +116,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 				if (sessionParameters.SenderCompId.Equals("sender")
 						&& sessionParameters.TargetCompId.Equals("target"))
 				{
-					_outerInstance.AssertValidSession(_outerInstance._createAcceptor, sessionParameters);
+					_outerInstance.ClassicAssertValidSession(_outerInstance._createAcceptor, sessionParameters);
 					_created.Value = true;
 				}
 			}

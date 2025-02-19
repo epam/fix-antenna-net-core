@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Dictionary;
 using Epam.FixAntenna.NetCore.Validation.Entities;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Dictionary
 {
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.Fix.Dictionary
 				if ("IOIQty".Equals(varBlockDef.Name))
 				{
 					IList<object> itemOrRangeOrDescr = varBlockDef.ItemOrRangeOrDescr;
-					Assert.AreEqual(4, itemOrRangeOrDescr.Count);
+					ClassicAssert.AreEqual(4, itemOrRangeOrDescr.Count);
 				}
 			}
 		}
@@ -55,8 +56,8 @@ namespace Epam.FixAntenna.Fix.Dictionary
 				new FixVersionContainer("FIX44Custom", FixVersion.Fix44, "Additional/custom_44.xml");
 			var fixdic = (Fixdic)Builder.BuildDictionary(fixVersionContainer, false);
 			var fielddic = fixdic.Fielddic;
-			Assert.AreEqual(3, fielddic.Fielddef.Count);
-			Assert.AreEqual(3, fixdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(3, fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(3, fixdic.Msgdic.Msgdef.Count);
 		}
 
 		[Test]
@@ -64,12 +65,12 @@ namespace Epam.FixAntenna.Fix.Dictionary
 		{
 			var base40 = FixVersionContainer.GetFixVersionContainer(FixVersion.Fix40);
 			var baseFiXdic = (Fixdic)Builder.BuildDictionary(base40, false);
-			Assert.AreEqual(27, baseFiXdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(27, baseFiXdic.Msgdic.Msgdef.Count);
 
 			var custom40 = new FixVersionContainer(base40.DictionaryId, FixVersion.Fix40,
 				"Custom/fixdic40custom.xml");
 			var customFiXdic = (Fixdic)Builder.BuildDictionary(custom40, true);
-			Assert.AreEqual(2, customFiXdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(2, customFiXdic.Msgdic.Msgdef.Count);
 		}
 
 		[Test]
@@ -78,29 +79,29 @@ namespace Epam.FixAntenna.Fix.Dictionary
 			var fixVersionContainer = new FixVersionContainer("QFIX44", FixVersion.Fix44, "Additional/qFIX44.xml");
 			var fixdic = (Fixdic)Builder.BuildDictionary(fixVersionContainer, false);
 			var fielddic = fixdic.Fielddic;
-			Assert.AreEqual(912, fielddic.Fielddef.Count);
-			Assert.AreEqual(93, fixdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(912, fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(93, fixdic.Msgdic.Msgdef.Count);
 		}
 
 		[Test]
 		public void TestQfixType()
 		{
 			var fixVersionContainer = new FixVersionContainer("QFIX44", FixVersion.Fix44, "qfix-wrong-type.xml");
-			Assert.Throws(typeof(InvalidOperationException), () => Builder.BuildDictionary(fixVersionContainer, false));
+			ClassicAssert.Throws(typeof(InvalidOperationException), () => Builder.BuildDictionary(fixVersionContainer, false));
 		}
 
 		[Test]
 		public void TestQfixMajor()
 		{
 			var fixVersionContainer = new FixVersionContainer("QFIX44", FixVersion.Fix44, "qfix-wrong-major.xml");
-			Assert.Throws(typeof(InvalidOperationException), () => Builder.BuildDictionary(fixVersionContainer, false));
+			ClassicAssert.Throws(typeof(InvalidOperationException), () => Builder.BuildDictionary(fixVersionContainer, false));
 		}
 
 		[Test]
 		public void TestQfixMinor()
 		{
 			var fixVersionContainer = new FixVersionContainer("QFIX44", FixVersion.Fix44, "qfix-wrong-minor.xml");
-			Assert.Throws(typeof(InvalidOperationException), () => Builder.BuildDictionary(fixVersionContainer, false));
+			ClassicAssert.Throws(typeof(InvalidOperationException), () => Builder.BuildDictionary(fixVersionContainer, false));
 		}
 
 		[Test]
@@ -109,8 +110,8 @@ namespace Epam.FixAntenna.Fix.Dictionary
 			var fixVersionContainer = new FixVersionContainer("FIX44", FixVersion.Fix44, "Additional/fixdic44.xml");
 			var fixdic = (Fixdic)Builder.BuildDictionary(fixVersionContainer, true);
 			var fielddic = fixdic.Fielddic;
-			Assert.AreEqual(1, fielddic.Fielddef.Count);
-			Assert.AreEqual(1, fixdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(1, fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(1, fixdic.Msgdic.Msgdef.Count);
 		}
 	}
 }

@@ -16,7 +16,8 @@ using System;
 using System.Reflection;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -101,11 +102,11 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				try
 				{
 					CheckGetter(ffl, UnexistTestTag);
-					Assert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
+					ClassicAssert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
 				}
 				catch (Exception e)
 				{
-					Assert.AreEqual(failAnnotation.Value, e.GetType(),
+					ClassicAssert.AreEqual(failAnnotation.Value, e.GetType(),
 						GetValidatorName() + " Invalid exception thrown: " + e.ToString());
 				}
 			}
@@ -129,11 +130,11 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				try
 				{
 					CheckGetterAtIndex(ffl, 1, 1000);
-					Assert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
+					ClassicAssert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
 				}
 				catch (Exception e)
 				{
-					Assert.AreEqual(failAnnotation.Value, e.GetType(),
+					ClassicAssert.AreEqual(failAnnotation.Value, e.GetType(),
 						GetValidatorName() + " Invalid exception thrown: " + e.ToString());
 				}
 			}
@@ -157,11 +158,11 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				try
 				{
 					CheckGetterWithOccurrence(ffl, TestTag, 1000);
-					Assert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
+					ClassicAssert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
 				}
 				catch (Exception e)
 				{
-					Assert.AreEqual(failAnnotation.Value, e.GetType(),
+					ClassicAssert.AreEqual(failAnnotation.Value, e.GetType(),
 						GetValidatorName() + " Invalid exception thrown: " + e.ToString());
 				}
 			}
@@ -185,11 +186,11 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 				try
 				{
 					CheckGetterWithOccurrence(ffl, UnexistTestTag, 1);
-					Assert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
+					ClassicAssert.Fail(GetValidatorName() + " Expected exception: " + failAnnotation.Value);
 				}
 				catch (Exception e)
 				{
-					Assert.AreEqual(failAnnotation.Value, e.GetType(),
+					ClassicAssert.AreEqual(failAnnotation.Value, e.GetType(),
 						GetValidatorName() + " Invalid exception thrown: " + e.ToString());
 				}
 			}

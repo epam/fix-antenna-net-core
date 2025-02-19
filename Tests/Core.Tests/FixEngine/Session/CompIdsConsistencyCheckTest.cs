@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -56,7 +57,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			ConfigurationHelper.StoreGlobalConfig();
 			_acceptorQueue = new ConcurrentQueue<FixMessage>();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 
 			Config.GlobalConfiguration.SetProperty(Config.SenderTargetIdConsistencyCheck, "false");
 			InitCounterparties();
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			{
 				StopCounterparties();
 				FixSessionManager.DisposeAllSession();
-				Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+				ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 			}
 			finally
 			{
@@ -151,23 +152,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			message2.Set(56, acceptor1Target);
 
 			SendMessage(SendType.SendMessageWithoutType, _initiatorSession11, (FixMessage)message1.Clone(), messageType, null);
-			AssertAcceptorMessage(Initiator11, Acceptor1, messageType);
+			ClassicAssertAcceptorMessage(Initiator11, Acceptor1, messageType);
 
 			SendMessage(SendType.SendMessageWithChanges, _initiatorSession11, (FixMessage)message1.Clone(), messageType, ChangesType.UpdateSmhAndSmt);
-			AssertAcceptorMessage(Initiator11, Acceptor1, messageType);
+			ClassicAssertAcceptorMessage(Initiator11, Acceptor1, messageType);
 
 			SendMessage(SendType.SendMessageWithChanges, _initiatorSession11, (FixMessage)message1.Clone(), messageType, ChangesType.UpdateSmhAndSmtExceptCompids);
-			AssertAcceptorMessage(initiator11Sender, acceptor1Target, messageType);
+			ClassicAssertAcceptorMessage(initiator11Sender, acceptor1Target, messageType);
 		}
 
-		private void AssertAcceptorMessage(string initiator11Sender, string acceptor1Target, string messageType)
+		private void ClassicAssertAcceptorMessage(string initiator11Sender, string acceptor1Target, string messageType)
 		{
 			FixMessage aMessage = null;
 			CheckingUtils.CheckWithinTimeout(() => _acceptorQueue.TryDequeue(out aMessage), TimeSpan.FromMilliseconds(WaitMs));
-			Assert.IsNotNull(aMessage);
-			Assert.AreEqual(initiator11Sender, aMessage.GetTagValueAsString(49));
-			Assert.AreEqual(acceptor1Target, aMessage.GetTagValueAsString(56));
-			Assert.AreEqual(messageType, aMessage.GetTagValueAsString(35));
+			ClassicAssert.IsNotNull(aMessage);
+			ClassicAssert.AreEqual(initiator11Sender, aMessage.GetTagValueAsString(49));
+			ClassicAssert.AreEqual(acceptor1Target, aMessage.GetTagValueAsString(56));
+			ClassicAssert.AreEqual(messageType, aMessage.GetTagValueAsString(35));
 		}
 
 		private FixMessage GetFullMessage()

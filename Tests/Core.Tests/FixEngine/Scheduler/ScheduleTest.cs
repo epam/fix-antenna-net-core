@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 {
@@ -59,8 +60,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var actual = schedule.IsInsideInterval(date);
 
-			// Assert
-			Assert.AreEqual(expected, actual, $"Wrong behaviour. {dateString}, {startTimeExpr}, {stopTimeExpr}");
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, actual, $"Wrong behaviour. {dateString}, {startTimeExpr}, {stopTimeExpr}");
 		}
 
 		private static readonly object[] TestCasesToTestIsTimestampInTradingPeriod =
@@ -80,8 +81,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var result = schedule.IsTimestampInTradingPeriod(DateTimeHelper.CurrentMilliseconds);
 
-			// Assert
-			Assert.AreEqual(expected, result);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, result);
 		}
 
 		[TestCase("0 10 * * * ?", "0 20 * * * ?", true )]
@@ -96,8 +97,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var result = schedule.IsTradingPeriodDefined();
 
-			// Assert
-			Assert.AreEqual(expected, result);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, result);
 		}
 
 		[TestCase("0 10 * * * ?", "0 20 * * * ?", false )]
@@ -112,8 +113,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var result = schedule.IsOnlyPeriodBeginDefined();
 
-			// Assert
-			Assert.AreEqual(expected, result);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, result);
 		}
 
 		private static readonly object[] TestCasesToTestIsTimestampAfterTradingPeriodBegin =
@@ -133,8 +134,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var result = schedule.IsTimestampAfterTradingPeriodBegin(getTimestamp());
 
-			// Assert
-			Assert.AreEqual(expected, result);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, result);
 		}
 
 		private static readonly object[] TestCasesToTestIsTimestampAfterTradingPeriodEnd =
@@ -154,8 +155,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			// Act
 			var result = schedule.IsTimestampAfterTradingPeriodEnd(getTimestamp());
 
-			// Assert
-			Assert.AreEqual(expected, result);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expected, result);
 		}
 
 		private string GetCronExpression(DateTimeOffset date)

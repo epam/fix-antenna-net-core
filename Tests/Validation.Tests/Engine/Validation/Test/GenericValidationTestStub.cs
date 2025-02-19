@@ -25,7 +25,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.NetCore.Validation.Validators.Factory;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 {
@@ -118,7 +119,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 				}
 			}
 
-			Assert.IsFalse(_fastValidator == null, "The validators should be not null");
+			ClassicAssert.IsFalse(_fastValidator == null, "The validators should be not null");
 			_scanner = new StreamReader(source);
 
 			var msg = _scanner.ReadLine();
@@ -144,11 +145,11 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 
 			if (errorShouldOccur)
 			{
-				Assert.IsTrue(wasError, errorMessage);
+				ClassicAssert.IsTrue(wasError, errorMessage);
 			}
 			else
 			{
-				Assert.IsFalse(wasError, errorMessage);
+				ClassicAssert.IsFalse(wasError, errorMessage);
 			}
 		}
 
@@ -185,7 +186,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 				}
 			}
 
-			Assert.IsFalse(_fastValidator == null, "The validators should be not null");
+			ClassicAssert.IsFalse(_fastValidator == null, "The validators should be not null");
 			_scanner = new StreamReader(source);
 
 			var msg = _scanner.ReadLine();
@@ -211,14 +212,14 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 				}
 			}
 
-			Assert.IsFalse(_fastValidator == null, "The validators should be not null");
+			ClassicAssert.IsFalse(_fastValidator == null, "The validators should be not null");
 
 			var fields = RawFixUtil.GetFixMessage(message.AsByteArray());
 			_msgType = StringHelper.NewString(fields.MsgType);
 
 			Errors = _fastValidator.ValidateFixMessage(_msgType, fields);
 			var errorSize = Errors.Errors.Count;
-			Assert.IsTrue(errorSize > 0, "Error occurred: " + Errors.IsPriorityError);
+			ClassicAssert.IsTrue(errorSize > 0, "Error occurred: " + Errors.IsPriorityError);
 		}
 
 		public virtual void ValidateAndCheckTime(Stream source, int countOfLoops)
@@ -237,7 +238,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 				}
 
 				var errorSize = Errors.Errors.Count;
-				Assert.IsTrue(errorSize > 0);
+				ClassicAssert.IsTrue(errorSize > 0);
 
 				msg = _scanner.ReadLine();
 			}

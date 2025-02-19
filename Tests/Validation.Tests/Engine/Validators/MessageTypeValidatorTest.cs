@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Validation;
 using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 {
@@ -46,7 +47,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 		public virtual void TestMessageWithInvalidMsgType()
 		{
 			var errorContainer = Validator.Validate("09", CreateValidationMessage(_message), false);
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.InvalidMsgtype, -1, "09", 35)));
 		}
 
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 		public virtual void TestValidMsgType()
 		{
 			var errorContainer = Validator.Validate("9", CreateValidationMessage(_message), false);
-			Assert.IsTrue(errorContainer.IsEmpty, "Error, message type '9' must exist");
+			ClassicAssert.IsTrue(errorContainer.IsEmpty, "Error, message type '9' must exist");
 		}
 
 		[Test]
@@ -64,7 +65,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			_message.AddTag(35, "9");
 
 			var errorContainer = Validator.Validate("9", CreateValidationMessage(_message), true);
-			Assert.IsTrue(errorContainer.IsEmpty, "Error, message type '9' must exist");
+			ClassicAssert.IsTrue(errorContainer.IsEmpty, "Error, message type '9' must exist");
 		}
 	}
 }

@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Common;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -52,8 +53,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// Act
 			_session.Schedule();
 
-			// Assert
-			Assert.AreEqual(0, _session.ConnectionAttempts);
+			// ClassicAssert
+			ClassicAssert.AreEqual(0, _session.ConnectionAttempts);
 		}
 
 		// schedule start and stop time by setting offset in minutes around now
@@ -76,8 +77,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// Act
 			_session.Schedule();
 
-			// Assert
-			Assert.AreEqual(1, _session.ConnectionAttempts);
+			// ClassicAssert
+			ClassicAssert.AreEqual(1, _session.ConnectionAttempts);
 		}
 
 		[Test]
@@ -93,7 +94,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_session = CreateScheduledSession(props);
 
 			// Act
-			Assert.Throws<ArgumentException>(() => _session.Schedule());
+			ClassicAssert.Throws<ArgumentException>(() => _session.Schedule());
 		}
 
 		[Test]
@@ -108,8 +109,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			_session = CreateScheduledSession(props);
 
-			// Act, Assert
-			Assert.Throws<ArgumentException>(() => _session.Schedule());
+			// Act, ClassicAssert
+			ClassicAssert.Throws<ArgumentException>(() => _session.Schedule());
 		}
 
 		// schedule start and stop time by setting offset in minutes around now
@@ -135,9 +136,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// Act
 			_session.Schedule();
 
-			// Assert
-			Assert.AreEqual(expectedIsSessionStartScheduled, _session.IsSessionStartScheduled);
-			Assert.AreEqual(expectedIsSessionStopScheduled, _session.IsSessionStopScheduled);
+			// ClassicAssert
+			ClassicAssert.AreEqual(expectedIsSessionStartScheduled, _session.IsSessionStartScheduled);
+			ClassicAssert.AreEqual(expectedIsSessionStopScheduled, _session.IsSessionStopScheduled);
 		}
 
 		[Test]
@@ -152,8 +153,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			_session = CreateScheduledSession(props);
 
-			// Act, Assert
-			Assert.Throws<InvalidOperationException>(() =>
+			// Act, ClassicAssert
+			ClassicAssert.Throws<InvalidOperationException>(() =>
 			{
 				_session.Dispose();
 				_session.Schedule();
@@ -176,9 +177,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_session.Schedule();
 			_session.Deschedule();
 
-			// Assert
-			Assert.IsFalse(_session.IsSessionStartScheduled);
-			Assert.IsFalse(_session.IsSessionStopScheduled);
+			// ClassicAssert
+			ClassicAssert.IsFalse(_session.IsSessionStartScheduled);
+			ClassicAssert.IsFalse(_session.IsSessionStopScheduled);
 		}
 
 		[Test]
@@ -198,8 +199,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_session.Schedule();
 			_session.Dispose();
 
-			// Assert
-			Assert.IsTrue(scheduler.IsShutdown());
+			// ClassicAssert
+			ClassicAssert.IsTrue(scheduler.IsShutdown());
 		}
 
 		[TearDown]

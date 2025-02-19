@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.AdminTool.Commands;
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -33,8 +34,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			command.RequestID = RequestID;
 
 			var response = GetReponse(command);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationNotImplemented.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationNotImplemented.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -53,8 +54,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			command.RequestID = RequestID;
 
 			var response = GetReponse(command);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationNotImplemented.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationNotImplemented.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -72,9 +73,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			command.RequestID = RequestID;
 
 			var response = GetReponse(command);
-			Assert.IsNotNull(response, "no response");
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.IsNotNull(response, "no response");
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 		}
 	}
 

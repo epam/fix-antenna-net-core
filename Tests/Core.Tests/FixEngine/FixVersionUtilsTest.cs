@@ -16,7 +16,8 @@ using System;
 
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.FixEngine;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.FixEngine
 {
@@ -28,15 +29,15 @@ namespace Epam.FixAntenna.FixEngine
 			var fixVersionStr = "FIXT.1.1:FIX.4.4";
 			var fixVersionUtils = new FixVersionUtils(fixVersionStr);
 			var fixtVersion11 = fixVersionUtils.GetFixtVersion();
-			Assert.IsNotNull(fixtVersion11,
+			ClassicAssert.IsNotNull(fixtVersion11,
 				"FixVersion can't be null. FIXTVersion not parse from string \"" + fixVersionStr + "\"");
-			Assert.AreEqual(FixVersion.Fixt11, fixtVersion11,
+			ClassicAssert.AreEqual(FixVersion.Fixt11, fixtVersion11,
 				"FIX version must be FIXT.1.1. FIXTVersion not parse from string \"" + fixVersionStr + "\"");
 
 			var fixVersion44 = fixVersionUtils.GetFixtVersion();
-			Assert.IsNotNull(fixtVersion11,
+			ClassicAssert.IsNotNull(fixtVersion11,
 				"FixVersion can't be null. FixVersion not parse from string \"" + fixVersionStr + "\"");
-			Assert.AreEqual(FixVersion.Fixt11, fixtVersion11,
+			ClassicAssert.AreEqual(FixVersion.Fixt11, fixtVersion11,
 				"FIX version must be FIX.4.4. FixVersion not parse from string \"" + fixVersionStr + "\"");
 		}
 
@@ -46,14 +47,14 @@ namespace Epam.FixAntenna.FixEngine
 			var fixVersionStr = "FIX.4.4";
 			var fixVersionUtils = new FixVersionUtils(fixVersionStr);
 			var fixtVersion11 = fixVersionUtils.GetFixtVersion();
-			Assert.IsNull(fixtVersion11,
+			ClassicAssert.IsNull(fixtVersion11,
 				"FixVersion must be null. FIXTVersion not declared in string \"" + fixVersionStr + "\"");
 		}
 
 		[Test]
 		public virtual void GetFixtVersionFixtVersionNotValid()
 		{
-			Assert.Throws<ArgumentException>(() =>
+			ClassicAssert.Throws<ArgumentException>(() =>
 			{
 				var fixVersionStr = "NOT.VALID.VALUE.TEST:FIX.4.4";
 				var fixVersionUtils = new FixVersionUtils(fixVersionStr);
@@ -67,24 +68,24 @@ namespace Epam.FixAntenna.FixEngine
 			var fixVersionStr = "FIX.5.0";
 			var fixVersionUtils = new FixVersionUtils(fixVersionStr);
 			var fixVersion50 = fixVersionUtils.GetFixVersion();
-			Assert.IsNotNull(fixVersion50,
+			ClassicAssert.IsNotNull(fixVersion50,
 				"FixVersion can't be null. FixVersion not parse from string \"" + fixVersionStr + "\"");
-			Assert.AreEqual(FixVersion.Fix50, fixVersion50,
+			ClassicAssert.AreEqual(FixVersion.Fix50, fixVersion50,
 				"FIX version must be FIX.5.0. FixVersion not parse from string \"" + fixVersionStr + "\"");
 
 			var fixtVersionStr = "FIXT.1.1:FIX.4.4";
 			var fixtVersionUtils = new FixVersionUtils(fixtVersionStr);
 			var fixVersion44 = fixtVersionUtils.GetFixVersion();
-			Assert.IsNotNull(fixVersion44,
+			ClassicAssert.IsNotNull(fixVersion44,
 				"FixVersion can't be null. FixVersion not parse from string \"" + fixVersionStr + "\"");
-			Assert.AreEqual(FixVersion.Fix44, fixVersion44,
+			ClassicAssert.AreEqual(FixVersion.Fix44, fixVersion44,
 				"FIX version must be FIX.4.4. FixVersion not parse from string \"" + fixVersionStr + "\"");
 		}
 
 		[Test]
 		public virtual void GetFixVersionFixVersionNotValid()
 		{
-			Assert.Throws<ArgumentException>(() =>
+			ClassicAssert.Throws<ArgumentException>(() =>
 			{
 				var fixVersionStr = "NOT.VALID.VALUE.TEST";
 				var fixVersionUtils = new FixVersionUtils(fixVersionStr);

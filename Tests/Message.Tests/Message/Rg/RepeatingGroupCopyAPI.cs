@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var copiedEntry =
 				targetGroup.CopyEntry(entryForCopy, 1); //entry for copy and index where entry will be inserted
 
-			Assert.AreEqual(copiedEntry.ToString(), entryForCopy.ToString());
+			ClassicAssert.AreEqual(copiedEntry.ToString(), entryForCopy.ToString());
 
 			copiedEntry.RemoveTag(456);
 
@@ -65,9 +66,9 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var expectedMsgForCopy = _executionReportForCopy;
 
-			Assert.AreEqual(expectedTargetMsg, _dstMsg.ToString());
-			Assert.AreEqual(expectedMsgForCopy, _srcMsg.ToString());
-			Assert.IsFalse(entryForCopy.ToString().Equals(copiedEntry.ToString()));
+			ClassicAssert.AreEqual(expectedTargetMsg, _dstMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsgForCopy, _srcMsg.ToString());
+			ClassicAssert.IsFalse(entryForCopy.ToString().Equals(copiedEntry.ToString()));
 		}
 
 		[Test]
@@ -80,7 +81,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				targetEntry.CopyRepeatingGroup(
 					groupForCopy); //Actually you can insert nested group in any entry or even in root of message without limitation
 
-			Assert.AreEqual(copiedGroup.ToString(), groupForCopy.ToString());
+			ClassicAssert.AreEqual(copiedGroup.ToString(), groupForCopy.ToString());
 
 			copiedGroup.RemoveEntry(1);
 
@@ -91,9 +92,9 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"600=19\u0001603=20\u0001604=2\u0001605=21\u0001605=32\u0001251=22\u0001" +
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var expectedMsgForCopy = _executionReportForCopy;
-			Assert.AreEqual(expectedTargetMsg, _dstMsg.ToString());
-			Assert.AreEqual(expectedMsgForCopy, _srcMsg.ToString());
-			Assert.IsFalse(copiedGroup.ToString().Equals(groupForCopy.ToString()));
+			ClassicAssert.AreEqual(expectedTargetMsg, _dstMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsgForCopy, _srcMsg.ToString());
+			ClassicAssert.IsFalse(copiedGroup.ToString().Equals(groupForCopy.ToString()));
 		}
 
 		[Test]
@@ -103,7 +104,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var copiedGroup =
 				_dstMsg.CopyRepeatingGroup(srcGroup, 9); // group for copy and index where group will be inserted
 
-			Assert.AreEqual(copiedGroup.ToString(), srcGroup.ToString());
+			ClassicAssert.AreEqual(copiedGroup.ToString(), srcGroup.ToString());
 
 			var newEntry = copiedGroup.AddEntry();
 			newEntry.AddTag(233, 123);
@@ -115,9 +116,9 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"454=1\u0001455=5\u0001456=abc\u0001" + "555=2\u0001600=12\u0001603=13\u0001251=15\u0001" +
 				"600=19\u0001603=20\u0001604=2\u0001605=21\u0001605=32\u0001251=22\u0001" +
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
-			Assert.AreEqual(expectedMsgWithGroup, _srcMsg.ToString());
-			Assert.AreEqual(expectedMsgWithoutGroup, _dstMsg.ToString());
-			Assert.IsFalse(srcGroup.ToString().Equals(copiedGroup.ToString()));
+			ClassicAssert.AreEqual(expectedMsgWithGroup, _srcMsg.ToString());
+			ClassicAssert.AreEqual(expectedMsgWithoutGroup, _dstMsg.ToString());
+			ClassicAssert.IsFalse(srcGroup.ToString().Equals(copiedGroup.ToString()));
 		}
 	}
 }

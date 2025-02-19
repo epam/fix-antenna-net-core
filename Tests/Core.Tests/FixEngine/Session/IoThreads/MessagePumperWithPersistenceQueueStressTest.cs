@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Storage.Queue;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 {
@@ -98,7 +99,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			}
 
 			Thread.Sleep(5000);
-			Assert.AreEqual(_transport.GetMessages().Count, _messageStorage.GetMessages().Count, "Expected " + numMessages);
+			ClassicAssert.AreEqual(_transport.GetMessages().Count, _messageStorage.GetMessages().Count, "Expected " + numMessages);
 		}
 
 		[Test]
@@ -119,7 +120,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			}
 
 			Thread.Sleep(5000);
-			Assert.AreEqual(_transport.GetMessages().Count, _messageStorage.GetMessages().Count, "Expected " + numMessages);
+			ClassicAssert.AreEqual(_transport.GetMessages().Count, _messageStorage.GetMessages().Count, "Expected " + numMessages);
 		}
 
 		[Test]
@@ -153,13 +154,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			_messagePumper.Shutdown();
 	//        queue.SetOutOfTurnOnlyMode(false);
 
-			Assert.AreEqual(0, Queue.Size, "Expected " + 0);
-			Assert.AreEqual(numMessages + numMessages / 2, _messageStorage.GetMessages().Count, "Expected " + numMessages);
+			ClassicAssert.AreEqual(0, Queue.Size, "Expected " + 0);
+			ClassicAssert.AreEqual(numMessages + numMessages / 2, _messageStorage.GetMessages().Count, "Expected " + numMessages);
 
 			foreach (var el in _messageStorage.GetMessages())
 			{
 				var e = (byte[]) el;
-				Assert.AreEqual(StringHelper.NewString(RawFixUtil.GetMessageType(e)), "B");
+				ClassicAssert.AreEqual(StringHelper.NewString(RawFixUtil.GetMessageType(e)), "B");
 			}
 		}
 

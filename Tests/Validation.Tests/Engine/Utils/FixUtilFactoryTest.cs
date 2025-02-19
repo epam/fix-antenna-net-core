@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Validation.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 {
@@ -46,9 +47,9 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 		public virtual void Test43()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix43);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
@@ -62,7 +63,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 				"custom/fixdic40custom.xml");
 			var fixUtil2 = BuildFixUtil(v2, null);
 
-			Assert.That(fixUtil1, Is.SameAs(fixUtil2));
+			ClassicAssert.That(fixUtil1, Is.SameAs(fixUtil2));
 		}
 
 		[Test]
@@ -71,97 +72,97 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 			var versionContainer = new FixVersionContainer("Fix40custom", FixVersion.Fix40,
 				"custom/fixdic40custom.xml");
 			_fixUtil = BuildFixUtil(versionContainer, null);
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("0").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("0").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil40()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix40);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil41()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix41);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil42()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix42);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil44()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix44);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil50()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix50);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil50Fixt()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fixt11, FixVersion.Fix50);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("A").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("A").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil50Sp1()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix50Sp1);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil50Sp1Fixt()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fixt11, FixVersion.Fix50Sp1);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("A").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("A").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil50Sp2()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fix50Sp2);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("C").Count > 0);
 		}
 
 		[Test]
 		public virtual void TestGetFixUtil50Sp2Fixt()
 		{
 			_fixUtil = BuildFixUtil(FixVersion.Fixt11, FixVersion.Fix50Sp2);
-			Assert.IsNotNull(_fixUtil);
+			ClassicAssert.IsNotNull(_fixUtil);
 
-			Assert.IsTrue(_fixUtil.GetFieldsByMessageType("A").Count > 0);
+			ClassicAssert.IsTrue(_fixUtil.GetFieldsByMessageType("A").Count > 0);
 		}
 
 		[Test]
@@ -175,7 +176,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 				"custom/fixdic40custom.xml");
 			var fixUtil2 = BuildFixUtil(v2, null);
 
-			Assert.AreNotSame(fixUtil1, fixUtil2);
+			ClassicAssert.AreNotSame(fixUtil1, fixUtil2);
 		}
 	}
 }

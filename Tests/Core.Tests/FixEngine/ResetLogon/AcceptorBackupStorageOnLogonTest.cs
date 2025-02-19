@@ -26,7 +26,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 {
@@ -76,7 +77,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			_server.Start();
 			_sessionHelper.Open();
 			_sessionHelper.SendLogon();
-			Assert.IsTrue(acceptorSessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
+			ClassicAssert.IsTrue(acceptorSessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
 			_sessionHelper.ReceiveLogon();
 		}
 
@@ -140,7 +141,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			CheckBackupStorageSize(_session.Parameters, 0);
 
 			_sessionHelper.Close();
-			Assert.True(_sessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
+			ClassicAssert.True(_sessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
 
 			_sessionHelper.Open();
 			_sessionHelper.SendResetLogon();
@@ -161,14 +162,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			Config.GlobalConfiguration.SetProperty(Config.TradePeriodEnd, GetCronExpression(now + TimeSpan.FromMinutes(10)));
 
 			_sessionHelper.Close();
-			Assert.True(_sessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
+			ClassicAssert.True(_sessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
 
 			_sessionConnectedEvent.ResetEvent();
 			_sessionDisconnectedEvent.ResetEvent();
 
 			_sessionHelper.Open();
 			_sessionHelper.SendLogon();
-			Assert.True(_sessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
+			ClassicAssert.True(_sessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
 			_sessionHelper.ReceiveLogon();
 			_sessionHelper.SendNewsMessage();
 			CheckBackupStorageSize(_session.Parameters, 3);
@@ -181,7 +182,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 		private void CheckBackupStorageSize(SessionParameters sessionParameters, int expectedSize)
 		{
 			var configurationAdapter = new ConfigurationAdapter(sessionParameters.Configuration);
-			Assert.IsTrue(CountMatchedFiles(configurationAdapter.BackupStorageDirectory, GetLogFileName(sessionParameters)) >= expectedSize);
+			ClassicAssert.IsTrue(CountMatchedFiles(configurationAdapter.BackupStorageDirectory, GetLogFileName(sessionParameters)) >= expectedSize);
 		}
 
 		private string GetLogFileName(SessionParameters sessionParameters)

@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Dictionary;
 using Epam.FixAntenna.NetCore.Validation.Entities;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Dictionary
 {
@@ -35,9 +36,9 @@ namespace Epam.FixAntenna.Fix.Dictionary
 		{
 			var fixVersionContainer = FixVersionContainer.GetFixVersionContainer(FixVersion.Fix41);
 			var dictionaries = _factory.GetDictionaries(fixVersionContainer, null);
-			Assert.IsNotNull(dictionaries);
-			Assert.IsNotNull(dictionaries.Dictionaries);
-			Assert.AreEqual(dictionaries.Dictionaries.Count, 1);
+			ClassicAssert.IsNotNull(dictionaries);
+			ClassicAssert.IsNotNull(dictionaries.Dictionaries);
+			ClassicAssert.AreEqual(dictionaries.Dictionaries.Count, 1);
 		}
 
 		[Test]
@@ -46,7 +47,7 @@ namespace Epam.FixAntenna.Fix.Dictionary
 			var baseFix40 = FixVersionContainer.GetFixVersionContainer(FixVersion.Fix40);
 			var dictionaries = _factory.GetDictionaries(baseFix40, null);
 			var msgDefCount = ((Fixdic)dictionaries.Dictionaries[0]).Msgdic.Msgdef.Count;
-			Assert.AreEqual(27, msgDefCount);
+			ClassicAssert.AreEqual(27, msgDefCount);
 
 			//reload dictionary
 			var customFix40 = new FixVersionContainer(baseFix40.DictionaryId, FixVersion.Fix40,
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.Fix.Dictionary
 			_factory.LoadDictionary(customFix40, null);
 			dictionaries = _factory.GetDictionaries(baseFix40, null);
 			var newMsgDefCount = ((Fixdic)dictionaries.Dictionaries[0]).Msgdic.Msgdef.Count;
-			Assert.AreEqual(2, newMsgDefCount);
+			ClassicAssert.AreEqual(2, newMsgDefCount);
 		}
 	}
 }

@@ -15,7 +15,8 @@
 using Epam.FixAntenna.TestUtils;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global.Helper;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -34,7 +35,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		public virtual void TearDown()
 		{
 			_messageHandler.FreeResources();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()
@@ -46,34 +47,34 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		[Test]
 		public virtual void MessageWithInvalidOrderOfFirstThreeTags()
 		{
-			var ex = Assert.Throws<GarbledMessageException>(() =>
+			var ex = ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				_messageHandler.ProcessMessage(MessageHelper.GetMessageWithInvalidOrderOfThreeTags());
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			Assert.IsNull(_messageHandler.GetMessage());
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssert.IsNull(_messageHandler.GetMessage());
 		}
 
 		[Test]
 		public virtual void MessageWithValidOrder()
 		{
 			_messageHandler.ProcessMessage(MessageHelper.GetLoginMessage());
-			Assert.IsNotNull(_messageHandler.GetMessage());
+			ClassicAssert.IsNotNull(_messageHandler.GetMessage());
 		}
 
 		[Test]
 		public virtual void MessageWithoutSeqNum()
 		{
-			var ex = Assert.Throws<GarbledMessageException>(() =>
+			var ex = ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				var message = MessageHelper.GetLoginMessage();
 				message.RemoveTag(34);
 				_messageHandler.ProcessMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.IsNull(_messageHandler.GetMessage());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.IsNull(_messageHandler.GetMessage());
 		}
 	}
 }

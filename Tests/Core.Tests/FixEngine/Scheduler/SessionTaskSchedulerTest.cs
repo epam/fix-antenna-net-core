@@ -17,7 +17,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Scheduler.Tasks;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using Quartz;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
@@ -36,8 +37,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			scheduler.ScheduleCronTask<ATask>(pipedCronExpression, TimeZoneInfo.Utc);
 			var actual = scheduler.GetCronExpressionsForScheduledCronTask<ATask>();
 			
-			// Assert
-			Assert.That(actual, Is.EquivalentTo(expected));
+			// ClassicAssert
+			ClassicAssert.That(actual, Is.EquivalentTo(expected));
 
 			scheduler.Shutdown();
 		}
@@ -54,8 +55,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Scheduler
 			scheduler.ScheduleCronTask<ATask>(pipedCronExpression, TimeZoneInfo.Utc);
 			var actual = scheduler.GetCronExpressionsForScheduledCronTask<ATask>();
 			
-			// Assert
-			Assert.That(actual, Is.EquivalentTo(expected));
+			// ClassicAssert
+			ClassicAssert.That(actual, Is.EquivalentTo(expected));
 
 			scheduler.Shutdown();
 		}

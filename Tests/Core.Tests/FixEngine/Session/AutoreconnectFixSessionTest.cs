@@ -26,7 +26,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -110,15 +111,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			CreateAndConnectInitiatorSession(Localhost, _ports);
 			Thread.Sleep(2000);
 
-			Assert.IsNull(_servers[0].Session);
-			Assert.IsNull(_servers[1].Session);
-			Assert.IsNull(_servers[2].Session);
+			ClassicAssert.IsNull(_servers[0].Session);
+			ClassicAssert.IsNull(_servers[1].Session);
+			ClassicAssert.IsNull(_servers[2].Session);
 
 			_servers[1].Server.Start();
 			CheckingUtils.CheckWithinTimeout(() => _initiatorSession.SessionState.Equals(SessionState.Connected), TimeSpan.FromMilliseconds(StateWaitMs));
 			CheckingUtils.CheckWithinTimeout(() => _servers[1].Session.SessionState.Equals(SessionState.Connected), TimeSpan.FromMilliseconds(StateWaitMs));
-			Assert.IsNull(_servers[0].Session);
-			Assert.IsNull(_servers[2].Session);
+			ClassicAssert.IsNull(_servers[0].Session);
+			ClassicAssert.IsNull(_servers[2].Session);
 		}
 
 		[Test]
@@ -128,7 +129,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			CreateAndConnectInitiatorSession(Localhost, new[] { _ports[0] });
 
 			CheckingUtils.CheckWithinTimeout(() => _initiatorSession.SessionState.Equals(SessionState.Connected), TimeSpan.FromMilliseconds(StateWaitMs));
-			Assert.IsNotNull(_servers[0].Session);
+			ClassicAssert.IsNotNull(_servers[0].Session);
 
 			_initiatorSession.Disconnect(string.Empty);
 			CheckingUtils.CheckWithinTimeout(() => _servers[0].Session.SessionState.Equals(SessionState.Disconnected), TimeSpan.FromMilliseconds(StateWaitMs));

@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -34,7 +35,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		[SetUp]
 		public void SetUp()
 		{
-			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 			ConfigurationHelper.StoreGlobalConfig();
 			// Speed up test execution. Otherwise _helper.Session.Dispose() takes 30 seconds
 			Config.GlobalConfiguration.SetProperty(Config.ReadingThreadShutdownTimeout, "1");
@@ -47,7 +48,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_helper.Session.Dispose();
 			_helper.Transport.Close();
 			ConfigurationHelper.RestoreGlobalConfig();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()
@@ -66,8 +67,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_helper.Session.Connect();
 			var logonReply = _helper.Transport.ReadMessageFromSession();
 
-			// assert
-			Assert.AreEqual("A", logonReply.GetTagValueAsString(35));
+			// ClassicAssert
+			ClassicAssert.AreEqual("A", logonReply.GetTagValueAsString(35));
 		}
 
 		private SessionParameters GetTestSessionParameters()

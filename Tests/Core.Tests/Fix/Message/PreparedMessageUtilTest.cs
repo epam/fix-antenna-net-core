@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using ValueType = Epam.FixAntenna.NetCore.FixEngine.ValueType;
 
 namespace Epam.FixAntenna.Fix.Message
@@ -52,8 +53,8 @@ namespace Epam.FixAntenna.Fix.Message
 			var expected =
 				"8=FIX.4.2\u00019=091\u000135=A\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                     \u000198=0\u0001108=30\u00011= \u00012=\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
 		}
 
 		[Test]
@@ -67,8 +68,8 @@ namespace Epam.FixAntenna.Fix.Message
 			var expected =
 				"8=FIX.4.2\u00019=079\u000135=A\u000134=\u000149=admin3\u000156=admin\u000150=ssId\u000157=ee"
 							+ "\u000152=                     \u000198=0\u0001108=30\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
 		}
 
 		[Test]
@@ -88,8 +89,8 @@ namespace Epam.FixAntenna.Fix.Message
 				"8=FIX.4.2\u00019=123\u000135=A\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                     \u000198=0\u0001108=30\u00011=TestValue1\u00012=TestValue2\u0001"
 							+ "3=TestValue3\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
 		}
 
 		[Test]
@@ -107,8 +108,8 @@ namespace Epam.FixAntenna.Fix.Message
 			var preparedMessage = Pmu.PrepareMessage(list, "A", ms);
 			var expected =
 				"8=FIX.4.2\u00019=1087\u000135=A\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u000157=ee\u000152=                     \u000198=0\u0001108=30\u00011=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
 		}
 
 		[Test]
@@ -120,8 +121,8 @@ namespace Epam.FixAntenna.Fix.Message
 			var expected =
 				"8=FIX.4.0\u00019=080\u000135=A\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                 \u000198=0\u0001108=30\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
 		}
 
 		[Test]
@@ -133,8 +134,8 @@ namespace Epam.FixAntenna.Fix.Message
 			var expected =
 				"8=FIX.4.4\u00019=084\u000135=A\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                     \u000198=0\u0001108=30\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
 		}
 
 		[Test]
@@ -158,15 +159,15 @@ namespace Epam.FixAntenna.Fix.Message
 			var preparedMessage = Pmu.PrepareMessage(list, ms);
 			var expected = "8=FIX.4.2\u00019=089\u000135=A\u000134=  \u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                     \u000198=0\u0001108=30\u00011=     \u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
-			Assert.IsTrue(preparedMessage.IsMessageBufferContinuous, "Message isn't placed in single buffer");
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.IsTrue(preparedMessage.IsMessageBufferContinuous, "Message isn't placed in single buffer");
 
 			preparedMessage.Set(9, 1234);
 			var updatedExpected = "8=FIX.4.2\u00019=1234\u000135=A\u000134=  \u000149=admin3\u000156=admin\u000150=ssId"
 									+ "\u000157=ee\u000152=                     \u000198=0\u0001108=30\u00011=     \u000110=   \u0001";
-			Assert.AreEqual(updatedExpected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.IsFalse(preparedMessage.IsMessageBufferContinuous, "Message is placed in single buffer");
+			ClassicAssert.AreEqual(updatedExpected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.IsFalse(preparedMessage.IsMessageBufferContinuous, "Message is placed in single buffer");
 		}
 
 		[Test]
@@ -184,20 +185,20 @@ namespace Epam.FixAntenna.Fix.Message
 			var preparedMessage = Pmu.PrepareMessageFromString(template.AsByteArray(), "A", ms);
 			var expected = "8=FIX.4.2\u00019=080\u000135=A\u000134=1\u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                     \u000198=0\u0001108=30\u000110=037\u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
-			Assert.IsFalse(preparedMessage.IsMessageBufferContinuous, "Message is placed in single buffer");
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.IsFalse(preparedMessage.IsMessageBufferContinuous, "Message is placed in single buffer");
 
 			preparedMessage.Set(9, 1234);
 			var updatedExpected = "8=FIX.4.2\u00019=1234\u000135=A\u000134=1\u000149=admin3\u000156=admin\u0001"
 									+ "50=ssId\u000157=ee\u000152=                     \u000198=0\u0001108=30\u000110=037\u0001";
-			Assert.AreEqual(updatedExpected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(updatedExpected, StringHelper.NewString(preparedMessage.AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestFromLagerStructure()
 		{
-			Assert.Throws<PreparedMessageException>(() =>
+			ClassicAssert.Throws<PreparedMessageException>(() =>
 			{
 				var ms = new MessageStructure();
 				ms.Reserve(108, 2);
@@ -221,13 +222,13 @@ namespace Epam.FixAntenna.Fix.Message
 			var pm = Pmu.PrepareMessage("D", ms);
 			var expected =
 				"8=FIX.4.2\u00019=080\u000135=D\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u000157=ee\u000152=                     \u000138=\u000139=\u000110=   \u0001";
-			Assert.AreEqual(expected, pm.ToString());
+			ClassicAssert.AreEqual(expected, pm.ToString());
 		}
 
 		[Test]
 		public virtual void TestPrepareMessageWithWrongStructure()
 		{
-			Assert.Throws<PreparedMessageException>(() =>
+			ClassicAssert.Throws<PreparedMessageException>(() =>
 			{
 				var list = new FixMessage();
 				list.AddTag(1, "TestValue1");
@@ -242,7 +243,7 @@ namespace Epam.FixAntenna.Fix.Message
 		[Test]
 		public virtual void TestMsgWithoutMsgType()
 		{
-			Assert.Throws<FieldNotFoundException>(() =>
+			ClassicAssert.Throws<FieldNotFoundException>(() =>
 			{
 				var ms = new MessageStructure();
 				ms.Reserve(1, 1);
@@ -264,7 +265,7 @@ namespace Epam.FixAntenna.Fix.Message
 								+ "269=0\u0001270=1.29886\u0001271=2000000\u000110=113\u0001";
 			var ms = new MessageStructure();
 			var pm = Pmu.PrepareMessageFromString(mdTemplate.AsByteArray(), ms);
-			Assert.AreEqual(mdTemplate, pm.ToString());
+			ClassicAssert.AreEqual(mdTemplate, pm.ToString());
 		}
 
 		[Test]
@@ -277,7 +278,7 @@ namespace Epam.FixAntenna.Fix.Message
 			fixFields.Set(55, "12");
 			fixFields.Set(55, "1"); // <- exception on 2.16.2 here!!!
 
-			Assert.AreEqual("8=FIX.4.2\u00019=076\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=076\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
 							+ "50=ssId\u000157=ee\u000152=                     \u000155=1\u000110=   \u0001",
 				fixFields.ToString());
 		}
@@ -292,7 +293,7 @@ namespace Epam.FixAntenna.Fix.Message
 			fixFields.Set(55, "12");
 			fixFields.Set(55, "1234");
 
-			Assert.AreEqual("8=FIX.4.2\u00019=076\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=076\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
 							+ "50=ssId\u000157=ee\u000152=                     \u000155=1234\u000110=   \u0001",
 				fixFields.ToString());
 		}
@@ -305,12 +306,12 @@ namespace Epam.FixAntenna.Fix.Message
 
 			var fixFields = Pmu.PrepareMessage("D", ms);
 			fixFields.Set(55, "123");
-			Assert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
 							+ "50=ssId\u000157=ee\u000152=                     \u000155=123\u000110=   \u0001",
 				fixFields.ToString());
 
 			fixFields.Set(55, "12");
-			Assert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
 							+ "50=ssId\u000157=ee\u000152=                     \u000155=12 \u000110=   \u0001",
 				fixFields.ToString());
 		}
@@ -325,14 +326,14 @@ namespace Epam.FixAntenna.Fix.Message
 
 			//set longer value
 			fixFields.Set(55, "1234");
-			Assert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
 							+ "50=ssId\u000157=ee\u000152=                     \u000155=1234\u000110=   \u0001",
 				fixFields.ToString());
 
 			//set shorter value
 			fixFields.Set(55, "1");
-			Assert.AreEqual("1", fixFields.GetTagValueAsString(55));
-			Assert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
+			ClassicAssert.AreEqual("1", fixFields.GetTagValueAsString(55));
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=079\u000135=D\u000134=     \u000149=admin3\u000156=admin\u0001"
 							+ "50=ssId\u000157=ee\u000152=                     \u000155=1\u000110=   \u0001",
 				fixFields.ToString());
 		}
@@ -348,7 +349,7 @@ namespace Epam.FixAntenna.Fix.Message
 			fixFields.Set(55, "123456");
 			fixFields.Set(55, "1234");
 			fixFields.Set(55, "12345");
-			Assert.AreEqual("12345", fixFields.GetTagValueAsString(55));
+			ClassicAssert.AreEqual("12345", fixFields.GetTagValueAsString(55));
 		}
 
 		[Test]
@@ -382,21 +383,21 @@ namespace Epam.FixAntenna.Fix.Message
 			preparedMessage.Set(10005, 1234.56789, 4);
 			preparedMessage.Set(10006, -56789.123456, 4);
 
-			Assert.AreEqual(1234.567, preparedMessage.GetTagValueAsDouble(10001));
-			Assert.AreEqual(-56789.123, preparedMessage.GetTagValueAsDouble(10002));
-			Assert.AreEqual(1234, preparedMessage.GetTagValueAsLong(10003));
-			Assert.AreEqual(-56789, preparedMessage.GetTagValueAsLong(10004));
-			Assert.AreEqual(1234.5679, preparedMessage.GetTagValueAsDouble(10005));
-			Assert.AreEqual(-56789.1235, preparedMessage.GetTagValueAsDouble(10006));
+			ClassicAssert.AreEqual(1234.567, preparedMessage.GetTagValueAsDouble(10001));
+			ClassicAssert.AreEqual(-56789.123, preparedMessage.GetTagValueAsDouble(10002));
+			ClassicAssert.AreEqual(1234, preparedMessage.GetTagValueAsLong(10003));
+			ClassicAssert.AreEqual(-56789, preparedMessage.GetTagValueAsLong(10004));
+			ClassicAssert.AreEqual(1234.5679, preparedMessage.GetTagValueAsDouble(10005));
+			ClassicAssert.AreEqual(-56789.1235, preparedMessage.GetTagValueAsDouble(10006));
 
 			var expected =
 				"8=FIX.4.2\u00019=216\u000135=A\u000134=     \u000149=admin3\u000156=admin\u000150=ssId\u0001"
 							+ "57=ee\u000152=                     \u000198=0\u0001108=30\u0001"
 							+ "10001=00000001234.567\u000110002=-0000056789.123\u000110003=000000000001234\u0001"
 							+ "10004=-00000000056789\u000110005=0000001234.5679\u000110006=-000056789.1235\u000110=   \u0001";
-			Assert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
-			Assert.AreEqual(expected, preparedMessage.ToString());
-			Assert.IsTrue(preparedMessage.IsMessageBufferContinuous, "Message isn't placed in single buffer");
+			ClassicAssert.AreEqual(expected, StringHelper.NewString(preparedMessage.AsByteArray()));
+			ClassicAssert.AreEqual(expected, preparedMessage.ToString());
+			ClassicAssert.IsTrue(preparedMessage.IsMessageBufferContinuous, "Message isn't placed in single buffer");
 		}
 
 		[Test]
@@ -406,21 +407,21 @@ namespace Epam.FixAntenna.Fix.Message
 			var span = buffer.AsSpan();
 
 			var length = FixTypes.FormatIntWithPadding(123456, 10, span);
-			Assert.AreEqual(10, length);
-			Assert.AreEqual("0000123456", StringHelper.NewString(buffer));
+			ClassicAssert.AreEqual(10, length);
+			ClassicAssert.AreEqual("0000123456", StringHelper.NewString(buffer));
 
 			span.Clear();
 			length = FixTypes.FormatIntWithPadding(-12345, 10, span);
-			Assert.AreEqual(10, length);
-			Assert.AreEqual("-000012345", StringHelper.NewString(buffer));
+			ClassicAssert.AreEqual(10, length);
+			ClassicAssert.AreEqual("-000012345", StringHelper.NewString(buffer));
 
 			buffer = new byte[15];
 			FixTypes.FormatDoubleWithPadding(123.45, 5, 15, buffer, 0);
-			Assert.AreEqual("000000000123.45", StringHelper.NewString(buffer));
+			ClassicAssert.AreEqual("000000000123.45", StringHelper.NewString(buffer));
 
 			buffer = new byte[15];
 			FixTypes.FormatDoubleWithPadding(-123.4567, 3, 15, buffer, 0);
-			Assert.AreEqual("-0000000123.457", StringHelper.NewString(buffer));
+			ClassicAssert.AreEqual("-0000000123.457", StringHelper.NewString(buffer));
 		}
 
 		[Test]
@@ -442,22 +443,22 @@ namespace Epam.FixAntenna.Fix.Message
 			template.Set(270, 1, 111111.1999999, 5);
 			template.Set(270, 2, 111111.1999999, 5);
 
-			Assert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 1));
-			Assert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 2));
+			ClassicAssert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 1));
+			ClassicAssert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 2));
 
 			//repeat with the same value again and make sure that nothing corrupted
 			template.Set(270, 1, 111111.1999999, 5);
 			template.Set(270, 2, 111111.1999999, 5);
 
-			Assert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 1));
-			Assert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 2));
+			ClassicAssert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 1));
+			ClassicAssert.AreEqual(111111.2, template.GetTagValueAsDouble(270, 2));
 
 			//one more check with normal value
 			template.Set(270, 1, 11.1111, 5);
 			template.Set(270, 2, 11.1111, 5);
 
-			Assert.AreEqual(11.1111, template.GetTagValueAsDouble(270, 1));
-			Assert.AreEqual(11.1111, template.GetTagValueAsDouble(270, 2));
+			ClassicAssert.AreEqual(11.1111, template.GetTagValueAsDouble(270, 1));
+			ClassicAssert.AreEqual(11.1111, template.GetTagValueAsDouble(270, 2));
 		}
 	}
 }

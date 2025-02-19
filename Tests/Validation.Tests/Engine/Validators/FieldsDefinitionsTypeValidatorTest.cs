@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.Validation.Entities;
 using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 {
@@ -73,18 +74,18 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			item.Val = "1";
 			multi.Item.Add(item);
 
-			Assert.IsTrue(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1"));
+			ClassicAssert.IsTrue(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1"));
 
-			Assert.IsTrue(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1 1"));
+			ClassicAssert.IsTrue(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1 1"));
 
-			Assert.IsFalse(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1 2"));
+			ClassicAssert.IsFalse(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1 2"));
 
 			item = new Item();
 			item.Val = "2";
 			multi.Item.Add(item);
-			Assert.IsTrue(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1 2"));
+			ClassicAssert.IsTrue(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1 2"));
 
-			Assert.IsFalse(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1\n2"));
+			ClassicAssert.IsFalse(FieldsDefinitionsTypeValidator.CheckMulti(multi, "1\n2"));
 		}
 
 		[Test]
@@ -101,7 +102,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			var fixMessage = fixMessageBuilder.BuildValidationFixMessage(fieldList);
 
 			var errorContainer = Validator.Validate("7", fixMessage, false);
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.IncorrectDataFormatForValue, -1, "7", fieldList.GetTag(1079))));
 		}
 
@@ -117,8 +118,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(94, "11");
 
 			var errorContainer = validator.Validate("C", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.IncorrectDataFormatForValue, -1, "C", fieldList.GetTag(94))));
 		}
 
@@ -138,7 +139,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -156,7 +157,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -178,7 +179,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 				fieldList.AddTag(10, "10");
 
 				var errorContainer = Validator.Validate("B", CreateValidationMessage(fieldList), false);
-				Assert.IsTrue(errorContainer.Errors.Count == 0,
+				ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 					"Error occurred:" + errorContainer.IsPriorityError);
 			}
 
@@ -194,7 +195,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 				fieldList.AddTag(10, "10");
 
 				var errorContainer = Validator.Validate("B", CreateValidationMessage(fieldList), false);
-				Assert.IsTrue(errorContainer.Errors.Count == 0,
+				ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 					"Error occurred:" + errorContainer.IsPriorityError);
 			}
 		}
@@ -211,8 +212,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(373, "25");
 
 			var errorContainer = validator.Validate("3", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.ValueIncorrectOutOfRangeForTag, -1, "3", fieldList.GetTag(373))));
 		}
 
@@ -231,27 +232,27 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-02:39-05");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-15:39+08");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-13:09+05:30");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-13:09:05:30");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 		}
 
 		[Test]
@@ -269,27 +270,27 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-02:39-05");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-15:39+08");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-13:09+05:30");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-13:09:05:30");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 		}
 
 		[Test]
@@ -307,27 +308,27 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-02:39-05");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-15:39+08");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-13:09+05:30");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(1132, "20060901-13:09:05:30");
 			errorContainer = Validator.Validate("AE", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 		}
 
 		[Test]
@@ -343,7 +344,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("s", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -362,31 +363,31 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "20081111");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "200811w1");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "20080229");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "20080231");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 
 			fieldList.Set(200, "200802w8");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 		}
 
 		[Test]
@@ -404,31 +405,31 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "200811");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "200811");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "200806");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 
 			fieldList.Set(200, "20080112");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 
 			fieldList.Set(200, "200802w8");
 			errorContainer = Validator.Validate("V", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must occurred.");
 		}
 
 		[Test]
@@ -446,7 +447,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("W", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -464,7 +465,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("0", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -482,7 +483,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("0", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.Errors.Count == 0, "Error must exists");
+			ClassicAssert.IsFalse(errorContainer.Errors.Count == 0, "Error must exists");
 		}
 
 		[Test]
@@ -499,7 +500,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("A", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -517,7 +518,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("A", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -536,7 +537,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("A", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -554,7 +555,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("A", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -572,7 +573,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "10");
 
 			var errorContainer = Validator.Validate("A", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred:" + errorContainer.IsPriorityError);
 		}
 
@@ -587,7 +588,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(10, "011");
 
 			var errorContainer = Validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.IsEmpty, "Error occurred.");
+			ClassicAssert.IsTrue(errorContainer.IsEmpty, "Error occurred.");
 		}
 
 		[Test]
@@ -602,8 +603,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(18, " ");
 
 			var errorContainer = validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.ValueIncorrectOutOfRangeForTag, -1, "7", fieldList.GetTag(18))));
 		}
 
@@ -619,8 +620,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(18, "1   ");
 
 			var errorContainer = validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.ValueIncorrectOutOfRangeForTag, -1, "7", fieldList.GetTag(18))));
 		}
 
@@ -636,8 +637,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(18, "  1");
 
 			var errorContainer = validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.IsFalse(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.ValueIncorrectOutOfRangeForTag, -1, "7", fieldList.GetTag(18))));
 		}
 
@@ -658,10 +659,10 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(18, "1 1");
 
 			var errorContainer = validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.IsEmpty, "Error occurred:" + errorContainer.IsPriorityError);
+			ClassicAssert.IsTrue(errorContainer.IsEmpty, "Error occurred:" + errorContainer.IsPriorityError);
 
 			// compare fix dic collection characteristic
-			Assert.IsTrue(fixdic.Equals(dictionaries.Dictionaries[0]), "Fielddef collection must be equals.");
+			ClassicAssert.IsTrue(fixdic.Equals(dictionaries.Dictionaries[0]), "Fielddef collection must be equals.");
 		}
 
 		[Test]
@@ -681,11 +682,11 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			for (var i = 0; i < 10; i++)
 			{
 				var errorContainer = validator.Validate("7", CreateValidationMessage(fieldList), false);
-				Assert.IsTrue(errorContainer.IsEmpty, "Error exists");
-				Assert.IsTrue(errorContainer.Errors.Count == 0, "Error container must have not any error.");
+				ClassicAssert.IsTrue(errorContainer.IsEmpty, "Error exists");
+				ClassicAssert.IsTrue(errorContainer.Errors.Count == 0, "Error container must have not any error.");
 			}
 
-			Assert.IsNotNull(fixdic.Equals(dictionaries.Dictionaries[0]), "Fielddef must exists");
+			ClassicAssert.IsNotNull(fixdic.Equals(dictionaries.Dictionaries[0]), "Fielddef must exists");
 		}
 
 		[Test]
@@ -697,7 +698,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(1474, "uk");
 
 			var errorContainer = Validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0,
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0,
 				"Error occurred: " + errorContainer.Errors);
 		}
 
@@ -713,8 +714,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(18, "1 2");
 
 			var errorContainer = validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
-			Assert.IsTrue(errorContainer.Errors.Count == 0, "Error container must have not any error.");
+			ClassicAssert.IsTrue(errorContainer.IsEmpty, "Error occurred, tag has invalid value.");
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0, "Error container must have not any error.");
 		}
 
 		[Test]
@@ -726,7 +727,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 			fieldList.AddTag(1185, "1");
 
 			var errorContainer = Validator.Validate("7", CreateValidationMessage(fieldList), false);
-			Assert.IsTrue(errorContainer.Errors.Count == 0, "Error occurred.");
+			ClassicAssert.IsTrue(errorContainer.Errors.Count == 0, "Error occurred.");
 		}
 	}
 }

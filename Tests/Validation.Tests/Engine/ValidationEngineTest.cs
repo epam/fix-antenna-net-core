@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Dictionary;
 using Epam.FixAntenna.NetCore.Validation;
 using Epam.FixAntenna.NetCore.Validation.Entities;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Validation.Engine
 {
@@ -38,8 +39,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine
 			var fix42 = FixVersionContainer.GetFixVersionContainer(FixVersion.Fix42);
 			var dictionariesBefore = FixDictionaryFactory.Instance.GetDictionaries(fix42, null);
 			var fixdicBefore = (Fixdic)dictionariesBefore.Dictionaries[0];
-			Assert.AreEqual(400, fixdicBefore.Fielddic.Fielddef.Count);
-			Assert.AreEqual(46, fixdicBefore.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(400, fixdicBefore.Fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(46, fixdicBefore.Msgdic.Msgdef.Count);
 
 			ValidationEngine.PreloadDictionary(FixVersion.Fix42, "minimal/test42min.xml", true);
 			ValidationEngine.PreloadDictionary(FixVersion.Fix42, "minimal/test42minadditional.xml",
@@ -47,9 +48,9 @@ namespace Epam.FixAntenna.Fix.Validation.Engine
 
 			var dictionaries = FixDictionaryFactory.Instance.GetDictionaries(fix42, null);
 			var fixdic = (Fixdic)dictionaries.Dictionaries[0];
-			Assert.AreEqual(3, fixdic.Fielddic.Fielddef.Count);
-			Assert.AreEqual(1, fixdic.Msgdic.Msgdef.Count);
-			Assert.AreEqual(3, fixdic.Msgdic.Msgdef[0].FieldOrDescrOrAlias.Count);
+			ClassicAssert.AreEqual(3, fixdic.Fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(1, fixdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(3, fixdic.Msgdic.Msgdef[0].FieldOrDescrOrAlias.Count);
 		}
 
 		[Test]
@@ -58,16 +59,16 @@ namespace Epam.FixAntenna.Fix.Validation.Engine
 			var fix42 = FixVersionContainer.GetFixVersionContainer(FixVersion.Fix42);
 			var dictionariesBefore = FixDictionaryFactory.Instance.GetDictionaries(fix42, null);
 			var fixdicBefore = (Fixdic)dictionariesBefore.Dictionaries[0];
-			Assert.AreEqual(400, fixdicBefore.Fielddic.Fielddef.Count);
-			Assert.AreEqual(46, fixdicBefore.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(400, fixdicBefore.Fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(46, fixdicBefore.Msgdic.Msgdef.Count);
 
 			ValidationEngine.PreloadDictionary(FixVersion.Fix42, "minimal/test42min.xml", true);
 
 			var dictionaries = FixDictionaryFactory.Instance.GetDictionaries(fix42, null);
 			var fixdic = (Fixdic)dictionaries.Dictionaries[0];
-			Assert.AreEqual(2, fixdic.Fielddic.Fielddef.Count);
-			Assert.AreEqual(1, fixdic.Msgdic.Msgdef.Count);
-			Assert.AreEqual(2, fixdic.Msgdic.Msgdef[0].FieldOrDescrOrAlias.Count);
+			ClassicAssert.AreEqual(2, fixdic.Fielddic.Fielddef.Count);
+			ClassicAssert.AreEqual(1, fixdic.Msgdic.Msgdef.Count);
+			ClassicAssert.AreEqual(2, fixdic.Msgdic.Msgdef[0].FieldOrDescrOrAlias.Count);
 		}
 	}
 }

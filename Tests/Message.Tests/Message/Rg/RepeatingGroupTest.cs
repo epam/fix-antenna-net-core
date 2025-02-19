@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Rg;
 using Epam.FixAntenna.NetCore.Message.Rg.Exceptions;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -53,12 +54,12 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group = RepeatingGroupPool.RepeatingGroup;
 			Msg.GetRepeatingGroup(454, group);
 
-			Assert.AreEqual("454=1 | 455=5 | 456=6 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("454=1 | 455=5 | 456=6 | ", group.ToPrintableString());
 
 			var entry = group.AddEntry();
 			entry.AddTag(455, 111);
 			entry.AddTag(456, 112);
-			Assert.AreEqual("454=2 | 455=5 | 456=6 | 455=111 | 456=112 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("454=2 | 455=5 | 456=6 | 455=111 | 456=112 | ", group.ToPrintableString());
 
 			group.Release();
 
@@ -72,7 +73,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"454=2 | 455=5 | 456=6 | 455=111 | 456=112 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " +
 				"518=1 | 519=10 | 520=11 | " + "10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -120,13 +121,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var fixMsgWithNewGroup =
 				"8=FIX.4.3\u00019=94\u000135=8\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u0001454=1\u0001455=5\u0001456=6\u0001232=2\u0001233=7\u0001234=8\u0001233=9\u0001234=9\u0001518=1\u0001519=10\u0001520=11\u0001" +
 				"382=2\u0001375=1\u0001337=2\u0001375=3\u0001437=4\u0001";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToString());
 		}
 
 		[Test]
 		public virtual void CreateFlatRgAtEnd2()
 		{
-			Assert.IsFalse(Msg.IsTagExists(382));
+			ClassicAssert.IsFalse(Msg.IsTagExists(382));
 			var group = Msg.AddRepeatingGroupAtIndex(20, 382, false);
 
 			//append entry to the end of group
@@ -153,13 +154,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " +
 				"382=3 | 375=1 | 337=2 | 375=222 | 337=333 | 375=3 | 437=4 | 10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
 		}
 
 		[Test]
 		public virtual void CreateFlatRgAtStart()
 		{
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | " +
 				"52=20080212-04:15:18.308 | " + "454=1 | 455=5 | 456=6 | " +
 				"232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " + "10=124 | ",
@@ -191,7 +192,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"382=3 | 375=1 | 337=2 | 375=222 | 337=333 | 375=3 | 437=4 | " + "454=1 | 455=5 | 456=6 | " +
 				"232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | 10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -250,7 +251,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"454=1 | 455=5 | 456=6 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " +
 				"555=2 | " + "600=111 | 604=2 | 605=222 | 606=223 | 605=224 | 606=225 | 607=112 | " +
 				"600=121 | 601=122 | 604=2 | 605=232 | 606=233 | 605=234 | 606=235 | 607=123 | " + "10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -311,7 +312,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"600=121 | 601=122 | 604=2 | 605=232 | 606=233 | 605=234 | 606=235 | 607=123 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " +
 				"10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -326,14 +327,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group2 = entry1.AddRepeatingGroup(456);
 			var entry2 = group2.AddEntry();
 
-			Assert.AreEqual("", group1.AddEntry().ToPrintableString());
-			Assert.AreEqual("", group2.AddEntry().ToPrintableString());
-			Assert.AreEqual("", group2.AddEntry().ToPrintableString());
-			Assert.AreEqual("", group1.AddEntry().ToPrintableString());
-			Assert.AreEqual("", entry1.ToPrintableString());
-			Assert.AreEqual("", entry2.ToPrintableString());
-			Assert.AreEqual("", group1.ToPrintableString());
-			Assert.AreEqual("", group2.ToPrintableString());
+			ClassicAssert.AreEqual("", group1.AddEntry().ToPrintableString());
+			ClassicAssert.AreEqual("", group2.AddEntry().ToPrintableString());
+			ClassicAssert.AreEqual("", group2.AddEntry().ToPrintableString());
+			ClassicAssert.AreEqual("", group1.AddEntry().ToPrintableString());
+			ClassicAssert.AreEqual("", entry1.ToPrintableString());
+			ClassicAssert.AreEqual("", entry2.ToPrintableString());
+			ClassicAssert.AreEqual("", group1.ToPrintableString());
+			ClassicAssert.AreEqual("", group2.ToPrintableString());
 		}
 
 		[Test]
@@ -344,48 +345,48 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(35, "8");
 
 			var group = msg.AddRepeatingGroup(123);
-			Assert.AreEqual(0, @group.Count);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual(0, @group.Count);
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
 			var entry = group.AddEntry();
-			Assert.AreEqual(1, @group.Count);
-			Assert.AreEqual(0, group.GetLeadingTagValue());
-			Assert.AreEqual(0, entry.Count);
+			ClassicAssert.AreEqual(1, @group.Count);
+			ClassicAssert.AreEqual(0, group.GetLeadingTagValue());
+			ClassicAssert.AreEqual(0, entry.Count);
 
 			var nestdGroup = entry.AddRepeatingGroup(456);
-			Assert.AreEqual(0, nestdGroup.Count);
-			Assert.AreEqual(0, nestdGroup.GetLeadingTagValue());
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual(0, nestdGroup.Count);
+			ClassicAssert.AreEqual(0, nestdGroup.GetLeadingTagValue());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
 			group.RemoveEntry(entry);
-			Assert.AreEqual(0, @group.Count);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual(0, @group.Count);
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
 			//rg should be accessible after removing entries
 			group = msg.GetRepeatingGroup(123);
-			Assert.AreEqual(0, @group.Count);
-			Assert.AreEqual(0, group.GetLeadingTagValue());
+			ClassicAssert.AreEqual(0, @group.Count);
+			ClassicAssert.AreEqual(0, group.GetLeadingTagValue());
 
 			entry = group.AddEntry();
-			Assert.AreEqual(1, @group.Count);
-			Assert.AreEqual(0, group.GetLeadingTagValue());
-			Assert.AreEqual(0, entry.Count);
+			ClassicAssert.AreEqual(1, @group.Count);
+			ClassicAssert.AreEqual(0, group.GetLeadingTagValue());
+			ClassicAssert.AreEqual(0, entry.Count);
 
 			nestdGroup = entry.AddRepeatingGroup(456);
-			Assert.AreEqual(0, nestdGroup.Count);
-			Assert.AreEqual(0, nestdGroup.GetLeadingTagValue());
+			ClassicAssert.AreEqual(0, nestdGroup.Count);
+			ClassicAssert.AreEqual(0, nestdGroup.GetLeadingTagValue());
 			var entry2 = nestdGroup.AddEntry();
-			Assert.AreEqual(0, entry2.Count);
-			Assert.AreEqual(1, nestdGroup.Count);
-			Assert.AreEqual(0, nestdGroup.GetLeadingTagValue());
+			ClassicAssert.AreEqual(0, entry2.Count);
+			ClassicAssert.AreEqual(1, nestdGroup.Count);
+			ClassicAssert.AreEqual(0, nestdGroup.GetLeadingTagValue());
 			var nestedGroup2 = entry2.AddRepeatingGroup(789);
-			Assert.AreEqual(0, nestedGroup2.Count);
-			Assert.AreEqual(0, nestedGroup2.GetLeadingTagValue());
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual(0, nestedGroup2.Count);
+			ClassicAssert.AreEqual(0, nestedGroup2.GetLeadingTagValue());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 			nestdGroup.RemoveEntry(entry2);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 			entry.Remove();
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 		}
 
 		[Test]
@@ -396,14 +397,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(35, "8");
 
 			var group = msg.AddRepeatingGroup(123);
-			Assert.AreEqual(0, @group.Count);
+			ClassicAssert.AreEqual(0, @group.Count);
 
 			var entry = group.AddEntry();
-			Assert.AreEqual(1, @group.Count);
-			Assert.AreEqual(0, group.GetLeadingTagValue());
-			Assert.AreEqual(0, entry.Count);
+			ClassicAssert.AreEqual(1, @group.Count);
+			ClassicAssert.AreEqual(0, group.GetLeadingTagValue());
+			ClassicAssert.AreEqual(0, entry.Count);
 			entry.AddTag(1234, 123);
-			Assert.AreEqual(1, entry.Count);
+			ClassicAssert.AreEqual(1, entry.Count);
 		}
 
 		//RG 1.6
@@ -437,7 +438,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			//iterate entries
 			foreach (var entry in group)
 			{
-				Assert.AreEqual(entries[index++], entry.ToPrintableString());
+				ClassicAssert.AreEqual(entries[index++], entry.ToPrintableString());
 			}
 
 			//iterate tags
@@ -453,7 +454,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			{
 				for (var tagIndex = 0; tagIndex < entry.Count; tagIndex++)
 				{
-					Assert.AreEqual(expectedTagValue[entryIndex][tagIndex], entry.GetTagValueAsStringAtIndex(tagIndex));
+					ClassicAssert.AreEqual(expectedTagValue[entryIndex][tagIndex], entry.GetTagValueAsStringAtIndex(tagIndex));
 				}
 
 				entryIndex++;
@@ -481,7 +482,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group3 = entry2.AddRepeatingGroup(789);
 			var entry3 = group3.AddEntry();
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | " + "123=2 | " + "1234=1 | 1236=2 | " + "1234=11 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | " + "123=2 | " + "1234=1 | 1236=2 | " + "1234=11 | ",
 				msg.ToPrintableString());
 
 			entry1.AddTag(1111, 1);
@@ -490,7 +491,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			entry1.AddTag(1112, 3);
 			entry3.AddTag(3333, 3);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 123=2 | " +
 				"1234=1 | 1236=2 | 456=1 | 789=1 | 3333=3 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | " + "1234=11 | ",
 				msg.ToPrintableString());
@@ -509,7 +510,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				msg.GetRepeatingGroup(123));
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(msg, "456=1\u00012222=2\u00012223=4\u0001",
 				msg.GetRepeatingGroup(123).GetEntry(0).GetRepeatingGroup(456));
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 123=2 | " + "1234=1 | 1236=2 | 456=1 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | " +
 				"1234=11 | ", msg.ToPrintableString());
 
@@ -525,7 +526,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			var entry111 = group1.AddEntry();
 			entry111.AddTag(1234, 111);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 123=3 | 1234=1 | 1236=2 | 456=1 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | 1234=11 | 1234=111 | ",
 				msg.ToPrintableString());
 
@@ -552,7 +553,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group3 = entry2.AddRepeatingGroup(789);
 			var entry3 = group3.AddEntry();
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
 			entry3.AddTag(3333, 3);
 			entry2.AddTag(2222, 2);
@@ -560,7 +561,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			entry1.AddTag(1112, 3);
 			entry2.AddTag(2223, 4);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 789=1 | 3333=3 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 789=1 | 3333=3 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
 				msg.ToPrintableString());
 
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(msg, "123=1\u0001456=1\u00011111=1\u00011112=3\u0001",
@@ -571,15 +572,15 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				msg.GetRepeatingGroup(123).GetEntry(0).GetRepeatingGroup(456).GetEntry(0).GetRepeatingGroup(789));
 
 			entry3.RemoveTag(3333);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
 				msg.ToPrintableString());
 			entry3.AddTag(3333, 3);
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(msg, "789=1\u00013333=3\u0001",
 				msg.GetRepeatingGroup(123).GetEntry(0).GetRepeatingGroup(456).GetEntry(0).GetRepeatingGroup(789));
 			entry3.RemoveTag(3333);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("", msg.GetRepeatingGroup(789).ToPrintableString());
+			ClassicAssert.AreEqual("", msg.GetRepeatingGroup(789).ToPrintableString());
 		}
 
 		[Test]
@@ -597,18 +598,18 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group3 = entry2.AddRepeatingGroup(789);
 			var entry3 = group3.AddEntry();
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
 			entry3.AddTag(3333, 3);
 			entry3.RemoveTag(3333);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 			entry2.AddTag(2222, 2);
 			entry1.AddTag(1111, 1);
 			entry1.AddTag(1112, 3);
 			entry2.AddTag(2223, 4);
 			entry3.AddTag(3333, 3);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 789=1 | 3333=3 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 456=1 | 789=1 | 3333=3 | 2222=2 | 2223=4 | 1111=1 | 1112=3 | ",
 				msg.ToPrintableString());
 
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(msg, "123=1\u0001456=1\u00011111=1\u00011112=3\u0001",
@@ -631,7 +632,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			// do manual parse
 			RawFixUtil.IndexRepeatingGroup(customMessage, customFixVersion, "0");
-			Assert.IsTrue(customMessage.IsRepeatingGroupExists(199));
+			ClassicAssert.IsTrue(customMessage.IsRepeatingGroupExists(199));
 		}
 
 		[Test]
@@ -642,14 +643,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(35, "8");
 
 			var group = msg.AddRepeatingGroup(123);
-			Assert.IsNull(msg.GetRepeatingGroup(35));
-			Assert.IsNotNull(msg.GetRepeatingGroup(123));
+			ClassicAssert.IsNull(msg.GetRepeatingGroup(35));
+			ClassicAssert.IsNotNull(msg.GetRepeatingGroup(123));
 			group = msg.GetRepeatingGroup(123);
 			var entry = group.AddEntry();
 			entry.AddTag(111, 111);
 			entry.AddRepeatingGroup(456);
-			Assert.IsNull(msg.GetRepeatingGroup(111));
-			Assert.IsNotNull(msg.GetRepeatingGroup(456));
+			ClassicAssert.IsNull(msg.GetRepeatingGroup(111));
+			ClassicAssert.IsNotNull(msg.GetRepeatingGroup(456));
 		}
 
 		[Test]
@@ -659,13 +660,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 						"199=2 | 104=a | 104=b | 10=034 | ";
 
 			var message = RawFixUtil.GetFixMessage(msgStr.Replace(" | ", "\u0001").AsByteArray());
-			Assert.IsFalse(message.IsRepeatingGroupExists(199));
+			ClassicAssert.IsFalse(message.IsRepeatingGroupExists(199));
 
 			var customMessage = RawFixUtil.GetFixMessage(msgStr.Replace(" | ", "\u0001").AsByteArray());
 			var customFixVersion =
 				new FixVersionContainer("custom40", FixVersion.Fix40, "custom/fixdic40custom.xml");
 			FixMessageTestHelper.SetFixVersion(customMessage, customFixVersion);
-			Assert.IsTrue(customMessage.IsRepeatingGroupExists(199));
+			ClassicAssert.IsTrue(customMessage.IsRepeatingGroupExists(199));
 		}
 
 		[Test]
@@ -773,7 +774,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var entry = group.AddEntry();
 			entry.AddTag(1, 1);
 			var nestedGroup = entry.AddRepeatingGroup(456);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1=1 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1=1 | ", msg.ToPrintableString());
 		}
 
 		[Test]
@@ -794,9 +795,9 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			nestedGroup.AddEntry().AddTag(222, 222);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 111=111 | 456=1 | 222=222 | ", msg.ToPrintableString());
-			Assert.AreEqual("123=1 | 111=111 | 456=1 | 222=222 | ", msg.GetRepeatingGroup(123).ToPrintableString());
-			Assert.AreEqual("456=1 | 222=222 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 111=111 | 456=1 | 222=222 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("123=1 | 111=111 | 456=1 | 222=222 | ", msg.GetRepeatingGroup(123).ToPrintableString());
+			ClassicAssert.AreEqual("456=1 | 222=222 | ",
 				msg.GetRepeatingGroup(123).GetEntry(0).GetRepeatingGroup(456).ToPrintableString());
 		}
 
@@ -807,12 +808,12 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(8, "FIX.4.4");
 			msg.Set(35, "8");
 
-			Assert.IsFalse(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(123));
 			var group = msg.AddRepeatingGroup(123);
-			Assert.IsTrue(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsTrue(msg.IsRepeatingGroupExists(123));
 
 			msg.RemoveRepeatingGroup(123);
-			Assert.IsFalse(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(123));
 
 			group = msg.AddRepeatingGroup(123);
 			var entry = group.AddEntry();
@@ -820,7 +821,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var nestedGroup = entry.AddRepeatingGroup(456);
 
 			entry.RemoveRepeatingGroup(456);
-			Assert.IsFalse(entry.IsRepeatingGroupExists(456));
+			ClassicAssert.IsFalse(entry.IsRepeatingGroupExists(456));
 			entry.AddRepeatingGroup(456);
 		}
 
@@ -839,41 +840,41 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			var group = RepeatingGroupPool.RepeatingGroup;
 			Msg.GetRepeatingGroup(555, group);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"555=2 | " + "600=12 | 603=13 | 604=1 | 605=14 | 251=15 | 539=2 | 524=16 | 525=17 | 524=18 | " +
 				"600=19 | 603=20 | 604=2 | 605=21 | 605=32 | 251=22 | 539=2 | 524=23 | 524=24 | 525=25 | ",
 				group.ToPrintableString());
 
 			group.RemoveEntry(0);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"555=1 | 600=19 | 603=20 | 604=2 | 605=21 | 605=32 | 251=22 | 539=2 | 524=23 | 524=24 | 525=25 | ",
 				group.ToPrintableString());
 
 			group.Release();
 
 			group = Msg.GetRepeatingGroup(232);
-			Assert.AreEqual("232=2 | 233=7 | 234=8 | 233=9 | 234=9 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("232=2 | 233=7 | 234=8 | 233=9 | 234=9 | ", group.ToPrintableString());
 			var entry = group.GetEntry(1);
 			entry.Remove();
-			Assert.AreEqual("232=1 | 233=7 | 234=8 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("232=1 | 233=7 | 234=8 | ", group.ToPrintableString());
 
 			group.RemoveEntry(0);
-			Assert.AreEqual("", group.ToPrintableString());
+			ClassicAssert.AreEqual("", group.ToPrintableString());
 
 			group = Msg.GetRepeatingGroup(454);
-			Assert.AreEqual("454=1 | 455=5 | 456=6 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("454=1 | 455=5 | 456=6 | ", group.ToPrintableString());
 			entry = group.GetEntry(0);
 			group.RemoveEntry(entry);
-			Assert.AreEqual("", group.ToPrintableString());
+			ClassicAssert.AreEqual("", group.ToPrintableString());
 
 			group = Msg.GetRepeatingGroup(382);
-			Assert.AreEqual("382=2 | 375=1 | 337=2 | 375=3 | 437=4 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("382=2 | 375=1 | 337=2 | 375=3 | 437=4 | ", group.ToPrintableString());
 			entry = group.GetEntry(0);
 			var entry1 = group.GetEntry(1);
 
 			entry.Remove();
 			entry1.Remove();
-			Assert.AreEqual("", group.ToPrintableString());
+			ClassicAssert.AreEqual("", group.ToPrintableString());
 
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(Msg, "518=1\u0001519=10\u0001520=11\u0001", null);
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(Msg,
@@ -887,7 +888,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"518=1 | 519=10 | 520=11 | " + "555=1 | 600=19 | 603=20 | 604=2 | 605=21 | 605=32 | " +
 				"251=22 | 539=2 | 524=23 | 524=24 | 525=25 | 10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -901,7 +902,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"10=124\u0001";
 			Msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 			var group = Msg.GetRepeatingGroup(555);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"555=2 | " + "600=12 | 603=13 | 604=1 | 605=14 | 251=15 | 539=2 | 524=16 | 525=17 | 524=18 | " +
 				"600=19 | 603=20 | 604=2 | 605=21 | 605=32 | 251=22 | 539=2 | 524=23 | 524=24 | 525=25 | ",
 				group.ToPrintableString());
@@ -912,7 +913,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var expected =
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"518=1 | 519=10 | 520=11 | " + "10=124 | ";
-			Assert.AreEqual(expected, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expected, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -926,7 +927,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"10=124\u0001";
 			Msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 			var group = Msg.GetRepeatingGroup(555);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"555=2 | " + "600=12 | 603=13 | 604=1 | 605=14 | 251=15 | 539=2 | 524=16 | 525=17 | 524=18 | " +
 				"600=19 | 603=20 | 604=2 | 605=21 | 605=32 | 251=22 | 539=2 | 524=23 | 524=24 | 525=25 | ",
 				group.ToPrintableString());
@@ -936,10 +937,10 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var expected =
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"518=1 | 519=10 | 520=11 | 10=124 | ";
-			Assert.AreEqual(expected, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expected, Msg.ToPrintableString());
 
 			group = Msg.GetRepeatingGroup(555);
-			Assert.IsNotNull(group);
+			ClassicAssert.IsNotNull(group);
 		}
 
 		[Test]
@@ -957,7 +958,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			clone.RemoveTag(Tags.BeginString);
 
-			Assert.AreEqual("35=D | 49=CLIENT | 58=TEXT | 453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
+			ClassicAssert.AreEqual("35=D | 49=CLIENT | 58=TEXT | 453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
 				clone.ToPrintableString());
 		}
 
@@ -975,8 +976,8 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var entryForGetFromPool = RepeatingGroupPool.Entry;
 			rgForAdd.GetEntry(0, entryForGetFromPool);
 
-			Assert.AreSame(entryForAdd, entryForGet);
-			Assert.AreNotSame(entryForAdd, entryForGetFromPool);
+			ClassicAssert.AreSame(entryForAdd, entryForGet);
+			ClassicAssert.AreNotSame(entryForAdd, entryForGetFromPool);
 		}
 
 		[Test]
@@ -993,8 +994,8 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var rgForGet = msg.GetRepeatingGroup(454);
 			msg.GetRepeatingGroup(454, rgForGetFromPool);
 
-			Assert.AreSame(rgForAdd, rgForGet);
-			Assert.AreNotSame(rgForGetFromPool, rgForGet);
+			ClassicAssert.AreSame(rgForAdd, rgForGet);
+			ClassicAssert.AreNotSame(rgForGetFromPool, rgForGet);
 		}
 
 		[Test]
@@ -1022,7 +1023,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"250=2 | 21=11 | 22=12 | 23=13 | 21=21 | 22=22 | 23=23 | " + "454=1 | 455=5 | 456=6 | " +
 				"232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " + "10=124 | ";
-			Assert.AreEqual(expectedMessage, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1050,7 +1051,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"250=2 | 21=11 | 22=12 | 23=13 | 21=21 | 22=22 | 23=23 | " + "454=1 | 455=5 | 456=6 | " +
 				"232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " + "10=124 | ";
-			Assert.AreEqual(expectedMessage, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1079,7 +1080,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"250=2 | 21=11 | 22=12 | 23=13 | 21=21 | 22=22 | 23=23 | " + "454=1 | 455=5 | 456=6 | " +
 				"232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " + "10=124 | ";
-			Assert.AreEqual(expectedMessage, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1094,7 +1095,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var nested1 = entry.AddRepeatingGroup(345);
 
 			//throw exception as duplicate group
-			Assert.Throws<DuplicateGroupException>(() =>
+			ClassicAssert.Throws<DuplicateGroupException>(() =>
 			{
 				var nested2 = entry.AddRepeatingGroup(345);
 			});
@@ -1114,7 +1115,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			nested1.RemoveEntry(0);
 
 			//throw exception as duplicate group
-			Assert.Throws<DuplicateGroupException>(() =>
+			ClassicAssert.Throws<DuplicateGroupException>(() =>
 			{
 				var nested2 = entry.AddRepeatingGroup(345);
 			});
@@ -1130,7 +1131,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group1 = msg.AddRepeatingGroup(123);
 
 			//throw exception as duplicate group
-			Assert.Throws<DuplicateGroupException>(() =>
+			ClassicAssert.Throws<DuplicateGroupException>(() =>
 			{
 				var group2 = msg.AddRepeatingGroup(123);
 			});
@@ -1146,7 +1147,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var group1 = msg.AddRepeatingGroup(123);
 
 			//throw exception as duplicate group
-			Assert.Throws<DuplicateGroupException>(() =>
+			ClassicAssert.Throws<DuplicateGroupException>(() =>
 			{
 				var group2 = msg.AddRepeatingGroup(123);
 			});
@@ -1168,17 +1169,17 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(452, "11");
 
 			msg.AddTag(999, "TEXT");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 58=TEXT | 453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
 				msg.ToPrintableString());
 
-			Assert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
+			ClassicAssert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
 
 			var rg2 = msg.AddRepeatingGroupAtIndex(msg.GetTagIndex(58),
 				111); // THIS REMOVAL CAUSES FURTHER RG ADDITIONS TO FAIL
 			var entry = rg2.AddEntry();
 			entry.AddTag(222, "222");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 111=1 | 222=222 | 58=TEXT | " +
 				"453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ", msg.ToPrintableString());
 
@@ -1189,11 +1190,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(448, "Mickey");
 			rge.AddTag(447, "D");
 			rge.AddTag(452, "3");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 111=1 | 222=222 | 58=TEXT | 453=2 | 448=TRADER | 447=D | 452=11 | " +
 				"448=Mickey | 447=D | 452=3 | 999=TEXT | ", msg.ToPrintableString());
 
-			Assert.AreEqual(2, rg.Count, "Incorrect entries");
+			ClassicAssert.AreEqual(2, rg.Count, "Incorrect entries");
 		}
 
 		[Test]
@@ -1224,14 +1225,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(452, "11");
 
 			msg.AddTag(999, "TEXT");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 58=TEXT | " + "453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
 				msg.ToPrintableString());
 
-			Assert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
+			ClassicAssert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
 
 			msg.AddTagAtIndex(msg.GetTagIndex(58), 158, (long)158);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 158=158 | 58=TEXT | " +
 				"453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ", msg.ToPrintableString());
 
@@ -1242,11 +1243,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(448, "Mickey");
 			rge.AddTag(447, "D");
 			rge.AddTag(452, "3");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 158=158 | 58=TEXT | 453=2 | 448=TRADER | 447=D | 452=11 | " +
 				"448=Mickey | 447=D | 452=3 | 999=TEXT | ", msg.ToPrintableString());
 
-			Assert.AreEqual(2, rg.Count, "Incorrect entries");
+			ClassicAssert.AreEqual(2, rg.Count, "Incorrect entries");
 		}
 
 		[Test]
@@ -1264,11 +1265,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			entry.AddTag(233, 111);
 			entry.AddTag(234, 222);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=1 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | 10=124 | ",
 				Msg.ToPrintableString());
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=3 | 233=7 | 234=8 | 233=9 | 234=9 | 233=111 | 234=222 | " +
 				"518=1 | 519=10 | 520=11 | 10=124 | ", copy.ToPrintableString());
@@ -1285,7 +1286,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			Msg = RawFixUtil.IndexRepeatingGroup(Msg, FixVersion.Fix43, "8");
 			var expected =
 				"600=12\u0001603=13\u0001604=1\u0001605=14\u0001251=15\u0001539=2\u0001524=16\u0001525=17\u0001524=18\u0001";
-			Assert.That(Msg.GetRepeatingGroup(555).GetEntry(0).AsByteArray(), Is.EquivalentTo(expected.AsByteArray()));
+			ClassicAssert.That(Msg.GetRepeatingGroup(555).GetEntry(0).AsByteArray(), Is.EquivalentTo(expected.AsByteArray()));
 		}
 
 		[Test]
@@ -1296,28 +1297,28 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(35, "8");
 			msg.Set(10, "12");
 
-			Assert.IsFalse(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(123));
 			var group = msg.GetOrAddRepeatingGroupAtIndex(123, 2);
-			Assert.IsNotNull(group);
-			Assert.IsTrue(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsNotNull(group);
+			ClassicAssert.IsTrue(msg.IsRepeatingGroupExists(123));
 
 			var entry = group.AddEntry();
 			entry.AddTag(1111, 15);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 10=12 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 10=12 | ", msg.ToPrintableString());
 			group.Remove();
 
-			Assert.IsFalse(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(123));
 			group = RepeatingGroupPool.RepeatingGroup;
 
 			msg.GetOrAddRepeatingGroupAtIndex(123, 2, group);
-			Assert.IsNotNull(group);
-			Assert.IsTrue(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsNotNull(group);
+			ClassicAssert.IsTrue(msg.IsRepeatingGroupExists(123));
 
 			entry = group.AddEntry();
 			entry.AddTag(1111, 15);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 10=12 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 10=12 | ", msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1327,88 +1328,88 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(8, "FIX.4.4");
 			msg.Set(35, "8");
 
-			Assert.IsFalse(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(123));
 			var group = msg.GetOrAddRepeatingGroup(123);
-			Assert.IsNotNull(group);
-			Assert.IsTrue(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsNotNull(group);
+			ClassicAssert.IsTrue(msg.IsRepeatingGroupExists(123));
 
 			var entry = group.AddEntry();
 			entry.AddTag(1111, 15);
-			Assert.IsFalse(entry.IsRepeatingGroupExists(456));
+			ClassicAssert.IsFalse(entry.IsRepeatingGroupExists(456));
 			var nestedGroup = entry.GetOrAddRepeatingGroup(456);
-			Assert.IsTrue(entry.IsRepeatingGroupExists(456));
+			ClassicAssert.IsTrue(entry.IsRepeatingGroupExists(456));
 			nestedGroup.AddEntry().AddTag(2222, 25);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 456=1 | 2222=25 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 456=1 | 2222=25 | ", msg.ToPrintableString());
 			group.Remove();
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
-			Assert.IsFalse(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(123));
 			group = RepeatingGroupPool.RepeatingGroup;
 			nestedGroup = RepeatingGroupPool.RepeatingGroup;
 
 			msg.GetOrAddRepeatingGroup(123, group);
-			Assert.IsNotNull(group);
-			Assert.IsTrue(msg.IsRepeatingGroupExists(123));
+			ClassicAssert.IsNotNull(group);
+			ClassicAssert.IsTrue(msg.IsRepeatingGroupExists(123));
 
 			entry = group.AddEntry();
 			entry.AddTag(1111, 15);
-			Assert.IsFalse(entry.IsRepeatingGroupExists(456));
+			ClassicAssert.IsFalse(entry.IsRepeatingGroupExists(456));
 			entry.GetOrAddRepeatingGroup(456, nestedGroup);
-			Assert.IsTrue(entry.IsRepeatingGroupExists(456));
+			ClassicAssert.IsTrue(entry.IsRepeatingGroupExists(456));
 			nestedGroup.AddEntry().AddTag(2222, 25);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 456=1 | 2222=25 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 123=1 | 1111=15 | 456=1 | 2222=25 | ", msg.ToPrintableString());
 		}
 
 		[Test]
 		public virtual void TestGetSize()
 		{
 			var group = Msg.GetRepeatingGroup(232);
-			Assert.AreEqual("232=2 | 233=7 | 234=8 | 233=9 | 234=9 | ", group.ToPrintableString());
-			Assert.AreEqual(2, @group.Count);
+			ClassicAssert.AreEqual("232=2 | 233=7 | 234=8 | 233=9 | 234=9 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual(2, @group.Count);
 			group.RemoveEntry(0);
-			Assert.AreEqual(1, @group.Count);
+			ClassicAssert.AreEqual(1, @group.Count);
 			group.RemoveEntry(0);
-			Assert.AreEqual(0, @group.Count);
+			ClassicAssert.AreEqual(0, @group.Count);
 
 			var entry = Msg.GetRepeatingGroup(454).GetEntry(0);
-			Assert.AreEqual("455=5 | 456=6 | ", entry.ToPrintableString());
-			Assert.AreEqual(2, entry.Count);
+			ClassicAssert.AreEqual("455=5 | 456=6 | ", entry.ToPrintableString());
+			ClassicAssert.AreEqual(2, entry.Count);
 			entry.RemoveTag(455);
-			Assert.AreEqual(1, entry.Count);
+			ClassicAssert.AreEqual(1, entry.Count);
 			entry.RemoveTag(456);
-			Assert.AreEqual(0, entry.Count);
+			ClassicAssert.AreEqual(0, entry.Count);
 			entry.AddTag(455, 123);
-			Assert.AreEqual(1, entry.Count);
+			ClassicAssert.AreEqual(1, entry.Count);
 		}
 
 		[Test]
 		public virtual void TestGettersForRemovedGroups()
 		{
-			Assert.IsFalse(Msg.IsRepeatingGroupExists(555));
+			ClassicAssert.IsFalse(Msg.IsRepeatingGroupExists(555));
 			var group = Msg.AddRepeatingGroup(555);
-			Assert.IsTrue(Msg.IsRepeatingGroupExists(555));
+			ClassicAssert.IsTrue(Msg.IsRepeatingGroupExists(555));
 
 			var entry = group.AddEntry();
 
-			Assert.IsFalse(entry.IsRepeatingGroupExists(604));
+			ClassicAssert.IsFalse(entry.IsRepeatingGroupExists(604));
 			entry.AddTag(600, "delimiter");
-			Assert.IsFalse(entry.IsRepeatingGroupExists(604));
+			ClassicAssert.IsFalse(entry.IsRepeatingGroupExists(604));
 			var nestedGroup = entry.AddRepeatingGroup(604);
-			Assert.IsTrue(entry.IsRepeatingGroupExists(604));
+			ClassicAssert.IsTrue(entry.IsRepeatingGroupExists(604));
 
 			var nestedEntry = nestedGroup.AddEntry();
 			nestedEntry.AddTag(605, "nested group delimiter");
-			Assert.AreEqual("555=1 | 600=delimiter | 604=1 | 605=nested group delimiter | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("555=1 | 600=delimiter | 604=1 | 605=nested group delimiter | ", group.ToPrintableString());
 
 			group.Remove();
 
-			Assert.IsNull(Msg.GetRepeatingGroup(555));
-			Assert.IsFalse(nestedEntry.IsRepeatingGroupExists(604));
-			Assert.IsFalse(Msg.IsRepeatingGroupExists(555));
-			Assert.IsFalse(Msg.IsTagExists(604));
-			Assert.IsFalse(Msg.IsTagExists(555));
+			ClassicAssert.IsNull(Msg.GetRepeatingGroup(555));
+			ClassicAssert.IsFalse(nestedEntry.IsRepeatingGroupExists(604));
+			ClassicAssert.IsFalse(Msg.IsRepeatingGroupExists(555));
+			ClassicAssert.IsFalse(Msg.IsTagExists(604));
+			ClassicAssert.IsFalse(Msg.IsTagExists(555));
 		}
 
 		[Test]
@@ -1419,7 +1420,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			Msg = RawFixUtil.GetFixMessage(msgStr.AsByteArray());
 			Msg = RawFixUtil.IndexRepeatingGroup(Msg, FixVersion.Fix43, "8");
 
-			Assert.AreEqual(msgStr, Msg.GetRepeatingGroup(555).ToString());
+			ClassicAssert.AreEqual(msgStr, Msg.GetRepeatingGroup(555).ToString());
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(Msg,
 				"555=1\u0001600=12\u0001603=13\u0001604=1\u0001539=2\u0001251=15\u0001", null);
 			RepeatingGroupTestUtil.ValidateRepeatingGroup(Msg, "604=1\u0001605=14\u0001",
@@ -1438,7 +1439,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"453=2\u0001448=artem.holubiev@ubs.com\u0001447=D\u0001452=12\u0001448=56462\u0001447=D\u0001452=24\u0001" +
 				"448=UBS_BP\u0001447=D\u0001452=73\u0001802=1\u0001523=UBS_BP\u0001803=32\u000110=134\u0001")
 				.AsByteArray());
-			Assert.Throws<InvalidLeadingTagValueException>(() =>
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() =>
 			{
 				RawFixUtil.IndexRepeatingGroup(newOrderTestMessage,
 					FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50Sp2), "D");
@@ -1461,9 +1462,9 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			var buffer = strMsgWithoutRg.Replace(" | ", "\u0001").AsByteArray();
 			RawFixUtil.GetFixMessage(msg, buffer, 0, buffer.Length, new DefaultRawTags());
-			Assert.AreEqual(strMsgWithoutRg, msg.ToPrintableString());
+			ClassicAssert.AreEqual(strMsgWithoutRg, msg.ToPrintableString());
 			//call to RG API build RG index for this message
-			Assert.IsFalse(msg.IsRepeatingGroupExists(453));
+			ClassicAssert.IsFalse(msg.IsRepeatingGroupExists(453));
 
 			// clear message - RG index should be cleaned too
 			((AbstractFixMessage)msg).Clear();
@@ -1471,8 +1472,8 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			buffer = strMsgWithRg.Replace(" | ", "\u0001").AsByteArray();
 			RawFixUtil.GetFixMessage(msg, buffer, 0, buffer.Length, new DefaultRawTags());
 			//call to RG API build RG index for this NEW message
-			Assert.AreEqual(strMsgWithRg, msg.ToPrintableString());
-			Assert.IsTrue(msg.IsRepeatingGroupExists(453));
+			ClassicAssert.AreEqual(strMsgWithRg, msg.ToPrintableString());
+			ClassicAssert.IsTrue(msg.IsRepeatingGroupExists(453));
 		}
 
 		[Test]
@@ -1482,11 +1483,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.4\u000135=8\u0001555=1\u0001600=ZNZ5\u0001604=2\u0001605=TYZ5\u0001606=5\u0001605=TYZ5 Comdty\u0001606=A\u0001";
 			var list = RawFixUtil.GetFixMessage(msgStr.AsByteArray());
 			var leg1 = list.GetRepeatingGroup(555).GetEntry(0);
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
 			var group = leg1.GetRepeatingGroup(604);
-			Assert.AreEqual("604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ", group.ToPrintableString());
 
 			group.Remove();
 
@@ -1500,17 +1501,17 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId2.UpdateValue(606, "A", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				list.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
-			Assert.AreEqual(2, leg1.GetTagValueAsLong(604));
-			Assert.AreEqual("TYZ5", secAltId1.GetTagValueAsString(605));
-			Assert.AreEqual("5", secAltId1.GetTagValueAsString(606));
-			Assert.AreEqual("TYZ5 Comdty", secAltId2.GetTagValueAsString(605));
-			Assert.AreEqual("A", secAltId2.GetTagValueAsString(606));
+			ClassicAssert.AreEqual(2, leg1.GetTagValueAsLong(604));
+			ClassicAssert.AreEqual("TYZ5", secAltId1.GetTagValueAsString(605));
+			ClassicAssert.AreEqual("5", secAltId1.GetTagValueAsString(606));
+			ClassicAssert.AreEqual("TYZ5 Comdty", secAltId2.GetTagValueAsString(605));
+			ClassicAssert.AreEqual("A", secAltId2.GetTagValueAsString(606));
 		}
 
 		[Test]
@@ -1528,8 +1529,8 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 						+ "|10=176|";
 			var msg = RawFixUtil.GetFixMessage(msgStr.Replace("|", "\x0001").AsByteArray());
 			var noSides = msg.GetRepeatingGroup(552);
-			Assert.IsNotNull(noSides);
-			Assert.AreEqual(
+			ClassicAssert.IsNotNull(noSides);
+			ClassicAssert.AreEqual(
 				"552=1 | 54=2 | 453=2 | 448=RBS | 452=4 | 802=1 | 523=RBS | 803=1 | 448=Manual | 452=21 | 12=0 " +
 				"| 13=1 | 78=1 | 79=80029 | 756=4 | 757=80029 | 759=24 | 757=80029 | 759=45 | 757=House | " +
 				"759=38 | 806=1 | 760=House | 807=26 | 757=RBS | 759=78 | 80=9 | 37=FIM7JRJjtd0 | ",
@@ -1558,7 +1559,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			var nestedEntry = RepeatingGroupPool.Entry;
 			nestedGroup.GetEntry(0, nestedEntry);
-			Assert.AreEqual("79=1 | 80=1800 | ", nestedEntry.ToPrintableString());
+			ClassicAssert.AreEqual("79=1 | 80=1800 | ", nestedEntry.ToPrintableString());
 		}
 
 		[Test]
@@ -1569,7 +1570,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			msg.Set(35, "8");
 
 			var group = msg.AddRepeatingGroup(123);
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1590,7 +1591,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			var fixMessage = RawFixUtil.GetFixMessage(bytes);
 			fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, false);
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, true));
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, true));
 			var repeatingGroup = fixMessage.GetRepeatingGroup(268);
 		}
 
@@ -1633,14 +1634,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(452, "11");
 
 			msg.AddTag(999, "TEXT");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 58=TEXT | 111=1 | 222=222 | " +
 				"453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ", msg.ToPrintableString());
 
-			Assert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
+			ClassicAssert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
 
 			msg.RemoveRepeatingGroup(111);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 58=TEXT | " + "453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
 				msg.ToPrintableString());
 
@@ -1651,12 +1652,12 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(448, "Mickey");
 			rge.AddTag(447, "D");
 			rge.AddTag(452, "3");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 58=TEXT | " +
 				"453=2 | 448=TRADER | 447=D | 452=11 | 448=Mickey | 447=D | 452=3 | 999=TEXT | ",
 				msg.ToPrintableString());
 
-			Assert.AreEqual(2, rg.Count, "Incorrect entries");
+			ClassicAssert.AreEqual(2, rg.Count, "Incorrect entries");
 		}
 
 		[Test]
@@ -1675,14 +1676,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(452, "11");
 
 			msg.AddTag(999, "TEXT");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 58=TEXT | 453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
 				msg.ToPrintableString());
 
-			Assert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
+			ClassicAssert.IsNotNull(msg.IsTagExists(453), "Tag 453 should exist");
 
 			msg.RemoveTag(58); // THIS REMOVAL CAN CAUSES FURTHER RG ADDITIONS TO FAIL
-			Assert.AreEqual("8=FIX.4.4 | 35=D | 49=CLIENT | 453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=D | 49=CLIENT | 453=1 | 448=TRADER | 447=D | 452=11 | 999=TEXT | ",
 				msg.ToPrintableString());
 
 			// Add another party entry
@@ -1692,11 +1693,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			rge.AddTag(448, "Mickey");
 			rge.AddTag(447, "D");
 			rge.AddTag(452, "3");
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=D | 49=CLIENT | 453=2 | 448=TRADER | 447=D | 452=11 | " +
 				"448=Mickey | 447=D | 452=3 | 999=TEXT | ", msg.ToPrintableString());
 
-			Assert.AreEqual(2, rg.Count, "Incorrect entries");
+			ClassicAssert.AreEqual(2, rg.Count, "Incorrect entries");
 		}
 
 		[Test]
@@ -1708,7 +1709,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 						"539=2\u0001524=23\u0001524=24\u0001525=25\u0001";
 			Msg = RawFixUtil.GetFixMessage(msgStr.AsByteArray());
 			Msg = RawFixUtil.IndexRepeatingGroup(Msg, FixVersion.Fix43, "8");
-			Assert.That(Msg.GetRepeatingGroup(555).ToByteArray(), Is.EquivalentTo(Msg.AsByteArray()));
+			ClassicAssert.That(Msg.GetRepeatingGroup(555).ToByteArray(), Is.EquivalentTo(Msg.AsByteArray()));
 		}
 
 		[Test]
@@ -1732,8 +1733,8 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 											"600=19 | 603=20 | 604=2 | 605=21 | 605=32 | 251=22 | " +
 											"539=2 | 524=23 | 524=24 | 525=25 | ";
 
-			Assert.AreEqual(expectedToString, group.ToString());
-			Assert.AreEqual(expectedToPrintableString, group.ToPrintableString());
+			ClassicAssert.AreEqual(expectedToString, group.ToString());
+			ClassicAssert.AreEqual(expectedToPrintableString, group.ToPrintableString());
 		}
 
 		[Test]
@@ -1752,11 +1753,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, false);
 			var repeatingGroup = fixMessage.GetRepeatingGroup(268);
-			Assert.IsNull(repeatingGroup);
+			ClassicAssert.IsNull(repeatingGroup);
 
 			fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, true);
 			repeatingGroup = fixMessage.GetRepeatingGroup(268);
-			Assert.IsNull(repeatingGroup);
+			ClassicAssert.IsNull(repeatingGroup);
 		}
 
 		[Test]
@@ -1778,19 +1779,19 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, false);
 			var repeatingGroup = fixMessage.GetRepeatingGroup(268);
-			Assert.IsNotNull(repeatingGroup);
-			Assert.IsNotNull(repeatingGroup.GetEntry(0));
-			Assert.IsNull(repeatingGroup.GetEntry(0).GetRepeatingGroup(453));
-			Assert.IsNotNull(repeatingGroup.GetEntry(1));
-			Assert.IsNull(repeatingGroup.GetEntry(1).GetRepeatingGroup(453));
+			ClassicAssert.IsNotNull(repeatingGroup);
+			ClassicAssert.IsNotNull(repeatingGroup.GetEntry(0));
+			ClassicAssert.IsNull(repeatingGroup.GetEntry(0).GetRepeatingGroup(453));
+			ClassicAssert.IsNotNull(repeatingGroup.GetEntry(1));
+			ClassicAssert.IsNull(repeatingGroup.GetEntry(1).GetRepeatingGroup(453));
 
 			fixMessage = RawFixUtil.IndexRepeatingGroup(fixMessage, true);
 			repeatingGroup = fixMessage.GetRepeatingGroup(268);
-			Assert.IsNotNull(repeatingGroup);
-			Assert.IsNotNull(repeatingGroup.GetEntry(0));
-			Assert.IsNull(repeatingGroup.GetEntry(0).GetRepeatingGroup(453));
-			Assert.IsNotNull(repeatingGroup.GetEntry(1));
-			Assert.IsNull(repeatingGroup.GetEntry(1).GetRepeatingGroup(453));
+			ClassicAssert.IsNotNull(repeatingGroup);
+			ClassicAssert.IsNotNull(repeatingGroup.GetEntry(0));
+			ClassicAssert.IsNull(repeatingGroup.GetEntry(0).GetRepeatingGroup(453));
+			ClassicAssert.IsNotNull(repeatingGroup.GetEntry(1));
+			ClassicAssert.IsNull(repeatingGroup.GetEntry(1).GetRepeatingGroup(453));
 		}
 
 		[Test]
@@ -1819,7 +1820,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			firstSubEntry.AddTag(33, 22);
 
 			entry.AddTag(23, 12);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"250=1 | 22=11 | 251=1 | 32=21 | 252=1 | 42=31 | 253=1 | 52=41 | 53=42 | 43=32 | 33=22 | 23=12 | ",
 				group.ToPrintableString());
 
@@ -1841,7 +1842,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"250=1 | 22=11 | 251=1 | 32=21 | 252=1 | 42=31 | 253=1 | 52=41 | 53=42 | 43=32 | 33=22 | 23=12 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " +
 				"10=124 | ";
-			Assert.AreEqual(expectedMessage, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1871,7 +1872,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			firstSubEntry.AddTag(37, 26);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"250=1 | 22=11 | " + "251=1 | 32=21 | " + "252=1 | 42=31 | " + "253=1 | 52=41 | 53=42 | " + "43=32 | " +
 				"33=22 | 34=23 | 35=24 | 36=25 | 37=26 | " + "23=12 | ", group.ToPrintableString());
 
@@ -1893,7 +1894,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"250=1 | 22=11 | 251=1 | 32=21 | 252=1 | 42=31 | 253=1 | 52=41 | 53=42 | 43=32 | 33=22 | 34=23 | 35=24 | 36=25 | 37=26 | 23=12 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " +
 				"10=124 | ";
-			Assert.AreEqual(expectedMessage, Msg.ToPrintableString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToPrintableString());
 		}
 
 		[Test]
@@ -1908,13 +1909,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			var group = RepeatingGroupPool.RepeatingGroup;
 			msg.GetRepeatingGroup(555, group);
-			Assert.AreEqual("555=1 | 600=12 | 564=13 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("555=1 | 600=12 | 564=13 | ", group.ToPrintableString());
 
 			var entry = group.GetEntry(0);
 			entry.AddTag(565, 111);
 			entry.UpdateValue(600, 112, IndexedStorage.MissingTagHandling.DontAddIfNotExists);
 			entry.RemoveTag(564);
-			Assert.AreEqual("555=1 | 600=112 | 565=111 | ", group.ToPrintableString());
+			ClassicAssert.AreEqual("555=1 | 600=112 | 565=111 | ", group.ToPrintableString());
 			group.Release();
 
 
@@ -1927,7 +1928,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3 | 9=94 | 35=8 | 49=target | 56=sender | 115=onBehalf | 34=1 | 50=senderSub | 52=20080212-04:15:18.308 | " +
 				"454=1 | 455=5 | 456=6 | " + "232=2 | 233=7 | 234=8 | 233=9 | 234=9 | " + "518=1 | 519=10 | 520=11 | " +
 				"555=1 | 600=112 | 565=111 | " + "10=124 | ";
-			Assert.AreEqual(fixMsgWithNewGroup, msg.ToPrintableString());
+			ClassicAssert.AreEqual(fixMsgWithNewGroup, msg.ToPrintableString());
 		}
 	}
 }

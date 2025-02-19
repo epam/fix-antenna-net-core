@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Message
 {
@@ -29,7 +30,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var formatter = new FixFormatter();
 			var formatted = StringHelper.NewString(formatter.FormatInt(value));
 
-			Assert.That(formatted, Is.EqualTo("12345"));
+			ClassicAssert.That(formatted, Is.EqualTo("12345"));
 		}
 
 		[Test]
@@ -39,7 +40,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var formatter = new FixFormatter();
 			var formatted = StringHelper.NewString(formatter.FormatInt(value));
 
-			Assert.That(formatted, Is.EqualTo("-12345"));
+			ClassicAssert.That(formatted, Is.EqualTo("-12345"));
 		}
 
 		[Test]
@@ -50,7 +51,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var formatter = new FixFormatter();
 			var formatted = StringHelper.NewString(formatter.FormatInt(value, 0, minLen));
 
-			Assert.That(formatted, Is.EqualTo("0000012345"));
+			ClassicAssert.That(formatted, Is.EqualTo("0000012345"));
 		}
 
 		[Test]
@@ -61,7 +62,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var formatter = new FixFormatter();
 			var formatted = StringHelper.NewString(formatter.FormatInt(value, minLength:minLen));
 
-			Assert.That(formatted, Is.EqualTo("-000012345"));
+			ClassicAssert.That(formatted, Is.EqualTo("-000012345"));
 		}
 
 		[Test]
@@ -72,7 +73,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var formatter = new FixFormatter();
 			var formatted = StringHelper.NewString(formatter.FormatInt(value, minLength: minLen));
 
-			Assert.That(formatted, Is.EqualTo("-123456"));
+			ClassicAssert.That(formatted, Is.EqualTo("-123456"));
 		}
 	}
 }
