@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -51,21 +52,21 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.getTagValueAsTimeOnly(tagId);
-			Assert.IsTrue(LocalTimes[0].Equals(actual));
+			ClassicAssert.IsTrue(LocalTimes[0].Equals(actual));
 		}
 
 		[ExpectedExceptionOnFail(typeof(FieldNotFoundException))]
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			var actual = ffl.getTagValueAsTimeOnly(tagId, occurrence);
-			Assert.IsTrue(LocalTimes[occurrence - 1].Equals(actual));
+			ClassicAssert.IsTrue(LocalTimes[occurrence - 1].Equals(actual));
 		}
 
 		[ExpectedExceptionOnFail(typeof(IndexOutOfRangeException))]
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			var actual = ffl.getTagValueAsTimeOnlyAtIndex(firstTagIndex);
-			Assert.IsTrue(LocalTimes[occurrence - 1].Equals(actual));
+			ClassicAssert.IsTrue(LocalTimes[occurrence - 1].Equals(actual));
 		}
 
 		public override FixMessage AddTag(FixMessage msg, int tagId, int occurrence)

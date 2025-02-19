@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message.SpecialTags;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Message
 {
@@ -35,7 +36,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 		{
 			var buffer = Original.AsByteArray();
 			var message = SpecialFixUtil.GetMaskedString(buffer, 0, buffer.Length, null, null);
-			Assert.That(message, Is.EqualTo(Expected));
+			ClassicAssert.That(message, Is.EqualTo(Expected));
 		}
 
 		[Test]
@@ -44,7 +45,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var maskedTags = CustomMaskedTags.Create("58");
 			var buffer = Original.AsByteArray();
 			var message = SpecialFixUtil.GetMaskedString(buffer, 0, buffer.Length, null, maskedTags);
-			Assert.That(message, Is.EqualTo(ExCustom));
+			ClassicAssert.That(message, Is.EqualTo(ExCustom));
 		}
 
 		[Test]
@@ -52,7 +53,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 		{
 			var buffer = (Original+Original).AsByteArray();
 			var message = SpecialFixUtil.GetMaskedString(buffer, buffer.Length / 2, buffer.Length / 2, null, null);
-			Assert.That(message, Is.EqualTo(Expected));
+			ClassicAssert.That(message, Is.EqualTo(Expected));
 		}
 
 		[Test]
@@ -61,7 +62,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var maskedTags = CustomMaskedTags.Create("96");
 			var buffer = OriginalWithRaw.AsByteArray();
 			var message = SpecialFixUtil.GetMaskedString(buffer, 0, buffer.Length, null, maskedTags);
-			Assert.That(message, Is.EqualTo(ExpectedWithRaw));
+			ClassicAssert.That(message, Is.EqualTo(ExpectedWithRaw));
 		}
 
 		[Test, Category("Bug"), Property("JIRA", "https://jira.epam.com/jira/browse/BBP-23939")]
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.Message.Tests.Message
 			var maskedTags = CustomMaskedTags.Create("95");
 			var buffer = OriginalWithRaw.AsByteArray();
 			var message = SpecialFixUtil.GetMaskedString(buffer, 0, buffer.Length, null, maskedTags);
-			Assert.That(message, Is.Not.Null);
+			ClassicAssert.That(message, Is.Not.Null);
 		}
 	}
 }

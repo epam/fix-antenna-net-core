@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation.Error;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 {
@@ -46,7 +47,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 		{
 			CollectAllMessageErrors(Fix44Prefix + "u_Cross_Order_Cancel_Request_invalid.fix", false, true);
 			var fixError = GetError(FixErrorCode.IncorrectDataFormatForValue, 2, "u", new TagValue(552, "A"));
-			Assert.That(Errors.Errors, Does.Contain(fixError));
+			ClassicAssert.That(Errors.Errors, Does.Contain(fixError));
 		}
 	}
 }

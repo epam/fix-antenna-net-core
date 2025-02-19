@@ -20,7 +20,8 @@ using Epam.FixAntenna.NetCore.Validation;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.NetCore.Validation.Validators.Factory;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Additional.Util
 {

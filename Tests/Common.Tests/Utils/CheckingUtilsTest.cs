@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Common.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Utils
 {
@@ -26,7 +27,7 @@ namespace Epam.FixAntenna.Common.Utils
 		public virtual void TryCheckWithinTimeout_ShouldRethrowExceptions()
 		{
 			var waitingTime = 200;
-			Assert.Throws(Is.TypeOf<Exception>()
+			ClassicAssert.Throws(Is.TypeOf<Exception>()
 				, () => { CheckingUtils.TryCheckWithinTimeout(() => throw new Exception(), TimeSpan.FromMilliseconds(waitingTime)); });
 		}
 
@@ -36,7 +37,7 @@ namespace Epam.FixAntenna.Common.Utils
 			var waitingTime = 200;
 			var startTime = DateTimeHelper.CurrentMilliseconds;
 			CheckingUtils.TryCheckWithinTimeout(() => true, TimeSpan.FromMilliseconds(waitingTime));
-			Assert.True(DateTimeHelper.CurrentMilliseconds - startTime < waitingTime);
+			ClassicAssert.True(DateTimeHelper.CurrentMilliseconds - startTime < waitingTime);
 		}
 
 		[Test]
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.Common.Utils
 			var waitingTime = 200;
 			var startTime = DateTimeHelper.CurrentMilliseconds;
 			CheckingUtils.TryCheckWithinTimeout(() => false, TimeSpan.FromMilliseconds(waitingTime));
-			Assert.True(DateTimeHelper.CurrentMilliseconds - startTime >= waitingTime);
+			ClassicAssert.True(DateTimeHelper.CurrentMilliseconds - startTime >= waitingTime);
 		}
 
 		[Test]
@@ -54,14 +55,14 @@ namespace Epam.FixAntenna.Common.Utils
 			var waitingTime = 200;
 			var startTime = DateTimeHelper.CurrentMilliseconds;
 			CheckingUtils.TryCheckWithinTimeout(() => null, TimeSpan.FromMilliseconds(waitingTime));
-			Assert.True(DateTimeHelper.CurrentMilliseconds - startTime >= waitingTime);
+			ClassicAssert.True(DateTimeHelper.CurrentMilliseconds - startTime >= waitingTime);
 		}
 
 		[Test]
 		public virtual void CheckWithinTimeout_ShouldFailIfTheResultIsNotMet()
 		{
 			var waitingTime = 200;
-			Assert.Throws<TimeoutException>(() =>
+			ClassicAssert.Throws<TimeoutException>(() =>
 				CheckingUtils.CheckWithinTimeout(() => false, TimeSpan.FromMilliseconds(waitingTime)));
 		}
 
@@ -69,7 +70,7 @@ namespace Epam.FixAntenna.Common.Utils
 		public virtual void CheckWithinTimeout_ShouldFailIfTheResultIsNull()
 		{
 			var waitingTime = 200;
-			Assert.Throws<TimeoutException>(() =>
+			ClassicAssert.Throws<TimeoutException>(() =>
 				CheckingUtils.CheckWithinTimeout(() => null, TimeSpan.FromMilliseconds(waitingTime)));
 		}
 	}

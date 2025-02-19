@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Common;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test.Data.messages_inv_cond_req
 {

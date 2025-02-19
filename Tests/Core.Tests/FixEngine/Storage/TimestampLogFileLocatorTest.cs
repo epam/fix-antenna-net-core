@@ -15,7 +15,8 @@
 using System.IO;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Storage;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 {
@@ -30,7 +31,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 			p.TargetCompId = "t";
 			var fileName = locator.GetFileName(p);
 			var template = GetTemplate("s-t-");
-			Assert.That(fileName, Does.Match(template),
+			ClassicAssert.That(fileName, Does.Match(template),
 				$"File name '{fileName}' do not matches with template '{template}'");
 		}
 
@@ -44,7 +45,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 			p.SessionQualifier = "q";
 			var fileName = locator.GetFileName(p);
 			var template = GetTemplate("s-t-q");
-			Assert.That(fileName, Does.Match(template),
+			ClassicAssert.That(fileName, Does.Match(template),
 				$"File name '{fileName}' do not matches with template '{template}'");
 		}
 
@@ -57,7 +58,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage
 			p.TargetCompId = "t";
 			var fileName = locator.GetFileName(p);
 			var template = GetTemplate("s-t-");
-			Assert.That(fileName, Does.Match(template),
+			ClassicAssert.That(fileName, Does.Match(template),
 				$"File name '{fileName}' do not matches with template '{template}'");
 		}
 

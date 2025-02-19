@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 {
@@ -100,10 +101,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 		private void CheckEquals(FixVersionContainer expected, FixVersionContainer actual)
 		{
-			Assert.AreEqual(expected.DictionaryId, actual.DictionaryId);
-			Assert.AreEqual(expected.FixVersion, actual.FixVersion);
-			Assert.AreEqual(expected.DictionaryFile, actual.DictionaryFile);
-			Assert.AreEqual(expected.ExtensionFile, actual.ExtensionFile);
+			ClassicAssert.AreEqual(expected.DictionaryId, actual.DictionaryId);
+			ClassicAssert.AreEqual(expected.FixVersion, actual.FixVersion);
+			ClassicAssert.AreEqual(expected.DictionaryFile, actual.DictionaryFile);
+			ClassicAssert.AreEqual(expected.ExtensionFile, actual.ExtensionFile);
 		}
 
 		private Config GetConfig()

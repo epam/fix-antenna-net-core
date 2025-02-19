@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using System;
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;

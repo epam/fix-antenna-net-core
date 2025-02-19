@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -61,20 +62,20 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			}
 
 			var response = GetReponse(_sessionsStat);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
 			var sessionsStatData = response.GeneralSessionsStatData;
-			Assert.IsNotNull(sessionsStatData);
-			Assert.IsTrue(sessionsStatData.ActiveSessions != 0);
-			Assert.IsTrue(sessionsStatData.AwaitingSessions == 0);
-			Assert.IsNotNull(sessionsStatData.LastSessionCreation);
-			Assert.IsTrue(sessionsStatData.MaxSessionLifetime != 0);
-			Assert.IsTrue(sessionsStatData.MinSessionLifetime != 0);
-			Assert.IsTrue(sessionsStatData.NumOfProcessedMessages != 0);
-			Assert.AreEqual(0, sessionsStatData.ReconnectingSessions);
-			Assert.AreEqual(0, sessionsStatData.TerminatedAbnormalSessions);
-			Assert.AreEqual(0, sessionsStatData.TerminatedNormalSessions);
+			ClassicAssert.IsNotNull(sessionsStatData);
+			ClassicAssert.IsTrue(sessionsStatData.ActiveSessions != 0);
+			ClassicAssert.IsTrue(sessionsStatData.AwaitingSessions == 0);
+			ClassicAssert.IsNotNull(sessionsStatData.LastSessionCreation);
+			ClassicAssert.IsTrue(sessionsStatData.MaxSessionLifetime != 0);
+			ClassicAssert.IsTrue(sessionsStatData.MinSessionLifetime != 0);
+			ClassicAssert.IsTrue(sessionsStatData.NumOfProcessedMessages != 0);
+			ClassicAssert.AreEqual(0, sessionsStatData.ReconnectingSessions);
+			ClassicAssert.AreEqual(0, sessionsStatData.TerminatedAbnormalSessions);
+			ClassicAssert.AreEqual(0, sessionsStatData.TerminatedNormalSessions);
 		}
 	}
 }

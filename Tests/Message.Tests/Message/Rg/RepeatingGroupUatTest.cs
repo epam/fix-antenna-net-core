@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Rg;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -55,14 +56,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 		private void CheckRepeatingGroup(RepeatingGroup.Entry entry, int noTag, string[][] sampleGroupData)
 		{
 			//1) check overall group structure
-			Assert.AreEqual((long)sampleGroupData.Length, entry.GetTagValueAsLong(noTag),
+			ClassicAssert.AreEqual((long)sampleGroupData.Length, entry.GetTagValueAsLong(noTag),
 				"Wrong value of group No tag.");
 
 			var group = entry.GetRepeatingGroup(noTag);
-			Assert.IsNotNull(group, "No group found for NoTag=" + noTag);
+			ClassicAssert.IsNotNull(group, "No group found for NoTag=" + noTag);
 
-			Assert.AreEqual(sampleGroupData.Length, @group.Count, "Wrong number of entries in group.");
-			Assert.AreEqual((long)@group.Count, entry.GetTagValueAsLong(noTag),
+			ClassicAssert.AreEqual(sampleGroupData.Length, @group.Count, "Wrong number of entries in group.");
+			ClassicAssert.AreEqual((long)@group.Count, entry.GetTagValueAsLong(noTag),
 				"Repeating group No-tag value doesn't match number of entries in group");
 
 			//Check group's entries against the sample data
@@ -77,7 +78,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 					var tagValue = entryData[e].Split("=", true);
 					if (tagValue.Length == 2)
 					{
-						Assert.AreEqual(tagValue[1], nestedEntry.GetTagValueAsString(int.Parse(tagValue[0])),
+						ClassicAssert.AreEqual(tagValue[1], nestedEntry.GetTagValueAsString(int.Parse(tagValue[0])),
 							"Wrong tag/value pair in entry[" + i + "].");
 					}
 					else
@@ -92,14 +93,14 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 		private void CheckRepeatingGroup(ITagList msg, int noTag, string[][] sampleGroupData)
 		{
 			//1) check overall group structure
-			Assert.AreEqual((long)sampleGroupData.Length, msg.GetTagValueAsLong(noTag), "Wrong value of group No tag.");
+			ClassicAssert.AreEqual((long)sampleGroupData.Length, msg.GetTagValueAsLong(noTag), "Wrong value of group No tag.");
 
 			var group = msg.GetRepeatingGroup(noTag);
-			Assert.IsNotNull(group, "No group found for NoTag=" + noTag);
+			ClassicAssert.IsNotNull(group, "No group found for NoTag=" + noTag);
 
 			var groupEntries = GetAllEntries(group);
-			Assert.AreEqual((long)sampleGroupData.Length, groupEntries.Length, "Wrong number of entries in group.");
-			Assert.AreEqual((long)groupEntries.Length, msg.GetTagValueAsLong(noTag),
+			ClassicAssert.AreEqual((long)sampleGroupData.Length, groupEntries.Length, "Wrong number of entries in group.");
+			ClassicAssert.AreEqual((long)groupEntries.Length, msg.GetTagValueAsLong(noTag),
 				"Repeating group No-tag value doesn't match number of entries in group");
 
 			//Check group's entries against the sample data
@@ -114,7 +115,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 					var tagValue = entryData[e].Split("=", true);
 					if (tagValue.Length == 2)
 					{
-						Assert.AreEqual(tagValue[1], entry.GetTagValueAsString(int.Parse(tagValue[0])),
+						ClassicAssert.AreEqual(tagValue[1], entry.GetTagValueAsString(int.Parse(tagValue[0])),
 							"Wrong tag/value pair in entry[" + i + "].");
 					}
 					else
@@ -187,39 +188,39 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId2.UpdateValue(605, "TYZ5 Comdty", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			secAltId2.UpdateValue(606, "A", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
 			legSecAltIdGroup = leg1.GetRepeatingGroup(604);
 
 			var tagValueAsLong = leg1.GetTagValueAsLong(604);
-			Assert.AreEqual(2L, tagValueAsLong, "Wrong value for msg.leg.NoLegSecurityAltID");
-			Assert.AreEqual(2, legSecAltIdGroup.Count, "Wrong number of entries");
+			ClassicAssert.AreEqual(2L, tagValueAsLong, "Wrong value for msg.leg.NoLegSecurityAltID");
+			ClassicAssert.AreEqual(2, legSecAltIdGroup.Count, "Wrong number of entries");
 
 			secAltId2 = legSecAltIdGroup.GetEntry(1);
 			secAltId2.Remove();
 
-			Assert.AreEqual(1L, leg1.GetTagValueAsLong(604), "Wrong value for msg.leg.NoLegSecurityAltID");
-			Assert.AreEqual(1, legSecAltIdGroup.Count, "Wrong number of entries");
+			ClassicAssert.AreEqual(1L, leg1.GetTagValueAsLong(604), "Wrong value for msg.leg.NoLegSecurityAltID");
+			ClassicAssert.AreEqual(1, legSecAltIdGroup.Count, "Wrong number of entries");
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=1 | 605=TYZ5 | 606=5 | ",
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=1 | 605=TYZ5 | 606=5 | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=1 | 605=TYZ5 | 606=5 | ", leg1.ToPrintableString());
-			Assert.AreEqual("604=1 | 605=TYZ5 | 606=5 | ", legSecAltIdGroup.ToPrintableString());
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=1 | 605=TYZ5 | 606=5 | ", leg1.ToPrintableString());
+			ClassicAssert.AreEqual("604=1 | 605=TYZ5 | 606=5 | ", legSecAltIdGroup.ToPrintableString());
 
 			secAltId1 = legSecAltIdGroup.GetEntry(0);
 			secAltId1.Remove();
 
 			//entry was removed, thus message doesn't contains empty(0) leading tag too
-			//        assertEquals("Wrong value for msg.leg.NoLegSecurityAltID", 0l, leg1.getTagValueAsLong(604)); //fails
-			Assert.AreEqual(0, legSecAltIdGroup.Count, "Wrong number of entries"); //passes
+			//        ClassicAssertEquals("Wrong value for msg.leg.NoLegSecurityAltID", 0l, leg1.getTagValueAsLong(604)); //fails
+			ClassicAssert.AreEqual(0, legSecAltIdGroup.Count, "Wrong number of entries"); //passes
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | ", msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | ", leg1.ToPrintableString());
-			Assert.AreEqual("", legSecAltIdGroup.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("600=ZNZ5 | ", leg1.ToPrintableString());
+			ClassicAssert.AreEqual("", legSecAltIdGroup.ToPrintableString());
 		}
 
 		[Test]
@@ -236,15 +237,15 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			party1.UpdateValue(447, "D", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			party1.UpdateValue(452, "1", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 453=1 | 448=RBS | 447=D | 452=1 | ", msg.ToPrintableString());
-			Assert.AreEqual("448=RBS | 447=D | 452=1 | ", party1.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 453=1 | 448=RBS | 447=D | 452=1 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("448=RBS | 447=D | 452=1 | ", party1.ToPrintableString());
 
 			//Remove party1
 			party1.Remove();
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | ", msg.ToPrintableString());
 
-			Assert.IsNull(msg.GetTagValueAsString(4711));
-			Assert.IsNull(msg.GetTagValueAsString(453));
+			ClassicAssert.IsNull(msg.GetTagValueAsString(4711));
+			ClassicAssert.IsNull(msg.GetTagValueAsString(453));
 			partyGroup.Remove();
 
 			//add another group
@@ -263,23 +264,23 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId2.UpdateValue(605, "TYZ5 Comdty", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			secAltId2.UpdateValue(606, "A", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
 			//remove both secAltAID
 			secAltId1.Remove();
 			secAltId2.Remove();
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | ", msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | ", leg1.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("600=ZNZ5 | ", leg1.ToPrintableString());
 
-			Assert.IsNull(leg1.GetTagValueAsString(4711));
-			Assert.IsNull(leg1.GetTagValueAsString(604));
-			Assert.IsFalse(leg1.IsTagExists(604));
-			Assert.IsFalse(leg1.IsTagExists(5555));
+			ClassicAssert.IsNull(leg1.GetTagValueAsString(4711));
+			ClassicAssert.IsNull(leg1.GetTagValueAsString(604));
+			ClassicAssert.IsFalse(leg1.IsTagExists(604));
+			ClassicAssert.IsFalse(leg1.IsTagExists(5555));
 
 			//now re-add the nested group
 			//        legSecAltIDGroup = leg1.addRepeatingGroup(604);
@@ -292,13 +293,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId2.UpdateValue(605, "TYZ5 Comdty", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			secAltId2.UpdateValue(606, "A", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
-			Assert.AreEqual(2, leg1.GetTagValueAsLong(604));
+			ClassicAssert.AreEqual(2, leg1.GetTagValueAsLong(604));
 
 			//add another internal group
 			var newRepeatingGroup = secAltId1.AddRepeatingGroup(1234);
@@ -307,23 +308,23 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			newEntry2.AddTag(234, "2");
 			newEntry1.AddTag(234, "1");
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 1234=2 | 234=1 | 234=2 | 605=TYZ5 Comdty | 606=A | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("1234=2 | 234=1 | 234=2 | ", newRepeatingGroup.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 1234=2 | 234=1 | 234=2 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("1234=2 | 234=1 | 234=2 | ", newRepeatingGroup.ToPrintableString());
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 1234=2 | 234=1 | 234=2 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
 			newEntry1.Remove();
 			secAltId1.AddTag(222, "222");
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 1234=1 | 234=2 | 222=222 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
 			newEntry2.AddTag(235, "235");
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 1234=1 | 234=2 | 235=235 | 222=222 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 		}
@@ -349,13 +350,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId2.UpdateValue(605, "TYZ5 Comdty", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			secAltId2.UpdateValue(606, "A", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
-			Assert.AreEqual(2L, leg1.GetTagValueAsLong(604), "Wrong value of group No tag.");
+			ClassicAssert.AreEqual(2L, leg1.GetTagValueAsLong(604), "Wrong value of group No tag.");
 
 			CheckRepeatingGroup(leg1, 604, TestSampleSecurityAltIdGroup);
 
@@ -363,11 +364,11 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId1.Remove();
 			secAltId2.Remove();
 
-			Assert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | ", msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | ", leg1.ToPrintableString());
+			ClassicAssert.AreEqual("8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | ", msg.ToPrintableString());
+			ClassicAssert.AreEqual("600=ZNZ5 | ", leg1.ToPrintableString());
 
-			Assert.IsNull(leg1.GetTagValueAsString(4711)); //passes, returns null as expected
-			Assert.IsNull(leg1.GetTagValueAsString(604)); //passes, returns null as expected
+			ClassicAssert.IsNull(leg1.GetTagValueAsString(4711)); //passes, returns null as expected
+			ClassicAssert.IsNull(leg1.GetTagValueAsString(604)); //passes, returns null as expected
 
 			//now re-add the nested group
 			//        legSecAltIDGroup = leg1.addRepeatingGroup(604);
@@ -380,20 +381,20 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			secAltId2.UpdateValue(605, "TYZ5 Comdty", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			secAltId2.UpdateValue(606, "A", IndexedStorage.MissingTagHandling.AddIfNotExists);
 
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 35=8 | 555=1 | 600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				msg.ToPrintableString());
-			Assert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
+			ClassicAssert.AreEqual("600=ZNZ5 | 604=2 | 605=TYZ5 | 606=5 | 605=TYZ5 Comdty | 606=A | ",
 				leg1.ToPrintableString());
 
-			Assert.AreEqual(2, leg1.GetTagValueAsLong(604));
-			Assert.AreEqual("TYZ5", secAltId1.GetTagValueAsString(605));
-			Assert.AreEqual("5", secAltId1.GetTagValueAsString(606));
-			Assert.AreEqual("TYZ5 Comdty", secAltId2.GetTagValueAsString(605));
-			Assert.AreEqual("A", secAltId2.GetTagValueAsString(606));
+			ClassicAssert.AreEqual(2, leg1.GetTagValueAsLong(604));
+			ClassicAssert.AreEqual("TYZ5", secAltId1.GetTagValueAsString(605));
+			ClassicAssert.AreEqual("5", secAltId1.GetTagValueAsString(606));
+			ClassicAssert.AreEqual("TYZ5 Comdty", secAltId2.GetTagValueAsString(605));
+			ClassicAssert.AreEqual("A", secAltId2.GetTagValueAsString(606));
 
 			CheckRepeatingGroup(leg1, 604, TestSampleSecurityAltIdGroup);
-			Assert.AreEqual(2, leg1.GetTagValueAsLong(604));
+			ClassicAssert.AreEqual(2, leg1.GetTagValueAsLong(604));
 		}
 
 		[Test]
@@ -462,7 +463,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			entry.Remove();
 			altSecIdGroup.Remove();
 
-			Assert.IsNull(GetGroup(msg, 454), "SecurityAltID group not removed from message.");
+			ClassicAssert.IsNull(GetGroup(msg, 454), "SecurityAltID group not removed from message.");
 
 
 			/*
@@ -482,7 +483,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			});
 
 			msg.RemoveRepeatingGroup(454);
-			Assert.IsNull(GetGroup(msg, 454), "SecurityAltID group not removed from message.");
+			ClassicAssert.IsNull(GetGroup(msg, 454), "SecurityAltID group not removed from message.");
 
 
 			/*
@@ -496,7 +497,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				new[] { "448=86687", "447=D", "452=24" }
 			});
 
-			Assert.IsNull(GetGroup(xcheckMsg, 454), "SecurityAltID group shouldn't be on message.");
+			ClassicAssert.IsNull(GetGroup(xcheckMsg, 454), "SecurityAltID group shouldn't be on message.");
 		}
 
 		[Test]
@@ -514,7 +515,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 			leg1.UpdateValue(600, "ZNZ5", IndexedStorage.MissingTagHandling.AddIfNotExists);
 			AddRepeatingGroup(leg1, 454, TestSampleSecurityAltIdGroup);
 
-			Assert.AreEqual(StringHelper.NewString(msg.AsByteArray()).Replace("\u0001", " | "), msg.ToPrintableString(),
+			ClassicAssert.AreEqual(StringHelper.NewString(msg.AsByteArray()).Replace("\u0001", " | "), msg.ToPrintableString(),
 				"IFIXMessage.toString() returns invalid message string");
 		}
 	}

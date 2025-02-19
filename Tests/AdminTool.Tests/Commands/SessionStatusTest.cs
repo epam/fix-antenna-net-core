@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -43,24 +44,24 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 
 			var response = GetReponse(_sessionParams);
 			// check response
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.IsNotNull(response.SessionStatusData);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.IsNotNull(response.SessionStatusData);
 
 			var sessionStatusData = response.SessionStatusData;
 
 			// sender and taret
-			Assert.AreEqual(TestSessionID.Sender, sessionStatusData.SenderCompID);
-			Assert.AreEqual(TestSessionID.Target, sessionStatusData.TargetCompID);
+			ClassicAssert.AreEqual(TestSessionID.Sender, sessionStatusData.SenderCompID);
+			ClassicAssert.AreEqual(TestSessionID.Target, sessionStatusData.TargetCompID);
 
 			// session type
-			Assert.AreEqual((long?) session.RuntimeState.InSeqNum, sessionStatusData.InSeqNum);
-			Assert.AreEqual((long?)(session.RuntimeState.OutSeqNum - 1), sessionStatusData.OutSeqNum);
-			Assert.AreEqual(StatusGroup.ESTABLISHED, sessionStatusData.StatusGroup);
-			Assert.AreEqual(session.SessionState.ToString(), sessionStatusData.Status);
+			ClassicAssert.AreEqual((long?) session.RuntimeState.InSeqNum, sessionStatusData.InSeqNum);
+			ClassicAssert.AreEqual((long?)(session.RuntimeState.OutSeqNum - 1), sessionStatusData.OutSeqNum);
+			ClassicAssert.AreEqual(StatusGroup.ESTABLISHED, sessionStatusData.StatusGroup);
+			ClassicAssert.AreEqual(session.SessionState.ToString(), sessionStatusData.Status);
 			if (session is InitiatorFixSession)
 			{
-				Assert.AreEqual(BackupState.PRIMARY, sessionStatusData.BackupState);
+				ClassicAssert.AreEqual(BackupState.PRIMARY, sessionStatusData.BackupState);
 			}
 		}
 
@@ -74,24 +75,24 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			var response = GetReponse(_sessionParams);
 
 			// check response
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.IsNotNull(response.SessionStatusData);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.IsNotNull(response.SessionStatusData);
 
 			var sessionStatusData = response.SessionStatusData;
 			// sender and taret
 
-			Assert.AreEqual(TestSessionIdQualifier.Sender, sessionStatusData.SenderCompID);
-			Assert.AreEqual(TestSessionIdQualifier.Target, sessionStatusData.TargetCompID);
+			ClassicAssert.AreEqual(TestSessionIdQualifier.Sender, sessionStatusData.SenderCompID);
+			ClassicAssert.AreEqual(TestSessionIdQualifier.Target, sessionStatusData.TargetCompID);
 
 			// session type
-			Assert.AreEqual((long?) session.RuntimeState.InSeqNum, sessionStatusData.InSeqNum);
-			Assert.AreEqual((long?)(session.RuntimeState.OutSeqNum - 1), sessionStatusData.OutSeqNum);
-			Assert.AreEqual(StatusGroup.ESTABLISHED, sessionStatusData.StatusGroup);
-			Assert.AreEqual(session.SessionState.ToString(), sessionStatusData.Status);
+			ClassicAssert.AreEqual((long?) session.RuntimeState.InSeqNum, sessionStatusData.InSeqNum);
+			ClassicAssert.AreEqual((long?)(session.RuntimeState.OutSeqNum - 1), sessionStatusData.OutSeqNum);
+			ClassicAssert.AreEqual(StatusGroup.ESTABLISHED, sessionStatusData.StatusGroup);
+			ClassicAssert.AreEqual(session.SessionState.ToString(), sessionStatusData.Status);
 			if (session is InitiatorFixSession)
 			{
-				Assert.AreEqual(BackupState.PRIMARY, sessionStatusData.BackupState);
+				ClassicAssert.AreEqual(BackupState.PRIMARY, sessionStatusData.BackupState);
 			}
 		}
 	}

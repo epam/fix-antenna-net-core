@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 using System;
 using System.IO;
@@ -55,7 +56,7 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Storage.File
 			MessageStorage.AppendMessage(message.AsByteArray());
 			var strMsg = RetrieveMessage(0);
 			strMsg = strMsg.Substring(strMsg.IndexOf("8=", StringComparison.InvariantCulture)); // trim timestamp
-			Assert.That(strMsg, Is.EqualTo(expected));
+			ClassicAssert.That(strMsg, Is.EqualTo(expected));
 		}
 
 		[Test, Property("Implements", "https://jira.epam.com/jira/browse/BBP-17110")]
@@ -66,7 +67,7 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Storage.File
 			MessageStorage.AppendMessage(message.AsByteArray());
 			var strMsg = RetrieveMessage(0);
 			strMsg = strMsg.Substring(strMsg.IndexOf("8=", StringComparison.InvariantCulture)); // trim timestamp
-			Assert.That(strMsg, Is.EqualTo(expectedRaw));
+			ClassicAssert.That(strMsg, Is.EqualTo(expectedRaw));
 		}
 
 		[Test, Property("Implements", "https://jira.epam.com/jira/browse/BBP-17110")]
@@ -78,7 +79,7 @@ namespace Epam.FixAntenna.Core.Tests.FixEngine.Storage.File
 			MessageStorage.AppendMessage(message.AsByteArray());
 			var strMsg = RetrieveMessage(1);
 			strMsg = strMsg.Substring(strMsg.IndexOf("8=", StringComparison.InvariantCulture)); // trim timestamp
-			Assert.That(strMsg, Is.EqualTo(expected));
+			ClassicAssert.That(strMsg, Is.EqualTo(expected));
 		}
 
 		private string RetrieveMessage(int msgNum)

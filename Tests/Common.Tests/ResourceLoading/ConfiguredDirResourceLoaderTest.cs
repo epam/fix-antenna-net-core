@@ -16,7 +16,8 @@ using System;
 using System.IO;
 using Epam.FixAntenna.NetCore.Common.ResourceLoading;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.ResourceLoading
 {
@@ -29,8 +30,8 @@ namespace Epam.FixAntenna.Common.ResourceLoading
 			Config.ConfigurationDirectory = null;
 			var loader = new ConfiguredDirResourceLoader(new DummyResourceLoader());
 
-			// Act, Assert
-			Assert.Throws<ResourceNotFoundException>(() => loader.LoadResource("fixengine.properties"));
+			// Act, ClassicAssert
+			ClassicAssert.Throws<ResourceNotFoundException>(() => loader.LoadResource("fixengine.properties"));
 		}
 
 		[Test]
@@ -40,8 +41,8 @@ namespace Epam.FixAntenna.Common.ResourceLoading
 			Config.ConfigurationDirectory = TestContext.CurrentContext.TestDirectory;
 			var loader = new ConfiguredDirResourceLoader(new DummyResourceLoader());
 
-			// Act, Assert
-			Assert.Throws<ResourceNotFoundException>(() => loader.LoadResource($"fixengine_{Guid.NewGuid()}.properties"));
+			// Act, ClassicAssert
+			ClassicAssert.Throws<ResourceNotFoundException>(() => loader.LoadResource($"fixengine_{Guid.NewGuid()}.properties"));
 		}
 
 		[Test]
@@ -58,10 +59,10 @@ namespace Epam.FixAntenna.Common.ResourceLoading
 			// Act
 			var stream = loader.LoadResource(filepath);
 
-			// Assert
+			// ClassicAssert
 			try
 			{
-				Assert.IsNotNull(stream);
+				ClassicAssert.IsNotNull(stream);
 			}
 			finally
 			{

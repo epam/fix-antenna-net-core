@@ -17,7 +17,8 @@ using System.Collections.Concurrent;
 using System.Text;
 using NLog;
 using NLog.Targets;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Util
 {
@@ -90,9 +91,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Util
 #endif
 		}
 
-		public static void AssertIfErrorExist()
+		public static void ClassicAssertIfErrorExist()
 		{
-			Assert.IsTrue(Errors.IsEmpty, AsString(Errors));
+			ClassicAssert.IsTrue(Errors.IsEmpty, AsString(Errors));
 		}
 	}
 }

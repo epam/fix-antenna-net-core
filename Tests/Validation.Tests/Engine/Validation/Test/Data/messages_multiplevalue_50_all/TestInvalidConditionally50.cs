@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.NetCore.Common;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test.Data.messages_multiplevalue_50_all
 {

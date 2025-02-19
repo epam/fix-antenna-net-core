@@ -15,7 +15,8 @@
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 {
@@ -38,30 +39,30 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Manager
 			Events.Clear();
 		}
 
-		public virtual void AssertEmpty()
+		public virtual void ClassicAssertEmpty()
 		{
-			Assert.AreEqual(0, Events.Count, "There are extra events");
+			ClassicAssert.AreEqual(0, Events.Count, "There are extra events");
 		}
 
 		public virtual void CheckAddSessionEvent(SessionParameters @params)
 		{
 			var @event = PollNextEvent();
-			Assert.IsTrue(@event is AddSessionCslcEvent, "There is another event: " + @event);
-			Assert.AreEqual(@params, @event.GetParams(), "Event has other parameters");
+			ClassicAssert.IsTrue(@event is AddSessionCslcEvent, "There is another event: " + @event);
+			ClassicAssert.AreEqual(@params, @event.GetParams(), "Event has other parameters");
 		}
 
 		public virtual void CheckRemoveSessionEvent(SessionParameters @params)
 		{
 			var @event = PollNextEvent();
-			Assert.IsTrue(@event is RemoveSessionCslcEvent, "There is another event: " + @event);
-			Assert.AreEqual(@params, @event.GetParams(), "Event has other parameters");
+			ClassicAssert.IsTrue(@event is RemoveSessionCslcEvent, "There is another event: " + @event);
+			ClassicAssert.AreEqual(@params, @event.GetParams(), "Event has other parameters");
 		}
 
 		private CslcEvent PollNextEvent()
 		{
 			if (Events.Count == 0)
 			{
-				Assert.Fail("No events");
+				ClassicAssert.Fail("No events");
 			}
 
 			var first = Events.First.Value;

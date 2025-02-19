@@ -20,7 +20,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests
 {
@@ -68,7 +69,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 		[TearDown]
 		public virtual void After()
 		{
-			LogAppender.AssertIfErrorExist();
+			LogAppender.ClassicAssertIfErrorExist();
 			ConfiguredSessionRegister.DeleteAll();
 			FixSessionManager.DisposeAllSession();
 		}
@@ -85,7 +86,7 @@ namespace Epam.FixAntenna.AdminTool.Tests
 		{
 			AdminTool.Process(CommandUtilHelper.BuildFixMessage(requestCommand));
 			var response = AdminSession.Message;
-			Assert.IsNotNull(response, "no response");
+			ClassicAssert.IsNotNull(response, "no response");
 			return CommandUtilHelper.GetXmlData(response);
 		}
 

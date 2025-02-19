@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 using System.Threading;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Message;
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Reconect
 
 			_newSessionConnected.Wait(TimeSpan.FromSeconds(5));
 
-			Assert.IsTrue(!string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
+			ClassicAssert.IsTrue(!string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
 
 			_newSessionConnected.Reset();
 			_disconnectedAbnormally.Reset();
@@ -80,7 +81,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Reconect
 			_initiatorSession.Connect();
 			_newSessionConnected.Wait(TimeSpan.FromSeconds(5));
 
-			Assert.IsTrue(string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
+			ClassicAssert.IsTrue(string.IsNullOrEmpty(_acceptorSession.Parameters.IncomingLoginMessage.GetTagValueAsString(Tags.ResetSeqNumFlag)));
 		}
 
 		private void InitServer(Config config)

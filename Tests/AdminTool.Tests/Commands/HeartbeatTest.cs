@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -41,12 +42,12 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_heartbeat.TargetCompID = TestSessionID.Target;
 
 			var response = GetReponse(_heartbeat);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
-			Assert.IsNotNull(extendedFIXSession.Message);
+			ClassicAssert.IsNotNull(extendedFIXSession.Message);
 
-			Assert.AreEqual(extendedFIXSession.Message.GetTagValueAsString(35), "0");
+			ClassicAssert.AreEqual(extendedFIXSession.Message.GetTagValueAsString(35), "0");
 		}
 
 		[Test]
@@ -59,12 +60,12 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_heartbeat.SessionQualifier = TestSessionIdQualifier.Qualifier;
 
 			var response = GetReponse(_heartbeat);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 
-			Assert.IsNotNull(extendedFIXSession.Message);
+			ClassicAssert.IsNotNull(extendedFIXSession.Message);
 
-			Assert.AreEqual(extendedFIXSession.Message.GetTagValueAsString(35), "0");
+			ClassicAssert.AreEqual(extendedFIXSession.Message.GetTagValueAsString(35), "0");
 		}
 	}
 }

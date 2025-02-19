@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 {
@@ -42,7 +43,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 		{
 			foreach (var tag in tags)
 			{
-				Assert.IsNotNull(message.GetTagValueAsString(tag), "Tag " + tag + " is missed");
+				ClassicAssert.IsNotNull(message.GetTagValueAsString(tag), "Tag " + tag + " is missed");
 			}
 		}
 

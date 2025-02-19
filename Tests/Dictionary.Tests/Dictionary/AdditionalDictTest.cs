@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Dictionary;
 using Epam.FixAntenna.NetCore.Validation.Entities;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Dictionary
 {
@@ -37,9 +38,9 @@ namespace Epam.FixAntenna.Fix.Dictionary
 			var fixdic = (Fixdic)builder.BuildDictionary(fix40, false);
 
 			var testField = FindMsgTag(fixdic, "0", 1);
-			Assert.IsNull(testField.Condreq, "condReq attribute wasn't overridden");
-			Assert.IsNull(testField.Name, "name attribute should be cleaned by additional dict");
-			Assert.AreEqual("N", testField.Req, "req attribute is different");
+			ClassicAssert.IsNull(testField.Condreq, "condReq attribute wasn't overridden");
+			ClassicAssert.IsNull(testField.Name, "name attribute should be cleaned by additional dict");
+			ClassicAssert.AreEqual("N", testField.Req, "req attribute is different");
 		}
 
 		private Field FindMsgTag(Fixdic fixdic, string msgType, int tagId)

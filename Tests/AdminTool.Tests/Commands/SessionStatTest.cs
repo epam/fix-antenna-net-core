@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -42,12 +43,12 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			var response = GetReponse(_sessionStat);
 
 			var sessionStatData = response.SessionStatData;
-			Assert.AreEqual(TestSessionID.Sender, sessionStatData.SenderCompID);
-			Assert.AreEqual(TestSessionID.Target, sessionStatData.TargetCompID);
-			Assert.IsNotNull(sessionStatData.Established);
-			Assert.IsNotNull(sessionStatData.NumOfProcessedMessages);
-			Assert.IsTrue(sessionStatData.ReceivedBytes > 0);
-			Assert.IsTrue(sessionStatData.SentBytes > 0);
+			ClassicAssert.AreEqual(TestSessionID.Sender, sessionStatData.SenderCompID);
+			ClassicAssert.AreEqual(TestSessionID.Target, sessionStatData.TargetCompID);
+			ClassicAssert.IsNotNull(sessionStatData.Established);
+			ClassicAssert.IsNotNull(sessionStatData.NumOfProcessedMessages);
+			ClassicAssert.IsTrue(sessionStatData.ReceivedBytes > 0);
+			ClassicAssert.IsTrue(sessionStatData.SentBytes > 0);
 		}
 
 		[Test]
@@ -60,13 +61,13 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			var response = GetReponse(_sessionStat);
 
 			var sessionStatData = response.SessionStatData;
-			Assert.AreEqual(TestSessionIdQualifier.Sender, sessionStatData.SenderCompID);
-			Assert.AreEqual(TestSessionIdQualifier.Target, sessionStatData.TargetCompID);
-			Assert.AreEqual(TestSessionIdQualifier.Qualifier, sessionStatData.SessionQualifier);
-			Assert.IsNotNull(sessionStatData.Established);
-			Assert.IsNotNull(sessionStatData.NumOfProcessedMessages);
-			Assert.IsTrue(sessionStatData.ReceivedBytes > 0);
-			Assert.IsTrue(sessionStatData.SentBytes > 0);
+			ClassicAssert.AreEqual(TestSessionIdQualifier.Sender, sessionStatData.SenderCompID);
+			ClassicAssert.AreEqual(TestSessionIdQualifier.Target, sessionStatData.TargetCompID);
+			ClassicAssert.AreEqual(TestSessionIdQualifier.Qualifier, sessionStatData.SessionQualifier);
+			ClassicAssert.IsNotNull(sessionStatData.Established);
+			ClassicAssert.IsNotNull(sessionStatData.NumOfProcessedMessages);
+			ClassicAssert.IsTrue(sessionStatData.ReceivedBytes > 0);
+			ClassicAssert.IsTrue(sessionStatData.SentBytes > 0);
 		}
 	}
 }

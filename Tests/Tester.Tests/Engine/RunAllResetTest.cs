@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Tester.NUnit;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.Tests
 {

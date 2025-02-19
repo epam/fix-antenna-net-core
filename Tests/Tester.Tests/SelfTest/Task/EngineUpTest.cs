@@ -16,7 +16,8 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using Epam.FixAntenna.NetCore.Common.Logging;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			var buf = new byte[1];
 			int count = connectionStream.Read(buf, 0, 1);
 
-			Assert.AreEqual(1, count);
+			ClassicAssert.AreEqual(1, count);
 
 			clientStream.Close();
 			connectionStream.Close();
@@ -96,7 +97,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			{
 				Console.WriteLine(e.ToString());
 				Console.Write(e.StackTrace);
-				Assert.Fail(e.Message);
+				ClassicAssert.Fail(e.Message);
 			}
 		}
 	}

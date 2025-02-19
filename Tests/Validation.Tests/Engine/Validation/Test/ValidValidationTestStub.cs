@@ -16,7 +16,8 @@ using System.IO;
 
 using Epam.FixAntenna.NetCore.Common;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 {
@@ -26,7 +27,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 		[TearDown]
 		public virtual void After()
 		{
-			Assert.IsTrue(Errors.IsEmpty, Errors.Errors.ToReadableString());
+			ClassicAssert.IsTrue(Errors.IsEmpty, Errors.Errors.ToReadableString());
 		}
 
 		private const bool ErrorShouldOccur = false;

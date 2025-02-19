@@ -16,7 +16,8 @@ using System.Threading.Tasks;
 using Epam.FixAntenna.Fixicc.Message;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Smoke.Util
 {
@@ -47,7 +48,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke.Util
 		public static Task CreateTask(System.Action payload)
 		{
 			return Task.Factory.StartNew(payload, TaskCreationOptions.LongRunning)
-				.ContinueWith(t => Assert.Fail(t.Exception?.InnerException?.Message), TaskContinuationOptions.OnlyOnFaulted);
+				.ContinueWith(t => ClassicAssert.Fail(t.Exception?.InnerException?.Message), TaskContinuationOptions.OnlyOnFaulted);
 		}
 	}
 }

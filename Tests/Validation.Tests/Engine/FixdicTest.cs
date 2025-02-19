@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.NetCore.Validation.Entities;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine
 {
@@ -40,8 +41,8 @@ namespace Epam.FixAntenna.Validation.Tests.Engine
 			// change msgdic element
 			_fixdic.Msgdic.Msgdef[0].Msgtype = "hi";
 
-			Assert.AreEqual(clonedFixDic.Date, _fixdic.Date);
-			Assert.AreEqual(clonedFixDic.Msgdic, _fixdic.Msgdic);
+			ClassicAssert.AreEqual(clonedFixDic.Date, _fixdic.Date);
+			ClassicAssert.AreEqual(clonedFixDic.Msgdic, _fixdic.Msgdic);
 		}
 	}
 }

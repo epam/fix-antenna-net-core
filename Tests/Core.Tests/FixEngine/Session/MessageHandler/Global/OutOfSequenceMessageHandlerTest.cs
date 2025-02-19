@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -61,9 +62,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_handler.OnNewMessage(_message);
 
 			var resendSeqMessage = GetMessageWithType(MsgTypeBytes);
-			Assert.IsNotNull(resendSeqMessage);
-			Assert.AreEqual(MsgTypeBytes, resendSeqMessage.GetTagValueAsString(35));
-			AssertNoOutMessage();
+			ClassicAssert.IsNotNull(resendSeqMessage);
+			ClassicAssert.AreEqual(MsgTypeBytes, resendSeqMessage.GetTagValueAsString(35));
+			ClassicAssertNoOutMessage();
 		}
 
 		[Test]
@@ -72,15 +73,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_handler.OnNewMessage(_message);
 
 			var resendSeqMessage = GetMessageWithType(MsgTypeBytes);
-			Assert.IsNotNull(resendSeqMessage);
-			Assert.AreEqual(MsgTypeBytes, resendSeqMessage.GetTagValueAsString(35));
-			AssertOutMessageEquals(_message);
+			ClassicAssert.IsNotNull(resendSeqMessage);
+			ClassicAssert.AreEqual(MsgTypeBytes, resendSeqMessage.GetTagValueAsString(35));
+			ClassicAssertOutMessageEquals(_message);
 		}
 
 		[Test]
 		public virtual void ToLowMessageSequenceDisconnect()
 		{
-			Assert.Throws<SequenceToLowException>(() =>
+			ClassicAssert.Throws<SequenceToLowException>(() =>
 			{
 				_message.Set(34, 1);
 				_testFixSession.RuntimeState.InSeqNum = 20;
@@ -88,8 +89,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_handler.OnNewMessage(_message);
 			});
 
-			Assert.AreEqual("Incoming seq number 1 is less then expected 20", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForForcedDisconnect, _testFixSession.SessionState);
+			ClassicAssert.AreEqual("Incoming seq number 1 is less then expected 20", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForForcedDisconnect, _testFixSession.SessionState);
 		}
 
 		[Test]
@@ -105,7 +106,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_message.AddTag(43, "Y");
 			_handler.OnNewMessage(_message);
 
-			AssertOutMessageEquals(_message);
+			ClassicAssertOutMessageEquals(_message);
 		}
 
 		private FixMessage GetMessageWithType(string msgType)
@@ -121,16 +122,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			return null;
 		}
 
-		private void AssertNoOutMessage()
+		private void ClassicAssertNoOutMessage()
 		{
-			Assert.IsNull(_nextHandler.GetMessage());
+			ClassicAssert.IsNull(_nextHandler.GetMessage());
 		}
 
-		private void AssertOutMessageEquals(FixMessage message)
+		private void ClassicAssertOutMessageEquals(FixMessage message)
 		{
 			var processed = _nextHandler.GetMessage();
-			Assert.IsNotNull(processed);
-			Assert.AreEqual(message.ToString(), processed.ToString());
+			ClassicAssert.IsNotNull(processed);
+			ClassicAssert.AreEqual(message.ToString(), processed.ToString());
 		}
 
 		private class NextHandler : AbstractGlobalMessageHandler

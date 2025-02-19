@@ -18,7 +18,8 @@ using System.Threading;
 using Epam.FixAntenna.AdminTool.Tests.Smoke.Util;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 {
@@ -68,7 +69,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 			}
 			catch (IOException e)
 			{
-				Assert.Fail("error on start server:" + e.Message);
+				ClassicAssert.Fail("error on start server:" + e.Message);
 			}
 		}
 
@@ -91,7 +92,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Smoke
 			}
 			catch (Exception e)
 			{
-				Assert.Fail(e.Message);
+				ClassicAssert.Fail(e.Message);
 			}
 		}
 

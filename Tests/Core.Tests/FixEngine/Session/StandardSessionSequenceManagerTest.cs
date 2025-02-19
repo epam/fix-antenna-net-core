@@ -28,7 +28,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sessionHelper.Shutdown(DisconnectReason.GetDefault(), true);
 			_sessionHelper.Dispose();
 			ConfigurationHelper.RestoreGlobalConfig();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()
@@ -68,9 +69,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			_sequenceManager.InitSeqNums(3, 5);
 			var runtimeState = _sessionHelper.RuntimeState;
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(3L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(5L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(3L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(5L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -79,9 +80,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sequenceManager.InitSeqNums(3, 5);
 			_sequenceManager.InitSeqNums(22, 55);
 			var runtimeState = _sessionHelper.RuntimeState;
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(3L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(5L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(3L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(5L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -93,9 +94,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sequenceManager.InitSeqNums(3, 5);
 
 			var runtimeState = _sessionHelper.RuntimeState;
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(12L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(21L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(12L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(21L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -106,9 +107,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sequenceManager.InitSeqNums(3, 5);
 
 			var runtimeState = _sessionHelper.RuntimeState;
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(12L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(5L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(12L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(5L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -119,9 +120,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sequenceManager.InitSeqNums(3, 5);
 
 			var runtimeState = _sessionHelper.RuntimeState;
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(3L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(12L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(3L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(12L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -137,17 +138,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sessionHelper.Parameters.OutgoingSequenceNumber = 3;
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
-			Assert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
+			ClassicAssert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
 
 			runtimeState.InSeqNum = 111;
 			runtimeState.OutSeqNum = 222;
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
-			Assert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
+			ClassicAssert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -164,18 +165,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_sequenceManager.InitSeqNums(4, 5);
 
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
-			Assert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
+			ClassicAssert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
 
 
 			runtimeState.InSeqNum = 111;
 			runtimeState.OutSeqNum = 222;
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(111L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(222L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(111L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(222L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -189,9 +190,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			configuration.SetProperty(Config.ForceSeqNumReset, ForceSeqNumReset.Never.ToString());
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(111L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(222L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(111L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(222L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -204,9 +205,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			runtimeState.OutgoingLogon.AddTag(141, "Y");
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
-			Assert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
+			ClassicAssert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -221,9 +222,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
-			Assert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
+			ClassicAssert.IsFalse(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		[Test]
@@ -246,9 +247,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			_sequenceManager.InitSeqNums(4, 5);
 
-			Assert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
-			Assert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
-			Assert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
+			ClassicAssert.That(runtimeState.InSeqNum, Is.EqualTo(1L));
+			ClassicAssert.That(runtimeState.OutSeqNum, Is.EqualTo(1L));
+			ClassicAssert.IsTrue(runtimeState.OutgoingLogon.IsTagExists(141));
 		}
 
 		private class InitiatorFixSessionStub : InitiatorFixSession

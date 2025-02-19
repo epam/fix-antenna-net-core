@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -38,48 +39,48 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		[Test]
 		public virtual void EmptyVersionTagProduceException()
 		{
-			var ex = Assert.Throws<GarbledMessageException>(() =>
+			var ex = ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				var message = new FixMessage();
 				_handler.OnNewMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			AssertNoMessagePassedForNext();
-			Assert.AreEqual("FIX version changed suddenly", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.AreEqual("FIX version changed suddenly", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
 		}
 
 		[Test]
 		public virtual void BrokenVersionTagProduceException()
 		{
-			var ex = Assert.Throws<GarbledMessageException>(() =>
+			var ex = ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				var message = new FixMessage();
 				message.AddTag(8, "FIX");
 				_handler.OnNewMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			AssertNoMessagePassedForNext();
-			Assert.AreEqual("FIX version changed suddenly", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.AreEqual("FIX version changed suddenly", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
 		}
 
 		[Test]
 		public virtual void InvalidFixVersionTagProduceException()
 		{
-			var ex = Assert.Throws<GarbledMessageException>(() =>
+			var ex = ClassicAssert.Throws<GarbledMessageException>(() =>
 			{
 				var message = new FixMessage();
 				message.AddTag(8, "FIX.4.0");
 				_handler.OnNewMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			AssertNoMessagePassedForNext();
-			Assert.AreEqual("FIX version changed suddenly", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.AreEqual("FIX version changed suddenly", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
 		}
 	}
 

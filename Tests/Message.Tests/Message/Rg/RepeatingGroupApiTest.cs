@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
 using Epam.FixAntenna.NetCore.Message.Rg;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -94,9 +95,9 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 		[Test]
 		public virtual void GetRepeatingGroupTest()
 		{
-			Assert.AreEqual("232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001",
+			ClassicAssert.AreEqual("232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001",
 				Msg.GetRepeatingGroup(232).ToString());
-			Assert.AreEqual("232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001",
+			ClassicAssert.AreEqual("232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001",
 				Msg.GetRepeatingGroupAtIndex(12).ToString());
 		}
 
@@ -108,7 +109,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3\u00019=94\u000135=8\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u0001" +
 				"454=1\u0001455=5\u0001456=abc\u0001" + "518=1\u0001519=10\u0001520=11\u0001" +
 				"555=1\u0001600=123\u0001604=1\u0001605=124\u0001" + "10=124\u0001";
-			Assert.AreEqual(expected, Msg.ToString());
+			ClassicAssert.AreEqual(expected, Msg.ToString());
 
 			Msg.RemoveRepeatingGroupAtIndex(9);
 			expected =
@@ -116,7 +117,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"518=1\u0001519=10\u0001520=11\u0001" + "555=1\u0001600=123\u0001604=1\u0001605=124\u0001" +
 				"10=124\u0001";
 
-			Assert.AreEqual(expected, Msg.ToString());
+			ClassicAssert.AreEqual(expected, Msg.ToString());
 		}
 
 		[Test]
@@ -145,7 +146,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"454=1\u0001455=5\u0001456=abc\u0001" + "232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001" +
 				"518=1\u0001519=10\u0001520=11\u0001" + "555=1\u0001600=123\u0001604=1\u0001605=124\u0001" +
 				"10=124\u0001";
-			Assert.AreEqual(expectedMessage, Msg.ToString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToString());
 		}
 
 		[Test]
@@ -158,53 +159,53 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			Msg.LoadTagValue(455, expectedTagValue);
 			entry.LoadTagValueByIndex(0, actualTagValue);
-			Assert.AreEqual(expectedTagValue, actualTagValue);
+			ClassicAssert.AreEqual(expectedTagValue, actualTagValue);
 
 			var expectedStrValue = Msg.GetTagValueAsString(456);
 			var actualStrValue = entry.GetTagValueAsStringAtIndex(1);
-			Assert.AreEqual(expectedStrValue, actualStrValue);
+			ClassicAssert.AreEqual(expectedStrValue, actualStrValue);
 
 			var expectedBuffValue = new StringBuilder();
 			var actualBuffValue = new StringBuilder();
 			Msg.GetTagValueAsStringBuff(456, expectedBuffValue);
 			entry.GetTagValueAsStringBuffAtIndex(1, actualBuffValue);
-			Assert.AreEqual(expectedBuffValue.ToString(), actualBuffValue.ToString());
+			ClassicAssert.AreEqual(expectedBuffValue.ToString(), actualBuffValue.ToString());
 
 			var expectedBytesValue = Msg.GetTagValueAsBytes(456);
 			var actualBytesValue = entry.GetTagValueAsBytesAtIndex(1);
-			Assert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
+			ClassicAssert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
 
 			Msg.GetTagValueAsBytes(456, expectedBytesValue, 0);
 			entry.GetTagValueAsBytesAtIndex(1, actualBytesValue, 0);
-			Assert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
+			ClassicAssert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
 
 			var expectedByteValue = Msg.GetTagValueAsByte(455);
 			var actualByteValue = entry.GetTagValueAsByteAtIndex(0);
-			Assert.AreEqual(expectedByteValue, actualByteValue);
+			ClassicAssert.AreEqual(expectedByteValue, actualByteValue);
 
 			expectedByteValue = Msg.GetTagValueAsByte(456, 1);
 			actualByteValue = entry.GetTagValueAsByteAtIndex(1, 1);
-			Assert.AreEqual(expectedByteValue, actualByteValue);
+			ClassicAssert.AreEqual(expectedByteValue, actualByteValue);
 
 			group = Msg.GetRepeatingGroup(232);
 			entry = group.GetEntry(0);
 			var expectedBoolValue = Msg.GetTagValueAsBool(233);
 			var actualBoolValue = entry.GetTagValueAsBoolAtIndex(0);
-			Assert.AreEqual(expectedBoolValue, actualBoolValue);
+			ClassicAssert.AreEqual(expectedBoolValue, actualBoolValue);
 
 			var expectedDoubleValue = Msg.GetTagValueAsDouble(234);
 			var actualDoubleValue = entry.GetTagValueAsDoubleAtIndex(1);
-			Assert.AreEqual(expectedDoubleValue, actualDoubleValue, 0.00001);
+			ClassicAssert.AreEqual(expectedDoubleValue, actualDoubleValue, 0.00001);
 
 			entry = group.GetEntry(1);
 			var expectedLongValue = Msg.GetTagValueAsLong(233, 2);
 			var actualLongValue = entry.GetTagValueAsLongAtIndex(0);
-			Assert.AreEqual(expectedLongValue, actualLongValue);
+			ClassicAssert.AreEqual(expectedLongValue, actualLongValue);
 
 			group = Msg.GetRepeatingGroup(555);
 			entry = group.GetEntry(0);
-			Assert.IsTrue(entry.IsGroupTagAtIndex(1));
-			Assert.IsFalse(entry.IsGroupTagAtIndex(0));
+			ClassicAssert.IsTrue(entry.IsGroupTagAtIndex(1));
+			ClassicAssert.IsFalse(entry.IsGroupTagAtIndex(0));
 		}
 
 		[Test]
@@ -217,56 +218,56 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 
 			Msg.LoadTagValue(455, expectedTagValue);
 			entry.LoadTagValue(455, actualTagValue);
-			Assert.AreEqual(expectedTagValue, actualTagValue);
+			ClassicAssert.AreEqual(expectedTagValue, actualTagValue);
 
 			var expectedStrValue = Msg.GetTagValueAsString(456);
 			var actualStrValue = entry.GetTagValueAsString(456);
-			Assert.AreEqual(expectedStrValue, actualStrValue);
+			ClassicAssert.AreEqual(expectedStrValue, actualStrValue);
 
 			var expectedBuffValue = new StringBuilder();
 			var actualBuffValue = new StringBuilder();
 			Msg.GetTagValueAsStringBuff(456, expectedBuffValue);
 			entry.GetTagValueAsStringBuff(456, actualBuffValue);
-			Assert.AreEqual(expectedBuffValue.ToString(), actualBuffValue.ToString());
+			ClassicAssert.AreEqual(expectedBuffValue.ToString(), actualBuffValue.ToString());
 
 			var expectedBytesValue = Msg.GetTagValueAsBytes(456);
 			var actualBytesValue = entry.GetTagValueAsBytes(456);
-			Assert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
+			ClassicAssert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
 
 			Msg.GetTagValueAsBytes(456, expectedBytesValue, 0);
 			entry.GetTagValueAsBytes(456, actualBytesValue, 0);
-			Assert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
+			ClassicAssert.That(actualBytesValue, Is.EquivalentTo(expectedBytesValue));
 
 			var expectedByteValue = Msg.GetTagValueAsByte(455);
 			var actualByteValue = entry.GetTagValueAsByte(455);
-			Assert.AreEqual(expectedByteValue, actualByteValue);
+			ClassicAssert.AreEqual(expectedByteValue, actualByteValue);
 
 			expectedByteValue = Msg.GetTagValueAsByte(456, 1);
 			actualByteValue = entry.GetTagValueAsByte(456, 1);
-			Assert.AreEqual(expectedByteValue, actualByteValue);
+			ClassicAssert.AreEqual(expectedByteValue, actualByteValue);
 
 			group = Msg.GetRepeatingGroup(232);
 			entry = group.GetEntry(0);
 			var expectedBoolValue = Msg.GetTagValueAsBool(233);
 			var actualBoolValue = entry.GetTagValueAsBool(233);
-			Assert.AreEqual(expectedBoolValue, actualBoolValue);
+			ClassicAssert.AreEqual(expectedBoolValue, actualBoolValue);
 
 			var expectedDoubleValue = Msg.GetTagValueAsDouble(234);
 			var actualDoubleValue = entry.GetTagValueAsDouble(234);
-			Assert.AreEqual(expectedDoubleValue, actualDoubleValue, 0.00001);
+			ClassicAssert.AreEqual(expectedDoubleValue, actualDoubleValue, 0.00001);
 
 			entry = group.GetEntry(1);
 			var expectedLongValue = Msg.GetTagValueAsLong(233, 2);
 			var actualLongValue = entry.GetTagValueAsLong(233);
-			Assert.AreEqual(expectedLongValue, actualLongValue);
+			ClassicAssert.AreEqual(expectedLongValue, actualLongValue);
 
-			Assert.AreEqual(false, entry.IsTagExists(123));
-			Assert.AreEqual(true, entry.IsTagExists(233));
+			ClassicAssert.AreEqual(false, entry.IsTagExists(123));
+			ClassicAssert.AreEqual(true, entry.IsTagExists(233));
 
-			Assert.IsTrue(Msg.IsRepeatingGroupExists(555));
+			ClassicAssert.IsTrue(Msg.IsRepeatingGroupExists(555));
 			group = Msg.GetRepeatingGroup(555);
 			entry = group.GetEntry(0);
-			Assert.IsTrue(entry.IsRepeatingGroupExists(604));
+			ClassicAssert.IsTrue(entry.IsRepeatingGroupExists(604));
 		}
 
 		[Test]
@@ -280,7 +281,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"8=FIX.4.3\u00019=94\u000135=8\u000149=target\u000156=sender\u0001115=onBehalf\u000134=1\u000150=senderSub\u000152=20080212-04:15:18.308\u0001" +
 				"454=1\u0001455=5\u0001456=abc\u0001" + "232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001" +
 				"518=1\u0001519=10\u0001520=11\u0001" + "555=1\u0001600=123\u0001" + "10=124\u0001";
-			Assert.AreEqual(expectedMessage, Msg.ToString());
+			ClassicAssert.AreEqual(expectedMessage, Msg.ToString());
 		}
 
 		[Test]
@@ -296,7 +297,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"124=bytevalue\u0001126=Y\u0001129=123\u0001125=updatedValue\u0001127=date\u0001128=2.0058\u0001130=updatedStrValue\u0001131=20140303\u0001" +
 				"454=1\u0001455=5\u0001456=abc\u0001" + "232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001" +
 				"518=1\u0001519=10\u0001520=11\u000110=124\u0001";
-			Assert.AreEqual(expectedMessage, MsgForUpdate.ToString());
+			ClassicAssert.AreEqual(expectedMessage, MsgForUpdate.ToString());
 		}
 
 		[Test]
@@ -314,7 +315,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				+ "454=1\u0001455=5\u0001456=abc\u0001"
 				+ "232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001"
 				+ "518=1\u0001519=10\u0001520=11\u000110=124\u0001";
-			Assert.AreEqual(expectedMessage, MsgForUpdate.ToString());
+			ClassicAssert.AreEqual(expectedMessage, MsgForUpdate.ToString());
 		}
 
 		[Test]
@@ -329,7 +330,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"124=bytevalue\u0001126=Y\u0001129=123\u0001" + "454=1\u0001455=5\u0001456=abc\u0001" +
 				"232=2\u0001233=N\u0001234=8.23\u0001233=9\u0001234=9\u0001" +
 				"518=1\u0001519=10\u0001520=11\u000110=124\u0001";
-			Assert.AreEqual(expectedMessage, MsgForUpdate.ToString());
+			ClassicAssert.AreEqual(expectedMessage, MsgForUpdate.ToString());
 		}
 	}
 }

@@ -16,7 +16,8 @@ using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation.Error;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 {
@@ -43,19 +44,19 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			fieldList.AddTag(Tags.HeartBtInt, 30L);
 			fieldList.AddTag(Tags.MsgSeqNum, 100L);
 
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_logonMessageHandler.OnNewMessage(fieldList);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.MsgSeqNum, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.ValueIncorrectOutOfRangeForTag, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.MsgSeqNum, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.ValueIncorrectOutOfRangeForTag, ex.GetFixErrorCode());
 
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
-			Assert.AreEqual("MsgSeqNum must be equal to 1 while resetting the sequence number", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
+			ClassicAssert.AreEqual("MsgSeqNum must be equal to 1 while resetting the sequence number", responseMessage.GetTagValueAsString(58));
 		}
 
 		[Test]
@@ -69,7 +70,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 
 			_logonMessageHandler.OnNewMessage(fixMessage);
 
-			Assert.IsFalse(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsFalse(_testFixSession.Messages.Count > 0);
 		}
 
 		[Test]
@@ -81,25 +82,25 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 			fixMessage.AddTag(Tags.HeartBtInt, -60);
 			fixMessage.AddTag(Tags.MsgSeqNum, (long)1);
 
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_logonMessageHandler.OnNewMessage(fixMessage);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.ValueIncorrectOutOfRangeForTag, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.ValueIncorrectOutOfRangeForTag, ex.GetFixErrorCode());
 
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
-			Assert.AreEqual("Negative heartbeat interval", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
+			ClassicAssert.AreEqual("Negative heartbeat interval", responseMessage.GetTagValueAsString(58));
 		}
 
 		[Test]
 		public virtual void TestInvalidHeartBtIntNotNumber()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var fixMessage = new FixMessage();
 				fixMessage.AddTag(Tags.BeginString, "FIX.4.4");
@@ -110,20 +111,20 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 				_logonMessageHandler.OnNewMessage(fixMessage);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.IncorrectDataFormatForValue, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.IncorrectDataFormatForValue, ex.GetFixErrorCode());
 
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
-			Assert.AreEqual("Incorrect or undefined heartbeat interval", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
+			ClassicAssert.AreEqual("Incorrect or undefined heartbeat interval", responseMessage.GetTagValueAsString(58));
 		}
 
 		[Test]
 		public virtual void TestInvalidHeartBtValue()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var fixMessage = new FixMessage();
 				fixMessage.AddTag(Tags.BeginString, "FIX.4.4");
@@ -135,21 +136,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 				_logonMessageHandler.OnNewMessage(fixMessage);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.ValueIncorrectOutOfRangeForTag, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.ValueIncorrectOutOfRangeForTag, ex.GetFixErrorCode());
 
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
-			Assert.AreEqual("Logon HeartBtInt(108) does not match value configured for session",
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
+			ClassicAssert.AreEqual("Logon HeartBtInt(108) does not match value configured for session",
 				responseMessage.GetTagValueAsString(58));
 		}
 
 		[Test]
 		public virtual void TestAbsentHeartBtValue()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				var fixMessage = new FixMessage();
 				fixMessage.AddTag(Tags.BeginString, "FIX.4.4");
@@ -161,14 +162,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.PerType
 				_logonMessageHandler.OnNewMessage(fixMessage);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.HeartBtInt, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
 
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
-			Assert.AreEqual("Incorrect or undefined heartbeat interval", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(Tags.MsgType));
+			ClassicAssert.AreEqual("Incorrect or undefined heartbeat interval", responseMessage.GetTagValueAsString(58));
 		}
 	}
 

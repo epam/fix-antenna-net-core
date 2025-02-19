@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation.Error;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -61,7 +62,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		public virtual void TestValidSendingTime()
 		{
 			_handler.OnNewMessage(_message);
-			AssertThatMessagePassedToNextHandlerIs(_message);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_message);
 			base.Reset();
 
 			var timestamp = DateTimeHelper.CurrentMilliseconds - DefaultAccuracy.Value;
@@ -69,7 +70,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_message.Set(Tags.SendingTime, FixTypes.FormatUtcTimestamp(calendar, TimestampPrecision.Milli));
 
 			_handler.OnNewMessage(_message);
-			AssertThatMessagePassedToNextHandlerIs(_message);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_message);
 			base.Reset();
 
 			timestamp = DateTimeHelper.CurrentMilliseconds + DefaultAccuracy.Value;
@@ -78,7 +79,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_message.Set(Tags.SendingTime, FixTypes.FormatUtcTimestamp(calendar, TimestampPrecision.Milli));
 
 			_handler.OnNewMessage(_message);
-			AssertThatMessagePassedToNextHandlerIs(_message);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_message);
 		}
 
 		/// <summary>
@@ -98,7 +99,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_message.Set(Tags.SendingTime, fractinalTimestamp);
 
 			_handler.OnNewMessage(_message);
-			AssertThatMessagePassedToNextHandlerIs(_message);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_message);
 			base.Reset();
 		}
 
@@ -113,24 +114,24 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			var calendar = DateTimeHelper.FromMilliseconds(timestamp);
 			_message.Set(Tags.SendingTime, FixTypes.FormatUtcTimestamp(calendar, TimestampPrecision.Milli));
 
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_handler.OnNewMessage(_message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.SendingTimeAccuracyProblem, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.SendingTimeAccuracyProblem, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual(3, responseMessage.GetTagAsInt(35));
-			Assert.AreEqual("SendingTime accuracy problem", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual(3, responseMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual("SendingTime accuracy problem", responseMessage.GetTagValueAsString(58));
 
-			Assert.AreEqual("SendingTime accuracy problem", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
-			Assert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
+			ClassicAssert.AreEqual("SendingTime accuracy problem", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
 		}
 
 		/// <summary>
@@ -145,24 +146,24 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 
 			_message.Set(Tags.SendingTime, FixTypes.FormatUtcTimestamp(calendar, TimestampPrecision.Milli));
 
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_handler.OnNewMessage(_message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.SendingTimeAccuracyProblem, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.SendingTimeAccuracyProblem, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual(3, responseMessage.GetTagAsInt(35));
-			Assert.AreEqual("SendingTime accuracy problem", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual(3, responseMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual("SendingTime accuracy problem", responseMessage.GetTagValueAsString(58));
 
-			Assert.AreEqual("SendingTime accuracy problem", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
-			Assert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
+			ClassicAssert.AreEqual("SendingTime accuracy problem", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
 		}
 
 		/// <summary>
@@ -178,7 +179,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_message.Set(Tags.SendingTime, FixTypes.FormatUtcTimestamp(calendar, TimestampPrecision.Milli));
 
 			_handler.OnNewMessage(_message);
-			AssertThatMessagePassedToNextHandlerIs(_message);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_message);
 		}
 
 		/// <summary>
@@ -194,7 +195,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_message.Set(Tags.SendingTime, FixTypes.FormatUtcTimestamp(calendar, TimestampPrecision.Milli));
 
 			_handler.OnNewMessage(_message);
-			AssertThatMessagePassedToNextHandlerIs(_message);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_message);
 		}
 
 		[Test]
@@ -202,21 +203,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		{
 			_message.RemoveTag(Tags.SendingTime);
 
-			var ex = Assert.Throws<MessageValidationException>(() => { _handler.OnNewMessage(_message); });
+			var ex = ClassicAssert.Throws<MessageValidationException>(() => { _handler.OnNewMessage(_message); });
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.RequiredTagMissing, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual(3, responseMessage.GetTagAsInt(35));
-			Assert.AreEqual("Missed sending time", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual(3, responseMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual("Missed sending time", responseMessage.GetTagValueAsString(58));
 
-			Assert.AreEqual("Missed sending time", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
-			Assert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
+			ClassicAssert.AreEqual("Missed sending time", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
 		}
 
 		[Test]
@@ -224,24 +225,24 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		{
 			_message.Set(Tags.SendingTime, "a");
 
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_handler.OnNewMessage(_message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
-			Assert.AreEqual(FixErrorCode.IncorrectDataFormatForValue, ex.GetFixErrorCode());
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual(Tags.SendingTime, ex.GetProblemField().TagId);
+			ClassicAssert.AreEqual(FixErrorCode.IncorrectDataFormatForValue, ex.GetFixErrorCode());
 
-			AssertNoMessagePassedForNext();
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual(3, responseMessage.GetTagAsInt(35));
-			Assert.AreEqual("Invalid sending time", responseMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual(3, responseMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual("Invalid sending time", responseMessage.GetTagValueAsString(58));
 
-			Assert.AreEqual("Invalid sending time", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
-			Assert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
+			ClassicAssert.AreEqual("Invalid sending time", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.AreEqual(DisconnectReason.InvalidMessage, _testFixSession.LastDisconnectReason);
 		}
 
 		[Test]
@@ -254,27 +255,27 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			long msgTime = 100;
 			long currTime = 104;
 			var inOutBorder = _handler.IsTimeOutOfBorder(msgTime, currTime);
-			Assert.IsFalse(inOutBorder);
+			ClassicAssert.IsFalse(inOutBorder);
 
 			msgTime = 90;
 			currTime = 104;
 			inOutBorder = _handler.IsTimeOutOfBorder(msgTime, currTime);
-			Assert.IsTrue(inOutBorder);
+			ClassicAssert.IsTrue(inOutBorder);
 
 			msgTime = 95;
 			currTime = 104;
 			inOutBorder = _handler.IsTimeOutOfBorder(msgTime, currTime);
-			Assert.IsFalse(inOutBorder);
+			ClassicAssert.IsFalse(inOutBorder);
 
 			msgTime = 114;
 			currTime = 104;
 			inOutBorder = _handler.IsTimeOutOfBorder(msgTime, currTime);
-			Assert.IsFalse(inOutBorder);
+			ClassicAssert.IsFalse(inOutBorder);
 
 			msgTime = 115;
 			currTime = 104;
 			inOutBorder = _handler.IsTimeOutOfBorder(msgTime, currTime);
-			Assert.IsTrue(inOutBorder);
+			ClassicAssert.IsTrue(inOutBorder);
 		}
 	}
 

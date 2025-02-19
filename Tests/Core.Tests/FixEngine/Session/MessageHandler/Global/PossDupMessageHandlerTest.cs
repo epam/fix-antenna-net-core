@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -47,9 +48,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.Set(34, "101");
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(_session.RuntimeState.InSeqNum, 100);
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(_session.RuntimeState.InSeqNum, 100);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 
 		[Test]
@@ -58,9 +59,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.Set(34, "99");
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(_session.RuntimeState.InSeqNum, 100);
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(_session.RuntimeState.InSeqNum, 100);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 
 		[Test]
@@ -69,9 +70,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.Set(34, "100");
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(_session.RuntimeState.InSeqNum, 100);
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(_session.RuntimeState.InSeqNum, 100);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 
 		[Test]
@@ -81,9 +82,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.RemoveTag(43);
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(_session.RuntimeState.InSeqNum, 100);
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(_session.RuntimeState.InSeqNum, 100);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 
 		[Test]
@@ -91,18 +92,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		{
 			_hbMessage.Set(122, "20110126-15:35:47.087");
 
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_messageHandler.OnNewMessage(_hbMessage);
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			AssertNoMessagePassedForNext();
-			Assert.AreEqual(1, _session.Messages.Count);
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.AreEqual(1, _session.Messages.Count);
 			var fixMessage = _session.Messages[0];
-			Assert.AreEqual(3, fixMessage.GetTagAsInt(35));
-			Assert.AreEqual(122, fixMessage.GetTagAsInt(371));
-			Assert.AreEqual("OriginalSendingTime is after SendingTime", fixMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual(3, fixMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual(122, fixMessage.GetTagAsInt(371));
+			ClassicAssert.AreEqual("OriginalSendingTime is after SendingTime", fixMessage.GetTagValueAsString(58));
 		}
 
 		[Test]
@@ -111,26 +112,26 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.Set(122, _hbMessage.GetTagValueAsString(52));
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 
 		[Test]
 		public virtual void TestOnAbsentOrigSendingTimeSendReject()
 		{
 			_hbMessage.RemoveTag(122);
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_messageHandler.OnNewMessage(_hbMessage);
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			AssertNoMessagePassedForNext();
-			Assert.AreEqual(1, _session.Messages.Count);
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.AreEqual(1, _session.Messages.Count);
 			var fixMessage = _session.Messages[0];
-			Assert.AreEqual(3, fixMessage.GetTagAsInt(35));
-			Assert.AreEqual(122, fixMessage.GetTagAsInt(371));
-			Assert.AreEqual("OriginalSendingTime is missing for PossDup message",
+			ClassicAssert.AreEqual(3, fixMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual(122, fixMessage.GetTagAsInt(371));
+			ClassicAssert.AreEqual("OriginalSendingTime is missing for PossDup message",
 				fixMessage.GetTagValueAsString(58));
 		}
 
@@ -138,18 +139,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		public virtual void TestOnEmptyOrigSendingTimeSendReject()
 		{
 			_hbMessage.Set(122, "");
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_messageHandler.OnNewMessage(_hbMessage);
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			AssertNoMessagePassedForNext();
-			Assert.AreEqual(1, _session.Messages.Count);
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssertNoMessagePassedForNext();
+			ClassicAssert.AreEqual(1, _session.Messages.Count);
 			var fixMessage = _session.Messages[0];
-			Assert.AreEqual(3, fixMessage.GetTagAsInt(35));
-			Assert.AreEqual(122, fixMessage.GetTagAsInt(371));
-			Assert.AreEqual("invalid OriginalSendingTime", fixMessage.GetTagValueAsString(58));
+			ClassicAssert.AreEqual(3, fixMessage.GetTagAsInt(35));
+			ClassicAssert.AreEqual(122, fixMessage.GetTagAsInt(371));
+			ClassicAssert.AreEqual("invalid OriginalSendingTime", fixMessage.GetTagValueAsString(58));
 		}
 
 		[Test]
@@ -162,8 +163,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.Set(122, "20110126-15:35:47.087");
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 
 		[Test]
@@ -176,8 +177,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_hbMessage.RemoveTag(122);
 			_messageHandler.OnNewMessage(_hbMessage);
 
-			Assert.AreEqual(0, _session.Messages.Count);
-			AssertThatMessagePassedToNextHandlerIs(_hbMessage);
+			ClassicAssert.AreEqual(0, _session.Messages.Count);
+			ClassicAssertThatMessagePassedToNextHandlerIs(_hbMessage);
 		}
 	}
 

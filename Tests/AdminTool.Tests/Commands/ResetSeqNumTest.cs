@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -38,8 +39,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_changeSeqNum.TargetCompID = TestSessionID.Target;
 
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -50,16 +51,16 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_changeSeqNum.SessionQualifier = TestSessionIdQualifier.Qualifier;
 
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 		}
 
 		[Test]
 		public void TestResetSeqNumFailed()
 		{
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 	}
 }

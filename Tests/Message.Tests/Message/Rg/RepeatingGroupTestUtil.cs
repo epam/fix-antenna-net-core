@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Rg;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -33,7 +34,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				group = msg.GetRepeatingGroup(leadingTag);
 			}
 
-			Assert.AreEqual(entriesCount, group.GetLeadingTagValue());
+			ClassicAssert.AreEqual(entriesCount, group.GetLeadingTagValue());
 
 			var currentTagIndex = 1;
 			var notSkippedEntries = 0;
@@ -62,13 +63,13 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 						actualValue = entry.GetTagValueAsString(tagId);
 					}
 
-					Assert.AreEqual(expectedValue, actualValue, "try get value of tag " + tagId);
+					ClassicAssert.AreEqual(expectedValue, actualValue, "try get value of tag " + tagId);
 					currentTagIndex++;
 				} while (currentTagIndex < tags.Length &&
 						Convert.ToInt32(tags[currentTagIndex].Split("=", true)[0]) != delimTag);
 			}
 
-			Assert.AreEqual(notSkippedEntries, entriesCount, "Skipped more then actual entry added");
+			ClassicAssert.AreEqual(notSkippedEntries, entriesCount, "Skipped more then actual entry added");
 		}
 	}
 }

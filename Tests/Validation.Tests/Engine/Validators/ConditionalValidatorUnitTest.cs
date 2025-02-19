@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.NetCore.Validation.Validators.Condition;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 {
@@ -46,7 +47,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 		{
 			var requiredAndAlwaysValidCondition = new DummyCondition(this, true, true);
 			var errors = ValidateWithCondition(requiredAndAlwaysValidCondition);
-			Assert.IsTrue(errors.IsEmpty, "No errors expected");
+			ClassicAssert.IsTrue(errors.IsEmpty, "No errors expected");
 		}
 
 		[Test]
@@ -54,7 +55,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 		{
 			var notRequiredAndValidCondition = new DummyCondition(this, false, true);
 			var errors = ValidateWithCondition(notRequiredAndValidCondition);
-			Assert.IsTrue(errors.IsEmpty, "No errors expected");
+			ClassicAssert.IsTrue(errors.IsEmpty, "No errors expected");
 		}
 
 		[Test]
@@ -62,7 +63,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 		{
 			var requiredAndInvalidCondition = new DummyCondition(this, true, false);
 			var errors = ValidateWithCondition(requiredAndInvalidCondition);
-			Assert.IsFalse(errors.IsEmpty, "Tag is expected in message");
+			ClassicAssert.IsFalse(errors.IsEmpty, "Tag is expected in message");
 		}
 
 		[Test]
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Validators
 		{
 			var notRequiredAndInvalidCondition = new DummyCondition(this, false, false);
 			var errors = ValidateWithCondition(notRequiredAndInvalidCondition);
-			Assert.IsTrue(errors.IsEmpty, "No errors expected");
+			ClassicAssert.IsTrue(errors.IsEmpty, "No errors expected");
 		}
 
 		private FixErrorContainer ValidateWithCondition(DummyCondition condition)

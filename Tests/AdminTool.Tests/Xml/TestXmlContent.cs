@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.AdminTool.Tests.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Xml
 {
@@ -28,7 +29,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Xml
 		[TearDown]
 		public void After()
 		{
-			LogAppender.AssertIfErrorExist();
+			LogAppender.ClassicAssertIfErrorExist();
 		}
 
 		[Test]

@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Acceptor;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		[SetUp]
 		public void SetUp()
 		{
-			Assert.IsTrue(ClearLogs(),"Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(),"Can't clean logs before tests");
 			_counter = new CountdownEvent(MessagesNumber);
 		}
 
@@ -52,7 +53,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			StopCounterparties();
 			FixSessionManager.DisposeAllSession();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		protected virtual bool ClearLogs()
@@ -149,7 +150,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			_counter.Wait();
 
-			Assert.IsTrue(!_checkThrottle && _initiatorSession.SessionState == SessionState.Connected);
+			ClassicAssert.IsTrue(!_checkThrottle && _initiatorSession.SessionState == SessionState.Connected);
 		}
 
 		[Test]
@@ -175,8 +176,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			CheckingUtils.CheckWithinTimeout(() => _initiatorSession.SessionState.Equals(SessionState.Disconnected), TimeSpan.FromMilliseconds(2000));
 
-			Assert.AreEqual(DisconnectReason.ClosedByCounterparty, ((AbstractFixSession)_initiatorSession).LastDisconnectReason);
-			Assert.AreEqual(DisconnectReason.Throttling, ((AbstractFixSession)_acceptorSession).LastDisconnectReason);
+			ClassicAssert.AreEqual(DisconnectReason.ClosedByCounterparty, ((AbstractFixSession)_initiatorSession).LastDisconnectReason);
+			ClassicAssert.AreEqual(DisconnectReason.Throttling, ((AbstractFixSession)_acceptorSession).LastDisconnectReason);
 		}
 
 

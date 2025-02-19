@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 {
@@ -62,15 +63,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			
 			var configuration = new ConfigurationAdapter(globalConfiguration);
 
-			Assert.IsFalse(configuration.IsResetOnSwitchToBackupEnabled);
+			ClassicAssert.IsFalse(configuration.IsResetOnSwitchToBackupEnabled);
 
-			Assert.IsTrue(configuration.IsResetOnSwitchToPrimaryEnabled);
+			ClassicAssert.IsTrue(configuration.IsResetOnSwitchToPrimaryEnabled);
 
-			Assert.IsTrue(configuration.IsCyclicSwitchBackupConnectionEnabled);
+			ClassicAssert.IsTrue(configuration.IsCyclicSwitchBackupConnectionEnabled);
 
-			Assert.IsFalse(configuration.IsAutoSwitchToBackupConnectionEnabled);
+			ClassicAssert.IsFalse(configuration.IsAutoSwitchToBackupConnectionEnabled);
 
-			Assert.AreEqual("Epam.FixAntenna.NetCore.FixEngine.Acceptor.AllowNonRegisteredAcceptorStrategyHandler", configuration.ServerAcceptorStrategy);
+			ClassicAssert.AreEqual("Epam.FixAntenna.NetCore.FixEngine.Acceptor.AllowNonRegisteredAcceptorStrategyHandler", configuration.ServerAcceptorStrategy);
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			var confAdapter = new ConfigurationAdapter(conf);
 
 			var maxMessagesToSendInBatch = confAdapter.MaxMessagesToSendInBatch;
-			Assert.IsTrue(maxMessagesToSendInBatch > 0, Config.MaxMessagesToSendInBatch + " has invalid value: " + maxMessagesToSendInBatch);
+			ClassicAssert.IsTrue(maxMessagesToSendInBatch > 0, Config.MaxMessagesToSendInBatch + " has invalid value: " + maxMessagesToSendInBatch);
 		}
 	}
 }

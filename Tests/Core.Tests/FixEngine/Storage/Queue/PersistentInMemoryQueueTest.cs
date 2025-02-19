@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.Queue;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 {
@@ -52,7 +53,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		public virtual void TestLength()
 		{
 			var utils = new PersistentInMemoryQueueUtils();
-			Assert.AreEqual(0, utils.GetIntByteLength(0));
+			ClassicAssert.AreEqual(0, utils.GetIntByteLength(0));
 		}
 
 		[Test]
@@ -60,7 +61,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		{
 			var utils = new PersistentInMemoryQueueUtils();
 			var header = utils.GetLengthHeader(0);
-			Assert.AreEqual(StringHelper.NewString(new byte[] { 0 }), StringHelper.NewString(header));
+			ClassicAssert.AreEqual(StringHelper.NewString(new byte[] { 0 }), StringHelper.NewString(header));
 		}
 
 		[Test]
@@ -75,13 +76,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		public virtual void TestGetIntByteLength()
 		{
 			var utils = new PersistentInMemoryQueueUtils();
-			Assert.AreEqual(0, utils.GetIntByteLength(0));
-			Assert.AreEqual(1, utils.GetIntByteLength(1));
-			Assert.AreEqual(1, utils.GetIntByteLength(255));
-			Assert.AreEqual(2, utils.GetIntByteLength(256));
-			Assert.AreEqual(2, utils.GetIntByteLength(32767));
-			Assert.AreEqual(2, utils.GetIntByteLength(65535));
-			Assert.AreEqual(3, utils.GetIntByteLength(65536));
+			ClassicAssert.AreEqual(0, utils.GetIntByteLength(0));
+			ClassicAssert.AreEqual(1, utils.GetIntByteLength(1));
+			ClassicAssert.AreEqual(1, utils.GetIntByteLength(255));
+			ClassicAssert.AreEqual(2, utils.GetIntByteLength(256));
+			ClassicAssert.AreEqual(2, utils.GetIntByteLength(32767));
+			ClassicAssert.AreEqual(2, utils.GetIntByteLength(65535));
+			ClassicAssert.AreEqual(3, utils.GetIntByteLength(65536));
 		}
 
 		[Test]
@@ -89,19 +90,19 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		{
 			InitializeNewFactory();
 			//System.in.read();
-			Assert.AreEqual(3, _queue.Size);
-			Assert.AreEqual("1", _queue.Poll().MessageType);
+			ClassicAssert.AreEqual(3, _queue.Size);
+			ClassicAssert.AreEqual("1", _queue.Poll().MessageType);
 		}
 
 		[Test]
 		public virtual void TestCommit()
 		{
 			InitializeNewFactory();
-			Assert.AreEqual(3, _queue.Size);
+			ClassicAssert.AreEqual(3, _queue.Size);
 			_queue.Poll();
 			_queue.Commit();
-			Assert.AreEqual(2, _queue.Size);
-			Assert.AreEqual("2", _queue.Poll().MessageType);
+			ClassicAssert.AreEqual(2, _queue.Size);
+			ClassicAssert.AreEqual("2", _queue.Poll().MessageType);
 		}
 
 		[Test]
@@ -109,10 +110,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		{
 			InitializeNewFactory();
 			_queue.Clear();
-			Assert.AreEqual(0, _queue.Size);
+			ClassicAssert.AreEqual(0, _queue.Size);
 			_queue.Add(FixMessageWithTypePoolFactory.GetFixMessageWithTypeFromPool(_list, "4"));
-			Assert.AreEqual(1, _queue.Size);
-			Assert.AreEqual("4", _queue.Poll().MessageType);
+			ClassicAssert.AreEqual(1, _queue.Size);
+			ClassicAssert.AreEqual("4", _queue.Poll().MessageType);
 		}
 
 		[Test]
@@ -125,7 +126,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.Commit();
 			_queue.Shutdown();
 			InitializeNewFactory();
-			Assert.AreEqual(1, _queue.Size);
+			ClassicAssert.AreEqual(1, _queue.Size);
 		}
 
 		private void InitializeNewFactory()

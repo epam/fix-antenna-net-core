@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy; 
 using ForceSeqNumReset = Epam.FixAntenna.NetCore.FixEngine.ForceSeqNumReset;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
@@ -108,14 +109,14 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 		{
 			_createInitiator.RequestID = null;
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 
 		[Test]
 		public void TestInvalidSenderTarget()
 		{
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -125,7 +126,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_createInitiator.SenderCompID = "sender";
 
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -138,7 +139,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_createInitiator.RemoteHost = "r";
 
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -162,8 +163,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_createInitiator.ExtraSessionParams.EncryptMethod = method;
 
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, method + " doesn't supported.");
-			Assert.AreEqual("Failed to execute `CreateInitiator` command: Unsupported " + "encryption method for session: " + method + ". Please choose NONE.", response.Description, method + " doesn't supported.");
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode, method + " doesn't supported.");
+			ClassicAssert.AreEqual("Failed to execute `CreateInitiator` command: Unsupported " + "encryption method for session: " + method + ". Please choose NONE.", response.Description, method + " doesn't supported.");
 			FixSessionManager.DisposeAllSession();
 			_createInitiator.ExtraSessionParams.EncryptMethod = null;
 		}
@@ -174,8 +175,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_createInitiator.ExtraSessionParams.EncryptMethod = method;
 
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode, method + " should be supported.");
-			Assert.AreEqual("CreateInitiator completed.", response.Description, method + " should be supported.");
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode, method + " should be supported.");
+			ClassicAssert.AreEqual("CreateInitiator completed.", response.Description, method + " should be supported.");
 
 			//wait till created session connected (it will be easier to dispose it)
 			using (var countDownLatch = new CountdownEvent(1))
@@ -223,8 +224,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			FixSessionManager.Instance.RegisterSessionManagerListener(new FixSessionListListenerAnonymousInnerClass(this, created));
 
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-			Assert.IsTrue(created.Value);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.IsTrue(created.Value);
 
 			//wait till created session connected (it will be easier to dispose it)
 			using (var countDownLatch = new CountdownEvent(1))
@@ -253,7 +254,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 				if (sessionParameters.SenderCompId.Equals("sender")
 						&& sessionParameters.TargetCompId.Equals("target"))
 				{
-					_outerInstance.AssertValidSession(_outerInstance._createInitiator, sessionParameters);
+					_outerInstance.ClassicAssertValidSession(_outerInstance._createInitiator, sessionParameters);
 					_created.Value = true;
 				}
 			}
@@ -298,8 +299,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			FixSessionManager.Instance.RegisterSessionManagerListener(new FixSessionListListenerAnonymousInnerClass2(this, created));
 
 			var response = GetReponse(_createInitiator);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-			Assert.IsTrue(created.Value);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.IsTrue(created.Value);
 
 			//wait till created session connected (it will be easier to dispose it)
 			using (var countDownLatch = new CountdownEvent(1))
@@ -330,7 +331,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 						&& "target".Equals(sessionParameters.TargetCompId)
 						&& "idT".Equals(sessionParameters.SessionQualifier))
 				{
-					_outerInstance.AssertValidSession(_outerInstance._createInitiator, sessionParameters);
+					_outerInstance.ClassicAssertValidSession(_outerInstance._createInitiator, sessionParameters);
 					_created.Value = true;
 				}
 			}
@@ -387,9 +388,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 				_createInitiator.Backup.ActiveConnection = ActiveConnection.BACKUP;
 
 				var response = GetReponse(_createInitiator);
-				Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-				Assert.IsTrue(backupCountDownLatch.Wait(1000));
-				Assert.IsFalse(primaryCountDownLatch.Wait(1000));
+				ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+				ClassicAssert.IsTrue(backupCountDownLatch.Wait(1000));
+				ClassicAssert.IsFalse(primaryCountDownLatch.Wait(1000));
 			}
 			finally
 			{
@@ -400,17 +401,17 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			}
 		}
 
-		private void AssertValidSession(CreateInitiator exceptedSessionData, SessionParameters actualSessionParameters)
+		private void ClassicAssertValidSession(CreateInitiator exceptedSessionData, SessionParameters actualSessionParameters)
 		{
-			Assert.AreEqual(exceptedSessionData.SenderCompID, actualSessionParameters.SenderCompId);
-			Assert.AreEqual(exceptedSessionData.TargetCompID, actualSessionParameters.TargetCompId);
-			Assert.AreEqual(ForceSeqNumReset.OneTime, actualSessionParameters.ForceSeqNumReset);
+			ClassicAssert.AreEqual(exceptedSessionData.SenderCompID, actualSessionParameters.SenderCompId);
+			ClassicAssert.AreEqual(exceptedSessionData.TargetCompID, actualSessionParameters.TargetCompId);
+			ClassicAssert.AreEqual(ForceSeqNumReset.OneTime, actualSessionParameters.ForceSeqNumReset);
 
 			var configurationAdaptor = new ConfigurationAdapter(actualSessionParameters.Configuration);
-			Assert.IsTrue(configurationAdaptor.IsAutoSwitchToBackupConnectionEnabled);
-			Assert.IsTrue(configurationAdaptor.IsCyclicSwitchBackupConnectionEnabled);
-			Assert.IsTrue(configurationAdaptor.IsEnableMessageRejecting);
-			Assert.IsTrue(configurationAdaptor.StorageFactoryClass.Contains("Memory"), configurationAdaptor.StorageFactoryClass);
+			ClassicAssert.IsTrue(configurationAdaptor.IsAutoSwitchToBackupConnectionEnabled);
+			ClassicAssert.IsTrue(configurationAdaptor.IsCyclicSwitchBackupConnectionEnabled);
+			ClassicAssert.IsTrue(configurationAdaptor.IsEnableMessageRejecting);
+			ClassicAssert.IsTrue(configurationAdaptor.StorageFactoryClass.Contains("Memory"), configurationAdaptor.StorageFactoryClass);
 		}
 
 		private void FillValidRequest(CreateInitiator createInitiator)

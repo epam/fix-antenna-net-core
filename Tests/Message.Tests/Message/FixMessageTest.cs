@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
 using Epam.FixAntenna.NetCore.Message.Storage;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -58,9 +59,9 @@ namespace Epam.FixAntenna.Message.Tests
 		public void TestToString()
 		{
 			_msgHbiList.IsPreparedMessage = false;
-			Assert.AreEqual(MsgHbi, _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi, _msgHbiList.ToString());
 			_msgHbiList.IsPreparedMessage = true;
-			Assert.AreEqual(MsgHbi, _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi, _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -71,20 +72,20 @@ namespace Epam.FixAntenna.Message.Tests
 			_msgHbiList.AddTagAtIndex(6, Tags.Password, "password");
 			var expected =
 				"8=FIX.4.4 | 9=66 | 35=0 | 34=15 | 49=SNDR | 58=Mickey Mouse | 554=******** | 52=20121225-11:55:47.669 | 56=TRGT | 112=123456789 | 10=063 | ";
-			Assert.AreEqual(expected, _msgHbiList.ToPrintableString());
+			ClassicAssert.AreEqual(expected, _msgHbiList.ToPrintableString());
 			_msgHbiList.IsPreparedMessage = true;
-			Assert.AreEqual(expected, _msgHbiList.ToPrintableString());
+			ClassicAssert.AreEqual(expected, _msgHbiList.ToPrintableString());
 		}
 
 		[Test]
 		public void TestParseFromString()
 		{
-			AssertEqualsString(8, "FIX.4.4", _msgHbiList);
-			Assert.AreEqual(15, _msgHbiList.GetTagAsInt(34));
-			Assert.AreEqual(0, _msgHbiList.GetTagAsInt(35));
-			AssertEqualsString(49, "SNDR", _msgHbiList);
-			AssertEqualsString(10, "063", _msgHbiList);
-			Assert.AreEqual(63, _msgHbiList.GetTagAsInt(10));
+			ClassicAssertEqualsString(8, "FIX.4.4", _msgHbiList);
+			ClassicAssert.AreEqual(15, _msgHbiList.GetTagAsInt(34));
+			ClassicAssert.AreEqual(0, _msgHbiList.GetTagAsInt(35));
+			ClassicAssertEqualsString(49, "SNDR", _msgHbiList);
+			ClassicAssertEqualsString(10, "063", _msgHbiList);
+			ClassicAssert.AreEqual(63, _msgHbiList.GetTagAsInt(10));
 		}
 
 		//------------------------ SET METHOD --------------------//
@@ -110,7 +111,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var value = new StringBuilder("Test").Append("Test").Append("Test").Append("Test").Append("Test");
 			_msgHbiList.SetAtIndex(7, value.ToString().AsByteArray());
 			var expected = ReplaceFieldValue(112, value.ToString(), MsgHbi);
-			Assert.AreEqual(expected, _msgHbiList.ToString());
+			ClassicAssert.AreEqual(expected, _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -119,7 +120,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var value = new StringBuilder("Test").Append("Test").Append("Test").Append("Test").Append("Test");
 			_newsMessage.Set(58, 2, value.ToString().AsByteArray());
 			var expected = ReplaceFieldValue(58, 2, value.ToString(), MessageNews);
-			Assert.AreEqual(expected, _newsMessage.ToString());
+			ClassicAssert.AreEqual(expected, _newsMessage.ToString());
 		}
 
 		[Test]
@@ -140,7 +141,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList.Set(tagId, value);
 			var expected = ReplaceFieldValue(tagId, value.ToString(), MsgHbi);
-			Assert.AreEqual(expected, _msgHbiList.ToString());
+			ClassicAssert.AreEqual(expected, _msgHbiList.ToString());
 		}
 
 		// Boolean
@@ -180,7 +181,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = true;
 			_msgHbiList.SetAtIndex(7, value);
-			Assert.AreEqual(ReplaceFieldValue(112, value ? "Y" : "N", MsgHbi), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(112, value ? "Y" : "N", MsgHbi), _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -188,13 +189,13 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = true;
 			_newsMessage.Set(58, 2, value);
-			Assert.AreEqual(ReplaceFieldValue(58, 2, value ? "Y" : "N", MessageNews), _newsMessage.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(58, 2, value ? "Y" : "N", MessageNews), _newsMessage.ToString());
 		}
 
 		private void TestSetBoolean(int tagId, bool value)
 		{
 			_msgHbiList.Set(tagId, value);
-			Assert.AreEqual(ReplaceFieldValue(tagId, value ? "Y" : "N", MsgHbi), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(tagId, value ? "Y" : "N", MsgHbi), _msgHbiList.ToString());
 		}
 
 		// byte[]
@@ -228,7 +229,7 @@ namespace Epam.FixAntenna.Message.Tests
 		private void TestSetByteArray(int tagId, byte[] value)
 		{
 			_msgHbiList.Set(tagId, value);
-			Assert.AreEqual(ReplaceFieldValue(tagId, StringHelper.NewString(value), MsgHbi), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(tagId, StringHelper.NewString(value), MsgHbi), _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -236,7 +237,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = "Test".AsByteArray();
 			_newsMessage.Set(58, 2, value);
-			Assert.AreEqual(ReplaceFieldValue(58, 2, StringHelper.NewString(value), MessageNews),
+			ClassicAssert.AreEqual(ReplaceFieldValue(58, 2, StringHelper.NewString(value), MessageNews),
 				_newsMessage.ToString());
 		}
 
@@ -273,14 +274,14 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = "TestTestTestTestTestTestTestTestTestTestTest".AsByteArray();
 			_newsMessage.Set(58, 2, value, 5, 20);
-			Assert.AreEqual(ReplaceFieldValue(58, 2, StringHelper.NewString(value, 5, 20), MessageNews),
+			ClassicAssert.AreEqual(ReplaceFieldValue(58, 2, StringHelper.NewString(value, 5, 20), MessageNews),
 				_newsMessage.ToString());
 		}
 
 		private void TestSetByteArray(int tagId, byte[] value, int offset, int length)
 		{
 			_msgHbiList.Set(tagId, value, offset, length);
-			Assert.AreEqual(ReplaceFieldValue(tagId, StringHelper.NewString(value, offset, length), MsgHbi),
+			ClassicAssert.AreEqual(ReplaceFieldValue(tagId, StringHelper.NewString(value, offset, length), MsgHbi),
 				_msgHbiList.ToString());
 		}
 
@@ -323,13 +324,13 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = 1234;
 			_newsMessage.Set(58, 2, (long)value);
-			Assert.AreEqual(ReplaceFieldValue(58, 2, Convert.ToString(value), MessageNews), _newsMessage.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(58, 2, Convert.ToString(value), MessageNews), _newsMessage.ToString());
 		}
 
 		private void TestSetInt(int tagId, string expectedValue, int value)
 		{
 			_msgHbiList.Set(tagId, value);
-			Assert.AreEqual(ReplaceFieldValue(tagId, expectedValue, MsgHbi), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(tagId, expectedValue, MsgHbi), _msgHbiList.ToString());
 		}
 
 		// double
@@ -372,13 +373,13 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = 1.123d;
 			_newsMessage.Set(58, 2, value, 3);
-			Assert.AreEqual(ReplaceFieldValue(58, 2, "1.123", MessageNews), _newsMessage.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(58, 2, "1.123", MessageNews), _newsMessage.ToString());
 		}
 
 		private void TestSetDouble(int tagId, string expectedValue, double value, int precision)
 		{
 			_msgHbiList.Set(tagId, value, precision);
-			Assert.AreEqual(ReplaceFieldValue(tagId, expectedValue, MsgHbi), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(tagId, expectedValue, MsgHbi), _msgHbiList.ToString());
 		}
 
 		// TIME
@@ -421,14 +422,14 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestSetOccurrenceTime()
 		{
 			_newsMessage.SetCalendarValue(58, 2, _calendarUtc, FixDateFormatterFactory.FixDateType.Time40);
-			Assert.AreEqual(ReplaceFieldValue(58, 2, _expectedDateTime, MessageNews), _newsMessage.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(58, 2, _expectedDateTime, MessageNews), _newsMessage.ToString());
 		}
 
 		private void TestSetTime(int tagId, string expectedValue, DateTime value,
 			FixDateFormatterFactory.FixDateType type)
 		{
 			_msgHbiList.SetCalendarValue(tagId, value, type);
-			Assert.AreEqual(ReplaceFieldValue(tagId, expectedValue, MsgHbi), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(ReplaceFieldValue(tagId, expectedValue, MsgHbi), _msgHbiList.ToString());
 		}
 
 		//------------------------ GET METHOD --------------------//
@@ -438,11 +439,11 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, "Y", MsgHbi).AsByteArray());
 			var actualValue = _msgHbiList.GetTagValueAsBool(112);
-			Assert.IsTrue(actualValue);
+			ClassicAssert.IsTrue(actualValue);
 
 			_msgHbiList.Set(112, false);
 			actualValue = _msgHbiList.GetTagValueAsBool(112);
-			Assert.IsFalse(actualValue);
+			ClassicAssert.IsFalse(actualValue);
 		}
 
 		[Test]
@@ -450,11 +451,11 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, "123", MsgHbi).AsByteArray());
 			var actualValue = _msgHbiList.GetTagValueAsByte(112, 2);
-			Assert.AreEqual('3', actualValue);
+			ClassicAssert.AreEqual('3', actualValue);
 
 			_msgHbiList.Set(112, "321".AsByteArray());
 			actualValue = _msgHbiList.GetTagValueAsByte(112, 2);
-			Assert.AreEqual('1', actualValue);
+			ClassicAssert.AreEqual('1', actualValue);
 		}
 
 		[Test]
@@ -462,11 +463,11 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, "123", MsgHbi).AsByteArray());
 			var actualValue = _msgHbiList.GetTagValueAsLong(112);
-			Assert.AreEqual(123, actualValue);
+			ClassicAssert.AreEqual(123, actualValue);
 
 			_msgHbiList.Set(112, 321);
 			actualValue = _msgHbiList.GetTagValueAsLong(112);
-			Assert.AreEqual(321, actualValue);
+			ClassicAssert.AreEqual(321, actualValue);
 		}
 
 		[Test]
@@ -474,11 +475,11 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, "1.23", MsgHbi).AsByteArray());
 			var actualValue = _msgHbiList.GetTagValueAsDouble(112);
-			Assert.AreEqual(1.23d, actualValue, 1e-15);
+			ClassicAssert.AreEqual(1.23d, actualValue, 1e-15);
 
 			_msgHbiList.Set(112, 3.21d, 2);
 			actualValue = _msgHbiList.GetTagValueAsDouble(112);
-			Assert.AreEqual(3.21d, actualValue, 1e-15);
+			ClassicAssert.AreEqual(3.21d, actualValue, 1e-15);
 		}
 
 		[Test]
@@ -487,35 +488,35 @@ namespace Epam.FixAntenna.Message.Tests
 			var bb = new ByteBuffer();
 			_newsMessage.GetTagValueAtIndex(_newsMessage.GetTagIndex(49), bb);
 			_newsMessage.GetTagValueAtIndex(_newsMessage.GetTagIndex(56), bb);
-			Assert.AreEqual("targetsender".Length, bb.Offset);
-			Assert.AreEqual("targetsender", StringHelper.NewString(bb.GetBulk()));
+			ClassicAssert.AreEqual("targetsender".Length, bb.Offset);
+			ClassicAssert.AreEqual("targetsender", StringHelper.NewString(bb.GetBulk()));
 		}
 
 		[Test]
 		public virtual void TestIsTagValueEqual()
 		{
-			Assert.IsTrue(_newsMessage.IsTagValueEqual(49, "target".AsByteArray()));
-			Assert.IsFalse(_newsMessage.IsTagValueEqual(56, "target".AsByteArray()));
+			ClassicAssert.IsTrue(_newsMessage.IsTagValueEqual(49, "target".AsByteArray()));
+			ClassicAssert.IsFalse(_newsMessage.IsTagValueEqual(56, "target".AsByteArray()));
 			//unknown tag
-			Assert.IsFalse(_newsMessage.IsTagValueEqual(50000, "target".AsByteArray()));
+			ClassicAssert.IsFalse(_newsMessage.IsTagValueEqual(50000, "target".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestHasTagValue()
 		{
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, "123", MsgHbi).AsByteArray());
-			Assert.IsTrue(_msgHbiList.HasTagValue(112));
+			ClassicAssert.IsTrue(_msgHbiList.HasTagValue(112));
 
 			//check empty value
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, "", MsgHbi).AsByteArray());
-			Assert.IsFalse(_msgHbiList.HasTagValue(112));
+			ClassicAssert.IsFalse(_msgHbiList.HasTagValue(112));
 
 			//check spaces
 			_msgHbiList = RawFixUtil.GetFixMessage(ReplaceFieldValue(112, " ", MsgHbi).AsByteArray());
-			Assert.IsTrue(_msgHbiList.HasTagValue(112));
+			ClassicAssert.IsTrue(_msgHbiList.HasTagValue(112));
 
 			//check unknown tag
-			Assert.IsFalse(_msgHbiList.HasTagValue(50000));
+			ClassicAssert.IsFalse(_msgHbiList.HasTagValue(50000));
 		}
 
 		//------------------------ OLD API METHOD --------------------//
@@ -524,45 +525,45 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestSplit()
 		{
 			var splitList = _newsMessage.Split(58);
-			Assert.AreEqual(2, splitList.Count);
+			ClassicAssert.AreEqual(2, splitList.Count);
 
 			var groupEntry = splitList[0];
-			Assert.AreEqual(1, groupEntry.Length);
-			AssertEqualsString(58, "1", groupEntry);
+			ClassicAssert.AreEqual(1, groupEntry.Length);
+			ClassicAssertEqualsString(58, "1", groupEntry);
 
 			groupEntry = splitList[1];
 			// without dictionary can't detect end of RG entry
-			//        assertEquals(1, groupEntry.size());
-			AssertEqualsString(58, "2", groupEntry);
+			//        ClassicAssertEquals(1, groupEntry.size());
+			ClassicAssertEqualsString(58, "2", groupEntry);
 		}
 
 		[Test]
 		public virtual void TestGetMsgType()
 		{
-			Assert.That("0".AsByteArray(), Is.EquivalentTo(_msgHbiList.MsgType));
+			ClassicAssert.That("0".AsByteArray(), Is.EquivalentTo(_msgHbiList.MsgType));
 			_msgHbiList.Set(35, "AB".AsByteArray());
-			Assert.That("AB".AsByteArray(), Is.EquivalentTo(_msgHbiList.MsgType));
+			ClassicAssert.That("AB".AsByteArray(), Is.EquivalentTo(_msgHbiList.MsgType));
 		}
 
 		[Test]
 		public virtual void TestGetMsgSeqNumber()
 		{
-			Assert.AreEqual(15, _msgHbiList.MsgSeqNumber);
+			ClassicAssert.AreEqual(15, _msgHbiList.MsgSeqNumber);
 		}
 
 		[Test]
 		public virtual void TestGetIndex()
 		{
-			Assert.AreEqual(35, _msgHbiList[2].TagId);
+			ClassicAssert.AreEqual(35, _msgHbiList[2].TagId);
 		}
 
 		[Test]
 		public virtual void TestClone()
 		{
 			var clone = (FixMessage)_msgHbiList.Clone();
-			Assert.AreEqual(_msgHbiList, clone);
-			Assert.AreEqual(_msgHbiList.ToString(), clone.ToString());
-			Assert.IsFalse(ReferenceEquals(_msgHbiList, clone));
+			ClassicAssert.AreEqual(_msgHbiList, clone);
+			ClassicAssert.AreEqual(_msgHbiList.ToString(), clone.ToString());
+			ClassicAssert.IsFalse(ReferenceEquals(_msgHbiList, clone));
 		}
 
 		[Test]
@@ -580,73 +581,73 @@ namespace Epam.FixAntenna.Message.Tests
 
 			msg.AddAll(list);
 
-			Assert.AreEqual("1=1\u00012=2\u00013=3\u00014=4\u0001", msg.ToString());
+			ClassicAssert.AreEqual("1=1\u00012=2\u00013=3\u00014=4\u0001", msg.ToString());
 		}
 
 		[Test]
 		public virtual void TestGetTag()
 		{
 			var f = _msgHbiList.GetTag(35);
-			Assert.IsNotNull(f);
-			Assert.That(f.Value, Is.EquivalentTo("0".AsByteArray()));
+			ClassicAssert.IsNotNull(f);
+			ClassicAssert.That(f.Value, Is.EquivalentTo("0".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestGetTagIfFieldNotExist()
 		{
-			Assert.IsNull(_msgHbiList.GetTag(555));
+			ClassicAssert.IsNull(_msgHbiList.GetTag(555));
 		}
 
 		[Test]
 		public virtual void TestGetTagOccurrence()
 		{
 			var f = _newsMessage.GetTag(58, 2);
-			Assert.IsNotNull(f);
-			Assert.That(f.Value, Is.EquivalentTo("2".AsByteArray()));
+			ClassicAssert.IsNotNull(f);
+			ClassicAssert.That(f.Value, Is.EquivalentTo("2".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestGetTagOccurrenceIfFieldNotExist()
 		{
-			Assert.IsNull(_msgHbiList.GetTag(555, 2));
+			ClassicAssert.IsNull(_msgHbiList.GetTag(555, 2));
 		}
 
 		[Test]
 		public virtual void TestGetTagOccurrenceOutOfOccurrence()
 		{
-			Assert.IsNull(_msgHbiList.GetTag(58, 3));
+			ClassicAssert.IsNull(_msgHbiList.GetTag(58, 3));
 		}
 
 		[Test]
 		public virtual void AddByteArray()
 		{
 			_msgHbiList.AddTag(777, "ABC".AsByteArray());
-			Assert.AreEqual(MsgHbi + "777=ABC\u0001", _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi + "777=ABC\u0001", _msgHbiList.ToString());
 		}
 
 		[Test]
 		public virtual void AddStringField()
 		{
 			_msgHbiList.AddTag(777, "ABC");
-			Assert.AreEqual(MsgHbi + "777=ABC\u0001", _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi + "777=ABC\u0001", _msgHbiList.ToString());
 		}
 
 		[Test]
 		public virtual void TestGetStringValue()
 		{
-			Assert.AreEqual("123456789", _msgHbiList.GetTagValueAsString(112));
+			ClassicAssert.AreEqual("123456789", _msgHbiList.GetTagValueAsString(112));
 		}
 
 		[Test]
 		public virtual void TestGetStringValueIfFieldNotExist()
 		{
-			Assert.IsNull(_msgHbiList.GetTagValueAsString(555));
+			ClassicAssert.IsNull(_msgHbiList.GetTagValueAsString(555));
 		}
 
 		[Test]
 		public virtual void TestToByteArray()
 		{
-			Assert.That(_msgHbiList.AsByteArray(), Is.EquivalentTo(MsgHbi.AsByteArray()));
+			ClassicAssert.That(_msgHbiList.AsByteArray(), Is.EquivalentTo(MsgHbi.AsByteArray()));
 		}
 
 		[Test]
@@ -655,8 +656,8 @@ namespace Epam.FixAntenna.Message.Tests
 			var array = new byte[1000];
 			var offset = 100;
 			var nextPos = offset + MsgHbi.Length;
-			Assert.AreEqual(nextPos, _msgHbiList.ToByteArrayAndReturnNextPosition(array, offset));
-			Assert.AreEqual(MsgHbi, StringHelper.NewString(array, offset, MsgHbi.Length));
+			ClassicAssert.AreEqual(nextPos, _msgHbiList.ToByteArrayAndReturnNextPosition(array, offset));
+			ClassicAssert.AreEqual(MsgHbi, StringHelper.NewString(array, offset, MsgHbi.Length));
 		}
 
 		[Test]
@@ -672,21 +673,21 @@ namespace Epam.FixAntenna.Message.Tests
 			var expectedMsg = "8=44\u000110=150\u0001";
 			var nextPos = offset + expectedMsg.Length;
 			int[] excludedFields = { 9 };
-			Assert.AreEqual(nextPos, msg.ToByteArrayAndReturnNextPosition(array, offset, excludedFields));
-			Assert.AreEqual(expectedMsg, StringHelper.NewString(array, offset, expectedMsg.Length));
+			ClassicAssert.AreEqual(nextPos, msg.ToByteArrayAndReturnNextPosition(array, offset, excludedFields));
+			ClassicAssert.AreEqual(expectedMsg, StringHelper.NewString(array, offset, expectedMsg.Length));
 		}
 
 		[Test]
 		public virtual void TestGetRawLength()
 		{
-			Assert.AreEqual(MsgHbi.Length, _msgHbiList.RawLength);
+			ClassicAssert.AreEqual(MsgHbi.Length, _msgHbiList.RawLength);
 		}
 
 		[Test]
 		public virtual void TestGetRawLengthAddField()
 		{
 			_msgHbiList.AddTag(1, (long)1);
-			Assert.AreEqual(MsgHbi.Length + 4, _msgHbiList.RawLength);
+			ClassicAssert.AreEqual(MsgHbi.Length + 4, _msgHbiList.RawLength);
 		}
 
 		[Test]
@@ -694,7 +695,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList.AddTag(1, (long)1);
 			_msgHbiList.IsPreparedMessage = true;
-			Assert.AreEqual(MsgHbi.Length + 4, _msgHbiList.RawLength);
+			ClassicAssert.AreEqual(MsgHbi.Length + 4, _msgHbiList.RawLength);
 		}
 
 		[Test]
@@ -702,7 +703,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var lengthBeforeUpdate = _msgHbiList.GetTagLength(112);
 			_msgHbiList.Set(112, 1);
-			Assert.AreEqual(MsgHbi.Length - lengthBeforeUpdate + 1, _msgHbiList.RawLength);
+			ClassicAssert.AreEqual(MsgHbi.Length - lengthBeforeUpdate + 1, _msgHbiList.RawLength);
 		}
 
 		[Test]
@@ -710,7 +711,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList.IsPreparedMessage = true;
 			_msgHbiList.Set(112, 1);
-			Assert.AreEqual(MsgHbi.Length, _msgHbiList.RawLength,
+			ClassicAssert.AreEqual(MsgHbi.Length, _msgHbiList.RawLength,
 				"In prepared message length must be without change");
 		}
 
@@ -721,20 +722,20 @@ namespace Epam.FixAntenna.Message.Tests
 			_msgHbiList.IsPreparedMessage = true;
 			var newValue = "1234567890123456";
 			_msgHbiList.Set(112, newValue.AsByteArray());
-			Assert.AreEqual(MsgHbi.Length - lengthBeforeUpdate + newValue.Length, _msgHbiList.RawLength);
+			ClassicAssert.AreEqual(MsgHbi.Length - lengthBeforeUpdate + newValue.Length, _msgHbiList.RawLength);
 		}
 
 		[Test]
 		public virtual void TestGetMsgVersion()
 		{
-			Assert.AreEqual(FixVersion.Fix44, _msgHbiList.MsgVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix44, _msgHbiList.MsgVersion);
 		}
 
 		[Test]
 		public virtual void TestAddFixField()
 		{
 			_msgHbiList.AddTag(55, "VV");
-			Assert.AreEqual(MsgHbi + "55=VV\u0001", _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi + "55=VV\u0001", _msgHbiList.ToString());
 		}
 		//------------------------ LIST API --------------------//
 
@@ -742,21 +743,21 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestSetAtIndexFixField()
 		{
 			_msgHbiList[0] = new TagValue(55, "VV");
-			Assert.AreEqual(MsgHbi.Replace("8=FIX.4.4", "55=VV"), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi.Replace("8=FIX.4.4", "55=VV"), _msgHbiList.ToString());
 		}
 
 		[Test]
 		public virtual void TestAddAtEndFixField()
 		{
 			_msgHbiList.AddTag(55, "VV");
-			Assert.AreEqual(MsgHbi + "55=VV\u0001", _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi + "55=VV\u0001", _msgHbiList.ToString());
 		}
 
 		[Test]
 		public virtual void TestAddAtIndexFixField()
 		{
 			_msgHbiList.AddTagAtIndex(0, 55, "VV");
-			Assert.AreEqual("55=VV\u0001" + MsgHbi, _msgHbiList.ToString());
+			ClassicAssert.AreEqual("55=VV\u0001" + MsgHbi, _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -772,7 +773,7 @@ namespace Epam.FixAntenna.Message.Tests
 
 			msg.AddAll(list);
 
-			Assert.AreEqual("1=1\u00012=2\u00013=3\u00014=4\u0001", msg.ToString());
+			ClassicAssert.AreEqual("1=1\u00012=2\u00013=3\u00014=4\u0001", msg.ToString());
 		}
 
 		[Test]
@@ -782,7 +783,7 @@ namespace Epam.FixAntenna.Message.Tests
 			otherList.AddTag(1, (long)1);
 			otherList.AddTag(2, (long)2);
 			_msgHbiList.Add(otherList);
-			Assert.AreEqual(MsgHbi + "1=1\u00012=2\u0001", _msgHbiList.ToString());
+			ClassicAssert.AreEqual(MsgHbi + "1=1\u00012=2\u0001", _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -800,26 +801,26 @@ namespace Epam.FixAntenna.Message.Tests
 
 			msg.AddAll(1, list);
 
-			Assert.AreEqual("1=1\u00013=3\u00014=4\u00012=2\u0001", msg.ToString());
+			ClassicAssert.AreEqual("1=1\u00013=3\u00014=4\u00012=2\u0001", msg.ToString());
 		}
 
 		[Test]
 		public virtual void TestGetTagValueByIndex()
 		{
-			Assert.AreEqual(new TagValue(9, "66"), _msgHbiList[1]);
+			ClassicAssert.AreEqual(new TagValue(9, "66"), _msgHbiList[1]);
 		}
 
 		[Test]
 		public virtual void TestContains()
 		{
-			Assert.IsTrue(_msgHbiList.Contains(new TagValue(9, "66")));
-			Assert.IsFalse(_msgHbiList.Contains(new TagValue(777, "11")));
+			ClassicAssert.IsTrue(_msgHbiList.Contains(new TagValue(9, "66")));
+			ClassicAssert.IsFalse(_msgHbiList.Contains(new TagValue(777, "11")));
 		}
 
 		[Test]
 		public virtual void TestIndexOf()
 		{
-			Assert.AreEqual(1, _msgHbiList.IndexOf(new TagValue(9, "66")));
+			ClassicAssert.AreEqual(1, _msgHbiList.IndexOf(new TagValue(9, "66")));
 		}
 
 		[Test]
@@ -827,7 +828,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			for (var i = 0; i < _msgHbiList.Length; i++)
 			{
-				Assert.AreEqual(
+				ClassicAssert.AreEqual(
 					_msgHbiList.GetTagValueAsStringAtIndex(i),
 					_msgHbiList[i].StringValue,
 					"Tag " + _msgHbiList.GetTagIdAtIndex(i) + " has invalid cache in message " + _msgHbiList.ToPrintableString());
@@ -835,13 +836,13 @@ namespace Epam.FixAntenna.Message.Tests
 
 			var sizeBefore = _msgHbiList.Length;
 			var removedField = _msgHbiList.Remove(0);
-			Assert.AreEqual(new TagValue(8, "FIX.4.4"), removedField);
-			Assert.AreEqual(sizeBefore, _msgHbiList.Length + 1);
-			Assert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), _msgHbiList.ToString());
+			ClassicAssert.AreEqual(new TagValue(8, "FIX.4.4"), removedField);
+			ClassicAssert.AreEqual(sizeBefore, _msgHbiList.Length + 1);
+			ClassicAssert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), _msgHbiList.ToString());
 
 			for (var i = 0; i < _msgHbiList.Length; i++)
 			{
-				Assert.AreEqual(
+				ClassicAssert.AreEqual(
 					_msgHbiList.GetTagValueAsStringAtIndex(i),
 					_msgHbiList[i].StringValue,
 					"Tag " + _msgHbiList.GetTagIdAtIndex(i) + " has invalid cache in message " + _msgHbiList.ToPrintableString());
@@ -851,7 +852,7 @@ namespace Epam.FixAntenna.Message.Tests
 			_msgHbiList.AddTag(1111, "1111");
 			for (var i = 0; i < _msgHbiList.Length; i++)
 			{
-				Assert.AreEqual(
+				ClassicAssert.AreEqual(
 					_msgHbiList.GetTagValueAsStringAtIndex(i),
 					_msgHbiList[i].StringValue,
 					"Tag " + _msgHbiList.GetTagIdAtIndex(i) + " has invalid cache in message " + _msgHbiList.ToPrintableString());
@@ -862,9 +863,9 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestRemoveTagId()
 		{
 			var sizeBefore = _msgHbiList.Length;
-			Assert.IsTrue(_msgHbiList.RemoveTag(8));
-			Assert.AreEqual(sizeBefore, _msgHbiList.Length + 1);
-			Assert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), _msgHbiList.ToString());
+			ClassicAssert.IsTrue(_msgHbiList.RemoveTag(8));
+			ClassicAssert.AreEqual(sizeBefore, _msgHbiList.Length + 1);
+			ClassicAssert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -875,11 +876,11 @@ namespace Epam.FixAntenna.Message.Tests
 			var fixList = RawFixUtil.GetFixMessage(msg.AsByteArray());
 			var sizeBefore = fixList.Length;
 
-			Assert.IsTrue(fixList.RemoveTag(35));
-			Assert.AreEqual(sizeBefore, fixList.Length + 1);
-			Assert.AreEqual(msg.Replace("35=A\u0001", ""), fixList.ToString());
+			ClassicAssert.IsTrue(fixList.RemoveTag(35));
+			ClassicAssert.AreEqual(sizeBefore, fixList.Length + 1);
+			ClassicAssert.AreEqual(msg.Replace("35=A\u0001", ""), fixList.ToString());
 			// after remove tag 35 for this message will be reindex inner hash index
-			Assert.IsTrue(fixList.IsTagExists(98), "After reindex tag 98 is invisible");
+			ClassicAssert.IsTrue(fixList.IsTagExists(98), "After reindex tag 98 is invisible");
 		}
 
 		[Test]
@@ -890,11 +891,11 @@ namespace Epam.FixAntenna.Message.Tests
 			var fixList = RawFixUtil.GetFixMessage(msg.AsByteArray());
 			var sizeBefore = fixList.Length;
 
-			Assert.IsTrue(fixList.RemoveTag(34));
-			Assert.AreEqual(sizeBefore, fixList.Length + 1);
-			Assert.AreEqual(msg.Replace("34=1\u0001", ""), fixList.ToString());
+			ClassicAssert.IsTrue(fixList.RemoveTag(34));
+			ClassicAssert.AreEqual(sizeBefore, fixList.Length + 1);
+			ClassicAssert.AreEqual(msg.Replace("34=1\u0001", ""), fixList.ToString());
 			// after remove tag 35 for this message will be reindex inner hash index
-			Assert.IsTrue(fixList.IsTagExists(98), "After reindex tag 98 is invisible");
+			ClassicAssert.IsTrue(fixList.IsTagExists(98), "After reindex tag 98 is invisible");
 		}
 
 		[Test]
@@ -902,9 +903,9 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var sizeBefore = _msgHbiList.Length;
 			var clonedList = _msgHbiList.DeepClone(true, false);
-			Assert.IsTrue(clonedList.RemoveTag(8));
-			Assert.AreEqual(sizeBefore, clonedList.Length + 1);
-			Assert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), clonedList.ToString());
+			ClassicAssert.IsTrue(clonedList.RemoveTag(8));
+			ClassicAssert.AreEqual(sizeBefore, clonedList.Length + 1);
+			ClassicAssert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), clonedList.ToString());
 		}
 
 		[Test]
@@ -915,11 +916,11 @@ namespace Epam.FixAntenna.Message.Tests
 			list.AddTag(2, (long)22);
 			list.AddTag(2, 333);
 			list.RemoveTag(2); // remove first occurrence of tagId=2
-			Assert.IsTrue(list.IsTagExists(2), "can't find tag after operation remove"); // find tagId=2
-			Assert.AreEqual(1, list.GetTagIndex(2)); // find tagId=2
-			Assert.AreEqual(333, list.GetTagAsInt(2));
+			ClassicAssert.IsTrue(list.IsTagExists(2), "can't find tag after operation remove"); // find tagId=2
+			ClassicAssert.AreEqual(1, list.GetTagIndex(2)); // find tagId=2
+			ClassicAssert.AreEqual(333, list.GetTagAsInt(2));
 			list.RemoveTag(2); // remove second occurrence of tagId=2
-			Assert.IsFalse(list.IsTagExists(2));
+			ClassicAssert.IsFalse(list.IsTagExists(2));
 		}
 
 		[Test]
@@ -931,8 +932,8 @@ namespace Epam.FixAntenna.Message.Tests
 			var msg = RawFixUtil.GetFixMessage(msgStr.AsByteArray());
 			msg.RemoveTag(611, 2);
 			//check that hash is still correct to address last tag
-			Assert.AreEqual("20170616", msg.GetTagValueAsString(75));
-			Assert.AreEqual(
+			ClassicAssert.AreEqual("20170616", msg.GetTagValueAsString(75));
+			ClassicAssert.AreEqual(
 				"8=FIX.4.4 | 9=2363 | 35=8 | 34=973 | 49=Endpoint_1 | 56=Endpoint_2 | 52=20170412-21:30:00.454 |" +
 				" 555=2 | 600=NQ_FM7.CM | 611=20170616 | 600=ES_SESM7_ESU7.CM | 75=20170616 | ",
 				msg.ToPrintableString());
@@ -946,9 +947,9 @@ namespace Epam.FixAntenna.Message.Tests
 			var list = RawFixUtil.GetFixMessage(longMsgStr.AsByteArray());
 
 			var sizeBefore = list.Length;
-			Assert.IsTrue(list.RemoveTag(8));
-			Assert.AreEqual(sizeBefore, list.Length + 1);
-			Assert.AreEqual(longMsgStr.Replace("8=FIXT.1.1\u0001", ""), list.ToString());
+			ClassicAssert.IsTrue(list.RemoveTag(8));
+			ClassicAssert.AreEqual(sizeBefore, list.Length + 1);
+			ClassicAssert.AreEqual(longMsgStr.Replace("8=FIXT.1.1\u0001", ""), list.ToString());
 		}
 
 		[Test]
@@ -959,18 +960,18 @@ namespace Epam.FixAntenna.Message.Tests
 			var list = RawFixUtil.GetFixMessage(longMsgStr.AsByteArray());
 			var clonedList = list.DeepClone(true, false);
 			var sizeBefore = clonedList.Length;
-			Assert.IsTrue(clonedList.RemoveTag(8));
-			Assert.AreEqual(sizeBefore, clonedList.Length + 1);
-			Assert.AreEqual(longMsgStr.Replace("8=FIXT.1.1\u0001", ""), clonedList.ToString());
+			ClassicAssert.IsTrue(clonedList.RemoveTag(8));
+			ClassicAssert.AreEqual(sizeBefore, clonedList.Length + 1);
+			ClassicAssert.AreEqual(longMsgStr.Replace("8=FIXT.1.1\u0001", ""), clonedList.ToString());
 		}
 
 		[Test]
 		public virtual void TestRemoveByObject()
 		{
 			var sizeBefore = _msgHbiList.Length;
-			Assert.IsTrue(_msgHbiList.Remove(new TagValue(8, "FIX.4.4")));
-			Assert.AreEqual(sizeBefore, _msgHbiList.Length + 1);
-			Assert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), _msgHbiList.ToString());
+			ClassicAssert.IsTrue(_msgHbiList.Remove(new TagValue(8, "FIX.4.4")));
+			ClassicAssert.AreEqual(sizeBefore, _msgHbiList.Length + 1);
+			ClassicAssert.AreEqual(MsgHbi.Replace("8=FIX.4.4\u0001", ""), _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -980,32 +981,32 @@ namespace Epam.FixAntenna.Message.Tests
 			int[] tags = { 8, 9, 35, 34, 49, 52, 56, 112, 10 };
 			foreach (var f in _msgHbiList)
 			{
-				Assert.AreEqual(tags[count], f.TagId);
+				ClassicAssert.AreEqual(tags[count], f.TagId);
 				count++;
 			}
 
-			Assert.AreEqual(9, count);
+			ClassicAssert.AreEqual(9, count);
 			// test reset iterator
 			count = 0;
 			foreach (var f in _msgHbiList)
 			{
-				Assert.AreEqual(tags[count], f.TagId);
+				ClassicAssert.AreEqual(tags[count], f.TagId);
 				count++;
 			}
 
-			Assert.AreEqual(9, count);
+			ClassicAssert.AreEqual(9, count);
 		}
 
 		[Test]
 		public virtual void TestClear()
 		{
-			Assert.IsTrue(_msgHbiList.Length > 0);
-			Assert.IsFalse(_msgHbiList.IsEmpty);
+			ClassicAssert.IsTrue(_msgHbiList.Length > 0);
+			ClassicAssert.IsFalse(_msgHbiList.IsEmpty);
 			((AbstractFixMessage)_msgHbiList).Clear();
-			Assert.IsTrue(_msgHbiList.IsEmpty);
-			Assert.IsTrue(_msgHbiList.Length == 0);
+			ClassicAssert.IsTrue(_msgHbiList.IsEmpty);
+			ClassicAssert.IsTrue(_msgHbiList.Length == 0);
 
-			Assert.AreEqual("", _msgHbiList.ToString());
+			ClassicAssert.AreEqual("", _msgHbiList.ToString());
 		}
 
 		[Test]
@@ -1013,10 +1014,10 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			_msgHbiList.IsPreparedMessage = true;
 			((AbstractFixMessage)_msgHbiList).Clear();
-			Assert.IsTrue(_msgHbiList.IsEmpty);
-			Assert.IsTrue(_msgHbiList.Length == 0);
-			Assert.AreEqual("", _msgHbiList.ToString());
-			Assert.IsFalse(_msgHbiList.IsPreparedMessage);
+			ClassicAssert.IsTrue(_msgHbiList.IsEmpty);
+			ClassicAssert.IsTrue(_msgHbiList.Length == 0);
+			ClassicAssert.AreEqual("", _msgHbiList.ToString());
+			ClassicAssert.IsFalse(_msgHbiList.IsPreparedMessage);
 		}
 
 		[Test]
@@ -1026,10 +1027,10 @@ namespace Epam.FixAntenna.Message.Tests
 			var msg = RawFixUtil.GetFixMessage(
 				"1330=STRING\u00011331=STRING\u00011332=STRING\u00011333=1\u00011344=STRING\u00011337=FUT\u00011338=STRING\u00011339=200101w2\u00011345=20010101\u00011405=01:01:01.001+03:30\u00011340=1.1\u00011391=C\u00011343=0\u00011341=DSMD\u00011392=STRING\u0001"
 					.AsByteArray());
-			Assert.IsFalse(msg.IsTagExists(tagId));
+			ClassicAssert.IsFalse(msg.IsTagExists(tagId));
 			msg.AddTagAtIndex(0, tagId, "TEST");
-			Assert.AreEqual(tagId, msg.GetTagIdAtIndex(0));
-			Assert.IsTrue(msg.IsTagExists(tagId));
+			ClassicAssert.AreEqual(tagId, msg.GetTagIdAtIndex(0));
+			ClassicAssert.IsTrue(msg.IsTagExists(tagId));
 		}
 
 		[Test]
@@ -1040,13 +1041,13 @@ namespace Epam.FixAntenna.Message.Tests
 			var msg = RawFixUtil.GetFixMessage(
 				"1330=STRING\u00011331=STRING\u00011332=STRING\u00011333=1\u00011344=STRING\u00011337=FUT\u00011338=STRING\u00011339=200101w2\u00011345=20010101\u00011405=01:01:01.001+03:30\u00011340=1.1\u00011391=C\u00011343=0\u00011341=DSMD\u00011392=STRING\u0001"
 					.AsByteArray());
-			Assert.IsFalse(msg.IsTagExists(tagId));
+			ClassicAssert.IsFalse(msg.IsTagExists(tagId));
 			msg.AddTagAtIndex(0, tagId, "TEST");
-			Assert.IsTrue(msg.IsTagExists(tagId));
+			ClassicAssert.IsTrue(msg.IsTagExists(tagId));
 
 			//remove inserted tag
 			msg.RemoveTag(tagId);
-			Assert.IsFalse(msg.IsTagExists(tagId));
+			ClassicAssert.IsFalse(msg.IsTagExists(tagId));
 		}
 
 		[Test]
@@ -1054,19 +1055,19 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var list = new FixMessage();
 			list.Set(Tags.MsgType, "A".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsMessageType(list, "A".AsByteArray()));
+			ClassicAssert.IsTrue(FixMessageUtil.IsMessageType(list, "A".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestChecksum()
 		{
-			Assert.AreEqual(_message.CalculateChecksum(), _message.GetTagAsInt(Tags.CheckSum));
+			ClassicAssert.AreEqual(_message.CalculateChecksum(), _message.GetTagAsInt(Tags.CheckSum));
 		}
 
 		[Test]
 		public virtual void TestLength()
 		{
-			Assert.AreEqual(_message.CalculateBodyLength(), _message.GetTagAsInt(Tags.BodyLength));
+			ClassicAssert.AreEqual(_message.CalculateBodyLength(), _message.GetTagAsInt(Tags.BodyLength));
 		}
 
 		[Test]
@@ -1076,7 +1077,7 @@ namespace Epam.FixAntenna.Message.Tests
 			list.Set(1, 1);
 			list.Set(2, 2);
 			var oneFieldBytes = new byte[1000];
-			Assert.AreEqual(list.ToByteArrayAndReturnNextPosition(oneFieldBytes, 0), 8);
+			ClassicAssert.AreEqual(list.ToByteArrayAndReturnNextPosition(oneFieldBytes, 0), 8);
 		}
 
 		[Test]
@@ -1085,62 +1086,62 @@ namespace Epam.FixAntenna.Message.Tests
 			var list = new FixMessage();
 			list.Set(1000, 1000);
 			var oneFieldBytes = new byte[1000];
-			Assert.AreEqual(list.ToByteArrayAndReturnNextPosition(oneFieldBytes, 0), 10);
+			ClassicAssert.AreEqual(list.ToByteArrayAndReturnNextPosition(oneFieldBytes, 0), 10);
 
 			list = new FixMessage();
 			list.Set(1000, 1000);
-			Assert.That("1000=1000\x0001".AsByteArray(), Is.EquivalentTo(list.AsByteArray()));
+			ClassicAssert.That("1000=1000\x0001".AsByteArray(), Is.EquivalentTo(list.AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestRemoveTag()
 		{
 			var sizeBefore = _message.Length;
-			Assert.IsTrue(_message.RemoveTag(8));
-			Assert.AreEqual(sizeBefore, _message.Length + 1);
+			ClassicAssert.IsTrue(_message.RemoveTag(8));
+			ClassicAssert.AreEqual(sizeBefore, _message.Length + 1);
 		}
 
 		[Test]
 		public virtual void TestCheckInvalidOccurrence()
 		{
-			Assert.Throws<ArgumentException>(() => _newsMessage.GetTagValueAsLong(49, 0));
+			ClassicAssert.Throws<ArgumentException>(() => _newsMessage.GetTagValueAsLong(49, 0));
 		}
 
 		[Test]
 		public virtual void TestCheckTagOccurrence()
 		{
-			Assert.AreEqual("1", _newsMessage.GetTagValueAsString(58, 1));
-			Assert.AreEqual("2", _newsMessage.GetTagValueAsString(58, 2));
+			ClassicAssert.AreEqual("1", _newsMessage.GetTagValueAsString(58, 1));
+			ClassicAssert.AreEqual("2", _newsMessage.GetTagValueAsString(58, 2));
 		}
 
 		[Test]
 		public virtual void TestProcessGroup()
 		{
 			var groupEntries = _newsMessage.ExtractGroup(33, 58, new[] { 58, 354 });
-			Assert.IsTrue(groupEntries.Count == 2, "The groups count should be equals to 2");
+			ClassicAssert.IsTrue(groupEntries.Count == 2, "The groups count should be equals to 2");
 		}
 
 		[Test]
 		public virtual void TestSplitMessage()
 		{
 			var groups = _newsMessage.Split(58);
-			Assert.IsTrue(groups.Count == 2, "The groups count should be equals to 2");
+			ClassicAssert.IsTrue(groups.Count == 2, "The groups count should be equals to 2");
 		}
 
 		[Test]
 		public virtual void TestSplitMessageAsList()
 		{
 			var groups = _newsMessage.SplitAsList(58);
-			Assert.IsTrue(groups.Count == 2, "The groups count should be equals to 2");
+			ClassicAssert.IsTrue(groups.Count == 2, "The groups count should be equals to 2");
 		}
 
 		[Test]
 		public virtual void TestDeepClone()
 		{
-			AssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(false, false));
-			AssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(true, false));
-			AssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(false, true));
-			AssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(true, true));
+			ClassicAssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(false, false));
+			ClassicAssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(true, false));
+			ClassicAssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(false, true));
+			ClassicAssertEqualsValue(_msgHbiList, _msgHbiList.DeepClone(true, true));
 		}
 
 		[Test]
@@ -1156,13 +1157,13 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestParsedMessageClear()
 		{
 			var parsedMessage = RawFixUtil.GetFixMessage(Message.AsByteArray());
-			Assert.IsFalse(parsedMessage.GetOriginalStorage().IsEmpty, "original storage should not be empty");
-			Assert.IsTrue(parsedMessage.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsTrue(parsedMessage.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsFalse(parsedMessage.GetOriginalStorage().IsEmpty, "original storage should not be empty");
+			ClassicAssert.IsTrue(parsedMessage.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsTrue(parsedMessage.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 			((AbstractFixMessage)parsedMessage).Clear();
-			Assert.IsTrue(parsedMessage.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsTrue(parsedMessage.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsTrue(parsedMessage.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(parsedMessage.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsTrue(parsedMessage.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsTrue(parsedMessage.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 		}
 
 		[Test]
@@ -1171,13 +1172,13 @@ namespace Epam.FixAntenna.Message.Tests
 			var msg = new FixMessage();
 			//will be added to arena
 			msg.AddTag(1, (long)1);
-			Assert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should not be empty");
-			Assert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should not be empty");
+			ClassicAssert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 			((AbstractFixMessage)msg).Clear();
-			Assert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsTrue(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsTrue(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 		}
 
 		[Test]
@@ -1189,13 +1190,13 @@ namespace Epam.FixAntenna.Message.Tests
 			//will be added to perfield, because arena is full
 			msg.AddTag(2, (long)1);
 
-			Assert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsFalse(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsFalse(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 			((AbstractFixMessage)msg).Clear();
-			Assert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsTrue(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsTrue(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 		}
 
 		[Test]
@@ -1215,46 +1216,46 @@ namespace Epam.FixAntenna.Message.Tests
 #endif
 			msg.AddTag(2, value2);
 			//check that all values in arena storage
-			Assert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsTrue(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 
 			//value will be placed to perfield, because arena is full
 			msg.Set(1, "CC");
-			Assert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
-			Assert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
-			Assert.IsFalse(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
+			ClassicAssert.IsTrue(msg.GetOriginalStorage().IsEmpty, "original storage should be empty");
+			ClassicAssert.IsFalse(msg.GetArenaStorage().IsEmpty, "arena storage should be empty");
+			ClassicAssert.IsFalse(msg.GetPerFieldStorage().IsEmpty, "perfield storage should be empty");
 
-			Assert.AreEqual("CC", msg.GetTagValueAsString(1));
+			ClassicAssert.AreEqual("CC", msg.GetTagValueAsString(1));
 			var tagIndex = msg.GetTagIndex(1);
-			Assert.AreEqual(FieldIndex.FlagPerfieldStorage, msg.GetStorageType(tagIndex),
+			ClassicAssert.AreEqual(FieldIndex.FlagPerfieldStorage, msg.GetStorageType(tagIndex),
 				"new value should be in perfield storage");
 		}
 
-		private void AssertEqualsValue(FixMessage fixList1, FixMessage fixList2)
+		private void ClassicAssertEqualsValue(FixMessage fixList1, FixMessage fixList2)
 		{
-			Assert.IsFalse(fixList1 == fixList2);
-			Assert.AreEqual(fixList1.Length, fixList2.Length);
+			ClassicAssert.IsFalse(fixList1 == fixList2);
+			ClassicAssert.AreEqual(fixList1.Length, fixList2.Length);
 			var tagValue = new TagValue();
 			var tagValueClone = new TagValue();
 			for (var i = 0; i < fixList1.Length; i++)
 			{
 				fixList1.LoadTagValueByIndex(i, tagValue);
 				fixList2.LoadTagValueByIndex(i, tagValueClone);
-				Assert.IsFalse(tagValue.Buffer == tagValueClone.Buffer);
-				AssertEqualsValue(tagValue, tagValueClone);
+				ClassicAssert.IsFalse(tagValue.Buffer == tagValueClone.Buffer);
+				ClassicAssertEqualsValue(tagValue, tagValueClone);
 			}
 
-			Assert.AreEqual(fixList1.ToString(), fixList2.ToString());
+			ClassicAssert.AreEqual(fixList1.ToString(), fixList2.ToString());
 		}
 
-		private void AssertEqualsValue(TagValue tagValue1, TagValue tagValue2)
+		private void ClassicAssertEqualsValue(TagValue tagValue1, TagValue tagValue2)
 		{
-			Assert.AreEqual(tagValue1.TagId, tagValue2.TagId, "Cloned TagID must be equals");
-			Assert.AreEqual(tagValue1.Length, tagValue2.Length, "Length of cloned value must be equals");
+			ClassicAssert.AreEqual(tagValue1.TagId, tagValue2.TagId, "Cloned TagID must be equals");
+			ClassicAssert.AreEqual(tagValue1.Length, tagValue2.Length, "Length of cloned value must be equals");
 			for (var i = 0; i < tagValue1.Length; i++)
 			{
-				Assert.AreEqual(tagValue1.Buffer[i + tagValue1.Offset], tagValue2.Buffer[i + tagValue2.Offset],
+				ClassicAssert.AreEqual(tagValue1.Buffer[i + tagValue1.Offset], tagValue2.Buffer[i + tagValue2.Offset],
 					"Cloned value must be equals");
 			}
 		}
@@ -1288,10 +1289,10 @@ namespace Epam.FixAntenna.Message.Tests
 			return msg.Substring(0, startIndex) + value + msg.Substring(endIndex, msg.Length - endIndex);
 		}
 
-		private void AssertEqualsString(int tagId, string expectedValue, FixMessage message)
+		private void ClassicAssertEqualsString(int tagId, string expectedValue, FixMessage message)
 		{
 			var actualValue = message.GetTag(tagId);
-			Assert.AreEqual(expectedValue, actualValue.StringValue);
+			ClassicAssert.AreEqual(expectedValue, actualValue.StringValue);
 		}
 
 		[Test]
@@ -1300,7 +1301,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var fMessage = RawFixUtil.GetFixMessageFromPool(true);
 
 			FillMessage(fMessage, "20130508-13:51:55.003", "22806579", "86601753734398", '1', '1', '1', 300, 700);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"56=MM00|60=20130508-13:51:55.003|17=22806579|11=86601753734398|37=86601753734398|55=SPY|54=1|39=1|150=1|20=0|6=1.1|14=300|151=700|40=2|47=A|59=0|44=1.1|110=0|31=1.1|32=100|35=8|",
 				fMessage.ToString().Replace('\u0001', '|'));
 		}
@@ -1348,7 +1349,7 @@ namespace Epam.FixAntenna.Message.Tests
 			}
 
 			emptyList.DeepCopyTo(_message);
-			Assert.AreEqual(0, _message.RawLength);
+			ClassicAssert.AreEqual(0, _message.RawLength);
 		}
 
 		[Test]
@@ -1362,21 +1363,21 @@ namespace Epam.FixAntenna.Message.Tests
 				source.AddTag(i, i);
 			}
 
-			Assert.IsFalse(source.GetTagIndex(100) == -1);
+			ClassicAssert.IsFalse(source.GetTagIndex(100) == -1);
 
 			for (var i = 100; i < 200; i++)
 			{
 				dest.AddTag(i, i);
 			}
 
-			Assert.IsFalse(dest.GetTagIndex(100) == -1);
+			ClassicAssert.IsFalse(dest.GetTagIndex(100) == -1);
 
 			((AbstractFixMessage)dest).Clear();
 
 			source.DeepCopyTo(dest);
 
 			// Tag 100 is present in source as well as dest, AND YET, it fails!
-			Assert.IsFalse(dest.GetTagIndex(100) == -1);
+			ClassicAssert.IsFalse(dest.GetTagIndex(100) == -1);
 
 			// dest.getTagValueAsLong(100) throws FieldNotFoundException
 		}
@@ -1386,7 +1387,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var size = _message.Count;
 			//index is starting from 0, so the last element has index [size-1]
-			Assert.Throws<IndexOutOfRangeException>(() => _message.GetTagIdAtIndex(size));
+			ClassicAssert.Throws<IndexOutOfRangeException>(() => _message.GetTagIdAtIndex(size));
 		}
 
 		[Test]
@@ -1401,7 +1402,7 @@ namespace Epam.FixAntenna.Message.Tests
 			orderMsg.Set(11, "1432205135565-1");
 
 			var copy = orderMsg.DeepClone(true, false);
-			Assert.That(copy.ToString(), Is.EqualTo(orderMsg.ToString()));
+			ClassicAssert.That(copy.ToString(), Is.EqualTo(orderMsg.ToString()));
 		}
 
 		[Test]
@@ -1411,8 +1412,8 @@ namespace Epam.FixAntenna.Message.Tests
 			msg.Set(8, "FIXT.1.1");
 			msg.Set(35, "D");
 			msg.Set(1128, 7);
-			Assert.AreEqual(FixVersion.Fixt11, msg.MsgVersion);
-			Assert.AreEqual(FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50), msg.GetFixVersion());
+			ClassicAssert.AreEqual(FixVersion.Fixt11, msg.MsgVersion);
+			ClassicAssert.AreEqual(FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50), msg.GetFixVersion());
 		}
 
 		[Test]
@@ -1422,8 +1423,8 @@ namespace Epam.FixAntenna.Message.Tests
 			msg.Set(8, "FIXT.1.1");
 			msg.Set(35, "D");
 			msg.Set(1128, 8);
-			Assert.AreEqual(FixVersion.Fixt11, msg.MsgVersion);
-			Assert.AreEqual(FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50Sp1), msg.GetFixVersion());
+			ClassicAssert.AreEqual(FixVersion.Fixt11, msg.MsgVersion);
+			ClassicAssert.AreEqual(FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50Sp1), msg.GetFixVersion());
 		}
 
 		[Test]
@@ -1433,8 +1434,8 @@ namespace Epam.FixAntenna.Message.Tests
 			msg.Set(8, "FIXT.1.1");
 			msg.Set(35, "D");
 			msg.Set(1128, 9);
-			Assert.AreEqual(FixVersion.Fixt11, msg.MsgVersion);
-			Assert.AreEqual(FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50Sp2), msg.GetFixVersion());
+			ClassicAssert.AreEqual(FixVersion.Fixt11, msg.MsgVersion);
+			ClassicAssert.AreEqual(FixVersionContainer.GetFixVersionContainer(FixVersion.Fix50Sp2), msg.GetFixVersion());
 		}
 
 		[Test]
@@ -1445,7 +1446,7 @@ namespace Epam.FixAntenna.Message.Tests
 			msg.Set(58, testTagValue);
 			var reusableString = new ReusableString();
 			msg.GetTagValueAsReusableString(reusableString, 58);
-			Assert.IsTrue(reusableString.Equals(testTagValue));
+			ClassicAssert.IsTrue(reusableString.Equals(testTagValue));
 		}
 
 		[Test]
@@ -1457,10 +1458,10 @@ namespace Epam.FixAntenna.Message.Tests
 			var testTagValue2 = "value11";
 			msg.Set(58, testTagValue1);
 			msg.GetTagValueAsReusableString(reusableString, 58);
-			Assert.IsTrue(reusableString.Equals(testTagValue1));
+			ClassicAssert.IsTrue(reusableString.Equals(testTagValue1));
 			msg.Set(58, testTagValue2);
 			msg.GetTagValueAsReusableString(reusableString, 58);
-			Assert.IsTrue(reusableString.Equals(testTagValue2));
+			ClassicAssert.IsTrue(reusableString.Equals(testTagValue2));
 		}
 
 		[Test]
@@ -1473,9 +1474,9 @@ namespace Epam.FixAntenna.Message.Tests
 			msg.AddTag(58, testTagValue1);
 			msg.AddTag(58, testTagValue2);
 			msg.GetTagValueAsReusableString(reusableString, 58, 1);
-			Assert.IsTrue(reusableString.Equals(testTagValue1));
+			ClassicAssert.IsTrue(reusableString.Equals(testTagValue1));
 			msg.GetTagValueAsReusableString(reusableString, 58, 2);
-			Assert.IsTrue(reusableString.Equals(testTagValue2));
+			ClassicAssert.IsTrue(reusableString.Equals(testTagValue2));
 		}
 
 		[Test]
@@ -1485,27 +1486,27 @@ namespace Epam.FixAntenna.Message.Tests
 			//set longer value
 			message.Set(1, 12345.69999, 4);
 			message.Set(2, 12345.69999, 4);
-			Assert.AreEqual("1=12345.7\u00012=12345.7\u0001", message.ToString());
+			ClassicAssert.AreEqual("1=12345.7\u00012=12345.7\u0001", message.ToString());
 
 			//check previous
 			message.Set(1, 1234.5678, 4);
 			message.Set(2, 1234.5678, 4);
-			Assert.AreEqual("1=1234.5678\u00012=1234.5678\u0001", message.ToString());
+			ClassicAssert.AreEqual("1=1234.5678\u00012=1234.5678\u0001", message.ToString());
 
 			//set longer value again
 			message.Set(1, 1234567.89999, 4);
 			message.Set(2, 1234567.89999, 4);
-			Assert.AreEqual("1=1234567.9\u00012=1234567.9\u0001", message.ToString());
+			ClassicAssert.AreEqual("1=1234567.9\u00012=1234567.9\u0001", message.ToString());
 
 			//check previous
 			message.Set(1, 1234.5678, 4);
 			message.Set(2, 1234.5678, 4);
-			Assert.AreEqual("1=1234.5678\u00012=1234.5678\u0001", message.ToString());
+			ClassicAssert.AreEqual("1=1234.5678\u00012=1234.5678\u0001", message.ToString());
 
 			//set longer value again
 			message.Set(1, 123456789.11111, 4);
 			message.Set(2, 123456789.11111, 4);
-			Assert.AreEqual("1=123456789.1111\u00012=123456789.1111\u0001", message.ToString());
+			ClassicAssert.AreEqual("1=123456789.1111\u00012=123456789.1111\u0001", message.ToString());
 		}
 	}
 }

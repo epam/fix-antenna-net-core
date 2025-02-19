@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation;
 using Epam.FixAntenna.NetCore.Validation.FixMessage;
 using Epam.FixAntenna.NetCore.Validation.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.FIXMessage.Builder
 {
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.FIXMessage.Builder
 		{
 			var fields = RawFixUtil.GetFixMessage(Message.AsByteArray());
 			IValidationFixMessage validationFixMessage = _builder.BuildValidationFixMessage(fields);
-			Assert.AreEqual(((ValidationFixMessage)validationFixMessage).FullFixMessage.Length,
+			ClassicAssert.AreEqual(((ValidationFixMessage)validationFixMessage).FullFixMessage.Length,
 				validationFixMessage.GetMessageSize());
 		}
 	}

@@ -16,7 +16,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.Queue;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 {
@@ -41,8 +42,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 		public virtual void EmptyQueue()
 		{
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(0, array.Length);
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(0, array.Length);
 		}
 
 		[Test]
@@ -55,14 +56,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.AddOutOfTurn(FixMessageWithTypePoolFactory.GetFixMessageWithTypeFromPool(message, "3"));
 
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(3, array.Length);
-			Assert.IsTrue(array[0] is FixMessageWithType);
-			Assert.IsTrue(array[1] is FixMessageWithType);
-			Assert.IsTrue(array[2] is FixMessageWithType);
-			Assert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("1"));
-			Assert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("2"));
-			Assert.IsTrue(((FixMessageWithType)array[2]).MessageType.Equals("3"));
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(3, array.Length);
+			ClassicAssert.IsTrue(array[0] is FixMessageWithType);
+			ClassicAssert.IsTrue(array[1] is FixMessageWithType);
+			ClassicAssert.IsTrue(array[2] is FixMessageWithType);
+			ClassicAssert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("1"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("2"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[2]).MessageType.Equals("3"));
 		}
 
 		[Test]
@@ -74,12 +75,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.Add(FixMessageWithTypePoolFactory.GetFixMessageWithTypeFromPool(message, "8"));
 
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(2, array.Length);
-			Assert.IsTrue(array[0] is FixMessageWithType);
-			Assert.IsTrue(array[1] is FixMessageWithType);
-			Assert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("D"));
-			Assert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("8"));
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(2, array.Length);
+			ClassicAssert.IsTrue(array[0] is FixMessageWithType);
+			ClassicAssert.IsTrue(array[1] is FixMessageWithType);
+			ClassicAssert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("D"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("8"));
 		}
 
 		[Test]
@@ -93,16 +94,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.Add(FixMessageWithTypePoolFactory.GetFixMessageWithTypeFromPool(message, "8"));
 
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(4, array.Length);
-			Assert.IsTrue(array[0] is FixMessageWithType);
-			Assert.IsTrue(array[1] is FixMessageWithType);
-			Assert.IsTrue(array[2] is FixMessageWithType);
-			Assert.IsTrue(array[3] is FixMessageWithType);
-			Assert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("1"));
-			Assert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("3"));
-			Assert.IsTrue(((FixMessageWithType)array[2]).MessageType.Equals("D"));
-			Assert.IsTrue(((FixMessageWithType)array[3]).MessageType.Equals("8"));
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(4, array.Length);
+			ClassicAssert.IsTrue(array[0] is FixMessageWithType);
+			ClassicAssert.IsTrue(array[1] is FixMessageWithType);
+			ClassicAssert.IsTrue(array[2] is FixMessageWithType);
+			ClassicAssert.IsTrue(array[3] is FixMessageWithType);
+			ClassicAssert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("1"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("3"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[2]).MessageType.Equals("D"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[3]).MessageType.Equals("8"));
 		}
 
 		[Test]
@@ -116,10 +117,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.Poll();
 
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(2, array.Length);
-			Assert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("1"));
-			Assert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("D"));
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(2, array.Length);
+			ClassicAssert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("1"));
+			ClassicAssert.IsTrue(((FixMessageWithType)array[1]).MessageType.Equals("D"));
 		}
 
 		[Test]
@@ -134,9 +135,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.Commit();
 
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(1, array.Length);
-			Assert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("D"));
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(1, array.Length);
+			ClassicAssert.IsTrue(((FixMessageWithType)array[0]).MessageType.Equals("D"));
 		}
 
 		[Test]
@@ -153,8 +154,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.Queue
 			_queue.Commit();
 
 			var array = _queue.ToArray();
-			Assert.IsNotNull(array);
-			Assert.AreEqual(0, array.Length);
+			ClassicAssert.IsNotNull(array);
+			ClassicAssert.AreEqual(0, array.Length);
 		}
 	}
 }

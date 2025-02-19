@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation;
 using Epam.FixAntenna.NetCore.Validation.Error;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -39,7 +40,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 		[Test]
 		public virtual void CheckFailedValidationForLogon()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_testFixSession.SetMessageValidator(new FailMessageValidator());
 				var message = new FixMessage();
@@ -48,15 +49,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_validatorHandler.OnNewMessage(message);
 			});
 
-			Assert.IsTrue(ex.IsCritical());
-			Assert.AreEqual("Invalid logon message", _testFixSession.DisconnectReason);
-			Assert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
+			ClassicAssert.IsTrue(ex.IsCritical());
+			ClassicAssert.AreEqual("Invalid logon message", _testFixSession.DisconnectReason);
+			ClassicAssert.AreEqual(SessionState.WaitingForLogoff, _testFixSession.SessionState);
 		}
 
 		[Test]
 		public virtual void CheckFailedValidationForNonLogon()
 		{
-			var ex = Assert.Throws<MessageValidationException>(() =>
+			var ex = ClassicAssert.Throws<MessageValidationException>(() =>
 			{
 				_testFixSession.SetMessageValidator(new FailMessageValidator());
 				var message = new FixMessage();
@@ -65,11 +66,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 				_validatorHandler.OnNewMessage(message);
 			});
 
-			Assert.IsFalse(ex.IsCritical());
-			Assert.IsTrue(_testFixSession.Messages.Count > 0);
+			ClassicAssert.IsFalse(ex.IsCritical());
+			ClassicAssert.IsTrue(_testFixSession.Messages.Count > 0);
 			var responseMessage = _testFixSession.Messages[0];
-			Assert.AreEqual("3", responseMessage.GetTagValueAsString(35));
-			Assert.AreEqual(FailMessageValidator.FakeValidationErrorDescription,
+			ClassicAssert.AreEqual("3", responseMessage.GetTagValueAsString(35));
+			ClassicAssert.AreEqual(FailMessageValidator.FakeValidationErrorDescription,
 				responseMessage.GetTagValueAsString(58));
 		}
 

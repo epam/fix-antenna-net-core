@@ -20,7 +20,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
 using Moq;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 {
@@ -55,7 +56,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_session.Setup(x => x.Parameters).Returns(sessionParameters);
 			_session.Setup(x => x.SequenceManager.GetExpectedIncomingSeqNumber()).Returns(20);
 
-			Assert.Throws<SequenceToLowException>(() =>
+			ClassicAssert.Throws<SequenceToLowException>(() =>
 				{
 					//init handler
 					_handler = new OutOfSequenceMessageHandler();
@@ -80,7 +81,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global
 			_session.Setup(x => x.Parameters).Returns(sessionParameters);
 			_session.Setup(x => x.SequenceManager.GetExpectedIncomingSeqNumber()).Returns(20);
 
-			Assert.Throws<SequenceToLowException>(() =>
+			ClassicAssert.Throws<SequenceToLowException>(() =>
 			{
 				//init handler
 				_handler = new OutOfSequenceMessageHandler();

@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.FixEngine;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Message
 {
@@ -34,10 +35,10 @@ namespace Epam.FixAntenna.Fix.Message
 		[Test]
 		public virtual void TestAdd()
 		{
-			Assert.AreEqual(75, Ms.GetTagId(0));
-			Assert.AreEqual(3, Ms.GetTagId(2));
-			Assert.AreEqual(10, Ms.GetLength(1));
-			Assert.AreEqual(30, Ms.GetLength(2));
+			ClassicAssert.AreEqual(75, Ms.GetTagId(0));
+			ClassicAssert.AreEqual(3, Ms.GetTagId(2));
+			ClassicAssert.AreEqual(10, Ms.GetLength(1));
+			ClassicAssert.AreEqual(30, Ms.GetLength(2));
 		}
 
 		[Test]
@@ -46,40 +47,40 @@ namespace Epam.FixAntenna.Fix.Message
 			var ms2 = new MessageStructure();
 			ms2.Reserve(35, 256);
 			Ms.Append(ms2);
-			Assert.AreEqual(35, Ms.GetTagId(3));
-			Assert.AreEqual(256, Ms.GetLength(3));
+			ClassicAssert.AreEqual(35, Ms.GetTagId(3));
+			ClassicAssert.AreEqual(256, Ms.GetLength(3));
 		}
 
 		[Test]
 		public virtual void ReservWrongZeroLength()
 		{
-			Assert.Throws<ArgumentException>(() => { Ms.Reserve(75, 0); });
+			ClassicAssert.Throws<ArgumentException>(() => { Ms.Reserve(75, 0); });
 		}
 
 		[Test]
 		public virtual void ReservWrongNegativeLength()
 		{
-			Assert.Throws<ArgumentException>(() => { Ms.Reserve(75, -2); });
+			ClassicAssert.Throws<ArgumentException>(() => { Ms.Reserve(75, -2); });
 		}
 
 		[Test]
 		public virtual void TestSetInvalidNegativeLength()
 		{
-			Assert.Throws<ArgumentException>(() => { Ms.SetLength(3, -2); });
+			ClassicAssert.Throws<ArgumentException>(() => { Ms.SetLength(3, -2); });
 		}
 
 		[Test]
 		public virtual void TestSetInvalidZeroLength()
 		{
-			Assert.Throws<ArgumentException>(() => { Ms.SetLength(3, 0); });
+			ClassicAssert.Throws<ArgumentException>(() => { Ms.SetLength(3, 0); });
 		}
 
 		[Test]
 		public virtual void TestSetInvalidLength()
 		{
-			Assert.AreEqual(5, Ms.GetLength(0));
+			ClassicAssert.AreEqual(5, Ms.GetLength(0));
 			Ms.SetLength(75, MessageStructure.VariableLength);
-			Assert.AreEqual(MessageStructure.VariableLength, Ms.GetLength(0));
+			ClassicAssert.AreEqual(MessageStructure.VariableLength, Ms.GetLength(0));
 		}
 
 		[Test]
@@ -104,7 +105,7 @@ namespace Epam.FixAntenna.Fix.Message
 			res.ReserveString(3);
 			res.ReserveString(4);
 
-			Assert.AreEqual(res, m1);
+			ClassicAssert.AreEqual(res, m1);
 		}
 	}
 

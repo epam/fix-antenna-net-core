@@ -14,7 +14,8 @@
 
 using System.Text;
 using Epam.FixAntenna.NetCore.Common.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Utils
 {
@@ -27,7 +28,7 @@ namespace Epam.FixAntenna.Common.Utils
 			var buffer = ByteBuffer.Demand(1);
 			buffer.AddLikeString(-100L);
 			buffer.Flip();
-			Assert.AreEqual("-100", Encoding.UTF8.GetString(buffer.GetByteArray(0, buffer.Limit())));
+			ClassicAssert.AreEqual("-100", Encoding.UTF8.GetString(buffer.GetByteArray(0, buffer.Limit())));
 		}
 
 		[Test]
@@ -36,7 +37,7 @@ namespace Epam.FixAntenna.Common.Utils
 			var buffer = ByteBuffer.Demand(1);
 			buffer.AddLikeString(-100L, 6);
 			buffer.Flip();
-			Assert.AreEqual("-000100", Encoding.UTF8.GetString(buffer.GetByteArray(0, buffer.Limit())));
+			ClassicAssert.AreEqual("-000100", Encoding.UTF8.GetString(buffer.GetByteArray(0, buffer.Limit())));
 		}
 
 		[Test]
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.Common.Utils
 			var buffer = ByteBuffer.Demand(1);
 			buffer.AddLikeString(-100L, 2);
 			buffer.Flip();
-			Assert.AreEqual("-100", Encoding.UTF8.GetString(buffer.GetByteArray(0, buffer.Limit())));
+			ClassicAssert.AreEqual("-100", Encoding.UTF8.GetString(buffer.GetByteArray(0, buffer.Limit())));
 		}
 	}
 }

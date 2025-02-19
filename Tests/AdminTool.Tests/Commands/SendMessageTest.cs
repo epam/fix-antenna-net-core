@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -50,9 +51,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = message.AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
-			Assert.AreEqual(expectedMsg, extendedFIXSession.Message.ToUnmaskedString());
+			ClassicAssert.AreEqual(expectedMsg, extendedFIXSession.Message.ToUnmaskedString());
 		}
 
 		[Test]
@@ -72,9 +73,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = message.AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
-			Assert.AreEqual(expectedMsg, extendedFIXSession.Message.ToUnmaskedString());
+			ClassicAssert.AreEqual(expectedMsg, extendedFIXSession.Message.ToUnmaskedString());
 		}
 
 		[Test]
@@ -93,9 +94,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = message.ToString().AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
-			Assert.AreEqual(message.ToString(), extendedFIXSession.Message.ToUnmaskedString());
+			ClassicAssert.AreEqual(message.ToString(), extendedFIXSession.Message.ToUnmaskedString());
 		}
 
 		[Test]
@@ -111,9 +112,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = message.AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
-			Assert.AreEqual(message, extendedFIXSession.Message.ToUnmaskedString());
+			ClassicAssert.AreEqual(message, extendedFIXSession.Message.ToUnmaskedString());
 		}
 
 		[Test]
@@ -130,9 +131,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = XmlHelper.ProtectSpecialCharacters(fieldListMessage.ToString()).AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
 
-			Assert.AreEqual(fieldListMessage.ToString(), extendedFIXSession.Message.ToUnmaskedString());
+			ClassicAssert.AreEqual(fieldListMessage.ToString(), extendedFIXSession.Message.ToUnmaskedString());
 		}
 
 		[Test]
@@ -143,9 +144,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.TargetCompID = extendedFIXSession.Parameters.TargetCompId;
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("SenderCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("SenderCompID is required"));
 		}
 
 		[Test]
@@ -158,9 +159,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = "".AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("TargetCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("TargetCompID is required"));
 		}
 
 		[Test]
@@ -174,9 +175,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_sendMessage.Message = "".AsByteArray();
 
 			var response = GetReponse(_sendMessage);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("Message is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("Message is required"));
 		}
 	}
 }

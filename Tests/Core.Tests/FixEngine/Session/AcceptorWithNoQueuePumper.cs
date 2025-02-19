@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Storage;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using NLog;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -40,7 +41,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			configuration.SetProperty(Config.InMemoryQueue, "true");
 			configuration.SetProperty(Config.StorageFactory, typeof(InMemoryStorageFactory).FullName);
 
-			// testing parameter with default value. The test should Assert.Fail if it is 0
+			// testing parameter with default value. The test should ClassicAssert.Fail if it is 0
 			configuration.SetProperty(Config.MaxDelayToSendAfterLogon, "500");
 
 			var fixServer = new FixServer(configuration);

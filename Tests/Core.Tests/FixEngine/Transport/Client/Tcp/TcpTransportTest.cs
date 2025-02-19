@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 {
@@ -46,26 +47,26 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Client.Tcp
 		public virtual void TestGetHostAndPort()
 		{
 			_transport = new TcpTransport("127.0.0.1", RemotePort);
-			Assert.AreEqual("127.0.0.1", _transport.RemoteHost);
-			Assert.IsNull(_transport.RemoteEndPoint?.Address);
-			Assert.AreEqual(1234, _transport.RemotePort);
-			Assert.AreEqual(null, _transport.LocalEndPoint?.Port);
+			ClassicAssert.AreEqual("127.0.0.1", _transport.RemoteHost);
+			ClassicAssert.IsNull(_transport.RemoteEndPoint?.Address);
+			ClassicAssert.AreEqual(1234, _transport.RemotePort);
+			ClassicAssert.AreEqual(null, _transport.LocalEndPoint?.Port);
 
 			_server.Start();
 
 			_transport.Open();
-			Assert.IsTrue(_transport.IsOpen);
-			Assert.AreEqual("127.0.0.1", _transport.RemoteHost);
-			Assert.AreEqual("127.0.0.1", _transport.RemoteEndPoint.Address.AsString());
-			Assert.AreEqual(1234, _transport.RemotePort);
-			Assert.AreEqual(1234, _transport.RemoteEndPoint?.Port);
-			Assert.IsTrue(_transport.LocalEndPoint?.Port != null);
+			ClassicAssert.IsTrue(_transport.IsOpen);
+			ClassicAssert.AreEqual("127.0.0.1", _transport.RemoteHost);
+			ClassicAssert.AreEqual("127.0.0.1", _transport.RemoteEndPoint.Address.AsString());
+			ClassicAssert.AreEqual(1234, _transport.RemotePort);
+			ClassicAssert.AreEqual(1234, _transport.RemoteEndPoint?.Port);
+			ClassicAssert.IsTrue(_transport.LocalEndPoint?.Port != null);
 
 			_transport.Close();
-			Assert.AreEqual("127.0.0.1", _transport.RemoteHost);
-			Assert.IsNull(_transport.RemoteEndPoint?.Address);
-			Assert.AreEqual(1234, _transport.RemotePort);
-			Assert.IsTrue(_transport.LocalEndPoint?.Port == null);
+			ClassicAssert.AreEqual("127.0.0.1", _transport.RemoteHost);
+			ClassicAssert.IsNull(_transport.RemoteEndPoint?.Address);
+			ClassicAssert.AreEqual(1234, _transport.RemotePort);
+			ClassicAssert.IsTrue(_transport.LocalEndPoint?.Port == null);
 		}
 	}
 }

@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.AdminTool.Commands;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Xml
 {
@@ -26,7 +27,7 @@ namespace Epam.FixAntenna.AdminTool.Tests.Xml
 			var commandHandler = new CommandHandler();
 			var command = commandHandler.GetCommand(xmlContent,
 				fixSession.Parameters.Configuration.GetProperty(Config.AutostartAcceptorCommandPackage));
-			Assert.IsNotNull(command);
+			ClassicAssert.IsNotNull(command);
 		}
 	}
 }

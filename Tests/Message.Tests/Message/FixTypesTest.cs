@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 using System;
 
@@ -53,20 +54,20 @@ namespace Epam.FixAntenna.Message.Tests
 				var res = FixTypes.parseTZTimeOnly(time.AsByteArray());
 				var roundedTime = StringHelper.NewString(FixTypes.formatTZTimeOnly(res));
 
-				Assert.AreEqual(7, res.Hour);
-				Assert.AreEqual(39, res.Minute);
+				ClassicAssert.AreEqual(7, res.Hour);
+				ClassicAssert.AreEqual(39, res.Minute);
 				if (secs)
 				{
-					Assert.AreEqual(32, res.Second);
+					ClassicAssert.AreEqual(32, res.Second);
 				}
 
 				if (mills)
 				{
-					Assert.AreEqual(1, res.Millisecond);
+					ClassicAssert.AreEqual(1, res.Millisecond);
 				}
 
 				var timeZone = res.Offset;
-				Assert.AreEqual(zone, timeZone);
+				ClassicAssert.AreEqual(zone, timeZone);
 
 				if (nans)
 				{
@@ -77,16 +78,16 @@ namespace Epam.FixAntenna.Message.Tests
 					time = micrs ? time.Substring(0, 12) + time.Substring(15) : time;
 				}
 
-				Assert.AreEqual(time, roundedTime);
+				ClassicAssert.AreEqual(time, roundedTime);
 			}
 		}
 
 		[Test]
 		public virtual void FormatInt()
 		{
-			Assert.That(StringHelper.NewString(FixTypes.FormatInt(0)), Is.EqualTo("0"));
-			Assert.That(StringHelper.NewString(FixTypes.FormatInt(10)), Is.EqualTo("10"));
-			Assert.That(StringHelper.NewString(FixTypes.FormatInt(-999999999)), Is.EqualTo("-999999999"));
+			ClassicAssert.That(StringHelper.NewString(FixTypes.FormatInt(0)), Is.EqualTo("0"));
+			ClassicAssert.That(StringHelper.NewString(FixTypes.FormatInt(10)), Is.EqualTo("10"));
+			ClassicAssert.That(StringHelper.NewString(FixTypes.FormatInt(-999999999)), Is.EqualTo("-999999999"));
 		}
 
 		[Test]
@@ -95,7 +96,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var value = "1.1";
 			var parsedValue = FixTypes.ParseFloat(value.AsByteArray());
 			var resultValue = StringHelper.NewString(FixTypes.FormatDouble(parsedValue));
-			Assert.That(resultValue, Is.EqualTo(value));
+			ClassicAssert.That(resultValue, Is.EqualTo(value));
 		}
 
 		[Test]
@@ -105,7 +106,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var expected = "20010101";
 			var calendar = FixTypes.ParseMonthYear44(value.AsByteArray());
 			var resultValue = StringHelper.NewString(FixTypes.FormatMonthYear44(calendar));
-			Assert.That(resultValue, Is.EqualTo(expected));
+			ClassicAssert.That(resultValue, Is.EqualTo(expected));
 		}
 
 		[Test]
@@ -121,7 +122,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var cal = FixTypes.parseTimeOnly(receivedValue.AsByteArray());
 			var actualResult = StringHelper.NewString(FixTypes.formatUTCTimeOnly(cal, precision));
-			Assert.AreEqual(expectedValue, actualResult);
+			ClassicAssert.AreEqual(expectedValue, actualResult);
 		}
 
 		[Test]
@@ -130,7 +131,7 @@ namespace Epam.FixAntenna.Message.Tests
 		[TestCase(TimestampPrecision.Nano)]
 		public virtual void TestFormatUTCTimeOnlyWrongPrecision(TimestampPrecision precision)
 		{
-			Assert.Throws<ArgumentException>(() =>
+			ClassicAssert.Throws<ArgumentException>(() =>
 			{
 				FixTypes.formatUTCTimeOnly(new DateTime(), precision);
 			});
@@ -149,7 +150,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var cal = FixTypes.ParseTimestamp(receivedValue.AsByteArray());
 			var actualResult = StringHelper.NewString(FixTypes.FormatUtcTimestamp(cal, precision));
-			Assert.AreEqual(expectedValue, actualResult);
+			ClassicAssert.AreEqual(expectedValue, actualResult);
 		}
 
 		[Test]
@@ -158,7 +159,7 @@ namespace Epam.FixAntenna.Message.Tests
 		[TestCase(TimestampPrecision.Nano)]
 		public virtual void TesFormatUtcTimestampWrongPrecision(TimestampPrecision precision)
 		{
-			Assert.Throws<ArgumentException>(() =>
+			ClassicAssert.Throws<ArgumentException>(() =>
 			{
 				FixTypes.FormatUtcTimestamp(new DateTime(), precision);
 			});
@@ -235,19 +236,19 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var res = FixTypes.parseTZTimeOnly(time.AsByteArray());
 
-			Assert.AreEqual(7, res.Hour);
-			Assert.AreEqual(39, res.Minute);
+			ClassicAssert.AreEqual(7, res.Hour);
+			ClassicAssert.AreEqual(39, res.Minute);
 			if (secs)
 			{
-				Assert.AreEqual(32, res.Second);
+				ClassicAssert.AreEqual(32, res.Second);
 			}
 			if (mills)
 			{
-				Assert.AreEqual(1, res.Millisecond);
+				ClassicAssert.AreEqual(1, res.Millisecond);
 			}
 
 			var timeZoneOffset = res.Offset;
-			Assert.AreEqual(DateTimeOffset.Now.Offset, timeZoneOffset);
+			ClassicAssert.AreEqual(DateTimeOffset.Now.Offset, timeZoneOffset);
 		}
 
 		[Test]
@@ -310,23 +311,23 @@ namespace Epam.FixAntenna.Message.Tests
 				var calendar = FixTypes.ParseTzTimestamp(time.AsByteArray());
 				var roundedTime = StringHelper.NewString(FixTypes.FormatTzTimestamp(calendar, precision));
 
-				Assert.AreEqual(2006, calendar.Year);
-				Assert.AreEqual(9, calendar.Month);
+				ClassicAssert.AreEqual(2006, calendar.Year);
+				ClassicAssert.AreEqual(9, calendar.Month);
 
-				Assert.AreEqual(7, calendar.Hour);
-				Assert.AreEqual(39, calendar.Minute);
+				ClassicAssert.AreEqual(7, calendar.Hour);
+				ClassicAssert.AreEqual(39, calendar.Minute);
 				if (seconds)
 				{
-					Assert.AreEqual(32, calendar.Second);
+					ClassicAssert.AreEqual(32, calendar.Second);
 				}
 
 				if (mills)
 				{
-					Assert.AreEqual(123, calendar.Millisecond);
+					ClassicAssert.AreEqual(123, calendar.Millisecond);
 				}
 
 				var timeZoneOffset = calendar.Offset;
-				Assert.AreEqual(zone, timeZoneOffset);
+				ClassicAssert.AreEqual(zone, timeZoneOffset);
 
 				if (nans)
 				{
@@ -337,7 +338,7 @@ namespace Epam.FixAntenna.Message.Tests
 					time = micrs ? time.Substring(0, 21) + time.Substring(24) : time;
 				}
 
-				Assert.AreEqual(time, roundedTime);
+				ClassicAssert.AreEqual(time, roundedTime);
 			}
 		}
 
@@ -346,7 +347,7 @@ namespace Epam.FixAntenna.Message.Tests
 		[TestCase(TimestampPrecision.Nano)]
 		public void TestFormatTzTimestampWrongPrecision(TimestampPrecision precision)
 		{
-			Assert.Throws<ArgumentException>(() =>
+			ClassicAssert.Throws<ArgumentException>(() =>
 			{
 				StringHelper.NewString(FixTypes.FormatTzTimestamp(new DateTimeOffset(), precision));
 			});
@@ -372,22 +373,22 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var res = FixTypes.ParseTzTimestamp(time.AsByteArray());
 
-			Assert.AreEqual(2011, res.Year);
-			Assert.AreEqual(9, res.Month);
-			Assert.AreEqual(1, res.Day);
-			Assert.AreEqual(7, res.Hour);
-			Assert.AreEqual(39, res.Minute);
+			ClassicAssert.AreEqual(2011, res.Year);
+			ClassicAssert.AreEqual(9, res.Month);
+			ClassicAssert.AreEqual(1, res.Day);
+			ClassicAssert.AreEqual(7, res.Hour);
+			ClassicAssert.AreEqual(39, res.Minute);
 			if (secs)
 			{
-				Assert.AreEqual(32, res.Second);
+				ClassicAssert.AreEqual(32, res.Second);
 			}
 			if (mills)
 			{
-				Assert.AreEqual(1, res.Millisecond);
+				ClassicAssert.AreEqual(1, res.Millisecond);
 			}
 
 			var timeZoneOffset = res.Offset;
-			Assert.AreEqual(DateTimeOffset.Now.Offset, timeZoneOffset);
+			ClassicAssert.AreEqual(DateTimeOffset.Now.Offset, timeZoneOffset);
 		}
 
 		[Test]
@@ -410,13 +411,13 @@ namespace Epam.FixAntenna.Message.Tests
 
 		private void CompareCalendars(DateTimeOffset calendar, DateTimeOffset parsedCalender)
 		{
-			Assert.AreEqual(calendar.Year, parsedCalender.Year);
-			Assert.AreEqual(calendar.Month, parsedCalender.Month);
-			Assert.AreEqual(calendar.Day, parsedCalender.Day);
-			Assert.AreEqual(calendar.Hour, parsedCalender.Hour);
-			Assert.AreEqual(calendar.Minute, parsedCalender.Minute);
-			Assert.AreEqual(calendar.Second, parsedCalender.Second);
-			Assert.AreEqual(calendar.Millisecond, parsedCalender.Millisecond);
+			ClassicAssert.AreEqual(calendar.Year, parsedCalender.Year);
+			ClassicAssert.AreEqual(calendar.Month, parsedCalender.Month);
+			ClassicAssert.AreEqual(calendar.Day, parsedCalender.Day);
+			ClassicAssert.AreEqual(calendar.Hour, parsedCalender.Hour);
+			ClassicAssert.AreEqual(calendar.Minute, parsedCalender.Minute);
+			ClassicAssert.AreEqual(calendar.Second, parsedCalender.Second);
+			ClassicAssert.AreEqual(calendar.Millisecond, parsedCalender.Millisecond);
 		}
 
 
@@ -427,7 +428,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var ourResult = StringHelper.NewString(FixTypes.FormatTzTimestamp(cal, TimestampPrecision.Milli));
 			var actualResult = cal.ToString(DateFormatGmt530);
 
-			Assert.AreEqual(actualResult + GetTimeZone(cal), ourResult, "Must be the same");
+			ClassicAssert.AreEqual(actualResult + GetTimeZone(cal), ourResult, "Must be the same");
 		}
 
 		[Test]
@@ -438,7 +439,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var ourResult = StringHelper.NewString(FixTypes.FormatTzTimestamp(cal, TimestampPrecision.Second));
 			var actualResult = cal.ToString(DateFormatWithoutMills);
 
-			Assert.AreEqual(actualResult + GetTimeZone(cal), ourResult, "Must be the same");
+			ClassicAssert.AreEqual(actualResult + GetTimeZone(cal), ourResult, "Must be the same");
 		}
 
 		[Test]
@@ -448,7 +449,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var actual = StringHelper.NewString(FixTypes.FormatTzTimestamp(cal, TimestampPrecision.Milli));
 			var expected = cal.ToString(DateFormatGmt530) + GetTimeZone(cal);
 
-			Assert.AreEqual(expected, actual, "Must be the same");
+			ClassicAssert.AreEqual(expected, actual, "Must be the same");
 		}
 
 		[Test]
@@ -459,7 +460,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var actual = StringHelper.NewString(FixTypes.FormatTzTimestamp(cal, TimestampPrecision.Second));
 			var expected = cal.ToString(DateFormatGmt5) + GetTimeZone(cal);
 
-			Assert.AreEqual(expected, actual, "Must be the same");
+			ClassicAssert.AreEqual(expected, actual, "Must be the same");
 		}
 		[Test]
 		public virtual void TestFormatTzTimestampWithoutMilli5()
@@ -469,7 +470,7 @@ namespace Epam.FixAntenna.Message.Tests
 			var actual = StringHelper.NewString(FixTypes.FormatTzTimestamp(cal, TimestampPrecision.Second));
 			var expected = cal.ToString(DateFormatWithoutMills5) + GetTimeZone(cal);
 
-			Assert.AreEqual(expected, actual, "Must be the same");
+			ClassicAssert.AreEqual(expected, actual, "Must be the same");
 		}
 
 		[Test]
@@ -481,7 +482,7 @@ namespace Epam.FixAntenna.Message.Tests
 
 			var expected = cal.ToString(DateFormatWithoutMills530) + GetTimeZone(cal);
 
-			Assert.AreEqual(expected, actual, "Must be the same");
+			ClassicAssert.AreEqual(expected, actual, "Must be the same");
 		}
 
 		// YYYYMM
@@ -496,49 +497,49 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var value = "200101";
 			var cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2001, cal.Year);
-			Assert.AreEqual(1, cal.Month);
+			ClassicAssert.AreEqual(2001, cal.Year);
+			ClassicAssert.AreEqual(1, cal.Month);
 
 			value = "201003";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
 
 			value = "20100312";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
-			Assert.AreEqual(12, cal.Day);
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(12, cal.Day);
 
 			value = "201003w5";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
-			Assert.AreEqual(5, cal.GetWeekOfMonth());
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(5, cal.GetWeekOfMonth());
 
 			value = "201003w4";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
-			Assert.AreEqual(4, cal.GetWeekOfMonth());
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(4, cal.GetWeekOfMonth());
 
 			value = "201003w3";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
-			Assert.AreEqual(3, cal.GetWeekOfMonth());
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(3, cal.GetWeekOfMonth());
 
 			value = "201003w2";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
-			Assert.AreEqual(2, cal.GetWeekOfMonth());
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(2, cal.GetWeekOfMonth());
 
 			value = "201003w1";
 			cal = FixTypes.ParseMonthYear44(value.AsByteArray());
-			Assert.AreEqual(2010, cal.Year);
-			Assert.AreEqual(3, cal.Month);
-			Assert.AreEqual(1, cal.GetWeekOfMonth());
+			ClassicAssert.AreEqual(2010, cal.Year);
+			ClassicAssert.AreEqual(3, cal.Month);
+			ClassicAssert.AreEqual(1, cal.GetWeekOfMonth());
 		}
 
 		[Test]
@@ -548,7 +549,7 @@ namespace Epam.FixAntenna.Message.Tests
 
 			foreach (var value in values)
 			{
-				Assert.IsFalse(FixTypes.IsInvalidTzTimestamp(value.AsByteArray()));
+				ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp(value.AsByteArray()));
 			}
 		}
 
@@ -559,19 +560,19 @@ namespace Epam.FixAntenna.Message.Tests
 
 			foreach (var value in values)
 			{
-				Assert.IsTrue(FixTypes.IsInvalidTzTimestamp(value.AsByteArray()));
+				ClassicAssert.IsTrue(FixTypes.IsInvalidTzTimestamp(value.AsByteArray()));
 			}
 		}
 
 		[Test]
 		public virtual void TestCheckSum()
 		{
-			Assert.AreEqual("000", StringHelper.NewString(FixTypes.FormatCheckSum(0)));
-			Assert.AreEqual("001", StringHelper.NewString(FixTypes.FormatCheckSum(1)));
-			Assert.AreEqual("002", StringHelper.NewString(FixTypes.FormatCheckSum(2)));
-			Assert.AreEqual("010", StringHelper.NewString(FixTypes.FormatCheckSum(10)));
-			Assert.AreEqual("100", StringHelper.NewString(FixTypes.FormatCheckSum(100)));
-			Assert.AreEqual("256", StringHelper.NewString(FixTypes.FormatCheckSum(256)));
+			ClassicAssert.AreEqual("000", StringHelper.NewString(FixTypes.FormatCheckSum(0)));
+			ClassicAssert.AreEqual("001", StringHelper.NewString(FixTypes.FormatCheckSum(1)));
+			ClassicAssert.AreEqual("002", StringHelper.NewString(FixTypes.FormatCheckSum(2)));
+			ClassicAssert.AreEqual("010", StringHelper.NewString(FixTypes.FormatCheckSum(10)));
+			ClassicAssert.AreEqual("100", StringHelper.NewString(FixTypes.FormatCheckSum(100)));
+			ClassicAssert.AreEqual("256", StringHelper.NewString(FixTypes.FormatCheckSum(256)));
 		}
 
 		/// <summary>
@@ -601,15 +602,15 @@ namespace Epam.FixAntenna.Message.Tests
 
 			var dateTimeResult = calendar.ToString(DateFormat);
 			var fixTypesResult = FixTypes.FormatTimestamp(new byte[21], 0, calendar, 0, TimestampPrecision.Milli);
-			Assert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
+			ClassicAssert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
 
 			dateTimeResult = calendar.ToString(DateFormat) + "001";
 			fixTypesResult = FixTypes.FormatTimestamp(new byte[24], 0, calendar, 1, TimestampPrecision.Micro);
-			Assert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
+			ClassicAssert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
 
 			dateTimeResult = calendar.ToString(DateFormat) + "000001";
 			fixTypesResult = FixTypes.FormatTimestamp(new byte[27], 0, calendar, 1, TimestampPrecision.Nano);
-			Assert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
+			ClassicAssert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
 		}
 
 		[Test]
@@ -619,15 +620,15 @@ namespace Epam.FixAntenna.Message.Tests
 
 			var dateTimeResult = calendar.ToString(PrefixStorageFormat);
 			var fixTypesResult = FixTypes.FormatStorageTimestamp(new byte[24], 0, calendar, 0, TimestampPrecision.Milli);
-			Assert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
+			ClassicAssert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
 
 			dateTimeResult = calendar.ToString(PrefixStorageFormat).Replace(" - ", "999 - ");
 			fixTypesResult = FixTypes.FormatStorageTimestamp(new byte[27], 0, calendar, 999, TimestampPrecision.Micro);
-			Assert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
+			ClassicAssert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
 
 			dateTimeResult = calendar.ToString(PrefixStorageFormat).Replace(" - ", "999999 - "); ;
 			fixTypesResult = FixTypes.FormatStorageTimestamp(new byte[30], 0, calendar, 999999, TimestampPrecision.Nano);
-			Assert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
+			ClassicAssert.AreEqual(dateTimeResult, StringHelper.NewString(fixTypesResult));
 		}
 
 		[Test]
@@ -1013,19 +1014,19 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestMonthYear44()
 		{
 			var value = "200101";
-			Assert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
+			ClassicAssert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
 
 			value = "201003";
-			Assert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
+			ClassicAssert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
 
 			value = "20100312";
-			Assert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
+			ClassicAssert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
 
 			value = "201003w2";
-			Assert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
+			ClassicAssert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
 
 			value = "200101w1";
-			Assert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
+			ClassicAssert.IsTrue(!FixTypes.IsInvalidMonthYear44(value.AsByteArray()));
 		}
 
 		[Test]
@@ -1035,27 +1036,27 @@ namespace Epam.FixAntenna.Message.Tests
 			var calendar = new DateTimeOffset();
 			calendar = FixTypes.ParseShortTime(value.AsByteArray());
 
-			Assert.AreEqual(0, calendar.Hour);
-			Assert.AreEqual(0, calendar.Minute);
-			Assert.AreEqual(0, calendar.Second);
+			ClassicAssert.AreEqual(0, calendar.Hour);
+			ClassicAssert.AreEqual(0, calendar.Minute);
+			ClassicAssert.AreEqual(0, calendar.Second);
 
 			value = "20:50:11";
 			calendar = new DateTimeOffset();
 			calendar = FixTypes.ParseShortTime(value.AsByteArray());
 
-			Assert.AreEqual(20, calendar.Hour);
-			Assert.AreEqual(50, calendar.Minute);
-			Assert.AreEqual(11, calendar.Second);
+			ClassicAssert.AreEqual(20, calendar.Hour);
+			ClassicAssert.AreEqual(50, calendar.Minute);
+			ClassicAssert.AreEqual(11, calendar.Second);
 		}
 
 		private void IsValid(string pattern)
 		{
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly(pattern.AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly(pattern.AsByteArray()));
 		}
 
 		private void IsInvalid(string pattern)
 		{
-			Assert.IsTrue(FixTypes.isInvalidTZTimeOnly(pattern.AsByteArray()));
+			ClassicAssert.IsTrue(FixTypes.isInvalidTZTimeOnly(pattern.AsByteArray()));
 		}
 
 		[Test]
@@ -1065,71 +1066,71 @@ namespace Epam.FixAntenna.Message.Tests
 
 			var result = new byte[15];
 			FixTypes.FormatBackupStorageTimestamp(result, calendar, 0, TimestampPrecision.Milli);
-			Assert.AreEqual("130112133038045", StringHelper.NewString(result));
+			ClassicAssert.AreEqual("130112133038045", StringHelper.NewString(result));
 
 			result = new byte[18];
 			FixTypes.FormatBackupStorageTimestamp(result, calendar, 12, TimestampPrecision.Micro);
-			Assert.AreEqual("130112133038045012", StringHelper.NewString(result));
+			ClassicAssert.AreEqual("130112133038045012", StringHelper.NewString(result));
 
 			result = new byte[21];
 			FixTypes.FormatBackupStorageTimestamp(result, calendar, 1, TimestampPrecision.Nano);
-			Assert.AreEqual("130112133038045000001", StringHelper.NewString(result));
+			ClassicAssert.AreEqual("130112133038045000001", StringHelper.NewString(result));
 		}
 
 		[Test]
 		public virtual void TestLeapSecondInTimestamp()
 		{
-			Assert.IsFalse(FixTypes.IsInvalidTimestamp("20060901-23:59:60.101".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTimestamp("20060901-23:59:60.101202".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTimestamp("20060901-23:59:60.101202303".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTimestamp("20060901-23:59:60.101".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTimestamp("20060901-23:59:60.101202".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTimestamp("20060901-23:59:60.101202303".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestLeapSecondInTzTimestamp()
 		{
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202303Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60+02:31".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101+02:31".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202+02:31".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202303+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202303+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202303Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202303+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTzTimestamp("20060901-23:59:60.101202303+02:31".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void testLeapSecondInTimeOnly()
 		{
-			Assert.IsFalse(FixTypes.isInvalidTimeOnly("23:59:60.101".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTimeOnly("23:59:60.101202".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTimeOnly("23:59:60.101202303".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTimeOnly("23:59:60.101".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTimeOnly("23:59:60.101202".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTimeOnly("23:59:60.101202303".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void testLeapSecondInTZTimeOnly()
 		{
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202303Z".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60+02:31".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101+02:31".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202+02:31".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202303+02".AsByteArray()));
-			Assert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202303+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202303Z".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202+02:31".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202303+02".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.isInvalidTZTimeOnly("23:59:60.101202303+02:31".AsByteArray()));
 		}
 
 		[Test]
 		public virtual void TestLeapSecondInTime()
 		{
-			Assert.IsFalse(FixTypes.IsInvalidTime("20060901-23:59:60".AsByteArray()));
+			ClassicAssert.IsFalse(FixTypes.IsInvalidTime("20060901-23:59:60".AsByteArray()));
 		}
 
 		[Test]
@@ -1137,9 +1138,9 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var c = new DateTime();
 			c = FixTypes.ParseTimestamp("20060901-23:59:60".AsByteArray());
-			Assert.AreEqual(0, c.Hour);
-			Assert.AreEqual(0, c.Minute);
-			Assert.AreEqual(0, c.Second);
+			ClassicAssert.AreEqual(0, c.Hour);
+			ClassicAssert.AreEqual(0, c.Minute);
+			ClassicAssert.AreEqual(0, c.Second);
 		}
 
 		[Test]
@@ -1147,36 +1148,36 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var c = new DateTime();
 			c = FixTypes.parseTimeOnly("23:59:60".AsByteArray());
-			Assert.AreEqual(0, c.Hour);
-			Assert.AreEqual(0, c.Minute);
-			Assert.AreEqual(0, c.Second);
+			ClassicAssert.AreEqual(0, c.Hour);
+			ClassicAssert.AreEqual(0, c.Minute);
+			ClassicAssert.AreEqual(0, c.Second);
 		}
 
 		[Test]
 		public virtual void testParseLeapSecondInTZTimeOnly()
 		{
 			var c = FixTypes.parseTZTimeOnly("23:59:60Z".AsByteArray());
-			Assert.AreEqual(0, c.Hour);
-			Assert.AreEqual(0, c.Minute);
-			Assert.AreEqual(0, c.Second);
+			ClassicAssert.AreEqual(0, c.Hour);
+			ClassicAssert.AreEqual(0, c.Minute);
+			ClassicAssert.AreEqual(0, c.Second);
 		}
 
 		[Test]
 		public virtual void TestParseLeapSecondInTime()
 		{
 			var c = FixTypes.ParseTime("20060901-23:59:60".AsByteArray());
-			Assert.AreEqual(0, c.Hour);
-			Assert.AreEqual(0, c.Minute);
-			Assert.AreEqual(0, c.Second);
+			ClassicAssert.AreEqual(0, c.Hour);
+			ClassicAssert.AreEqual(0, c.Minute);
+			ClassicAssert.AreEqual(0, c.Second);
 		}
 
 		[Test]
 		public virtual void TestParseLeapSecondInShortTime()
 		{
 			DateTimeOffset c = FixTypes.ParseShortTime("23:59:60".AsByteArray());
-			Assert.AreEqual(0, c.Hour);
-			Assert.AreEqual(0, c.Minute);
-			Assert.AreEqual(0, c.Second);
+			ClassicAssert.AreEqual(0, c.Hour);
+			ClassicAssert.AreEqual(0, c.Minute);
+			ClassicAssert.AreEqual(0, c.Second);
 		}
 	}
 }

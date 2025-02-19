@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.FixEngine.Transport.Server;
 using Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 {
@@ -58,7 +59,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 #pragma warning restore CA2000 // Dispose objects before losing scope
 					client.Connect(TestAddress, TestPort);
 					openSockets.Add(client);
-					Assert.IsTrue(client.Connected);
+					ClassicAssert.IsTrue(client.Connected);
 				}
 			}
 			finally
@@ -97,7 +98,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 			using (var client = new Socket(SocketType.Stream, ProtocolType.Tcp))
 			{
 				client.Connect(TestAddress, TestPort);
-				Assert.IsTrue(client.Connected);
+				ClassicAssert.IsTrue(client.Connected);
 			}
 		}
 
@@ -114,7 +115,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 			Init();
 			var client = new Socket(SocketType.Stream, ProtocolType.Tcp);
 			client.Connect(TestAddress, TestPort);
-			Assert.IsTrue(client.Connected);
+			ClassicAssert.IsTrue(client.Connected);
 
 			//restart server
 			_server.Stop();
@@ -128,7 +129,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 			try
 			{
 				newClient.Connect(TestAddress, TestPort);
-				Assert.IsTrue(newClient.Connected);
+				ClassicAssert.IsTrue(newClient.Connected);
 			}
 			finally
 			{

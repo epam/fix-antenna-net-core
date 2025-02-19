@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Storage;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 {
@@ -81,7 +82,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 		public virtual void SendOneMessage()
 		{
 			ExchangeWithMessages();
-			Assert.IsNotNull(_message);
+			ClassicAssert.IsNotNull(_message);
 		}
 
 		private void ExchangeWithMessages()
@@ -100,7 +101,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.IOThreads
 			ExchangeWithMessages();
 			Thread.Sleep(500);
 			var seqNumAfter = _session.RuntimeState.InSeqNum;
-			Assert.IsTrue(seqNumBefore != seqNumAfter, "sequence should not be equals: " + seqNumBefore + ", " + seqNumAfter);
+			ClassicAssert.IsTrue(seqNumBefore != seqNumAfter, "sequence should not be equals: " + seqNumBefore + ", " + seqNumAfter);
 		}
 	}
 }

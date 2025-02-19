@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Common.ResourceLoading;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 {
@@ -37,7 +38,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 			using (var data = ResourceLoader.DefaultLoader.LoadResource(resourceName))
 			{
 				Validate(resourceName, data, ErrorShouldOccur);
-				Assert.IsTrue(Errors.IsEmpty, Errors.Errors.ToReadableString());
+				ClassicAssert.IsTrue(Errors.IsEmpty, Errors.Errors.ToReadableString());
 				Log.Info("Passed " + resourceName);
 			}
 		}
@@ -50,7 +51,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validation.Test
 			using (var data = ResourceLoader.DefaultLoader.LoadResource(resourceName))
 			{
 				Validate(resourceName, data, ErrorShouldOccur);
-				Assert.IsTrue(Errors.IsEmpty, Errors.Errors.ToReadableString());
+				ClassicAssert.IsTrue(Errors.IsEmpty, Errors.Errors.ToReadableString());
 				Log.Info("Passed " + resourceName);
 			}
 		}

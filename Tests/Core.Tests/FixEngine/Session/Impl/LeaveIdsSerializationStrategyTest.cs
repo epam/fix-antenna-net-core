@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 {
@@ -79,12 +80,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=83\u000135=D\u000134=1\u0001" + "49=49\u000156=56\u000150=50\u000157=57\u0001142=142\u0001143=143\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=009\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=83\u000135=D\u000134=1\u0001" + "49=49\u000156=56\u000150=50\u000157=57\u0001142=142\u0001143=143\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=009\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 			CheckMsgLenght(serializedMsg, serialized);
 		}
 
@@ -103,12 +104,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=55\u000135=D\u000134=1\u0001" + "49=49\u000156=56\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=016\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=55\u000135=D\u000134=1\u0001" + "49=49\u000156=56\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=016\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -127,11 +128,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=147\u000135=D\u000134=1\u0001" + "49=SenderCompId\u000156=TargetCompId\u000150=SenderSubId\u000157=TargetSubId\u0001" + "142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=172\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=147\u000135=D\u000134=1\u0001" + "49=SenderCompId\u000156=TargetCompId\u000150=SenderSubId\u000157=TargetSubId\u0001" + "142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=172\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -154,7 +155,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=117\u000135=A\u000134=1\u0001"
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=117\u000135=A\u000134=1\u0001"
 											+ "49=49\u000156=56\u000150=50\u000157=57\u0001142=142\u0001143=143\u0001"
 											+ "52=20160510-10:39:37.987\u000198=0\u0001"
 											+ "108=30\u0001553=username\u0001554=pass\u00011=1\u00012=2\u000110=027\u0001", serializedMsg);
@@ -162,7 +163,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -181,12 +182,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=147\u000135=D\u000134=1\u0001" + "49=SenderCompId\u000156=TargetCompId\u000150=SenderSubId\u000157=TargetSubId\u0001" + "142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=172\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=147\u000135=D\u000134=1\u0001" + "49=SenderCompId\u000156=TargetCompId\u000150=SenderSubId\u000157=TargetSubId\u0001" + "142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=172\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -209,12 +210,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=115\u000135=D\u000134=1\u000149=49\u000156=TargetCompId\u0001" + "50=50\u000157=TargetSubId\u0001142=142\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=244\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=115\u000135=D\u000134=1\u000149=49\u000156=TargetCompId\u0001" + "50=50\u000157=TargetSubId\u0001142=142\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=244\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -237,12 +238,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=115\u000135=D\u000134=1\u000149=SenderCompId\u000156=56\u0001" + "50=SenderSubId\u000157=57\u0001142=SenderLocationId\u0001143=143\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=232\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=115\u000135=D\u000134=1\u000149=SenderCompId\u000156=56\u0001" + "50=SenderSubId\u000157=57\u0001142=SenderLocationId\u0001143=143\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=232\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -265,12 +266,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=55\u000135=D\u000134=1\u000149=49\u000156=56\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=016\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=55\u000135=D\u000134=1\u000149=49\u000156=56\u0001" + "52=20160510-10:39:37.987\u00011=1\u00012=2\u000110=016\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -296,12 +297,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=79\u000135=D\u000134=1\u000149=SenderCompId\u000156=56\u0001" + "57=57\u0001143=143\u000152=20160510-10:39:37.987\u00011=1\u00012=2\u000110=202\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=79\u000135=D\u000134=1\u000149=SenderCompId\u000156=56\u0001" + "57=57\u0001143=143\u000152=20160510-10:39:37.987\u00011=1\u00012=2\u000110=202\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -321,12 +322,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.2\u00019=139\u000135=D\u000134=1\u000149=SenderCompId\u0001" + "56=TargetCompId\u0001" + "50=SenderSubId\u000157=TargetSubId\u0001142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u000110=107\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.2\u00019=139\u000135=D\u000134=1\u000149=SenderCompId\u0001" + "56=TargetCompId\u0001" + "50=SenderSubId\u000157=TargetSubId\u0001142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u000110=107\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -346,12 +347,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual("8=FIX.4.4\u00019=140\u000135=AA\u000134=1\u000149=SenderCompId\u0001" + "56=TargetCompId\u0001" + "50=SenderSubId\u000157=TargetSubId\u0001142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u000110=163\u0001", serializedMsg);
+			ClassicAssert.AreEqual("8=FIX.4.4\u00019=140\u000135=AA\u000134=1\u000149=SenderCompId\u0001" + "56=TargetCompId\u0001" + "50=SenderSubId\u000157=TargetSubId\u0001142=SenderLocationId\u0001143=TargetLocationId\u0001" + "52=20160510-10:39:37.987\u000110=163\u0001", serializedMsg);
 			//try to parse
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -380,7 +381,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var bytesFromBuffer = StandardMessageFactoryHelper.GetBytesFromBuffer(_byteBuffer);
 
 			var serializedMsg = PrepareMsgString(bytesFromBuffer);
-			Assert.AreEqual(
+			ClassicAssert.AreEqual(
 				"8=FIXT.1.1\u00019=130\u000135=A\u000134=1\u0001"
 				+ "49=49\u000156=56\u000150=50\u000157=57\u0001142=142\u0001143=143\u0001"
 				+ "369=0\u000152=20160510-10:39:37.987\u00011137=6\u000198=0\u0001108=30\u0001"
@@ -390,7 +391,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var serialized = RawFixUtil.GetFixMessage(bytesFromBuffer);
 			Log.Debug("SERIALIZED: " + serialized.ToPrintableString());
 
-			Assert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
+			ClassicAssert.AreEqual(beforeFixString, _message.ToPrintableString(), "Message was changed during serialization");
 
 			CheckMsgLenght(serializedMsg, serialized);
 		}
@@ -411,7 +412,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			var end = serializedMsg.IndexOf("\u000110=", StringComparison.Ordinal) + 1;
 			var content = serializedMsg.Substring(start, end - start);
 			//System.out.println(content.Replace("\u0001", "|"));
-			Assert.AreEqual(length, content.Length);
+			ClassicAssert.AreEqual(length, content.Length);
 		}
 
 		private class SerializationContextStub : SerializationContext

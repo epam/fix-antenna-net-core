@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -64,9 +65,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 		public virtual void ValidateBackupResult()
 		{
 			var helper = new FileHelper(this);
-			Assert.AreEqual(0, helper.GetStorageFileSize(Sender));
+			ClassicAssert.AreEqual(0, helper.GetStorageFileSize(Sender));
 
-			Assert.IsTrue(helper.CountFilesInBackStorage() > 0);
+			ClassicAssert.IsTrue(helper.CountFilesInBackStorage() > 0);
 		}
 
 		[Test]
@@ -93,7 +94,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			ValidateBackupResult();
 
 			UpMessageStorage();
-			Assert.AreEqual(1L, GetInitializedSeqId());
+			ClassicAssert.AreEqual(1L, GetInitializedSeqId());
 		}
 
 		[Test]
@@ -109,13 +110,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			WriteDummyMessageToStorage();
 
 			var helper = new FileHelper(this);
-			Assert.IsTrue(helper.GetStorageFileSize(Sender) > 0);
+			ClassicAssert.IsTrue(helper.GetStorageFileSize(Sender) > 0);
 		}
 
 		public virtual void ValidateDeleteResult()
 		{
 			var helper = new FileHelper(this);
-			Assert.AreEqual(0, helper.GetStorageFileSize(Sender));
+			ClassicAssert.AreEqual(0, helper.GetStorageFileSize(Sender));
 		}
 
 		private class FileHelper

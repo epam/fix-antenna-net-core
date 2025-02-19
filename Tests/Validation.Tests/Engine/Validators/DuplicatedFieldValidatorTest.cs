@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.Validation.Tests.Engine.Validators.Util;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 {
@@ -47,7 +48,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 		{
 			var errorContainer =
 				Validator.Validate(message.GetTagValueAsString(35), CreateValidationMessage(message), false);
-			Assert.IsTrue(errorContainer.IsEmpty, errorContainer.IsPriorityError + "");
+			ClassicAssert.IsTrue(errorContainer.IsEmpty, errorContainer.IsPriorityError + "");
 		}
 
 		private void ValidateDuplicateField(FixMessage message, int tag)
@@ -56,7 +57,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var expectedError = GetError(FixErrorCode.TagAppearsMoreThanOnce, 34, message.GetTagValueAsString(35), message.GetTag(tag));
 
-			Assert.That(errorContainer.Errors, Does.Contain(expectedError));
+			ClassicAssert.That(errorContainer.Errors, Does.Contain(expectedError));
 		}
 
 		[Test]

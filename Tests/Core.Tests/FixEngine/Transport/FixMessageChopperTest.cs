@@ -17,7 +17,8 @@ using System.IO;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 {
@@ -47,8 +48,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 				messageChopper.ReadMessage(buf);
 			} while (messageChopper.IsMessageGarbled);
 			var readMessage = StringHelper.NewString(buf.Buffer, buf.Offset, buf.Length);
-			Assert.That(readMessage, Is.EqualTo(msg2));
-			AssertEndOfFile(messageChopper);
+			ClassicAssert.That(readMessage, Is.EqualTo(msg2));
+			ClassicAssertEndOfFile(messageChopper);
 		}
 
 		[Test]
@@ -202,7 +203,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			var msgBuf = new MsgBuf();
 			messageChopper.ReadMessage(msgBuf);
 			var received = StringHelper.NewString(msgBuf.Buffer, msgBuf.Offset, msgBuf.Length);
-			Assert.AreEqual(msg, received);
+			ClassicAssert.AreEqual(msg, received);
 			try
 			{
 				messageChopper.ReadMessage(msgBuf);
@@ -211,8 +212,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 			{
 			}
 
-			Assert.IsTrue(messageChopper.IsMessageGarbled);
-			Assert.AreEqual(messageChopper.Error, GarbledMessageError.Field8TagExpected);
+			ClassicAssert.IsTrue(messageChopper.IsMessageGarbled);
+			ClassicAssert.AreEqual(messageChopper.Error, GarbledMessageError.Field8TagExpected);
 		}
 
 		[Test]
@@ -232,12 +233,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport
 
 			var inMessage = ReadAsString(messageChopper, new MsgBuf());
 			var timeEnd = DateTimeHelper.CurrentTicks;
-			Assert.AreEqual(messages[0], inMessage);
-			Assert.Less(Math.Abs(timeEnd - messageChopper.MessageReadTimeInTicks), milliseconds * TimeSpan.TicksPerMillisecond);
+			ClassicAssert.AreEqual(messages[0], inMessage);
+			ClassicAssert.Less(Math.Abs(timeEnd - messageChopper.MessageReadTimeInTicks), milliseconds * TimeSpan.TicksPerMillisecond);
 			inMessage = ReadAsString(messageChopper, new MsgBuf());
 			timeEnd = DateTimeHelper.CurrentTicks;
-			Assert.AreEqual(messages[1], inMessage);
-			Assert.Less(Math.Abs(timeEnd - messageChopper.MessageReadTimeInTicks), 2 * TimeSpan.TicksPerMillisecond);
+			ClassicAssert.AreEqual(messages[1], inMessage);
+			ClassicAssert.Less(Math.Abs(timeEnd - messageChopper.MessageReadTimeInTicks), 2 * TimeSpan.TicksPerMillisecond);
 		}
 	}
 }

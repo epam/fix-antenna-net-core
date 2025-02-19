@@ -17,7 +17,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Rg.Exceptions;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Rg
 {
@@ -40,7 +41,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidDelimiterTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidDelimiterTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidDelimiterTagException(605, 606, _version, _msgType).Message);
 		}
 
@@ -57,7 +58,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidDelimiterTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidDelimiterTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidDelimiterTagException(455, 456, _version, _msgType).Message);
 		}
 
@@ -74,7 +75,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new DuplicateTagException(604, 606, _version, _msgType).Message);
 		}
 
@@ -91,7 +92,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new DuplicateTagException(382, 337, _version, _msgType).Message);
 		}
 
@@ -108,7 +109,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(604, true, _version, _msgType).Message);
 		}
 
@@ -125,7 +126,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(382, true, _version, _msgType).Message);
 		}
 
@@ -142,7 +143,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(604, false, _version, _msgType).Message);
 		}
 
@@ -159,7 +160,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(232, false, _version, _msgType).Message);
 		}
 
@@ -176,7 +177,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(555, true, _version, _msgType).Message);
 		}
 
@@ -194,7 +195,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new UnexpectedGroupTagException(456, _version, _msgType).Message);
 		}
 
@@ -211,7 +212,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(604, true, _version, _msgType).Message);
 		}
 
@@ -228,7 +229,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(382, true, _version, _msgType).Message);
 		}
 
@@ -245,7 +246,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(555, true, _version, _msgType).Message);
 		}
 
@@ -262,7 +263,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new DuplicateTagException(555, 604, _version, _msgType).Message);
 		}
 
@@ -280,7 +281,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<DuplicateGroupException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<DuplicateGroupException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new DuplicateGroupException(454, _version, _msgType).Message);
 		}
 
@@ -298,7 +299,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(604, true, _version, _msgType).Message);
 		}
 
@@ -316,7 +317,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(454, true, _version, _msgType).Message);
 		}
 
@@ -333,7 +334,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<DuplicateTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new DuplicateTagException(555, 604, _version, _msgType).Message);
 		}
 
@@ -351,7 +352,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<DuplicateGroupException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<DuplicateGroupException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new DuplicateGroupException(454, _version, _msgType).Message);
 		}
 
@@ -368,7 +369,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(555, true, _version, _msgType).Message);
 		}
 
@@ -386,7 +387,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new UnexpectedGroupTagException(603, _version, _msgType).Message);
 		}
 
@@ -403,7 +404,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(604, true, _version, _msgType).Message);
 		}
 
@@ -420,7 +421,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new UnexpectedGroupTagException(603, _version, _msgType).Message);
 		}
 
@@ -437,7 +438,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<InvalidLeadingTagValueException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new InvalidLeadingTagValueException(555, true, _version, _msgType).Message);
 		}
 
@@ -455,7 +456,7 @@ namespace Epam.FixAntenna.Message.Tests.Rg
 				"539=2\u0001524=23\u0001524=24\u0001525=25\u000110=124\u0001";
 			var msg = RawFixUtil.GetFixMessage(executionReport.AsByteArray());
 
-			Assert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
+			ClassicAssert.Throws<UnexpectedGroupTagException>(() => RawFixUtil.IndexRepeatingGroup(msg, true),
 				new UnexpectedGroupTagException(603, _version, _msgType).Message);
 		}
 	}

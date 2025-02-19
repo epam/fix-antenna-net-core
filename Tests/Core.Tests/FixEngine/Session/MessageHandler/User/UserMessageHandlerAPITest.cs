@@ -21,7 +21,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 {
@@ -185,8 +186,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 				_sessionB.Connect();
 
 				_connected.Wait(TimeSpan.FromSeconds(5));
-				Assert.AreEqual(_sessionA.SessionState, SessionState.Connected);
-				Assert.AreEqual(_sessionB.SessionState, SessionState.Connected);
+				ClassicAssert.AreEqual(_sessionA.SessionState, SessionState.Connected);
+				ClassicAssert.AreEqual(_sessionB.SessionState, SessionState.Connected);
 
 				_received1 = new System.Threading.CountdownEvent(1);
 				_received2 = new System.Threading.CountdownEvent(1);
@@ -196,8 +197,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 
 				_received1.Wait(TimeSpan.FromSeconds(5));
 				_received2.Wait(TimeSpan.FromSeconds(5));
-				Assert.IsNotNull(_msg1);
-				Assert.IsNull(_msg2);
+				ClassicAssert.IsNotNull(_msg1);
+				ClassicAssert.IsNull(_msg2);
 
 				_received1 = new System.Threading.CountdownEvent(1);
 				_received2 = new System.Threading.CountdownEvent(1);
@@ -208,17 +209,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.User
 
 				_received1.Wait(TimeSpan.FromSeconds(5));
 				_received2.Wait(TimeSpan.FromSeconds(5));
-				Assert.IsNotNull(_msg1);
-				Assert.IsNotNull(_msg2);
-				Assert.AreEqual(_msg1.GetTagValueAsString(Tags.OnBehalfOfCompID), "A");
-				Assert.AreEqual(_msg2.GetTagValueAsString(Tags.OnBehalfOfCompID), "A");
+				ClassicAssert.IsNotNull(_msg1);
+				ClassicAssert.IsNotNull(_msg2);
+				ClassicAssert.AreEqual(_msg1.GetTagValueAsString(Tags.OnBehalfOfCompID), "A");
+				ClassicAssert.AreEqual(_msg2.GetTagValueAsString(Tags.OnBehalfOfCompID), "A");
 
 				_sessionA.Disconnect("disconnect");
 				_sessionB.Disconnect("disconnect");
 
 				_disconnected.Wait(TimeSpan.FromSeconds(5));
-				Assert.AreEqual(_sessionA.SessionState, SessionState.Disconnected);
-				Assert.AreEqual(_sessionB.SessionState, SessionState.Disconnected);
+				ClassicAssert.AreEqual(_sessionA.SessionState, SessionState.Disconnected);
+				ClassicAssert.AreEqual(_sessionB.SessionState, SessionState.Disconnected);
 
 			}
 			catch (Exception ex)

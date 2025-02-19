@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Validation.FixMessage.Tree;
 using Epam.FixAntenna.NetCore.Validation.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.FIXMessage.Tree
 {
@@ -115,7 +116,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.FIXMessage.Tree
 			var list = RawFixUtil.GetFixMessage(MsgRgInRg.AsByteArray());
 			var entry = FixMessageTreeUtil.BuildMessageTree(list, _fixUtil);
 
-			Assert.AreEqual(list.Length, GetFieldsNum(entry));
+			ClassicAssert.AreEqual(list.Length, GetFieldsNum(entry));
 		}
 	}
 }

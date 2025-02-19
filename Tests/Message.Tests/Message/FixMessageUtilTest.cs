@@ -15,7 +15,8 @@
 using Epam.FixAntenna.Constants.Fixt11;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -31,7 +32,7 @@ namespace Epam.FixAntenna.Message.Tests
 					"" + "36=34655\u000110=217\u0001";
 			var parsedMsg = RawFixUtil.GetFixMessage(msg.AsByteArray());
 			var actualResult = FixMessageUtil.IsIgnorableMsg(parsedMsg);
-			Assert.AreEqual(expected, actualResult,
+			ClassicAssert.AreEqual(expected, actualResult,
 				"Invalid case for posDup=" + posDup + ", gapFill=" + gapFill + " and seqToHigh=" + seqToHigh);
 		}
 
@@ -61,11 +62,11 @@ namespace Epam.FixAntenna.Message.Tests
 			msg2.AddTag(3, "3");
 			msg2.AddTag(2, "2");
 
-			Assert.IsTrue(FixMessageUtil.IsEqualIgnoreOrder(msg1, msg2));
+			ClassicAssert.IsTrue(FixMessageUtil.IsEqualIgnoreOrder(msg1, msg2));
 
 			// change value. Now messages is not equals.
 			msg2 = UpdateMessage(msg2, 2, "5".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsEqualIgnoreOrder(msg1, msg2));
+			ClassicAssert.IsFalse(FixMessageUtil.IsEqualIgnoreOrder(msg1, msg2));
 		}
 
 		[Test]
@@ -73,14 +74,14 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var tagId = Tags.GapFillFlag;
 			var msg = UpdateMessage(GetTestMessage(), tagId, "Y".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsGapFill(msg));
+			ClassicAssert.IsTrue(FixMessageUtil.IsGapFill(msg));
 
 			msg = UpdateMessage(GetTestMessage(), tagId, "N".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsGapFill(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsGapFill(msg));
 
 			msg = GetTestMessage();
 			msg.RemoveTag(tagId);
-			Assert.IsFalse(FixMessageUtil.IsGapFill(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsGapFill(msg));
 		}
 
 		[Test]
@@ -89,9 +90,9 @@ namespace Epam.FixAntenna.Message.Tests
 			var rrMsg = "8=FIX.4.2 | 9=110 | 35=2 | 34=34653 | 49=initiator | 56=acceptor | " +
 						"52=20110125-13:28:54.931 | 43=Y | 7=1 | 16=0 | 10=217 | ";
 			var rr = RawFixUtil.GetFixMessage(rrMsg.Replace(" | ", "\u0001").AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsIgnorableMsg(rr), "Duplicated ResendRequest message should be ignorable");
+			ClassicAssert.IsTrue(FixMessageUtil.IsIgnorableMsg(rr), "Duplicated ResendRequest message should be ignorable");
 			rr.RemoveTag(Tags.PossDupFlag);
-			Assert.IsFalse(FixMessageUtil.IsIgnorableMsg(rr),
+			ClassicAssert.IsFalse(FixMessageUtil.IsIgnorableMsg(rr),
 				"Non-duplicated ResendRequest message shouldn't be ignorable");
 		}
 
@@ -101,20 +102,20 @@ namespace Epam.FixAntenna.Message.Tests
 			var logonMsg = "8=FIX.4.2 | 9=110 | 35=A | 34=1 | 49=initiator | 56=acceptor | " +
 							"52=20110125-13:28:54.931 | 141=Y | 108=30 | 10=217 | ";
 			var logon = RawFixUtil.GetFixMessage(logonMsg.Replace(" | ", "\u0001").AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsIgnorableMsg(logon), "Sequence reset Logon message should be ignorable");
+			ClassicAssert.IsTrue(FixMessageUtil.IsIgnorableMsg(logon), "Sequence reset Logon message should be ignorable");
 
 			var wrongLogon = (FixMessage)logon.Clone();
 			wrongLogon.Set(Tags.MsgSeqNum, 2);
-			Assert.IsFalse(FixMessageUtil.IsIgnorableMsg(wrongLogon),
+			ClassicAssert.IsFalse(FixMessageUtil.IsIgnorableMsg(wrongLogon),
 				"Wrong sequence reset Logon  message shouldn't be ignorable");
 
 			var wrongLogon2 = (FixMessage)logon.Clone();
 			wrongLogon2.Set(Tags.ResetSeqNumFlag, 'N');
-			Assert.IsFalse(FixMessageUtil.IsIgnorableMsg(wrongLogon2),
+			ClassicAssert.IsFalse(FixMessageUtil.IsIgnorableMsg(wrongLogon2),
 				"Wrong sequence reset Logon  message shouldn't be ignorable");
 
 			wrongLogon2.RemoveTag(Tags.ResetSeqNumFlag);
-			Assert.IsFalse(FixMessageUtil.IsIgnorableMsg(wrongLogon2),
+			ClassicAssert.IsFalse(FixMessageUtil.IsIgnorableMsg(wrongLogon2),
 				"Wrong sequence reset Logon  message shouldn't be ignorable");
 		}
 
@@ -124,9 +125,9 @@ namespace Epam.FixAntenna.Message.Tests
 			var seqResetMsg = "8=FIX.4.2 | 9=110 | 35=4 | 34=34653 | 49=initiator | 56=acceptor | " +
 							"52=20110125-13:28:54.931 | 123=N | 36=34655 | 10=217 | ";
 			var seqReset = RawFixUtil.GetFixMessage(seqResetMsg.Replace(" | ", "\u0001").AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsIgnorableMsg(seqReset), "SequenceReset message should be ignorable");
+			ClassicAssert.IsTrue(FixMessageUtil.IsIgnorableMsg(seqReset), "SequenceReset message should be ignorable");
 			seqReset.Set(Tags.GapFillFlag, "Y");
-			Assert.IsFalse(FixMessageUtil.IsIgnorableMsg(seqReset), "GapFill message shouldn't be ignorable");
+			ClassicAssert.IsFalse(FixMessageUtil.IsIgnorableMsg(seqReset), "GapFill message shouldn't be ignorable");
 		}
 
 		[Test]
@@ -134,10 +135,10 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var tagId = Tags.MsgType;
 			var msg = UpdateMessage(GetTestMessage(), tagId, "A".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsLogon(msg));
+			ClassicAssert.IsTrue(FixMessageUtil.IsLogon(msg));
 
 			msg = UpdateMessage(GetTestMessage(), tagId, "N".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsLogon(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsLogon(msg));
 		}
 
 		[Test]
@@ -145,10 +146,10 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var tagId = Tags.MsgType;
 			var msg = UpdateMessage(GetTestMessage(), tagId, "5".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsLogout(msg));
+			ClassicAssert.IsTrue(FixMessageUtil.IsLogout(msg));
 
 			msg = UpdateMessage(GetTestMessage(), tagId, "N".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsLogout(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsLogout(msg));
 		}
 
 		[Test]
@@ -156,13 +157,13 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			byte[] value1 = { (byte)'D' };
 			var msg = UpdateMessage(GetTestMessage(), 35, value1);
-			Assert.IsTrue(FixMessageUtil.IsMessageType(msg, value1));
-			Assert.IsFalse(FixMessageUtil.IsMessageType(msg, "A".AsByteArray()));
+			ClassicAssert.IsTrue(FixMessageUtil.IsMessageType(msg, value1));
+			ClassicAssert.IsFalse(FixMessageUtil.IsMessageType(msg, "A".AsByteArray()));
 
 			var value2 = "AA".AsByteArray();
 			msg = UpdateMessage(msg, 35, value2);
-			Assert.IsTrue(FixMessageUtil.IsMessageType(msg, value2));
-			Assert.IsFalse(FixMessageUtil.IsMessageType(msg, "BB".AsByteArray()));
+			ClassicAssert.IsTrue(FixMessageUtil.IsMessageType(msg, value2));
+			ClassicAssert.IsFalse(FixMessageUtil.IsMessageType(msg, "BB".AsByteArray()));
 		}
 
 		[Test]
@@ -170,14 +171,14 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var tagId = Tags.PossDupFlag;
 			var msg = UpdateMessage(GetTestMessage(), tagId, "Y".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsPosDup(msg));
+			ClassicAssert.IsTrue(FixMessageUtil.IsPosDup(msg));
 
 			msg = UpdateMessage(GetTestMessage(), tagId, "N".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsPosDup(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsPosDup(msg));
 
 			msg = GetTestMessage();
 			msg.RemoveTag(tagId);
-			Assert.IsFalse(FixMessageUtil.IsPosDup(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsPosDup(msg));
 		}
 
 		[Test]
@@ -188,26 +189,26 @@ namespace Epam.FixAntenna.Message.Tests
 			var msg = UpdateMessage(GetTestMessage(), tagId, "A".AsByteArray());
 			msg = UpdateMessage(msg, Tags.ResetSeqNumFlag, "Y".AsByteArray());
 			msg = UpdateMessage(msg, Tags.MsgSeqNum, "1".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsResetLogon(msg), "Logon with ResetSeqNumFlag 'Y', seqNum=1");
+			ClassicAssert.IsTrue(FixMessageUtil.IsResetLogon(msg), "Logon with ResetSeqNumFlag 'Y', seqNum=1");
 
 			msg = UpdateMessage(msg, Tags.ResetSeqNumFlag, "N".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Logon with ResetSeqNumFlag 'N', seqNum=1");
+			ClassicAssert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Logon with ResetSeqNumFlag 'N', seqNum=1");
 
 			msg = UpdateMessage(msg, Tags.ResetSeqNumFlag, "Y".AsByteArray());
 			msg = UpdateMessage(msg, Tags.MsgSeqNum, "5".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Logon with ResetSeqNumFlag 'Y', seqNum=5");
+			ClassicAssert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Logon with ResetSeqNumFlag 'Y', seqNum=5");
 
 			msg.RemoveTag(Tags.ResetSeqNumFlag);
 			msg = UpdateMessage(msg, Tags.MsgSeqNum, "1".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Logon without ResetSeqNumFlag, seqNum=1");
+			ClassicAssert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Logon without ResetSeqNumFlag, seqNum=1");
 
 			msg = UpdateMessage(GetTestMessage(), tagId, "0".AsByteArray());
 			msg = UpdateMessage(msg, Tags.ResetSeqNumFlag, "Y".AsByteArray());
 			msg = UpdateMessage(msg, Tags.MsgSeqNum, "1".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Not Logon with ResetSeqNumFlag 'Y'");
+			ClassicAssert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Not Logon with ResetSeqNumFlag 'Y'");
 
 			msg.RemoveTag(Tags.ResetSeqNumFlag);
-			Assert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Not Logon without ResetSeqNumFlag");
+			ClassicAssert.IsFalse(FixMessageUtil.IsResetLogon(msg), "Not Logon without ResetSeqNumFlag");
 		}
 
 		[Test]
@@ -215,10 +216,10 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var tagId = Tags.MsgType;
 			var msg = UpdateMessage(GetTestMessage(), tagId, "4".AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsSeqReset(msg));
+			ClassicAssert.IsTrue(FixMessageUtil.IsSeqReset(msg));
 
 			msg = UpdateMessage(GetTestMessage(), tagId, "N".AsByteArray());
-			Assert.IsFalse(FixMessageUtil.IsSeqReset(msg));
+			ClassicAssert.IsFalse(FixMessageUtil.IsSeqReset(msg));
 		}
 
 		[Test]
@@ -227,8 +228,8 @@ namespace Epam.FixAntenna.Message.Tests
 			var value = "abc".AsByteArray();
 			var tagId = 49;
 			var msg = UpdateMessage(GetTestMessage(), tagId, value);
-			Assert.IsTrue(FixMessageUtil.IsTagValueEquals(msg, tagId, value));
-			Assert.IsFalse(FixMessageUtil.IsTagValueEquals(msg, tagId, "BB111".AsByteArray()));
+			ClassicAssert.IsTrue(FixMessageUtil.IsTagValueEquals(msg, tagId, value));
+			ClassicAssert.IsFalse(FixMessageUtil.IsTagValueEquals(msg, tagId, "BB111".AsByteArray()));
 		}
 
 		[Test]
@@ -237,8 +238,8 @@ namespace Epam.FixAntenna.Message.Tests
 			var value = "abc";
 			var tagId = 49;
 			var msg = UpdateMessage(GetTestMessage(), tagId, value.AsByteArray());
-			Assert.IsTrue(FixMessageUtil.IsTagValueEquals(msg, tagId, value));
-			Assert.IsFalse(FixMessageUtil.IsTagValueEquals(msg, tagId, "BB111"));
+			ClassicAssert.IsTrue(FixMessageUtil.IsTagValueEquals(msg, tagId, value));
+			ClassicAssert.IsFalse(FixMessageUtil.IsTagValueEquals(msg, tagId, "BB111"));
 		}
 
 		[Test]

@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -43,14 +44,14 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.GetTagAsInt(tagId);
-			Assert.AreEqual(IntValues[0], actual, GetValidatorName() + "invalid value for getTagAsInt(" + tagId + ")");
+			ClassicAssert.AreEqual(IntValues[0], actual, GetValidatorName() + "invalid value for getTagAsInt(" + tagId + ")");
 		}
 
 		[ExpectedExceptionOnFail(typeof(FieldNotFoundException))]
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			long actual = ffl.GetTagAsInt(tagId, occurrence);
-			Assert.AreEqual(IntValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(IntValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for getTagAsInt(" + tagId + ", " + occurrence + ")");
 		}
 
@@ -58,7 +59,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			long actual = ffl.GetTagAsIntAtIndex(firstTagIndex);
-			Assert.AreEqual(IntValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(IntValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for getTagAsIntAtIndex(" + firstTagIndex + ")");
 		}
 

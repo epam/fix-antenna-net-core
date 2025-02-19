@@ -24,7 +24,8 @@ using Epam.FixAntenna.NetCore.Validation.Exceptions;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.Validation.Tests.Engine.Validation.Test;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 {
@@ -88,7 +89,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix42);
 			var group = _util.FindGroup("D", 79);
-			Assert.IsNotNull(group, "Group not found");
+			ClassicAssert.IsNotNull(group, "Group not found");
 		}
 
 		[Test]
@@ -96,7 +97,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix42);
 			var list = _util.GetGroupFieldDefs("D", 79);
-			Assert.AreEqual(2, list.Count, "Not all fields in group");
+			ClassicAssert.AreEqual(2, list.Count, "Not all fields in group");
 		}
 
 		[Test]
@@ -108,10 +109,10 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 			_util = BuildFixUtil(FixVersion.Fix50Sp2);
 
 			var allTags1301 = _util.GetGroupTagsWithInternalGroups("BP", 1310, fixMessage);
-			Assert.AreEqual(56, allTags1301.Count);
+			ClassicAssert.AreEqual(56, allTags1301.Count);
 
 			var tickRulesGroup = _util.GetGroupTagsWithInternalGroups("BP", 1205, fixMessage);
-			Assert.AreEqual(4, tickRulesGroup.Count);
+			ClassicAssert.AreEqual(4, tickRulesGroup.Count);
 		}
 
 		[Test]
@@ -123,7 +124,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 			_util = BuildFixUtil(FixVersion.Fix50Sp2);
 
 			var onlyTags1301 = _util.GetGroupTagsWithOutInternalGroups("BP", 1310, fixMessage);
-			Assert.AreEqual(16, onlyTags1301.Count);
+			ClassicAssert.AreEqual(16, onlyTags1301.Count);
 		}
 
 		[Test]
@@ -131,7 +132,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix44);
 			var list = _util.GetGroupFieldDefs("D", 448);
-			Assert.AreEqual(6, list.Count, "Not all fields in group");
+			ClassicAssert.AreEqual(6, list.Count, "Not all fields in group");
 		}
 
 		[Test]
@@ -139,7 +140,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix44);
 			var list = _util.GetGroupFieldDefs("D", 524);
-			Assert.AreEqual(6, list.Count, "Not all fields in group");
+			ClassicAssert.AreEqual(6, list.Count, "Not all fields in group");
 		}
 
 		[Test]
@@ -147,7 +148,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix42);
 			var list = _util.GetMessageFieldDefHier("D");
-			Assert.AreEqual(103, list.Count, "Not all fields in group");
+			ClassicAssert.AreEqual(103, list.Count, "Not all fields in group");
 		}
 
 		[Test]
@@ -156,10 +157,10 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 			_util = BuildFixUtil(FixVersion.Fix44);
 			var list = _util.GetMessageFieldDefHier("V");
 			var symRgList = FingGroup(list, 146);
-			Assert.IsNotNull(symRgList, "Required group is missed");
+			ClassicAssert.IsNotNull(symRgList, "Required group is missed");
 			var securityAltRgList = FingGroup(symRgList, 454);
-			Assert.IsNotNull(securityAltRgList, "Nested group is missed");
-			Assert.AreEqual(2, securityAltRgList.Count, "Nested group has invalid size");
+			ClassicAssert.IsNotNull(securityAltRgList, "Nested group is missed");
+			ClassicAssert.AreEqual(2, securityAltRgList.Count, "Nested group has invalid size");
 		}
 
 		[Test]
@@ -168,8 +169,8 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 			_util = BuildFixUtil(FixVersion.Fix44);
 			var list = _util.GetMessageFieldDefHier("V");
 			var noHopsRgList = FingGroup(list, 627);
-			Assert.IsNotNull(noHopsRgList, "Required group is missed");
-			Assert.AreEqual(3, noHopsRgList.Count, "Nested group has invalid size");
+			ClassicAssert.IsNotNull(noHopsRgList, "Required group is missed");
+			ClassicAssert.AreEqual(3, noHopsRgList.Count, "Nested group has invalid size");
 		}
 
 		/// <summary>
@@ -180,13 +181,13 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix42);
 			var tagId = _util.GetFieldTagByName("NetMoney");
-			Assert.AreEqual(118, tagId, "Error in getting tag id by field name: normal sensitive");
+			ClassicAssert.AreEqual(118, tagId, "Error in getting tag id by field name: normal sensitive");
 
 			tagId = _util.GetFieldTagByName("netmoney");
-			Assert.AreEqual(118, tagId, "Error in getting tag id by field name: lower case");
+			ClassicAssert.AreEqual(118, tagId, "Error in getting tag id by field name: lower case");
 
 			tagId = _util.GetFieldTagByName("NETMONEY");
-			Assert.AreEqual(118, tagId, "Error in getting tag id by field name: upper case");
+			ClassicAssert.AreEqual(118, tagId, "Error in getting tag id by field name: upper case");
 
 			var exception = false;
 			try
@@ -196,11 +197,11 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 			catch (DictionaryRuntimeException e)
 			{
 				exception = true;
-				Assert.AreEqual("Unknown field name [NETMONEY1] in FIX version [FIX.4.2]", e.Message,
+				ClassicAssert.AreEqual("Unknown field name [NETMONEY1] in FIX version [FIX.4.2]", e.Message,
 					"Error in getting tag id by field name: exception message error");
 			}
 
-			Assert.IsTrue(exception, "Error in getting tag id by field name: exception not thrown");
+			ClassicAssert.IsTrue(exception, "Error in getting tag id by field name: exception not thrown");
 		}
 
 		[Test]
@@ -208,9 +209,9 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix42);
 			var typeByTag = _util.GetFieldTypeByFieldTag(118);
-			Assert.AreEqual("Amt", typeByTag, "Invalid field type");
+			ClassicAssert.AreEqual("Amt", typeByTag, "Invalid field type");
 			var typeByName = _util.GetFieldTypeByFieldName("NetMoney");
-			Assert.AreEqual("Amt", typeByName, "Invalid field type");
+			ClassicAssert.AreEqual("Amt", typeByName, "Invalid field type");
 		}
 
 		/// <summary>
@@ -221,7 +222,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix50Sp1);
 			var startTag = _util.GetStartTagForGroup("6", 454);
-			Assert.AreEqual(455, startTag, "Error on get start tag for group");
+			ClassicAssert.AreEqual(455, startTag, "Error on get start tag for group");
 		}
 
 		/// <summary>
@@ -232,7 +233,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix50Sp2);
 			var startTag = _util.GetStartTagForGroup("6", 454);
-			Assert.AreEqual(455, startTag, "Error on get start tag for group");
+			ClassicAssert.AreEqual(455, startTag, "Error on get start tag for group");
 		}
 
 		[Test]
@@ -240,7 +241,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix42);
 			var isGroup = _util.IsGroupTag("i", 295);
-			Assert.IsTrue(isGroup);
+			ClassicAssert.IsTrue(isGroup);
 		}
 
 		[Test]
@@ -248,7 +249,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 		{
 			_util = BuildFixUtil(FixVersion.Fix44);
 			var isGroup = _util.IsGroupTag("D", 539);
-			Assert.IsTrue(isGroup);
+			ClassicAssert.IsTrue(isGroup);
 		}
 
 		/// <summary>
@@ -271,7 +272,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Utils
 				{
 					if (!IsTagExist(allTags, fielddef))
 					{
-						Assert.Fail("tags collection does not contains tag: " + fielddef.Tag);
+						ClassicAssert.Fail("tags collection does not contains tag: " + fielddef.Tag);
 					}
 				}
 			}

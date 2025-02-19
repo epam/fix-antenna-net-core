@@ -17,7 +17,8 @@ using Epam.FixAntenna.TestUtils;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -32,9 +33,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		[SetUp]
 		public virtual void SetUp()
 		{
-			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 			Server = CreateSever(Port);
-			Assert.IsTrue(Server.Start(), "Can't start server in SetUp().");
+			ClassicAssert.IsTrue(Server.Start(), "Can't start server in SetUp().");
 		}
 
 		[TearDown]
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			Server?.Stop();
 			FixSessionManager.DisposeAllSession();
 			FixSessionManager.Instance.RemoveAllSessions();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		public virtual bool ClearLogs()

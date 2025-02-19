@@ -24,7 +24,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.NetCore.Message;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.FixEngine
 {
@@ -47,15 +48,15 @@ namespace Epam.FixAntenna.FixEngine
 		public void TestCloned()
 		{
 			var clonedParameters = (SessionParameters)_sessionParameters.Clone();
-			Assert.IsTrue(clonedParameters.Equals(_sessionParameters));
-			Assert.AreNotSame(clonedParameters, _sessionParameters);
+			ClassicAssert.IsTrue(clonedParameters.Equals(_sessionParameters));
+			ClassicAssert.AreNotSame(clonedParameters, _sessionParameters);
 		}
 
 		[Test]
 		public void TestSetGetForceSeqNumReset()
 		{
 			_sessionParameters.ForceSeqNumReset = ForceSeqNumReset.Always;
-			Assert.AreEqual(ForceSeqNumReset.Always, _sessionParameters.ForceSeqNumReset);
+			ClassicAssert.AreEqual(ForceSeqNumReset.Always, _sessionParameters.ForceSeqNumReset);
 		}
 
 		[Test]
@@ -63,8 +64,8 @@ namespace Epam.FixAntenna.FixEngine
 		{
 			var p1 = BuildParameters();
 			var p2 = BuildSimilarParameters(p1);
-			Assert.IsTrue(p1.IsSimilar(p2));
-			Assert.IsTrue(p2.IsSimilar(p1));
+			ClassicAssert.IsTrue(p1.IsSimilar(p2));
+			ClassicAssert.IsTrue(p2.IsSimilar(p1));
 		}
 
 		[Test]
@@ -74,8 +75,8 @@ namespace Epam.FixAntenna.FixEngine
 			var p2 = BuildSimilarParameters(p1);
 			p2.AppVersionContainer = (FixVersionContainer)null;
 
-			Assert.IsFalse(p1.IsSimilar(p2));
-			Assert.IsFalse(p2.IsSimilar(p1));
+			ClassicAssert.IsFalse(p1.IsSimilar(p2));
+			ClassicAssert.IsFalse(p2.IsSimilar(p1));
 		}
 
 		[Test]
@@ -85,8 +86,8 @@ namespace Epam.FixAntenna.FixEngine
 			p1.SetSessionId("sID");
 			var p2 = BuildSimilarParameters(p1);
 			p2.SetSessionId("sID");
-			Assert.IsTrue(p1.IsSimilar(p2));
-			Assert.IsTrue(p2.IsSimilar(p1));
+			ClassicAssert.IsTrue(p1.IsSimilar(p2));
+			ClassicAssert.IsTrue(p2.IsSimilar(p1));
 		}
 
 		[Test]
@@ -95,8 +96,8 @@ namespace Epam.FixAntenna.FixEngine
 			var p1 = BuildParameters();
 			p1.FixVersionContainer = new FixVersionContainer("NEW_ID", p1.FixVersion, null);
 			var p2 = BuildSimilarParameters(p1);
-			Assert.IsTrue(p1.IsSimilar(p2));
-			Assert.IsTrue(p2.IsSimilar(p1));
+			ClassicAssert.IsTrue(p1.IsSimilar(p2));
+			ClassicAssert.IsTrue(p2.IsSimilar(p1));
 		}
 
 		[Test]
@@ -104,16 +105,16 @@ namespace Epam.FixAntenna.FixEngine
 		{
 			var p1 = BuildParameters();
 
-			AssertNotSimilar(p1, nameof(SessionParameters.SenderCompId), "s1");
-			AssertNotSimilar(p1, nameof(SessionParameters.SenderSubId), "ss1");
-			AssertNotSimilar(p1, nameof(SessionParameters.SenderLocationId), "sl1");
-			AssertNotSimilar(p1, nameof(SessionParameters.TargetCompId), "t1");
-			AssertNotSimilar(p1, nameof(SessionParameters.TargetSubId), "ts1");
-			AssertNotSimilar(p1, nameof(SessionParameters.TargetLocationId), "tl1");
-			AssertNotSimilar(p1, nameof(SessionParameters.SessionQualifier), "sq1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.SenderCompId), "s1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.SenderSubId), "ss1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.SenderLocationId), "sl1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.TargetCompId), "t1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.TargetSubId), "ts1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.TargetLocationId), "tl1");
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.SessionQualifier), "sq1");
 
-			AssertNotSimilar(p1, nameof(SessionParameters.FixVersion), FixVersion.Fix50);
-			AssertNotSimilar(p1, nameof(SessionParameters.AppVersion), FixVersion.Fix41);
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.FixVersion), FixVersion.Fix50);
+			ClassicAssertNotSimilar(p1, nameof(SessionParameters.AppVersion), FixVersion.Fix41);
 		}
 
 		private FixMessage GetSimpleFixMessage(int tag, int val)
@@ -123,10 +124,10 @@ namespace Epam.FixAntenna.FixEngine
 			return message;
 		}
 
-		private void AssertNotSimilar(SessionParameters p, string name, object value)
+		private void ClassicAssertNotSimilar(SessionParameters p, string name, object value)
 		{
 			var p2 = BuildNotSimilarParameters(p, name, value);
-			Assert.IsFalse(p.IsSimilar(p2), $"Session parameters {name} is different and object should not be similar");
+			ClassicAssert.IsFalse(p.IsSimilar(p2), $"Session parameters {name} is different and object should not be similar");
 		}
 
 		private SessionParameters BuildSimilarParameters(SessionParameters p1)
@@ -198,7 +199,7 @@ namespace Epam.FixAntenna.FixEngine
 			{
 				id.Append("a");
 			}
-			Assert.Throws<ArgumentException>(() => sessionParameters.SetSessionId(id.ToString()));
+			ClassicAssert.Throws<ArgumentException>(() => sessionParameters.SetSessionId(id.ToString()));
 		}
 
 		[Test]
@@ -226,7 +227,7 @@ namespace Epam.FixAntenna.FixEngine
 		{
 			var sessionParameters = new SessionParameters();
 			var id = new StringBuilder("a+a");
-			Assert.Throws<ArgumentException>(() => sessionParameters.SetSessionId(id.ToString()));
+			ClassicAssert.Throws<ArgumentException>(() => sessionParameters.SetSessionId(id.ToString()));
 		}
 
 		[Test]
@@ -241,10 +242,10 @@ namespace Epam.FixAntenna.FixEngine
 			sessionParameters.SetDestinationsIfPresent(properties);
 
 			var destinations = sessionParameters.Destinations;
-			Assert.AreEqual(3, destinations.Count);
-			Assert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 1111)));
-			Assert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 2222)));
-			Assert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 3333)));
+			ClassicAssert.AreEqual(3, destinations.Count);
+			ClassicAssert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 1111)));
+			ClassicAssert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 2222)));
+			ClassicAssert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 3333)));
 		}
 
 		/// <summary>
@@ -265,10 +266,10 @@ namespace Epam.FixAntenna.FixEngine
 			sessionParameters.SetDestinationsIfPresent(properties);
 
 			var destinations = sessionParameters.Destinations;
-			Assert.AreEqual(3, destinations.Count);
-			Assert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 1111)));
-			Assert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 2222)));
-			Assert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 3333)));
+			ClassicAssert.AreEqual(3, destinations.Count);
+			ClassicAssert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 1111)));
+			ClassicAssert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 2222)));
+			ClassicAssert.IsTrue(destinations.Contains(new DnsEndPoint("127.0.0.1", 3333)));
 		}
 
 		[Test]
@@ -279,48 +280,48 @@ namespace Epam.FixAntenna.FixEngine
 
 			sessionParameters.FixVersion = FixVersion.Fix40;
 			sessionParameters.AppVersion = FixVersion.Fix40;
-			Assert.AreEqual(FixVersion.Fix40, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix40, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix40, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix40, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix41;
 			sessionParameters.AppVersion = FixVersion.Fix41;
-			Assert.AreEqual(FixVersion.Fix41, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix41, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix41, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix41, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix42;
 			sessionParameters.AppVersion = FixVersion.Fix42;
-			Assert.AreEqual(FixVersion.Fix42, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix42, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix42, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix42, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix43;
 			sessionParameters.AppVersion = FixVersion.Fix43;
-			Assert.AreEqual(FixVersion.Fix43, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix43, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix43, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix43, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix44;
 			sessionParameters.AppVersion = FixVersion.Fix44;
-			Assert.AreEqual(FixVersion.Fix44, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix44, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix44, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix44, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix50;
 			sessionParameters.AppVersion = FixVersion.Fix50;
-			Assert.AreEqual(FixVersion.Fix50, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix50, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix50, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix50, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix50Sp1;
 			sessionParameters.AppVersion = FixVersion.Fix50Sp1;
-			Assert.AreEqual(FixVersion.Fix50Sp1, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix50Sp1, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix50Sp1, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix50Sp1, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fix50Sp2;
 			sessionParameters.AppVersion = FixVersion.Fix50Sp2;
-			Assert.AreEqual(FixVersion.Fix50Sp2, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fix50Sp2, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix50Sp2, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fix50Sp2, sessionParameters.AppVersionContainer.FixVersion);
 
 			sessionParameters.FixVersion = FixVersion.Fixt11;
 			sessionParameters.AppVersion = FixVersion.Fixt11;
-			Assert.AreEqual(FixVersion.Fixt11, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual(FixVersion.Fixt11, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fixt11, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual(FixVersion.Fixt11, sessionParameters.AppVersionContainer.FixVersion);
 		}
 
 		[Test]
@@ -343,23 +344,23 @@ namespace Epam.FixAntenna.FixEngine
 			sessionParameters.AppVersionFromString("FIX42Custom");
 
 			//check that custom FIX version does\t overwrite default
-			Assert.AreEqual(FixVersion.Fix42, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic42-custom.xml", sessionParameters.FixVersionContainer.DictionaryFile);
-			Assert.IsNull(sessionParameters.FixVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix42, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom.xml", sessionParameters.FixVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(sessionParameters.FixVersionContainer.ExtensionFile);
 
-			Assert.AreEqual(FixVersion.Fix42, sessionParameters.AppVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic42-custom.xml", sessionParameters.AppVersionContainer.DictionaryFile);
-			Assert.IsNull(sessionParameters.AppVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix42, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom.xml", sessionParameters.AppVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(sessionParameters.AppVersionContainer.ExtensionFile);
 
 			sessionParameters.FixVersionFromString("FIX44Custom");
 			sessionParameters.AppVersionFromString("FIX44Custom");
-			Assert.AreEqual(FixVersion.Fix44, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", sessionParameters.FixVersionContainer.DictionaryFile);
-			Assert.IsNull(sessionParameters.FixVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix44, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", sessionParameters.FixVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(sessionParameters.FixVersionContainer.ExtensionFile);
 
-			Assert.AreEqual(FixVersion.Fix44, sessionParameters.AppVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", sessionParameters.AppVersionContainer.DictionaryFile);
-			Assert.IsNull(sessionParameters.AppVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix44, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", sessionParameters.AppVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(sessionParameters.AppVersionContainer.ExtensionFile);
 		}
 
 		[Test]
@@ -379,24 +380,24 @@ namespace Epam.FixAntenna.FixEngine
 			sessionParameters.FixVersion = FixVersion.Fix42;
 			sessionParameters.AppVersion = FixVersion.Fix42;
 
-			Assert.AreEqual(FixVersion.Fix42, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic42-custom.xml", sessionParameters.FixVersionContainer.DictionaryFile);
-			Assert.IsNull(sessionParameters.FixVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix42, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom.xml", sessionParameters.FixVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(sessionParameters.FixVersionContainer.ExtensionFile);
 
-			Assert.AreEqual(FixVersion.Fix42, sessionParameters.AppVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic42-custom.xml", sessionParameters.AppVersionContainer.DictionaryFile);
-			Assert.IsNull(sessionParameters.AppVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix42, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom.xml", sessionParameters.AppVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(sessionParameters.AppVersionContainer.ExtensionFile);
 
 			sessionParameters.FixVersion = FixVersion.Fix44;
 			sessionParameters.AppVersion = FixVersion.Fix44;
 
-			Assert.AreEqual(FixVersion.Fix44, sessionParameters.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic44.xml", sessionParameters.FixVersionContainer.DictionaryFile);
-			Assert.AreEqual("fixdic44-custom.xml", sessionParameters.FixVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix44, sessionParameters.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic44.xml", sessionParameters.FixVersionContainer.DictionaryFile);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", sessionParameters.FixVersionContainer.ExtensionFile);
 
-			Assert.AreEqual(FixVersion.Fix44, sessionParameters.AppVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic44.xml", sessionParameters.AppVersionContainer.DictionaryFile);
-			Assert.AreEqual("fixdic44-custom.xml", sessionParameters.AppVersionContainer.ExtensionFile);
+			ClassicAssert.AreEqual(FixVersion.Fix44, sessionParameters.AppVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic44.xml", sessionParameters.AppVersionContainer.DictionaryFile);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", sessionParameters.AppVersionContainer.ExtensionFile);
 		}
 
 		[Test]
@@ -441,22 +442,22 @@ namespace Epam.FixAntenna.FixEngine
 			var acceptorSessions = SessionParametersBuilder.BuildAcceptorSessionParametersList();
 
 			var p = acceptorSessions["S1-C1"];
-			Assert.IsNotNull(p);
-			Assert.AreEqual(FixVersion.Fix42, p.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic42-custom.xml", p.FixVersionContainer.DictionaryFile);
-			Assert.IsNull(p.FixVersionContainer.ExtensionFile);
+			ClassicAssert.IsNotNull(p);
+			ClassicAssert.AreEqual(FixVersion.Fix42, p.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom.xml", p.FixVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(p.FixVersionContainer.ExtensionFile);
 		
 			p = acceptorSessions["S1-C2"];
-			Assert.IsNotNull(p);
-			Assert.AreEqual(FixVersion.Fix44, p.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", p.FixVersionContainer.DictionaryFile);
-			Assert.IsNull(p.FixVersionContainer.ExtensionFile);
+			ClassicAssert.IsNotNull(p);
+			ClassicAssert.AreEqual(FixVersion.Fix44, p.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", p.FixVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(p.FixVersionContainer.ExtensionFile);
 
 			p = acceptorSessions["S1-C3"];
-			Assert.IsNotNull(p);
-			Assert.AreEqual(FixVersion.Fix42, p.FixVersionContainer.FixVersion);
-			Assert.AreEqual("fixdic42.xml", p.FixVersionContainer.DictionaryFile);
-			Assert.IsNull(p.FixVersionContainer.ExtensionFile);
+			ClassicAssert.IsNotNull(p);
+			ClassicAssert.AreEqual(FixVersion.Fix42, p.FixVersionContainer.FixVersion);
+			ClassicAssert.AreEqual("fixdic42.xml", p.FixVersionContainer.DictionaryFile);
+			ClassicAssert.IsNull(p.FixVersionContainer.ExtensionFile);
 		}
 
 		[Test]
@@ -465,7 +466,7 @@ namespace Epam.FixAntenna.FixEngine
 			props.Put("lastSeqNumResetTimestamp", "test");
 
 			var sessionParameters = new SessionParameters();
-			Assert.Throws<ArgumentException>(() => sessionParameters.FromProperties(props.ToDictionary()));
+			ClassicAssert.Throws<ArgumentException>(() => sessionParameters.FromProperties(props.ToDictionary()));
 		}
 
 		[Test]
@@ -479,8 +480,8 @@ namespace Epam.FixAntenna.FixEngine
 			// Act
 			sessionParameters.FromProperties(props.ToDictionary());
 
-			// Assert
-			Assert.AreEqual(port, sessionParameters.Port);
+			// ClassicAssert
+			ClassicAssert.AreEqual(port, sessionParameters.Port);
 		}
 	}
 }

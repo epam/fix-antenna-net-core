@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.Validation.Tests.Engine.Validators.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 {
@@ -52,7 +53,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(_message), false);
 
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.TagSpecifiedOutOfRequiredOrder, -1, "B", _message.GetTag(10))));
 		}
 
@@ -63,11 +64,11 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(_message), false);
 
-			Assert.IsTrue(IsExistErrorCode(FixErrorCode.Other, errorContainer),
+			ClassicAssert.IsTrue(IsExistErrorCode(FixErrorCode.Other, errorContainer),
 				"Error should be : " + FixErrorCode.Other);
 
 			var errorCodeDescription = GetErrorCodeDescription(FixErrorCode.Other, errorContainer);
-			Assert.IsTrue(errorCodeDescription.Contains("checksum"), "Unexpected error:" + errorCodeDescription);
+			ClassicAssert.IsTrue(errorCodeDescription.Contains("checksum"), "Unexpected error:" + errorCodeDescription);
 		}
 
 		[Test]
@@ -77,11 +78,11 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(_message), false);
 
-			Assert.IsTrue(IsExistErrorCode(FixErrorCode.Other, errorContainer),
+			ClassicAssert.IsTrue(IsExistErrorCode(FixErrorCode.Other, errorContainer),
 				"Error should be : " + FixErrorCode.Other);
 
 			var errorCodeDescription = GetErrorCodeDescription(FixErrorCode.Other, errorContainer);
-			Assert.IsTrue(errorCodeDescription.Contains("Correct length is: 3"),
+			ClassicAssert.IsTrue(errorCodeDescription.Contains("Correct length is: 3"),
 				"Unexpected error:" + errorCodeDescription);
 		}
 
@@ -92,7 +93,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(_message), false);
 
-			Assert.That(errorContainer.Errors,
+			ClassicAssert.That(errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.TagSpecifiedOutOfRequiredOrder, -1, "B", _message.GetTag(9))));
 		}
 
@@ -102,7 +103,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			_message = MessageWelformedValidatorHelper.GetValidMessageForTest();
 
 			var errorContainer = Validator.Validate("B", CreateValidationMessage(_message), false);
-			Assert.IsTrue(!errorContainer.Errors.Any());
+			ClassicAssert.IsTrue(!errorContainer.Errors.Any());
 		}
 	}
 }

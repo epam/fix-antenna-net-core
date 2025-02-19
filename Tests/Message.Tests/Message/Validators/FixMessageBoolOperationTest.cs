@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -37,7 +38,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.GetTagValueAsBool(tagId);
-			Assert.AreEqual(BoolValues[0], actual,
+			ClassicAssert.AreEqual(BoolValues[0], actual,
 				GetValidatorName() + "invalid value for getTagValueAsBool(" + tagId + ")");
 		}
 
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			var actual = ffl.GetTagValueAsBool(tagId, occurrence);
-			Assert.AreEqual(BoolValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(BoolValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for getTagValueAsBool(" + tagId + ", " + occurrence + ")");
 		}
 
@@ -53,7 +54,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			var actual = ffl.GetTagValueAsBoolAtIndex(firstTagIndex);
-			Assert.AreEqual(BoolValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(BoolValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for getTagValueAsBoolAtIndex(" + firstTagIndex + ")");
 		}
 

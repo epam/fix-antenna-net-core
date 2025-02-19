@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -45,7 +46,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetter(FixMessage ffl, int tagId)
 		{
 			var actual = ffl.GetTagValueAsDecimal(tagId).DoubleValue();
-			Assert.AreEqual(DoubleValues[0], actual,
+			ClassicAssert.AreEqual(DoubleValues[0], actual,
 				GetValidatorName() + "invalid value for GetTagValueAsDecimal(" + tagId + ")");
 		}
 
@@ -53,7 +54,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterWithOccurrence(FixMessage ffl, int tagId, int occurrence)
 		{
 			var actual = ffl.GetTagValueAsDecimal(tagId, occurrence).DoubleValue();
-			Assert.AreEqual(DoubleValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(DoubleValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for GetTagValueAsDecimal(" + tagId + ", " + occurrence + ")");
 		}
 
@@ -61,7 +62,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		public override void CheckGetterAtIndex(FixMessage ffl, int occurrence, int firstTagIndex)
 		{
 			var actual = ffl.GetTagValueAsDecimalAtIndex(firstTagIndex).DoubleValue();
-			Assert.AreEqual(DoubleValues[occurrence - 1], actual,
+			ClassicAssert.AreEqual(DoubleValues[occurrence - 1], actual,
 				GetValidatorName() + "invalid value for GetTagValueAsDecimalAtIndex(" + firstTagIndex + ")");
 		}
 

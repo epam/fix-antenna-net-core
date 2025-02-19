@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -38,9 +39,9 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			var actual = new byte[Values[0].Length];
 			var actualLength = ffl.GetTagValueAsBytes(tagId, actual, 0);
-			Assert.AreEqual(Values[0], StringHelper.NewString(actual),
+			ClassicAssert.AreEqual(Values[0], StringHelper.NewString(actual),
 				GetValidatorName() + "invalid value for getTagValueAsBytes(" + tagId + ", buff, 0)");
-			Assert.AreEqual(Values[0].Length, actualLength,
+			ClassicAssert.AreEqual(Values[0].Length, actualLength,
 				GetValidatorName() + "invalid value length for getTagValueAsBytes(" + tagId + ", buff, 0)");
 		}
 
@@ -55,10 +56,10 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 
 			var actual = new byte[length];
 			var actualLength = ffl.GetTagValueAsBytes(tagId, occurrence, actual, 0);
-			Assert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
+			ClassicAssert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
 				GetValidatorName() + "invalid value for getTagValueAsBytes(" + tagId + ", " + occurrence + "," +
 				"buff, 0)");
-			Assert.AreEqual(Values[occurrence - 1].Length, actualLength,
+			ClassicAssert.AreEqual(Values[occurrence - 1].Length, actualLength,
 				GetValidatorName() + "invalid value length for getTagValueAsBytes(" + tagId + ", " + occurrence +
 				", buff, 0)");
 		}
@@ -74,9 +75,9 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 
 			var actual = new byte[length];
 			var actualLength = ffl.GetTagValueAsBytesAtIndex(firstTagIndex, actual, 0);
-			Assert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
+			ClassicAssert.AreEqual(Values[occurrence - 1], StringHelper.NewString(actual),
 				GetValidatorName() + "invalid value for getTagValueAsBytesAtIndex(" + firstTagIndex + ", buff, 0)");
-			Assert.AreEqual(Values[occurrence - 1].Length, actualLength,
+			ClassicAssert.AreEqual(Values[occurrence - 1].Length, actualLength,
 				GetValidatorName() + "invalid value length for getTagValueAsBytesAtIndex(" + firstTagIndex +
 				", buff, 0)");
 		}

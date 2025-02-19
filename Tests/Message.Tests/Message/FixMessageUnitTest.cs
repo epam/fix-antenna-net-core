@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Storage;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests
 {
@@ -45,15 +46,15 @@ namespace Epam.FixAntenna.Message.Tests
 			return bytes;
 		}
 
-		private void AssertFieldsEquals(FixMessage expected, FixMessage actual)
+		private void ClassicAssertFieldsEquals(FixMessage expected, FixMessage actual)
 		{
 			var size = expected.Length;
-			Assert.AreEqual(size, actual.Length, "Invalid size ");
+			ClassicAssert.AreEqual(size, actual.Length, "Invalid size ");
 			for (var i = 0; i < size; i++)
 			{
 				var expectedField = expected[i];
 				var actualField = actual[i];
-				Assert.IsTrue(expectedField.Equals(actualField),
+				ClassicAssert.IsTrue(expectedField.Equals(actualField),
 					"Tags no equals. Expected " + expectedField.ToString() + " but there is " + actualField.ToString());
 			}
 		}
@@ -67,26 +68,26 @@ namespace Epam.FixAntenna.Message.Tests
 		public virtual void TestCreateFromPoolForInternalUsage()
 		{
 			var fixFields = FixMessageFactory.NewInstanceFromPool(false);
-			Assert.IsFalse(fixFields.IsUserOwned);
-			Assert.IsTrue(fixFields.IsOriginatingFromPool);
-			Assert.IsFalse(fixFields.IsPreparedMessage);
-			Assert.IsFalse(fixFields.IsMessageIncomplete);
-			Assert.IsTrue(fixFields.IsEmpty);
-			Assert.IsFalse(fixFields.NeedCloneOnSend);
-			Assert.IsTrue(fixFields.NeedReleaseAfterSend);
+			ClassicAssert.IsFalse(fixFields.IsUserOwned);
+			ClassicAssert.IsTrue(fixFields.IsOriginatingFromPool);
+			ClassicAssert.IsFalse(fixFields.IsPreparedMessage);
+			ClassicAssert.IsFalse(fixFields.IsMessageIncomplete);
+			ClassicAssert.IsTrue(fixFields.IsEmpty);
+			ClassicAssert.IsFalse(fixFields.NeedCloneOnSend);
+			ClassicAssert.IsTrue(fixFields.NeedReleaseAfterSend);
 		}
 
 		[Test]
 		public virtual void TestCreateFromPoolForUser()
 		{
 			var fixFields = FixMessageFactory.NewInstanceFromPool(true);
-			Assert.IsTrue(fixFields.IsUserOwned);
-			Assert.IsTrue(fixFields.IsOriginatingFromPool);
-			Assert.IsFalse(fixFields.IsPreparedMessage);
-			Assert.IsFalse(fixFields.IsMessageIncomplete);
-			Assert.IsTrue(fixFields.IsEmpty);
-			Assert.IsTrue(fixFields.NeedCloneOnSend);
-			Assert.IsFalse(fixFields.NeedReleaseAfterSend);
+			ClassicAssert.IsTrue(fixFields.IsUserOwned);
+			ClassicAssert.IsTrue(fixFields.IsOriginatingFromPool);
+			ClassicAssert.IsFalse(fixFields.IsPreparedMessage);
+			ClassicAssert.IsFalse(fixFields.IsMessageIncomplete);
+			ClassicAssert.IsTrue(fixFields.IsEmpty);
+			ClassicAssert.IsTrue(fixFields.NeedCloneOnSend);
+			ClassicAssert.IsFalse(fixFields.NeedReleaseAfterSend);
 		}
 
 		[Test]
@@ -99,7 +100,7 @@ namespace Epam.FixAntenna.Message.Tests
 			parsedMsg.GetTag(56);
 
 			var clonedMsg = parsedMsg.DeepClone(true, true);
-			AssertFieldsEquals(parsedMsg, clonedMsg);
+			ClassicAssertFieldsEquals(parsedMsg, clonedMsg);
 		}
 
 		[Test]
@@ -107,7 +108,7 @@ namespace Epam.FixAntenna.Message.Tests
 		{
 			var parsedMsg = GetParsedMessage(LogonMessage);
 			var clonedMsg = parsedMsg.DeepClone(true, true);
-			AssertFieldsEquals(parsedMsg, clonedMsg);
+			ClassicAssertFieldsEquals(parsedMsg, clonedMsg);
 		}
 
 		[Test]
@@ -119,7 +120,7 @@ namespace Epam.FixAntenna.Message.Tests
 			message.Set(49, "AAAA");
 			var message2 = message.DeepClone(true, false);
 			var bytes = message2.AsByteArray();
-			Assert.AreEqual("35=D\u000149=AAAA\u0001", StringHelper.NewString(bytes));
+			ClassicAssert.AreEqual("35=D\u000149=AAAA\u0001", StringHelper.NewString(bytes));
 		}
 
 		[Test]
@@ -131,7 +132,7 @@ namespace Epam.FixAntenna.Message.Tests
 			message.Set(35, "AAAA");
 			var message2 = message.DeepClone(true, false);
 			var bytes = message2.AsByteArray();
-			Assert.AreEqual("35=AAAA\u000149=BLP\u0001", StringHelper.NewString(bytes));
+			ClassicAssert.AreEqual("35=AAAA\u000149=BLP\u0001", StringHelper.NewString(bytes));
 		}
 	}
 }

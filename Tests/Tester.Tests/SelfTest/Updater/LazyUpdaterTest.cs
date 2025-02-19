@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Tester.Updater;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -32,9 +33,9 @@ namespace Epam.FixAntenna.Tester.SelfTest
 		public virtual void TestUpdateLength()
 		{
 			string result = SuperUpdater.UpdateLength("8=FIX.4.1\x00019=45\x000135=5\x000149=B2B\x000156=123\x000134=2\x000152=20040227-11:53:34\x000110=088\x0001");
-			Assert.AreEqual("8=FIX.4.1\x00019=45\x000135=5\x000149=B2B\x000156=123\x000134=2\x000152=20040227-11:53:34\x000110=088\x0001", result);
+			ClassicAssert.AreEqual("8=FIX.4.1\x00019=45\x000135=5\x000149=B2B\x000156=123\x000134=2\x000152=20040227-11:53:34\x000110=088\x0001", result);
 			result = (new LazyUpdater()).UpdateLength("8=FIX.4.1\x00019=57\x000135=A\x000149=B2B\x000156=123\x000134=1\x000152=20040227-11:53:34\x000198=0\x0001108=30\x000110=127\x0001");
-			Assert.AreEqual("8=FIX.4.1\x00019=57\x000135=A\x000149=B2B\x000156=123\x000134=1\x000152=20040227-11:53:34\x000198=0\x0001108=30\x000110=127\x0001", result);
+			ClassicAssert.AreEqual("8=FIX.4.1\x00019=57\x000135=A\x000149=B2B\x000156=123\x000134=1\x000152=20040227-11:53:34\x000198=0\x0001108=30\x000110=127\x0001", result);
 		}
 
 		[Test]
@@ -42,13 +43,13 @@ namespace Epam.FixAntenna.Tester.SelfTest
 		{
 			string date = SuperUpdater.GetDate();
 			string result = SuperUpdater.UpdateSendingTime("8=FIX.4.1\x00019=45\x000135=5\x000149=B2B\x000156=123\x000134=2\x000152=20040227-11:53:34\x000110=088\x0001");
-			Assert.AreEqual("8=FIX.4.1\x00019=45\x000135=5\x000149=B2B\x000156=123\x000134=2\x000152=" + date + "\x000110=088\x0001", result);
+			ClassicAssert.AreEqual("8=FIX.4.1\x00019=45\x000135=5\x000149=B2B\x000156=123\x000134=2\x000152=" + date + "\x000110=088\x0001", result);
 		}
 
 		[Test]
 		public virtual void TestGetDate()
 		{
-			Assert.AreEqual(SuperUpdater.GetDate().Length, "00000000-00:00:00".Length);
+			ClassicAssert.AreEqual(SuperUpdater.GetDate().Length, "00000000-00:00:00".Length);
 		}
 
 	}

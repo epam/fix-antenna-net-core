@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -42,7 +43,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		[SetUp]
 		public void SetUp()
 		{
-			Assert.IsTrue(ClearLogs(), "Can't clean logs before tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs before tests");
 			_config = (Config)Config.GlobalConfiguration.Clone();
 		}
 
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		{
 			StopCounterparties();
 			FixSessionManager.DisposeAllSession();
-			Assert.IsTrue(ClearLogs(), "Can't clean logs after tests");
+			ClassicAssert.IsTrue(ClearLogs(), "Can't clean logs after tests");
 		}
 
 		[Test]
@@ -60,12 +61,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_initiatorSession = CreateInitiatorSession();
 			_initiatorSession.InSeqNum = 100;
 			_initiatorSession.OutSeqNum = 200;
-			AssertSeqNums(_initiatorSession, 100, 200);
+			ClassicAssertSeqNums(_initiatorSession, 100, 200);
 
 			_acceptorSession = CreateAcceptorSession();
 			_acceptorSession.InSeqNum = 200;
 			_acceptorSession.OutSeqNum = 100;
-			AssertSeqNums(_acceptorSession, 200, 100);
+			ClassicAssertSeqNums(_acceptorSession, 200, 100);
 
 			_acceptorServer = GetFixServer();
 			_acceptorServer.Start();
@@ -76,8 +77,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					_acceptorSession.SessionState.Equals(SessionState.Connected),
 				TimeSpan.FromMilliseconds(1000));
 
-			AssertSeqNums(_initiatorSession, 101, 201);
-			AssertSeqNums(_acceptorSession, 201, 101);
+			ClassicAssertSeqNums(_initiatorSession, 101, 201);
+			ClassicAssertSeqNums(_acceptorSession, 201, 101);
 		}
 
 		[Test]
@@ -95,10 +96,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				TimeSpan.FromMilliseconds(1000));
 
 			_initiatorSession.OutSeqNum = 100;
-			Assert.AreEqual(100, _initiatorSession.OutSeqNum);
+			ClassicAssert.AreEqual(100, _initiatorSession.OutSeqNum);
 
 			_acceptorSession.InSeqNum = 100;
-			Assert.AreEqual(100, _acceptorSession.InSeqNum);
+			ClassicAssert.AreEqual(100, _acceptorSession.InSeqNum);
 
 			_initiatorSession.SendMessage("B", GetNewMessage(1));
 			CheckingUtils.CheckWithinTimeout(() => _initiatorSession.OutSeqNum == 101, TimeSpan.FromSeconds(1));
@@ -132,23 +133,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// <<  35=A | 34=1
 			// >> 35=5 | 34=2
 			// << 35=5 | 34=2
-			AssertSeqNums(_initiatorSession, 3, 3);
+			ClassicAssertSeqNums(_initiatorSession, 3, 3);
 
 			_initiatorSession.InSeqNum = 100;
 			_initiatorSession.OutSeqNum = 200;
-			AssertSeqNums(_initiatorSession, 100, 200);
+			ClassicAssertSeqNums(_initiatorSession, 100, 200);
 
 			_acceptorSession.InSeqNum = 200;
 			_acceptorSession.OutSeqNum = 100;
-			AssertSeqNums(_acceptorSession, 200, 100);
+			ClassicAssertSeqNums(_acceptorSession, 200, 100);
 
 			_initiatorSession.Connect();
 			CheckingUtils.CheckWithinTimeout(
 				() => _initiatorSession.SessionState.Equals(SessionState.Connected) &&
 					_acceptorSession.SessionState.Equals(SessionState.Connected),
 				TimeSpan.FromMilliseconds(1000));
-			AssertSeqNums(_initiatorSession, 101, 201);
-			AssertSeqNums(_acceptorSession, 201, 101);
+			ClassicAssertSeqNums(_initiatorSession, 101, 201);
+			ClassicAssertSeqNums(_acceptorSession, 201, 101);
 		}
 
 		[Test]
@@ -172,23 +173,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				TimeSpan.FromMilliseconds(1000));
 
 			_initiatorSession.Dispose();
-			Assert.AreEqual(SessionState.Dead, _initiatorSession.SessionState);
+			ClassicAssert.AreEqual(SessionState.Dead, _initiatorSession.SessionState);
 
 			_initiatorSession.InSeqNum = 100;
 			_initiatorSession.OutSeqNum = 200;
-			AssertSeqNums(_initiatorSession, 100, 200);
+			ClassicAssertSeqNums(_initiatorSession, 100, 200);
 
 			_acceptorSession.InSeqNum = 200;
 			_acceptorSession.OutSeqNum = 100;
-			AssertSeqNums(_acceptorSession, 200, 100);
+			ClassicAssertSeqNums(_acceptorSession, 200, 100);
 
 			_initiatorSession.Connect();
 			CheckingUtils.CheckWithinTimeout(
 				() => _initiatorSession.SessionState.Equals(SessionState.Connected) &&
 					_acceptorSession.SessionState.Equals(SessionState.Connected),
 				TimeSpan.FromMilliseconds(1000));
-			AssertSeqNums(_initiatorSession, 101, 201);
-			AssertSeqNums(_acceptorSession, 201, 101);
+			ClassicAssertSeqNums(_initiatorSession, 101, 201);
+			ClassicAssertSeqNums(_acceptorSession, 201, 101);
 		}
 
 		[Test]
@@ -216,8 +217,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// <<  35=A | 34=1
 			// >> 35=5 | 34=2
 			// << 35=5 | 34=2
-			AssertSeqNums(_initiatorSession, 3, 3);
-			AssertSeqNums(_acceptorSession, 3, 3);
+			ClassicAssertSeqNums(_initiatorSession, 3, 3);
+			ClassicAssertSeqNums(_acceptorSession, 3, 3);
 			_initiatorSession.Dispose();
 			_acceptorSession.Dispose();
 			CheckingUtils.CheckWithinTimeout(
@@ -228,18 +229,18 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//recreate session
 			_initiatorSession = CreateInitiatorSession();
 			_acceptorSession = CreateAcceptorSession();
-			AssertSeqNums(_initiatorSession, 3, 3);
-			AssertSeqNums(_acceptorSession, 3, 3);
+			ClassicAssertSeqNums(_initiatorSession, 3, 3);
+			ClassicAssertSeqNums(_acceptorSession, 3, 3);
 
 			//change sequences
 			_initiatorSession.InSeqNum = 100;
 			_initiatorSession.OutSeqNum = 200;
-			AssertSeqNums(_initiatorSession, 100, 200);
+			ClassicAssertSeqNums(_initiatorSession, 100, 200);
 
 			_acceptorSession = CreateAcceptorSession();
 			_acceptorSession.InSeqNum = 200;
 			_acceptorSession.OutSeqNum = 100;
-			AssertSeqNums(_acceptorSession, 200, 100);
+			ClassicAssertSeqNums(_acceptorSession, 200, 100);
 
 			//connect and check
 			_initiatorSession.Connect();
@@ -247,8 +248,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				() => _initiatorSession.SessionState.Equals(SessionState.Connected) &&
 					_acceptorSession.SessionState.Equals(SessionState.Connected),
 				TimeSpan.FromMilliseconds(1000));
-			AssertSeqNums(_initiatorSession, 101, 201);
-			AssertSeqNums(_acceptorSession, 201, 101);
+			ClassicAssertSeqNums(_initiatorSession, 101, 201);
+			ClassicAssertSeqNums(_acceptorSession, 201, 101);
 		}
 
 		[Test]
@@ -259,12 +260,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//set before connect
 			_initiatorSession.InSeqNum = -1;
 			_initiatorSession.OutSeqNum = -1;
-			AssertSeqNums(_initiatorSession, 1, 1);
+			ClassicAssertSeqNums(_initiatorSession, 1, 1);
 
 			_acceptorSession = CreateAcceptorSession();
 			_acceptorSession.InSeqNum = -1;
 			_acceptorSession.OutSeqNum = -1;
-			AssertSeqNums(_acceptorSession, 1, 1);
+			ClassicAssertSeqNums(_acceptorSession, 1, 1);
 
 			_acceptorServer = GetFixServer();
 			_acceptorServer.Start();
@@ -274,17 +275,17 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				() => _initiatorSession.SessionState.Equals(SessionState.Connected) &&
 					_acceptorSession.SessionState.Equals(SessionState.Connected),
 				TimeSpan.FromMilliseconds(1000));
-			AssertSeqNums(_initiatorSession, 2, 2);
-			AssertSeqNums(_acceptorSession, 2, 2);
+			ClassicAssertSeqNums(_initiatorSession, 2, 2);
+			ClassicAssertSeqNums(_acceptorSession, 2, 2);
 
 			//set for connected
 			_initiatorSession.InSeqNum = -1;
 			_initiatorSession.OutSeqNum = -1;
-			AssertSeqNums(_initiatorSession, 2, 2);
+			ClassicAssertSeqNums(_initiatorSession, 2, 2);
 
 			_acceptorSession.InSeqNum = -1;
 			_acceptorSession.OutSeqNum = -1;
-			AssertSeqNums(_acceptorSession, 2, 2);
+			ClassicAssertSeqNums(_acceptorSession, 2, 2);
 
 			//disconnect and check sequences
 			_initiatorSession.Disconnect("TEST");
@@ -300,11 +301,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//set for connected
 			_initiatorSession.InSeqNum = -1;
 			_initiatorSession.OutSeqNum = -1;
-			AssertSeqNums(_initiatorSession, 3, 3);
+			ClassicAssertSeqNums(_initiatorSession, 3, 3);
 
 			_acceptorSession.InSeqNum = -1;
 			_acceptorSession.OutSeqNum = -1;
-			AssertSeqNums(_acceptorSession, 3, 3);
+			ClassicAssertSeqNums(_acceptorSession, 3, 3);
 		}
 
 		[Test]
@@ -315,12 +316,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//set before connect
 			_initiatorSession.InSeqNum = 0;
 			_initiatorSession.OutSeqNum = 0;
-			AssertSeqNums(_initiatorSession, 1, 1);
+			ClassicAssertSeqNums(_initiatorSession, 1, 1);
 
 			_acceptorSession = CreateAcceptorSession();
 			_acceptorSession.InSeqNum = 0;
 			_acceptorSession.OutSeqNum = 0;
-			AssertSeqNums(_acceptorSession, 1, 1);
+			ClassicAssertSeqNums(_acceptorSession, 1, 1);
 
 			_acceptorServer = GetFixServer();
 			_acceptorServer.Start();
@@ -336,11 +337,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// <<  35=A | 34=1
 			_initiatorSession.InSeqNum = 0;
 			_initiatorSession.OutSeqNum = 0;
-			AssertSeqNums(_initiatorSession, 2, 2);
+			ClassicAssertSeqNums(_initiatorSession, 2, 2);
 
 			_acceptorSession.InSeqNum = 0;
 			_acceptorSession.OutSeqNum = 0;
-			AssertSeqNums(_acceptorSession, 2, 2);
+			ClassicAssertSeqNums(_acceptorSession, 2, 2);
 
 			//disconnect and check sequences
 			_initiatorSession.Disconnect("TEST");
@@ -354,11 +355,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//set for connected
 			_initiatorSession.InSeqNum = 0;
 			_initiatorSession.OutSeqNum = 0;
-			AssertSeqNums(_initiatorSession, 3, 3);
+			ClassicAssertSeqNums(_initiatorSession, 3, 3);
 
 			_acceptorSession.InSeqNum = 0;
 			_acceptorSession.OutSeqNum = 0;
-			AssertSeqNums(_acceptorSession, 3, 3);
+			ClassicAssertSeqNums(_acceptorSession, 3, 3);
 		}
 
 
@@ -371,19 +372,19 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//PART 1: BEFORE CONNECTED
 			_initiatorSession.InSeqNum = 10;
 			_initiatorSession.OutSeqNum = 20;
-			AssertSeqNums(_initiatorSession, 10, 20);
+			ClassicAssertSeqNums(_initiatorSession, 10, 20);
 
 			_acceptorSession = CreateAcceptorSession();
 			_acceptorSession.InSeqNum = 20;
 			_acceptorSession.OutSeqNum = 10;
-			AssertSeqNums(_acceptorSession, 20, 10);
+			ClassicAssertSeqNums(_acceptorSession, 20, 10);
 
 			//do reset
 			_initiatorSession.ResetSequenceNumbers();
-			AssertSeqNums(_initiatorSession, 1, 1);
+			ClassicAssertSeqNums(_initiatorSession, 1, 1);
 
 			_acceptorSession.ResetSequenceNumbers();
-			AssertSeqNums(_acceptorSession, 1, 1);
+			ClassicAssertSeqNums(_acceptorSession, 1, 1);
 
 			_acceptorServer = GetFixServer();
 			_acceptorServer.Start();
@@ -398,16 +399,16 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			//set for connected
 			// >>  35=A | 34=1
 			// <<  35=A | 34=1
-			AssertSeqNums(_initiatorSession, 2, 2);
-			AssertSeqNums(_acceptorSession, 2, 2);
+			ClassicAssertSeqNums(_initiatorSession, 2, 2);
+			ClassicAssertSeqNums(_acceptorSession, 2, 2);
 
 			_initiatorSession.InSeqNum = 10;
 			_initiatorSession.OutSeqNum = 20;
-			AssertSeqNums(_initiatorSession, 10, 20);
+			ClassicAssertSeqNums(_initiatorSession, 10, 20);
 
 			_acceptorSession.InSeqNum = 20;
 			_acceptorSession.OutSeqNum = 10;
-			AssertSeqNums(_acceptorSession, 20, 10);
+			ClassicAssertSeqNums(_acceptorSession, 20, 10);
 
 			//do reset
 			_initiatorSession.ResetSequenceNumbers();
@@ -416,7 +417,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			CheckingUtils.CheckWithinTimeout(
 				() => _initiatorSession.InSeqNum == 2 && _initiatorSession.OutSeqNum == 2,
 				TimeSpan.FromMilliseconds(5000));
-			AssertSeqNums(_acceptorSession, 2, 2);
+			ClassicAssertSeqNums(_acceptorSession, 2, 2);
 
 			//PART 2: DISCONNECTED
 			_initiatorSession.Disconnect("TEST");
@@ -425,26 +426,26 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					_acceptorSession.SessionState.Equals(SessionState.Disconnected),
 				TimeSpan.FromMilliseconds(5000));
 
-			AssertSeqNums(_initiatorSession, 3, 3);
-			AssertSeqNums(_acceptorSession, 3, 3);
+			ClassicAssertSeqNums(_initiatorSession, 3, 3);
+			ClassicAssertSeqNums(_acceptorSession, 3, 3);
 
 			_initiatorSession.InSeqNum = 10;
 			_initiatorSession.OutSeqNum = 20;
-			AssertSeqNums(_initiatorSession, 10, 20);
+			ClassicAssertSeqNums(_initiatorSession, 10, 20);
 
 			_acceptorSession = CreateAcceptorSession();
 			_acceptorSession.OutSeqNum = 10;
 			_acceptorSession.InSeqNum = 20;
-			AssertSeqNums(_acceptorSession, 20, 10);
+			ClassicAssertSeqNums(_acceptorSession, 20, 10);
 
 			//do reset
 			_initiatorSession.ResetSequenceNumbers();
-			AssertSeqNums(_initiatorSession, 1, 1);
+			ClassicAssertSeqNums(_initiatorSession, 1, 1);
 
 			// check acceptor sequence reset after logon (reset on initiator side only)
-			AssertSeqNums(_acceptorSession, 20, 10);
+			ClassicAssertSeqNums(_acceptorSession, 20, 10);
 			//acceptorSession.ResetSequenceNumbers();
-			//assertSeqNums(acceptorSession, 1, 1);
+			//ClassicAssertSeqNums(acceptorSession, 1, 1);
 
 			_initiatorSession.Connect();
 			CheckingUtils.CheckWithinTimeout(
@@ -452,8 +453,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 					_acceptorSession.SessionState.Equals(SessionState.Connected),
 				TimeSpan.FromMilliseconds(5000));
 
-			AssertSeqNums(_initiatorSession, 2, 2);
-			AssertSeqNums(_acceptorSession, 2, 2);
+			ClassicAssertSeqNums(_initiatorSession, 2, 2);
+			ClassicAssertSeqNums(_acceptorSession, 2, 2);
 		}
 
 		public virtual bool ClearLogs()
@@ -530,7 +531,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			return list;
 		}
 
-		public virtual void AssertSeqNums(IFixSession session, long expectedInSeqNum, long expectedOutSeqNum)
+		public virtual void ClassicAssertSeqNums(IFixSession session, long expectedInSeqNum, long expectedOutSeqNum)
 		{
 			CheckingUtils.CheckWithinTimeout(() => session.InSeqNum == expectedInSeqNum,
 				TimeSpan.FromMilliseconds(1000));

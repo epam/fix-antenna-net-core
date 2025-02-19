@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.NetCore.FixEngine;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.FixEngine
 {
@@ -48,8 +49,8 @@ namespace Epam.FixAntenna.FixEngine
 		{
 			var id1 = new SessionId(_sender, _target);
 			var id2 = new SessionId(_sender, _target);
-			Assert.AreEqual(id1, id2);
-			Assert.AreEqual(id1.GetHashCode(), id2.GetHashCode());
+			ClassicAssert.AreEqual(id1, id2);
+			ClassicAssert.AreEqual(id1.GetHashCode(), id2.GetHashCode());
 		}
 
 		[Test]
@@ -57,8 +58,8 @@ namespace Epam.FixAntenna.FixEngine
 		{
 			var id1 = new SessionId(_sender, _target, _qualifier);
 			var id2 = new SessionId(_sender, _target, _qualifier);
-			Assert.AreEqual(id1, id2);
-			Assert.AreEqual(id1.GetHashCode(), id2.GetHashCode());
+			ClassicAssert.AreEqual(id1, id2);
+			ClassicAssert.AreEqual(id1.GetHashCode(), id2.GetHashCode());
 		}
 
 		[Test]
@@ -68,10 +69,10 @@ namespace Epam.FixAntenna.FixEngine
 			var idQ2 = new SessionId(_sender, _target, _qualifier);
 			var idQ3 = new SessionId(_sender, _target, _qualifier + "2");
 
-			Assert.IsFalse(id1.Equals(idQ2));
-			Assert.IsFalse(idQ2.Equals(idQ3));
-			Assert.IsFalse(id1.GetHashCode() == idQ2.GetHashCode());
-			Assert.IsFalse(idQ2.GetHashCode() == idQ3.GetHashCode());
+			ClassicAssert.IsFalse(id1.Equals(idQ2));
+			ClassicAssert.IsFalse(idQ2.Equals(idQ3));
+			ClassicAssert.IsFalse(id1.GetHashCode() == idQ2.GetHashCode());
+			ClassicAssert.IsFalse(idQ2.GetHashCode() == idQ3.GetHashCode());
 		}
 
 		[Test]
@@ -80,7 +81,7 @@ namespace Epam.FixAntenna.FixEngine
 			var customId = _sender + "-" + _target;
 			var idCustom = new SessionId(_sender, _target, null, customId);
 			var id2 = new SessionId(_sender, _target);
-			Assert.IsTrue(idCustom.Equals(id2));
+			ClassicAssert.IsTrue(idCustom.Equals(id2));
 		}
 
 		[Test]
@@ -89,24 +90,24 @@ namespace Epam.FixAntenna.FixEngine
 			var customId = "MyID";
 			var idCustom = new SessionId(_sender, _target, null, customId);
 			var id2 = new SessionId(_sender, _target);
-			Assert.IsFalse(idCustom.Equals(id2));
+			ClassicAssert.IsFalse(idCustom.Equals(id2));
 		}
 
 		private static void Verify(string expectedId, string sender, string target, string qualifier, SessionId sessionId)
 		{
-			Assert.AreEqual(expectedId, sessionId.ToString());
-			Assert.AreEqual(sender, sessionId.Sender);
-			Assert.AreEqual(target, sessionId.Target);
-			Assert.AreEqual(qualifier, sessionId.Qualifier);
-			Assert.IsNull(sessionId.CustomSessionId);
+			ClassicAssert.AreEqual(expectedId, sessionId.ToString());
+			ClassicAssert.AreEqual(sender, sessionId.Sender);
+			ClassicAssert.AreEqual(target, sessionId.Target);
+			ClassicAssert.AreEqual(qualifier, sessionId.Qualifier);
+			ClassicAssert.IsNull(sessionId.CustomSessionId);
 		}
 
 		private static void VerifyCustomId(string expectedId, string sender, string target, SessionId sessionId)
 		{
-			Assert.AreEqual(expectedId, sessionId.ToString());
-			Assert.AreEqual(expectedId, sessionId.CustomSessionId);
-			Assert.AreEqual(sender, sessionId.Sender);
-			Assert.AreEqual(target, sessionId.Target);
+			ClassicAssert.AreEqual(expectedId, sessionId.ToString());
+			ClassicAssert.AreEqual(expectedId, sessionId.CustomSessionId);
+			ClassicAssert.AreEqual(sender, sessionId.Sender);
+			ClassicAssert.AreEqual(target, sessionId.Target);
 		}
 	}
 }

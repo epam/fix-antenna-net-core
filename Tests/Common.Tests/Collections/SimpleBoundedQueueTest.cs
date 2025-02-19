@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Common.Collections;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Collections
 {
@@ -26,8 +27,8 @@ namespace Epam.FixAntenna.Common.Collections
 		{
 			_boundedQueue = new SimpleBoundedQueue<object>(Limit, false);
 			_circularQueue = new SimpleBoundedQueue<object>(Limit, true);
-			Assert.True(_boundedQueue.IsEmpty);
-			Assert.True(_circularQueue.IsEmpty);
+			ClassicAssert.True(_boundedQueue.IsEmpty);
+			ClassicAssert.True(_circularQueue.IsEmpty);
 		}
 
 		private IBoundedQueue<object> _boundedQueue;
@@ -42,7 +43,7 @@ namespace Epam.FixAntenna.Common.Collections
 				_circularQueue.Add(i);
 			}
 
-			Assert.True(_circularQueue.Add(Limit + 1));
+			ClassicAssert.True(_circularQueue.Add(Limit + 1));
 		}
 
 		[Test]
@@ -53,25 +54,25 @@ namespace Epam.FixAntenna.Common.Collections
 				_boundedQueue.Add(i);
 			}
 
-			Assert.Throws(Is.TypeOf<InvalidOperationException>()
+			ClassicAssert.Throws(Is.TypeOf<InvalidOperationException>()
 				.And.Message.EqualTo("Queue is full"), () => { _boundedQueue.Add(0); });
 		}
 
 		[Test]
 		public void TestElementFromEmptyQueue()
 		{
-			Assert.True(_boundedQueue.IsEmpty);
-			Assert.Throws(Is.TypeOf<InvalidOperationException>()
+			ClassicAssert.True(_boundedQueue.IsEmpty);
+			ClassicAssert.Throws(Is.TypeOf<InvalidOperationException>()
 				.And.Message.EqualTo("Queue is empty"), () => { _boundedQueue.Element(); });
 		}
 
 		[Test]
 		public void TestIsEmpty()
 		{
-			Assert.AreEqual(0, _boundedQueue.Size);
-			Assert.True(_boundedQueue.IsEmpty);
-			Assert.AreEqual(0, _circularQueue.Size);
-			Assert.True(_circularQueue.IsEmpty);
+			ClassicAssert.AreEqual(0, _boundedQueue.Size);
+			ClassicAssert.True(_boundedQueue.IsEmpty);
+			ClassicAssert.AreEqual(0, _circularQueue.Size);
+			ClassicAssert.True(_circularQueue.IsEmpty);
 		}
 
 		[Test]
@@ -83,19 +84,19 @@ namespace Epam.FixAntenna.Common.Collections
 				_circularQueue.Add(i);
 			}
 
-			Assert.AreEqual(Limit, _boundedQueue.Size);
-			Assert.True(_boundedQueue.IsFull);
-			Assert.AreEqual(Limit, _circularQueue.Size);
-			Assert.False(_circularQueue.IsFull);
+			ClassicAssert.AreEqual(Limit, _boundedQueue.Size);
+			ClassicAssert.True(_boundedQueue.IsFull);
+			ClassicAssert.AreEqual(Limit, _circularQueue.Size);
+			ClassicAssert.False(_circularQueue.IsFull);
 		}
 
 		[Test]
 		public void TestOfferOrAdd()
 		{
 			_boundedQueue.Offer(1);
-			Assert.AreEqual(1, _boundedQueue.Size);
+			ClassicAssert.AreEqual(1, _boundedQueue.Size);
 			_boundedQueue.Add(2);
-			Assert.AreEqual(2, _boundedQueue.Size);
+			ClassicAssert.AreEqual(2, _boundedQueue.Size);
 		}
 
 		[Test]
@@ -107,15 +108,15 @@ namespace Epam.FixAntenna.Common.Collections
 				_circularQueue.Offer(i);
 			}
 
-			Assert.False(_boundedQueue.Offer(Limit + 1));
-			Assert.True(_circularQueue.Offer(Limit + 1));
+			ClassicAssert.False(_boundedQueue.Offer(Limit + 1));
+			ClassicAssert.True(_circularQueue.Offer(Limit + 1));
 		}
 
 		[Test]
 		public void TestPeekFromEmptyQueue()
 		{
-			Assert.True(_boundedQueue.IsEmpty);
-			Assert.Null(_boundedQueue.Peek());
+			ClassicAssert.True(_boundedQueue.IsEmpty);
+			ClassicAssert.Null(_boundedQueue.Peek());
 		}
 
 		[Test]
@@ -127,16 +128,16 @@ namespace Epam.FixAntenna.Common.Collections
 			}
 
 			_boundedQueue.Peek();
-			Assert.AreEqual(Limit, _boundedQueue.Size);
+			ClassicAssert.AreEqual(Limit, _boundedQueue.Size);
 			_boundedQueue.Element();
-			Assert.AreEqual(Limit, _boundedQueue.Size);
+			ClassicAssert.AreEqual(Limit, _boundedQueue.Size);
 		}
 
 		[Test]
 		public void TestPollFromEmptyQueue()
 		{
-			Assert.True(_boundedQueue.IsEmpty);
-			Assert.IsNull(_boundedQueue.Poll());
+			ClassicAssert.True(_boundedQueue.IsEmpty);
+			ClassicAssert.IsNull(_boundedQueue.Poll());
 		}
 
 		[Test]
@@ -148,16 +149,16 @@ namespace Epam.FixAntenna.Common.Collections
 			}
 
 			_boundedQueue.Poll();
-			Assert.AreEqual(Limit - 1, _boundedQueue.Size);
+			ClassicAssert.AreEqual(Limit - 1, _boundedQueue.Size);
 			_boundedQueue.Remove();
-			Assert.AreEqual(Limit - 2, _boundedQueue.Size);
+			ClassicAssert.AreEqual(Limit - 2, _boundedQueue.Size);
 		}
 
 		[Test]
 		public void TestRemoveFromEmptyQueue()
 		{
-			Assert.True(_boundedQueue.IsEmpty);
-			Assert.Throws(Is.TypeOf<InvalidOperationException>()
+			ClassicAssert.True(_boundedQueue.IsEmpty);
+			ClassicAssert.Throws(Is.TypeOf<InvalidOperationException>()
 				.And.Message.EqualTo("Queue is empty"), () => { _boundedQueue.Remove(); });
 		}
 
@@ -167,7 +168,7 @@ namespace Epam.FixAntenna.Common.Collections
 			for (var i = 0; i < Limit; i++)
 			{
 				_boundedQueue.Add(i);
-				Assert.AreEqual(i + 1, _boundedQueue.Size);
+				ClassicAssert.AreEqual(i + 1, _boundedQueue.Size);
 			}
 		}
 	}

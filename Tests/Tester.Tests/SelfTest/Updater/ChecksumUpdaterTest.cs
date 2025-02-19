@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Tester.Updater;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -26,8 +27,8 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			string message = "";
 			try
 			{
-				Assert.AreEqual((new LazyUpdater()).UpdateMessage(message), message);
-				Assert.Fail();
+				ClassicAssert.AreEqual((new LazyUpdater()).UpdateMessage(message), message);
+				ClassicAssert.Fail();
 			}
 			catch (System.ArgumentException)
 			{
@@ -39,7 +40,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 		public virtual void TestUpdateMessage()
 		{
 			string message = "8=FIX.4.2\x00019=115\x000135=A\x000149=ADAPTOR\x000156=123\x000134=1\x000150=SENDERSUBID\x0001142=SENDERLOCATIONID\x000157=TARGETSUBID\x000152=20040219-11:02:43.334\x000198=0\x0001108=0\x000110=207\x0001";
-			Assert.AreEqual((new DefaultUpdater()).UpdateMessage(message), message);
+			ClassicAssert.AreEqual((new DefaultUpdater()).UpdateMessage(message), message);
 		}
 	}
 }

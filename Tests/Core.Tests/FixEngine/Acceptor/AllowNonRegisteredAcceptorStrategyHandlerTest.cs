@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Acceptor;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Moq;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Acceptor
 {

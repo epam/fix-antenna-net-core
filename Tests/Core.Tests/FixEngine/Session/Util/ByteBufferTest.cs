@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.NetCore.Common.Pool;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 {
@@ -36,8 +37,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		[Test]
 		public virtual void CheckAvailableBytes()
 		{
-			Assert.IsTrue(_buffer.IsAvailable(32));
-			Assert.IsFalse(_buffer.IsAvailable(33));
+			ClassicAssert.IsTrue(_buffer.IsAvailable(32));
+			ClassicAssert.IsFalse(_buffer.IsAvailable(33));
 		}
 
 		[Test]
@@ -45,8 +46,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 		{
 			_buffer.Add("1".AsByteArray());
 			_buffer.Add(TestString.AsByteArray());
-			Assert.That(_buffer.GetByteArray(), Is.EqualTo(("1" + TestString).AsByteArray()));
-			Assert.IsTrue(_buffer.Offset == ("1" + TestString).Length);
+			ClassicAssert.That(_buffer.GetByteArray(), Is.EqualTo(("1" + TestString).AsByteArray()));
+			ClassicAssert.IsTrue(_buffer.Offset == ("1" + TestString).Length);
 		}
 
 		[Test]
@@ -58,7 +59,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				_buffer.Add(Convert.ToString(i).AsByteArray());
 			}
 			_buffer.Add("0".AsByteArray()[0]);
-			Assert.AreEqual("0120", StringHelper.NewString(_buffer.GetBulk()));
+			ClassicAssert.AreEqual("0120", StringHelper.NewString(_buffer.GetBulk()));
 		}
 
 		[Test]
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				_buffer.Add(Convert.ToString(i).AsByteArray());
 			}
 			_buffer.Add('0');
-			Assert.AreEqual("0120", StringHelper.NewString(_buffer.GetBulk()));
+			ClassicAssert.AreEqual("0120", StringHelper.NewString(_buffer.GetBulk()));
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 			_buffer.Add(NonAsciiGlyph);
 
-			Assert.AreEqual(ByteBufferLength, _buffer.Length);
+			ClassicAssert.AreEqual(ByteBufferLength, _buffer.Length);
 		}
 
 		[Test]
@@ -94,7 +95,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 				_buffer.Add(Convert.ToString(i).AsByteArray());
 			}
 			_buffer.Add(new byte [0]);
-			Assert.AreEqual("012", StringHelper.NewString(_buffer.GetBulk()));
+			ClassicAssert.AreEqual("012", StringHelper.NewString(_buffer.GetBulk()));
 		}
 
 		[Test]
@@ -103,7 +104,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 			var world = "Hello World!!!".AsByteArray();
 			_buffer = new ByteBuffer(3);
 			_buffer.Add(world, 6, world.Length - 6);
-			Assert.AreEqual("World!!!", StringHelper.NewString(_buffer.GetBulk()));
+			ClassicAssert.AreEqual("World!!!", StringHelper.NewString(_buffer.GetBulk()));
 		}
 
 		[Test]

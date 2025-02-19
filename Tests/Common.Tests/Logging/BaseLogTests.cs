@@ -14,7 +14,8 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Common.Logging;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Tests.Logging
 {
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.Common.Tests.Logging
 			new Tuple<string, string>(SpecialCase2, SpecialCase2Expected)
 		};
 
-		private void PasswordHiddenAssert(Func<string, string> method)
+		private void PasswordHiddenClassicAssert(Func<string, string> method)
 		{
 			foreach (var tuple in TestData)
 			{
@@ -60,7 +61,7 @@ namespace Epam.FixAntenna.Common.Tests.Logging
 					var source = string.Format(tuple.Item1, quote);
 					var expected = string.Format(tuple.Item2, quote);
 					var result = method(source);
-					Assert.That(result, Is.EqualTo(expected));
+					ClassicAssert.That(result, Is.EqualTo(expected));
 				}
 			}
 		}
@@ -68,7 +69,7 @@ namespace Epam.FixAntenna.Common.Tests.Logging
 		[Test, Property("Implements", "https://jira.epam.com/jira/browse/BBP-17120")]
 		public void BaseLogToMessageTest()
 		{
-			PasswordHiddenAssert(BaseLog.ToMessage);
+			PasswordHiddenClassicAssert(BaseLog.ToMessage);
 		}
 	}
 }

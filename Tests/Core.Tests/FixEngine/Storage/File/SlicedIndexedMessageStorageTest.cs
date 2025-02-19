@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Storage;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -43,7 +44,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 
 			CloseStorage();
 			UpMessageStorage();
-			Assert.AreEqual(msgNum, GetInitializedSeqId());
+			ClassicAssert.AreEqual(msgNum, GetInitializedSeqId());
 		}
 
 		[Test]
@@ -52,13 +53,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			ConfigurationAdapter.Configuration.SetProperty(Config.TimestampsPrecisionInLogs, "micro");
 			UpMessageStorage();
 
-			Assert.AreEqual(1L, GetInitializedSeqId());
+			ClassicAssert.AreEqual(1L, GetInitializedSeqId());
 
 			var msg = GetNextMessage();
 			MessageStorage.AppendMessageInternal(DateTimeHelper.CurrentTicks, msg.AsByteArray(), 0,
 				msg.AsByteArray().Length);
-			Assert.AreEqual(msg.AsByteArray(), MessageStorage.RetrieveMessage(msg.MsgSeqNumber),
-				"Assert " + msg.MsgSeqNumber + " seqNumber");
+			ClassicAssert.AreEqual(msg.AsByteArray(), MessageStorage.RetrieveMessage(msg.MsgSeqNumber),
+				"ClassicAssert " + msg.MsgSeqNumber + " seqNumber");
 		}
 
 		[Test]
@@ -67,20 +68,20 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			ConfigurationAdapter.Configuration.SetProperty(Config.TimestampsPrecisionInLogs, "nano");
 			UpMessageStorage();
 
-			Assert.AreEqual(1L, GetInitializedSeqId());
+			ClassicAssert.AreEqual(1L, GetInitializedSeqId());
 
 			var msg = GetNextMessage();
 			MessageStorage.AppendMessageInternal(DateTimeHelper.CurrentTicks, msg.AsByteArray(), 0,
 				msg.AsByteArray().Length);
-			Assert.AreEqual(msg.AsByteArray(), MessageStorage.RetrieveMessage(msg.MsgSeqNumber),
-				"Assert " + msg.MsgSeqNumber + " seqNumber");
+			ClassicAssert.AreEqual(msg.AsByteArray(), MessageStorage.RetrieveMessage(msg.MsgSeqNumber),
+				"ClassicAssert " + msg.MsgSeqNumber + " seqNumber");
 		}
 
 		[Test]
 		public virtual void RestoreMessagesWithGap()
 		{
 			UpMessageStorage();
-			Assert.AreEqual(1L, GetInitializedSeqId());
+			ClassicAssert.AreEqual(1L, GetInitializedSeqId());
 
 			var msg1 = GetNextMessage().AsByteArray();
 			GetNextMessage(); // make gap in 1 message
@@ -90,11 +91,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var restoredMsg = new byte[3][];
 			MessageStorage.RetrieveMessages(1, 3, new MessageStorageListener(restoredMsg), true);
 
-			Assert.IsNotNull(restoredMsg[0], "First message");
-			Assert.AreEqual(msg1, restoredMsg[0], "Assert 1 seqNumber");
-			Assert.IsTrue(restoredMsg[1] == null || restoredMsg[1].Length == 0, "First message");
-			Assert.IsNotNull(restoredMsg[2], "First message");
-			Assert.AreEqual(msg3, restoredMsg[2], "Assert 3 seqNumber");
+			ClassicAssert.IsNotNull(restoredMsg[0], "First message");
+			ClassicAssert.AreEqual(msg1, restoredMsg[0], "ClassicAssert 1 seqNumber");
+			ClassicAssert.IsTrue(restoredMsg[1] == null || restoredMsg[1].Length == 0, "First message");
+			ClassicAssert.IsNotNull(restoredMsg[2], "First message");
+			ClassicAssert.AreEqual(msg3, restoredMsg[2], "ClassicAssert 3 seqNumber");
 		}
 
 		[Test]
@@ -113,8 +114,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 
 			var listener = new MessageStorageListener2(messages);
 			MessageStorage.RetrieveMessages(1, msgNum + 1, listener, true);
-			Assert.AreEqual(msgNum, listener.Counter);
-			AssertEqualsMessages(messages);
+			ClassicAssert.AreEqual(msgNum, listener.Counter);
+			ClassicAssertEqualsMessages(messages);
 		}
 
 		[Test]
@@ -138,7 +139,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				MessageStorage.AppendMessage(array[i].AsByteArray());
 			}
 
-			AssertEqualsMessages(array);
+			ClassicAssertEqualsMessages(array);
 		}
 
 		private class MessageStorageListener : IMessageStorageListener
@@ -173,7 +174,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			{
 				var expected = _messages[Counter++];
 				var actual = StringHelper.NewString(message);
-				Assert.AreEqual(expected, actual);
+				ClassicAssert.AreEqual(expected, actual);
 			}
 		}
 	}

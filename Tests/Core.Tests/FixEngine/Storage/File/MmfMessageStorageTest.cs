@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Storage.File;
 using Epam.FixAntenna.NetCore.Helpers;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 {
@@ -51,7 +52,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				messages[i] = StringHelper.NewString(arrMsg);
 			}
 
-			AssertEqualsMessages(messages);
+			ClassicAssertEqualsMessages(messages);
 		}
 
 		[Test]
@@ -71,7 +72,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			MessageStorage.AppendMessage(longMsg.AsByteArray());
 			var nextMsg = GetNextMessage().ToString();
 			MessageStorage.AppendMessage(nextMsg.AsByteArray());
-			AssertEqualsMessages(longMsg, nextMsg);
+			ClassicAssertEqualsMessages(longMsg, nextMsg);
 		}
 
 		[Test]
@@ -84,7 +85,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var arrMsg = GetNextMessage().AsByteArray();
 			MessageStorage.AppendMessage(arrMsg);
 
-			AssertEqualsMessages(StringHelper.NewString(arrMsg));
+			ClassicAssertEqualsMessages(StringHelper.NewString(arrMsg));
 		}
 
 		[Test]
@@ -97,7 +98,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			var arrMsg = GetNextMessage().AsByteArray();
 			MessageStorage.AppendMessage(arrMsg);
 
-			AssertEqualsMessages(StringHelper.NewString(arrMsg));
+			ClassicAssertEqualsMessages(StringHelper.NewString(arrMsg));
 		}
 
 		[Test]
@@ -118,7 +119,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 				CloseStorage();
 			}
 
-			Assert.AreEqual(storageFileLengthAfterCreating, storageFile.Length);
+			ClassicAssert.AreEqual(storageFileLengthAfterCreating, storageFile.Length);
 		}
 
 		[Test]
@@ -129,7 +130,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Storage.File
 			AppendMessage();
 			UpMessageStorage(); // close and re-open storage
 
-			Assert.That(AppendMessage, Throws.Nothing, "Storage not initialized correctly", null);
+			ClassicAssert.That(AppendMessage, Throws.Nothing, "Storage not initialized correctly", null);
 		}
 	}
 }

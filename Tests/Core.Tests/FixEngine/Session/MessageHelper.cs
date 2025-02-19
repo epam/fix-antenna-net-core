@@ -2,16 +2,17 @@
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
 	internal static class TestMessageHelper
 	{
-		public static void AssertTypeAndSeqNum(FixMessage msg, string type, int seqNum)
+		public static void ClassicAssertTypeAndSeqNum(FixMessage msg, string type, int seqNum)
 		{
-			Assert.AreEqual(type, msg.GetTagValueAsString(35), "Unexpected type in message: " + msg);
-			Assert.AreEqual(seqNum, msg.GetTagAsInt(34), "Unexpected SeqNum in message: " + msg);
+			ClassicAssert.AreEqual(type, msg.GetTagValueAsString(35), "Unexpected type in message: " + msg);
+			ClassicAssert.AreEqual(seqNum, msg.GetTagAsInt(34), "Unexpected SeqNum in message: " + msg);
 		}
 
 		public static byte[] GetNewsMessage(int seqNum)

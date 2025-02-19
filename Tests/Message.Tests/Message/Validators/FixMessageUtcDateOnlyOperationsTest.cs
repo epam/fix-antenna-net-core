@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -49,7 +50,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			var actual = ffl.getTagValueAsDateOnly(tagId);
 			var expected = GetCalendar(1);
-			assertDateOnlyEquals(expected, actual);
+			ClassicAssertDateOnlyEquals(expected, actual);
 		}
 
 		[ExpectedExceptionOnFail(typeof(FieldNotFoundException))]
@@ -57,7 +58,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			DateTimeOffset actual = ffl.getTagValueAsDateOnly(tagId, occurrence);
 			var expected = GetCalendar(occurrence);
-			assertDateOnlyEquals(expected, actual);
+			ClassicAssertDateOnlyEquals(expected, actual);
 		}
 
 		[ExpectedExceptionOnFail(typeof(IndexOutOfRangeException))]
@@ -65,7 +66,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			DateTimeOffset actual = ffl.getTagValueAsDateOnlyAtIndex(firstTagIndex);
 			var expected = GetCalendar(occurrence);
-			assertDateOnlyEquals(expected, actual);
+			ClassicAssertDateOnlyEquals(expected, actual);
 		}
 
 		private DateTimeOffset GetCalendar(int occurrence)
@@ -73,12 +74,12 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 			return UtcCalendars[occurrence - 1];
 		}
 
-		private void assertDateOnlyEquals(DateTimeOffset expected, DateTimeOffset actual)
+		private void ClassicAssertDateOnlyEquals(DateTimeOffset expected, DateTimeOffset actual)
 		{
 			var diff = "Expected " + expected.ToString(Sdf) + " but get " + actual.ToString(Sdf);
-			Assert.AreEqual(expected.Year, actual.Year, GetValidatorName() + "invalid year." + diff);
-			Assert.AreEqual(expected.Month, actual.Month, GetValidatorName() + "invalid month. " + diff);
-			Assert.AreEqual(expected.Day, actual.Day, GetValidatorName() + "invalid date. " + diff);
+			ClassicAssert.AreEqual(expected.Year, actual.Year, GetValidatorName() + "invalid year." + diff);
+			ClassicAssert.AreEqual(expected.Month, actual.Month, GetValidatorName() + "invalid month. " + diff);
+			ClassicAssert.AreEqual(expected.Day, actual.Day, GetValidatorName() + "invalid date. " + diff);
 		}
 
 		public override FixMessage AddTag(FixMessage msg, int tagId, int occurrence)

@@ -367,7 +367,7 @@ namespace Epam.FixAntenna.NetCore.Message.Format
 						}
 
 						var c = (byte)('0' + num);
-						Debug.Assert(!(c < (byte)'0' || c > (byte)'9'));
+						Debug.ClassicAssert(!(c < (byte)'0' || c > (byte)'9'));
 						length++;
 						mantissa -= num << precision;
 						var parsedValue = AsDouble(value, 0, sign != 0, ++decimalPlaces);
@@ -591,7 +591,7 @@ namespace Epam.FixAntenna.NetCore.Message.Format
 						}
 
 						var c = (byte)('0' + num);
-						Debug.Assert(!(c < (byte)'0' || c > (byte)'9'));
+						Debug.ClassicAssert(!(c < (byte)'0' || c > (byte)'9'));
 						buff[localOffset++] = c;
 						mantissa -= num << precision;
 						var parsedValue = AsDouble(value, 0, sign != 0, ++decimalPlaces);

@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.Validation.Utils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 {
@@ -55,8 +56,8 @@ namespace Epam.FixAntenna.Fix.Validation.Engine.Utils
 		{
 			var util = BuildFixUtil(fixVersion);
 			var field = util.GetFieldDefByTag(tagId);
-			Assert.IsNotNull(field.Descr);
-			Assert.AreEqual(html, FixUtil.DescrToHtmlStr(field.Descr));
+			ClassicAssert.IsNotNull(field.Descr);
+			ClassicAssert.AreEqual(html, FixUtil.DescrToHtmlStr(field.Descr));
 		}
 
 		private FixUtil BuildFixUtil(FixVersion fixVersion)

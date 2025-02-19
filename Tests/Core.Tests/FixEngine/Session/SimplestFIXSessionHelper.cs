@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.Common.Logging;
 using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.FixEngine.Transport;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -88,7 +89,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 		public virtual void WaitForMessages(int timeout)
 		{
 			MessagesWaiter.Wait(timeout);
-			Assert.IsTrue(MsgCount <= Messages.Count, "Wrong amount of messages received during last " + timeout + " msec. Expected " + MsgCount + " but received " + Messages.Count);
+			ClassicAssert.IsTrue(MsgCount <= Messages.Count, "Wrong amount of messages received during last " + timeout + " msec. Expected " + MsgCount + " but received " + Messages.Count);
 		}
 
 		internal sealed class MsgReader

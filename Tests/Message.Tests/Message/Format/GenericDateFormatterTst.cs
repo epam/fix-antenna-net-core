@@ -15,7 +15,8 @@
 using System;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Format
 {
@@ -27,7 +28,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			formatter.Format(cal, buff, 0);
 			var actual = StringHelper.NewString(buff);
 
-			Assert.AreEqual(res, actual, "Formatting date is wrong");
+			ClassicAssert.AreEqual(res, actual, "Formatting date is wrong");
 		}
 	}
 }

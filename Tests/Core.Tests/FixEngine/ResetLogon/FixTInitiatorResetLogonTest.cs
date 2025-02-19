@@ -14,7 +14,8 @@
 
 using Epam.FixAntenna.NetCore.Common;
 using Epam.FixAntenna.NetCore.FixEngine;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 {
@@ -49,10 +50,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			ResetSeqNums();
 
 			var message = AcceptorSessionEmulator.GetLastReceivedMessage();
-			Assert.AreEqual(message.MsgSeqNumber, 1);
-			Assert.AreEqual(message.GetTagValueAsString(141), "Y");
-			Assert.AreEqual(message.GetTagValueAsString(8), "FIXT.1.1");
-			Assert.AreEqual(message.GetTagValueAsString(1137), "4");
+			ClassicAssert.AreEqual(message.MsgSeqNumber, 1);
+			ClassicAssert.AreEqual(message.GetTagValueAsString(141), "Y");
+			ClassicAssert.AreEqual(message.GetTagValueAsString(8), "FIXT.1.1");
+			ClassicAssert.AreEqual(message.GetTagValueAsString(1137), "4");
 		}
 	}
 }

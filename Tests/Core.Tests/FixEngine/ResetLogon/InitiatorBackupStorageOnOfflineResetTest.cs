@@ -18,7 +18,8 @@ using Epam.FixAntenna.NetCore.Common.Utils;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 {
@@ -72,13 +73,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 		private void CheckCreatedBackupStorage(SessionParameters sessionParameters)
 		{
 			var configurationAdapter = new ConfigurationAdapter(sessionParameters.Configuration);
-			Assert.AreEqual(3, CountMatchedFiles(configurationAdapter.BackupStorageDirectory, GetLogFileName(sessionParameters)));
+			ClassicAssert.AreEqual(3, CountMatchedFiles(configurationAdapter.BackupStorageDirectory, GetLogFileName(sessionParameters)));
 		}
 
 		private void CheckEmptyBackupStorage(SessionParameters sessionParameters)
 		{
 			var configurationAdapter = new ConfigurationAdapter(sessionParameters.Configuration);
-			Assert.AreEqual(0, CountMatchedFiles(configurationAdapter.BackupStorageDirectory, GetLogFileName(sessionParameters)));
+			ClassicAssert.AreEqual(0, CountMatchedFiles(configurationAdapter.BackupStorageDirectory, GetLogFileName(sessionParameters)));
 		}
 
 		private string GetLogFileName(SessionParameters sessionParameters)

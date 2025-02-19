@@ -15,7 +15,8 @@
 using System;
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Configuration;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 {
@@ -46,53 +47,53 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_props["boolflagBadValue"] = "activate";
 			var _configuration = new Config(_props);
 
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagYes"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagYes", true));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagYes", false));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagYes"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagYes", true));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagYes", false));
 
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNo"));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNo", true));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNo", false));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNo"));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNo", true));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNo", false));
 
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrue"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrue", true));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrue", false));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrue"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrue", true));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrue", false));
 
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrueWithSpace"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrueWithSpace", true));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrueWithSpace", false));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrueWithSpace"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrueWithSpace", true));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagTrueWithSpace", false));
 
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagFalse"));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagFalse", true));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagFalse", false));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagFalse"));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagFalse", true));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagFalse", false));
 
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagyes"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagyes", true));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagyes", false));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagyes"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagyes", true));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagyes", false));
 
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagno"));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagno", true));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagno", false));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagno"));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagno", true));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagno", false));
 
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtrue"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtrue", true));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtrue", false));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtrue"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtrue", true));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtrue", false));
 
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtruewithspace"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtruewithspace", true));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtruewithspace", false));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtruewithspace"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtruewithspace", true));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagtruewithspace", false));
 
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagfalse"));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagfalse", true));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagfalse", false));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagfalse"));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagfalse", true));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagfalse", false));
 
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNon"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagNon", true));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNon", false));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNon"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagNon", true));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagNon", false));
 
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagBadValue"));
-			Assert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagBadValue", true));
-			Assert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagBadValue", false));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagBadValue"));
+			ClassicAssert.IsTrue(_configuration.GetPropertyAsBoolean("boolflagBadValue", true));
+			ClassicAssert.IsFalse(_configuration.GetPropertyAsBoolean("boolflagBadValue", false));
 		}
 
 		[Test]
@@ -100,7 +101,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 		{
 			_props["lowCase"] = "Yes";
 			var configuration = new Config(_props);
-			Assert.IsTrue(configuration.GetPropertyAsBoolean("LowCase", false));
+			ClassicAssert.IsTrue(configuration.GetPropertyAsBoolean("LowCase", false));
 		}
 
 		[Test]
@@ -138,7 +139,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			var configuration = new Config(_props);
 			foreach (var value in valueMatrix)
 			{
-				Assert.AreEqual(value.Result, configuration.GetPropertyAsBytesLength(value.PropertyName, -1),
+				ClassicAssert.AreEqual(value.Result, configuration.GetPropertyAsBytesLength(value.PropertyName, -1),
 					"Some problem with parse property: " + value.PropertyName);
 			}
 		}
@@ -151,9 +152,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_props["intFlagWithoutValue"] = "  ";
 			var configuration = new Config(_props);
 
-			Assert.AreEqual(10, configuration.GetPropertyAsInt("intFlag"));
-			Assert.AreEqual(10, configuration.GetPropertyAsInt("intFlagWithSpace", 5));
-			Assert.AreEqual(5, configuration.GetPropertyAsInt("intFlagWithoutValue", 5));
+			ClassicAssert.AreEqual(10, configuration.GetPropertyAsInt("intFlag"));
+			ClassicAssert.AreEqual(10, configuration.GetPropertyAsInt("intFlagWithSpace", 5));
+			ClassicAssert.AreEqual(5, configuration.GetPropertyAsInt("intFlagWithoutValue", 5));
 		}
 
 		[Test]
@@ -166,10 +167,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			// as result value must be default value
 			var resultValue =
 				configuration.GetPropertyAsInt(Config.MaxDelayToSendAfterLogon, 0, int.MaxValue, true);
-			Assert.IsNotNull(resultValue);
-			Assert.IsFalse(resultValue == 0);
-			Assert.IsFalse(resultValue == -1);
-			Assert.IsFalse(resultValue == userValue);
+			ClassicAssert.IsNotNull(resultValue);
+			ClassicAssert.IsFalse(resultValue == 0);
+			ClassicAssert.IsFalse(resultValue == -1);
+			ClassicAssert.IsFalse(resultValue == userValue);
 		}
 		
 		[Test]
@@ -177,9 +178,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 		{
 			_props["intFlag"] = "10";
 			var configuration = new Config(_props);
-			Assert.IsTrue(configuration.Exists("intFlag"));
-			Assert.IsTrue(configuration.Exists("intflag"));
-			Assert.IsTrue(configuration.Exists("INTFLAG"));
+			ClassicAssert.IsTrue(configuration.Exists("intFlag"));
+			ClassicAssert.IsTrue(configuration.Exists("intflag"));
+			ClassicAssert.IsTrue(configuration.Exists("INTFLAG"));
 		}
 
 		[Test]
@@ -189,12 +190,12 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			var configuration = new Config(_props);
 
-			Assert.IsNotNull(configuration.GetProperty("sessionIDs"));
-			Assert.AreEqual("sessionID1,sessionID2,sessionID3", configuration.GetProperty("sessionIDs"));
+			ClassicAssert.IsNotNull(configuration.GetProperty("sessionIDs"));
+			ClassicAssert.AreEqual("sessionID1,sessionID2,sessionID3", configuration.GetProperty("sessionIDs"));
 
 			var properties = configuration.Properties;
-			Assert.IsNotNull(properties["sessionIDs"]);
-			Assert.AreEqual("sessionID1,sessionID2,sessionID3", properties["sessionIDs"]);
+			ClassicAssert.IsNotNull(properties["sessionIDs"]);
+			ClassicAssert.AreEqual("sessionID1,sessionID2,sessionID3", properties["sessionIDs"]);
 		}
 
 		[Test]
@@ -210,13 +211,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			var configuration = new Config(_props);
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
-			Assert.AreEqual("fixdic42-custom1.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom1.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
-			Assert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
+			ClassicAssert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
 		}
 
 
@@ -228,9 +229,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			_props["customFixVersion.FIX42Custom.fileName"] = "fixdic42-custom2.xml";
 			var configuration = new Config(_props);
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
-			Assert.AreEqual("fixdic42-custom2.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom2.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
 
 			var newProps = new Dictionary<string, string>();
 			newProps["customFixVersions"] = "FIX44Custom";
@@ -239,10 +240,10 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			configuration.SetAllProperties(newProps);
 
-			Assert.IsNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
-			Assert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
+			ClassicAssert.IsNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
+			ClassicAssert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
 		}
 
 		[Test]
@@ -259,13 +260,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			var configuration = (Config)Config.GlobalConfiguration.Clone();
 			configuration.AddAllProperties(_props);
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
-			Assert.AreEqual("fixdic42-custom3.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom3.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
-			Assert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
+			ClassicAssert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
 		}
 
 		[Test]
@@ -275,28 +276,28 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			//set only names - no custom version
 			configuration.SetProperty("customFixVersions", "FIX42Custom,FIX44Custom");
-			Assert.IsNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.IsNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
+			ClassicAssert.IsNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.IsNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
 
 			//add properties for custom FIX4.2 - check that it is parsed
 			configuration.SetProperty("customFixVersion.FIX42Custom.fixVersion", "FIX.4.2");
 			configuration.SetProperty("customFixVersion.FIX42Custom.fileName", "fixdic42-custom4.xml");
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.IsNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
-			Assert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
-			Assert.AreEqual("fixdic42-custom4.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.IsNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
+			ClassicAssert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom4.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
 
 			//add properties for custom FIX4.4 - check that both are available
 			configuration.SetProperty("customFixVersion.FIX44Custom.fixVersion", "FIX.4.4");
 			configuration.SetProperty("customFixVersion.FIX44Custom.fileName", "fixdic44-custom.xml");
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
-			Assert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
-			Assert.AreEqual("fixdic42-custom4.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.AreEqual("FIX.4.2", configuration.GetCustomFixVersionConfig("FIX42Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic42-custom4.xml", configuration.GetCustomFixVersionConfig("FIX42Custom").FileName);
 
-			Assert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
-			Assert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
-			Assert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
+			ClassicAssert.IsNotNull(configuration.GetCustomFixVersionConfig("FIX44Custom"));
+			ClassicAssert.AreEqual("FIX.4.4", configuration.GetCustomFixVersionConfig("FIX44Custom").FixVersion);
+			ClassicAssert.AreEqual("fixdic44-custom.xml", configuration.GetCustomFixVersionConfig("FIX44Custom").FileName);
 		}
 
 		[Test]
@@ -313,15 +314,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 			configuration1.SetAllProperties(_props);
 
 			var configuration2 = (Config)globalConfiguration.Clone();
-			Assert.IsNull(configuration2.GetProperty(Config.CustomFixVersions));
-			Assert.IsNull(configuration2.GetCustomFixVersionConfig("FIX42Custom"));
+			ClassicAssert.IsNull(configuration2.GetProperty(Config.CustomFixVersions));
+			ClassicAssert.IsNull(configuration2.GetCustomFixVersionConfig("FIX42Custom"));
 
 			try 
 			{
 				globalConfiguration.SetAllProperties(_props);
 				var configuration3 = (Config)globalConfiguration.Clone();
-				Assert.AreEqual("FIX42Custom", configuration3.GetProperty(Config.CustomFixVersions));
-				Assert.IsNotNull(configuration3.GetCustomFixVersionConfig("FIX42Custom"));
+				ClassicAssert.AreEqual("FIX42Custom", configuration3.GetProperty(Config.CustomFixVersions));
+				ClassicAssert.IsNotNull(configuration3.GetCustomFixVersionConfig("FIX42Custom"));
 			} 
 			finally 
 			{
@@ -345,7 +346,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			try
 			{
-				Assert.AreEqual("1Mb", actualValue);
+				ClassicAssert.AreEqual("1Mb", actualValue);
 			}
 			finally
 			{
@@ -370,7 +371,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Configuration
 
 			try
 			{
-				Assert.AreEqual(evValue, actualValue);
+				ClassicAssert.AreEqual(evValue, actualValue);
 			}
 			finally
 			{

@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -37,8 +38,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 		public void TestDeleteAll()
 		{
 			var response = GetReponse(_delete);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 		}
 	}
 }

@@ -15,7 +15,8 @@
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.NetCore.Message.Format;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Format
 {
@@ -45,10 +46,10 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			return StringHelper.NewString(b, 0, 16);
 		}
 
-		private void AssertFormattedLength(double v, int expectedLength)
+		private void ClassicAssertFormattedLength(double v, int expectedLength)
 		{
 			var actualLength = DoubleFormatter.GetFormatLength(v, 16);
-			Assert.AreEqual(expectedLength, actualLength, "Wrong length for " + v);
+			ClassicAssert.AreEqual(expectedLength, actualLength, "Wrong length for " + v);
 		}
 
 		private static string ConvertDoubleToString(double v)
@@ -61,8 +62,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		{
 			byte[] buff = { (byte)'1', (byte)'0', (byte)'.', (byte)'9', (byte)'0', (byte)'0' };
 			var resLen = DoubleFormatter.CleanFormatted(buff, 0, 6);
-			Assert.AreEqual(4, resLen);
-			Assert.That(new[] { (byte)'1', (byte)'0', (byte)'.', (byte)'9', (byte)' ', (byte)' ' },
+			ClassicAssert.AreEqual(4, resLen);
+			ClassicAssert.That(new[] { (byte)'1', (byte)'0', (byte)'.', (byte)'9', (byte)' ', (byte)' ' },
 				Is.EquivalentTo(buff));
 		}
 
@@ -71,8 +72,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		{
 			byte[] buff = { (byte)'1', (byte)'0', (byte)'.', (byte)'0', (byte)'0', (byte)'0' };
 			var resLen = DoubleFormatter.CleanFormatted(buff, 0, 6);
-			Assert.AreEqual(2, resLen);
-			Assert.That(new[] { (byte)'1', (byte)'0', (byte)' ', (byte)' ', (byte)' ', (byte)' ' },
+			ClassicAssert.AreEqual(2, resLen);
+			ClassicAssert.That(new[] { (byte)'1', (byte)'0', (byte)' ', (byte)' ', (byte)' ', (byte)' ' },
 				Is.EquivalentTo(buff));
 		}
 
@@ -82,8 +83,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 0.00000000000000001d;
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
-			AssertFormattedLength(v, 18);
+			ClassicAssert.AreEqual(str1, str2);
+			ClassicAssertFormattedLength(v, 18);
 		}
 
 		[Test]
@@ -92,8 +93,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 999999999999999d;
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
-			AssertFormattedLength(v, 15);
+			ClassicAssert.AreEqual(str1, str2);
+			ClassicAssertFormattedLength(v, 15);
 		}
 
 		[Test]
@@ -102,7 +103,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = -2.34d;
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
+			ClassicAssert.AreEqual(str1, str2);
 		}
 
 		[Test]
@@ -111,8 +112,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 0.0000000000000001d;
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
-			AssertFormattedLength(v, 18);
+			ClassicAssert.AreEqual(str1, str2);
+			ClassicAssertFormattedLength(v, 18);
 		}
 
 		[Test]
@@ -121,8 +122,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = -999999999999999d;
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
-			AssertFormattedLength(v, 16);
+			ClassicAssert.AreEqual(str1, str2);
+			ClassicAssertFormattedLength(v, 16);
 		}
 
 		[Test]
@@ -132,7 +133,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			//System.out.printf("%.16f", v);
 			var str1 = "000000000012.345";
 			var str2 = FixFormatWithPadding(v);
-			Assert.AreEqual(str1, str2);
+			ClassicAssert.AreEqual(str1, str2);
 		}
 
 		[Test]
@@ -141,8 +142,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 0.00000000000000015d;
 			//System.out.printf("%.16f", v);
 
-			Assert.AreEqual("0.0000000000000002", FixFormat(v));
-			AssertFormattedLength(v, 18);
+			ClassicAssert.AreEqual("0.0000000000000002", FixFormat(v));
+			ClassicAssertFormattedLength(v, 18);
 		}
 
 		[Test]
@@ -152,9 +153,9 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			//System.out.printf("%.16f", v);
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
+			ClassicAssert.AreEqual(str1, str2);
 			//TODO: here should be 16 in general
-			AssertFormattedLength(v, 18);
+			ClassicAssertFormattedLength(v, 18);
 		}
 
 		[Test]
@@ -163,8 +164,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			double v = 0;
 			var str1 = ConvertDoubleToString(v);
 			var str2 = FixFormat(v);
-			Assert.AreEqual(str1, str2);
-			AssertFormattedLength(v, 1);
+			ClassicAssert.AreEqual(str1, str2);
+			ClassicAssertFormattedLength(v, 1);
 		}
 
 		[Test]
@@ -173,7 +174,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 999999999999999d;
 			var length1 = ConvertDoubleToString(v).Length;
 			var length2 = FixLength(v);
-			Assert.AreEqual(length1, length2);
+			ClassicAssert.AreEqual(length1, length2);
 		}
 
 		[Test]
@@ -182,7 +183,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = -2.34d;
 			var length1 = ConvertDoubleToString(v).Length;
 			var length2 = FixLength(v);
-			Assert.AreEqual(length1, length2);
+			ClassicAssert.AreEqual(length1, length2);
 		}
 
 		[Test]
@@ -191,7 +192,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 0.0000000000000001d;
 			var length1 = ConvertDoubleToString(v).Length;
 			var length2 = FixLength(v);
-			Assert.AreEqual(length1, length2);
+			ClassicAssert.AreEqual(length1, length2);
 		}
 
 		[Test]
@@ -200,7 +201,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = -999999999999999d;
 			var length1 = ConvertDoubleToString(v).Length;
 			var length2 = FixLength(v);
-			Assert.AreEqual(length1, length2);
+			ClassicAssert.AreEqual(length1, length2);
 		}
 
 		[Test]
@@ -209,7 +210,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			var v = 0.00000000000000015d;
 			var length1 = ConvertDoubleToString(v).Length;
 			var length2 = FixLength(v);
-			Assert.AreEqual(length1, length2);
+			ClassicAssert.AreEqual(length1, length2);
 		}
 
 		[Test]
@@ -218,7 +219,7 @@ namespace Epam.FixAntenna.Message.Tests.Format
 			double v = 0;
 			var length1 = ConvertDoubleToString(v).Length;
 			var length2 = FixLength(v);
-			Assert.AreEqual(length1, length2);
+			ClassicAssert.AreEqual(length1, length2);
 		}
 
 		[Test]
@@ -226,8 +227,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		{
 			byte[] buff = { (byte)'1', (byte)'0', (byte)'.', (byte)'1', (byte)'2' };
 			var resLen = DoubleFormatter.RoundUpFormatted(buff, 0, 5);
-			Assert.AreEqual(5, resLen);
-			Assert.That(new[] { (byte)'1', (byte)'0', (byte)'.', (byte)'1', (byte)'3' }, Is.EquivalentTo(buff));
+			ClassicAssert.AreEqual(5, resLen);
+			ClassicAssert.That(new[] { (byte)'1', (byte)'0', (byte)'.', (byte)'1', (byte)'3' }, Is.EquivalentTo(buff));
 		}
 
 		[Test]
@@ -235,8 +236,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		{
 			byte[] buff = { (byte)'9', (byte)'9', (byte)'.', (byte)'9', (byte)'9' };
 			var resLen = DoubleFormatter.RoundUpFormatted(buff, 0, 5);
-			Assert.AreEqual(3, resLen);
-			Assert.That(new[] { (byte)'1', (byte)'0', (byte)'0', (byte)' ', (byte)' ' }, Is.EquivalentTo(buff));
+			ClassicAssert.AreEqual(3, resLen);
+			ClassicAssert.That(new[] { (byte)'1', (byte)'0', (byte)'0', (byte)' ', (byte)' ' }, Is.EquivalentTo(buff));
 		}
 
 		[Test]
@@ -244,8 +245,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		{
 			byte[] buff = { (byte)'1', (byte)'0', (byte)'.', (byte)'1', (byte)'9' };
 			var resLen = DoubleFormatter.RoundUpFormatted(buff, 0, 5);
-			Assert.AreEqual(4, resLen);
-			Assert.That(new[] { (byte)'1', (byte)'0', (byte)'.', (byte)'2', (byte)' ' }, Is.EquivalentTo(buff));
+			ClassicAssert.AreEqual(4, resLen);
+			ClassicAssert.That(new[] { (byte)'1', (byte)'0', (byte)'.', (byte)'2', (byte)' ' }, Is.EquivalentTo(buff));
 		}
 
 		[Test]
@@ -253,8 +254,8 @@ namespace Epam.FixAntenna.Message.Tests.Format
 		{
 			byte[] buff = { (byte)'1', (byte)'9', (byte)'.', (byte)'9', (byte)'9' };
 			var resLen = DoubleFormatter.RoundUpFormatted(buff, 0, 5);
-			Assert.AreEqual(2, resLen);
-			Assert.That(new[] { (byte)'2', (byte)'0', (byte)' ', (byte)' ', (byte)' ' }, Is.EquivalentTo(buff));
+			ClassicAssert.AreEqual(2, resLen);
+			ClassicAssert.That(new[] { (byte)'2', (byte)'0', (byte)' ', (byte)' ', (byte)' ' }, Is.EquivalentTo(buff));
 		}
 	}
 }

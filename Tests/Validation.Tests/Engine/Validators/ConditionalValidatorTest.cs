@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.Validation.Error;
 using Epam.FixAntenna.NetCore.Validation.Utils;
 using Epam.FixAntenna.NetCore.Validation.Validators;
 using Epam.FixAntenna.Validation.Tests.Engine.Validators.Util;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 {
@@ -50,7 +51,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 		{
 			_errorContainer = Validator.Validate("7", CreateValidationMessage(_message), false);
 
-			Assert.IsTrue(!_errorContainer.Errors.Any(),
+			ClassicAssert.IsTrue(!_errorContainer.Errors.Any(),
 				"Error occurred : " + _errorContainer.IsPriorityError);
 		}
 
@@ -59,7 +60,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 			_errorContainer =
 				Validator.Validate(_message.GetTagValueAsString(35), CreateValidationMessage(_message), false);
 
-			Assert.That(_errorContainer.Errors,
+			ClassicAssert.That(_errorContainer.Errors,
 				Does.Contain(GetError(FixErrorCode.CondrequiredTagMissing, -1, _message.GetTagValueAsString(35), tag)));
 		}
 
@@ -70,7 +71,7 @@ namespace Epam.FixAntenna.Validation.Tests.Engine.Validators
 
 			var errors = _errorContainer.Errors;
 
-			Assert.IsTrue(errors.Count >= 2);
+			ClassicAssert.IsTrue(errors.Count >= 2);
 		}
 
 		[Test]

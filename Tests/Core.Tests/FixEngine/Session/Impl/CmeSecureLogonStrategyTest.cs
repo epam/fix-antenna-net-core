@@ -22,7 +22,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Impl;
 using Epam.FixAntenna.NetCore.Helpers;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 {
@@ -34,14 +35,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 		public void CreateTempFile()
 		{
 			_fileName = Path.GetTempFileName();
-			Assert.That(_fileName, Does.Exist);
+			ClassicAssert.That(_fileName, Does.Exist);
 		}
 
 		[TearDown]
 		public void DeleteTempFile()
 		{
 			File.Delete(_fileName);
-			Assert.That(_fileName, Does.Not.Exist);
+			ClassicAssert.That(_fileName, Does.Not.Exist);
 		}
 
 		[Test]
@@ -49,7 +50,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 		{
 			var fileContent = "";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
-			Assert.Throws<IOException>(() => CmeSecureLogonStrategy.ParseKeys(_fileName));
+			ClassicAssert.Throws<IOException>(() => CmeSecureLogonStrategy.ParseKeys(_fileName));
 		}
 
 		[Test]
@@ -60,7 +61,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				+ "                Creation Date        Expiration Date      Environment          \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keys = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsTrue(keys.Count == 0);
+			ClassicAssert.IsTrue(keys.Count == 0);
 		}
 
 		[Test]
@@ -73,14 +74,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"   2018-01-23           2019-01-23           NEWRELEASE           \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keysMap = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsNotNull(keysMap);
+			ClassicAssert.IsNotNull(keysMap);
 			var u89Parameters = keysMap["U89"];
-			Assert.IsNotNull(u89Parameters);
-			Assert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u89Parameters);
+			ClassicAssert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 		}
 
 		[Test]
@@ -97,14 +98,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"                2019-01-20           2019-05-20           NEWRELEASE           \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keysMap = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsNotNull(keysMap);
+			ClassicAssert.IsNotNull(keysMap);
 			var u89Parameters = keysMap["U89"];
-			Assert.IsNotNull(u89Parameters);
-			Assert.AreEqual("2AID", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("2SK", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("2018-02-28", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("2019-10-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u89Parameters);
+			ClassicAssert.AreEqual("2AID", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("2SK", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("2018-02-28", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("2019-10-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 		}
 
 		[Test]
@@ -119,9 +120,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"   2018-02-16           2059-02-16           NEWRELEASE\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keysMap = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsNotNull(keysMap);
+			ClassicAssert.IsNotNull(keysMap);
 			var u89Parameters = keysMap["K92"];
-			Assert.IsNotNull(u89Parameters);
+			ClassicAssert.IsNotNull(u89Parameters);
 		}
 
 		[Test]
@@ -136,21 +137,21 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"   3                    4                    5           \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keysMap = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsNotNull(keysMap);
+			ClassicAssert.IsNotNull(keysMap);
 			var u89Parameters = keysMap["U89"];
-			Assert.IsNotNull(u89Parameters);
-			Assert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u89Parameters);
+			ClassicAssert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 			var u90Parameters = keysMap["U90"];
-			Assert.IsNotNull(u90Parameters);
-			Assert.AreEqual("1", u90Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("2", u90Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("3", u90Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("4", u90Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("5", u90Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u90Parameters);
+			ClassicAssert.AreEqual("1", u90Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("2", u90Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("3", u90Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("4", u90Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("5", u90Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 		}
 
 		[Test]
@@ -168,28 +169,28 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"                8                    9                    10           \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keysMap = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsNotNull(keysMap);
+			ClassicAssert.IsNotNull(keysMap);
 			var u89Parameters = keysMap["U89"];
-			Assert.IsNotNull(u89Parameters);
-			Assert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u89Parameters);
+			ClassicAssert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("NEWRELEASE", u89Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 			var u90Parameters = keysMap["U90"];
-			Assert.IsNotNull(u90Parameters);
-			Assert.AreEqual("1", u90Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("2", u90Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("3", u90Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("4", u90Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("5", u90Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u90Parameters);
+			ClassicAssert.AreEqual("1", u90Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("2", u90Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("3", u90Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("4", u90Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("5", u90Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 			var u91Parameters = keysMap["U90"];
-			Assert.IsNotNull(u91Parameters);
-			Assert.AreEqual("1", u91Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("2", u91Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("3", u91Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("4", u91Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual("5", u91Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
+			ClassicAssert.IsNotNull(u91Parameters);
+			ClassicAssert.AreEqual("1", u91Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("2", u91Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("3", u91Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("4", u91Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual("5", u91Parameters[CmeSecureLogonStrategy.EnvironmentParamName]);
 		}
 
 		[Test]
@@ -210,11 +211,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			secureLogonStrategy.SetSessionParameters(testSessionParameters);
 			FixMessage logonMessage = new LogonFixMessage1();
 			secureLogonStrategy.CompleteLogon(logonMessage);
-			Assert.AreEqual(20, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncodedTextLenTag));
-			Assert.AreEqual("oNDxM33uE81ohWuVRtWT", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncodedTextTag));
-			Assert.AreEqual("CME-1-SHA-256", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordMethodTag));
-			Assert.AreEqual("oHZ2Dx1ihFAp7kHOFcJPkijm27xfApJFp-ZhsSCxr3s", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordTag));
-			Assert.AreEqual(43, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncryptedPasswordLenTag));
+			ClassicAssert.AreEqual(20, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncodedTextLenTag));
+			ClassicAssert.AreEqual("oNDxM33uE81ohWuVRtWT", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncodedTextTag));
+			ClassicAssert.AreEqual("CME-1-SHA-256", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordMethodTag));
+			ClassicAssert.AreEqual("oHZ2Dx1ihFAp7kHOFcJPkijm27xfApJFp-ZhsSCxr3s", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordTag));
+			ClassicAssert.AreEqual(43, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncryptedPasswordLenTag));
 		}
 
 		private class LogonFixMessage1 : FixMessage
@@ -253,11 +254,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			secureLogonStrategy.SetSessionParameters(testSessionParameters);
 			FixMessage logonMessage = new LogonFixMessage2();
 			secureLogonStrategy.CompleteLogon(logonMessage);
-			Assert.AreEqual(20, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncodedTextLenTag));
-			Assert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncodedTextTag));
-			Assert.AreEqual("CME-1-SHA-256", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordMethodTag));
-			Assert.AreEqual(43, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncryptedPasswordLenTag));
-			Assert.AreEqual("V9Xf6SV45lT0-x2fGs7aKJXk5j4SKEkXWmrLAVFNgGA", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordTag));
+			ClassicAssert.AreEqual(20, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncodedTextLenTag));
+			ClassicAssert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncodedTextTag));
+			ClassicAssert.AreEqual("CME-1-SHA-256", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordMethodTag));
+			ClassicAssert.AreEqual(43, logonMessage.GetTagAsInt(CmeSecureLogonStrategy.EncryptedPasswordLenTag));
+			ClassicAssert.AreEqual("V9Xf6SV45lT0-x2fGs7aKJXk5j4SKEkXWmrLAVFNgGA", logonMessage.GetTagValueAsString(CmeSecureLogonStrategy.EncryptedPasswordTag));
 		}
 
 		private class LogonFixMessage2 : FixMessage
@@ -296,9 +297,9 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			FixMessage logonMessage = new LogonFixMessage3();
 			secureLogonStrategy.CompleteLogon(logonMessage);
 			Console.WriteLine(logonMessage.ToPrintableString());
-			Assert.IsFalse(logonMessage.IsTagExists(Tags.EncryptMethod));
-			Assert.IsFalse(logonMessage.IsTagExists(Tags.RawDataLength));
-			Assert.IsFalse(logonMessage.IsTagExists(Tags.RawData));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(Tags.EncryptMethod));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(Tags.RawDataLength));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(Tags.RawData));
 		}
 
 		private class LogonFixMessage3 : FixMessage
@@ -341,11 +342,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 			secureLogonStrategy.SetSessionParameters(testSessionParameters);
 			FixMessage logonMessage = new LogonFixMessage4();
 			secureLogonStrategy.CompleteLogon(logonMessage);
-			Assert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncodedTextLenTag));
-			Assert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncodedTextTag));
-			Assert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncryptedPasswordMethodTag));
-			Assert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncryptedPasswordLenTag));
-			Assert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncryptedPasswordTag));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncodedTextLenTag));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncodedTextTag));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncryptedPasswordMethodTag));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncryptedPasswordLenTag));
+			ClassicAssert.IsFalse(logonMessage.IsTagExists(CmeSecureLogonStrategy.EncryptedPasswordTag));
 		}
 
 		private class LogonFixMessage4 : FixMessage
@@ -364,7 +365,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"                Creation Date        Expiration Date      \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keys = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsTrue(keys.Count == 0);
+			ClassicAssert.IsTrue(keys.Count == 0);
 		}
 
 		[Test]
@@ -377,14 +378,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Impl
 				"   2018-01-23           2019-01-23           \n" + "\n";
 			File.WriteAllBytes(_fileName, fileContent.AsByteArray());
 			var keysMap = CmeSecureLogonStrategy.ParseKeys(_fileName);
-			Assert.IsNotNull(keysMap);
+			ClassicAssert.IsNotNull(keysMap);
 			var u89Parameters = keysMap["U89"];
-			Assert.IsNotNull(u89Parameters);
-			Assert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
-			Assert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
-			Assert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
-			Assert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
-			Assert.AreEqual(null, u89Parameters.GetValueOrDefault(CmeSecureLogonStrategy.EnvironmentParamName));
+			ClassicAssert.IsNotNull(u89Parameters);
+			ClassicAssert.AreEqual("dipfNf8kZOOuk7Wz0ZUn", u89Parameters[CmeSecureLogonStrategy.AccessIdParamName]);
+			ClassicAssert.AreEqual("gyJYeacu9T--a1tak4i5S-pBXxwCNK_wUqp9fh5usJ8", u89Parameters[CmeSecureLogonStrategy.SecretKeyParamName]);
+			ClassicAssert.AreEqual("2018-01-23", u89Parameters[CmeSecureLogonStrategy.CreationDateParamName]);
+			ClassicAssert.AreEqual("2019-01-23", u89Parameters[CmeSecureLogonStrategy.ExpirationDateParamName]);
+			ClassicAssert.AreEqual(null, u89Parameters.GetValueOrDefault(CmeSecureLogonStrategy.EnvironmentParamName));
 		}
 	}
 }

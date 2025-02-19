@@ -13,7 +13,8 @@
 // limitations under the License.
 
 using Epam.FixAntenna.Fixicc.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.AdminTool.Tests.Commands
 {
@@ -45,11 +46,11 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 
 			var response = GetReponse(_changeSeqNum);
 
-			Assert.AreEqual(10, session.RuntimeState.OutSeqNum, "OutgoingSequenceNumber is not changed");
-			Assert.AreEqual(10, session.RuntimeState.InSeqNum, "IncomingSequenceNumber is not changed");
+			ClassicAssert.AreEqual(10, session.RuntimeState.OutSeqNum, "OutgoingSequenceNumber is not changed");
+			ClassicAssert.AreEqual(10, session.RuntimeState.InSeqNum, "IncomingSequenceNumber is not changed");
 
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -68,14 +69,14 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 
 			var response = GetReponse(_changeSeqNum);
 
-			Assert.AreEqual(10, sessionWithQ.RuntimeState.OutSeqNum, "OutgoingSequenceNumber is not changed");
-			Assert.AreEqual(10, sessionWithQ.RuntimeState.InSeqNum, "IncomingSequenceNumber is not changed");
+			ClassicAssert.AreEqual(10, sessionWithQ.RuntimeState.OutSeqNum, "OutgoingSequenceNumber is not changed");
+			ClassicAssert.AreEqual(10, sessionWithQ.RuntimeState.InSeqNum, "IncomingSequenceNumber is not changed");
 
-			Assert.AreEqual(outSeqNumSessionWithoutQ, session.RuntimeState.OutSeqNum, "Command ChangeSeqNum was affect to other session");
-			Assert.AreEqual(inSeqNumSessionWithoutQ, session.RuntimeState.InSeqNum, "Command ChangeSeqNum was affect to other session");
+			ClassicAssert.AreEqual(outSeqNumSessionWithoutQ, session.RuntimeState.OutSeqNum, "Command ChangeSeqNum was affect to other session");
+			ClassicAssert.AreEqual(inSeqNumSessionWithoutQ, session.RuntimeState.InSeqNum, "Command ChangeSeqNum was affect to other session");
 
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
 		}
 
 		[Test]
@@ -86,9 +87,9 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_changeSeqNum.InSeqNum = 1L;
 			_changeSeqNum.OutSeqNum = 1L;
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("SenderCompID is required"));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("SenderCompID is required"));
 		}
 
 		[Test]
@@ -99,18 +100,18 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_changeSeqNum.InSeqNum = 1L;
 			_changeSeqNum.OutSeqNum = 1L;
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.ResultUnknownSession.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("Failed to execute `ChangeSeqNum` command: Unknown session: SUnknown-TUnknown."));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.ResultUnknownSession.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("Failed to execute `ChangeSeqNum` command: Unknown session: SUnknown-TUnknown."));
 		}
 
 		[Test]
 		public void TestChangeSeqNumWithEmptyParameter()
 		{
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
-			Assert.That(response.Description, Does.Contain("completed."));
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationSuccess.Code, response.ResultCode);
+			ClassicAssert.That(response.Description, Does.Contain("completed."));
 		}
 
 		[Test]
@@ -120,8 +121,8 @@ namespace Epam.FixAntenna.AdminTool.Tests.Commands
 			_changeSeqNum.OutSeqNum = -1000L;
 
 			var response = GetReponse(_changeSeqNum);
-			Assert.AreEqual(RequestID, response.RequestID);
-			Assert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
+			ClassicAssert.AreEqual(RequestID, response.RequestID);
+			ClassicAssert.AreEqual(ResultCode.OperationInvalidArgument.Code, response.ResultCode);
 		}
 	}
 }

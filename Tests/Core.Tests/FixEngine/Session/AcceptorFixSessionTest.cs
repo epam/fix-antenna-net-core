@@ -20,7 +20,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.Message;
 using Epam.FixAntenna.TestUtils;
 
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 using System;
 using System.Collections.Generic;
@@ -132,8 +133,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// reset seqNum
 			helper.PrepareToReceiveMessages(1);
@@ -143,14 +144,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// make manual reset
 			serverListener.Session.ResetSequenceNumbers();
 			helper.WaitForMessages(3000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1, "141=Y#"));
 			// send msg foe test new seqNum
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(3000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -163,7 +164,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			// expect to continue seqNum
 			helper.SendMessage(GetLogonMessage(4));
 			helper.WaitForMessages(3000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
 			Server.Stop();
 		}
 
@@ -181,8 +182,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -198,8 +199,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -212,8 +213,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(4));
 			helper.SendMessage(GetNewsMessage(5));
 			helper.WaitForMessages(500000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
 
 			Server.Stop();
 		}
@@ -233,8 +234,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -255,8 +256,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -269,8 +270,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(4));
 			helper.SendMessage(GetNewsMessage(5));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 4);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 5);
 
 			Server.Stop();
 		}
@@ -289,8 +290,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(1));
 			helper.SendMessage(GetNewsMessage(2));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 2);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(3));
@@ -312,8 +313,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(11));
 			helper.SendMessage(GetNewsMessage(12));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 11);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 12);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 11);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 12);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(13));
@@ -326,8 +327,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.SendMessage(GetLogonMessage(14));
 			helper.SendMessage(GetNewsMessage(15));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 14);
-			AssertTypeAndSeqNum(helper.GetMessages()[1], "B", 15);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 14);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[1], "B", 15);
 
 			Server.Stop();
 		}
@@ -345,7 +346,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -377,7 +378,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -389,7 +390,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			sp.Port = Port + 1;
 			try
 			{
-				Assert.Throws<ArgumentException>(() => Server.RegisterAcceptorSession(sp));
+				ClassicAssert.Throws<ArgumentException>(() => Server.RegisterAcceptorSession(sp));
 			}
 			finally
 			{
@@ -410,7 +411,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -439,7 +440,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.Messages.Clear();
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitTransportDown();
-			Assert.AreEqual(0, helper.Messages.Count, "Session should be closed without communication");
+			ClassicAssert.AreEqual(0, helper.Messages.Count, "Session should be closed without communication");
 
 			//start new initiator to PORT2
 			helper = new SimplestFixSessionHelper("localhost", port2);
@@ -448,7 +449,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
 
 			// logout
 			helper.SendMessage(GetLogoutMessage(2));
@@ -492,11 +493,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			var successResponse = helper.GetMessages();
 
 
-			Assert.AreEqual("A", successResponse[0].GetTagValueAsString(35), "Respond Logon");
+			ClassicAssert.AreEqual("A", successResponse[0].GetTagValueAsString(35), "Respond Logon");
 			var rrMsg = successResponse[1];
-			Assert.AreEqual("2", rrMsg.GetTagValueAsString(35), "Respond RR: " + rrMsg);
-			Assert.AreEqual(2, rrMsg.GetTagValueAsLong(7), "BeginSeqNo " + rrMsg);
-			Assert.AreEqual(0, rrMsg.GetTagValueAsLong(16), "EndSeqNo");
+			ClassicAssert.AreEqual("2", rrMsg.GetTagValueAsString(35), "Respond RR: " + rrMsg);
+			ClassicAssert.AreEqual(2, rrMsg.GetTagValueAsLong(7), "BeginSeqNo " + rrMsg);
+			ClassicAssert.AreEqual(0, rrMsg.GetTagValueAsLong(16), "EndSeqNo");
 
 			Server.Stop();
 		}
@@ -572,11 +573,11 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			var successResponse = helper.GetMessages();
 
-			Assert.AreEqual("A", successResponse[0].GetTagValueAsString(35), "Respond Logon");
+			ClassicAssert.AreEqual("A", successResponse[0].GetTagValueAsString(35), "Respond Logon");
 			var rrMsg = successResponse[1];
-			Assert.AreEqual("2", rrMsg.GetTagValueAsString(35), "Respond RR: " + rrMsg);
-			Assert.AreEqual(2, rrMsg.GetTagValueAsLong(7), "BeginSeqNo " + rrMsg);
-			Assert.AreEqual(0, rrMsg.GetTagValueAsLong(16), "EndSeqNo");
+			ClassicAssert.AreEqual("2", rrMsg.GetTagValueAsString(35), "Respond RR: " + rrMsg);
+			ClassicAssert.AreEqual(2, rrMsg.GetTagValueAsLong(7), "BeginSeqNo " + rrMsg);
+			ClassicAssert.AreEqual(0, rrMsg.GetTagValueAsLong(16), "EndSeqNo");
 
 			Server.Stop();
 		}
@@ -626,8 +627,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			helper.PrepareToReceiveMessages(1);
 			helper.SendMessage(GetLogonMessage(1, "141=Y#"));
 			helper.WaitForMessages(5000);
-			AssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
-			AssertUnexpectedDuplicateTag(helper.GetMessages()[0], Tags.ResetSeqNumFlag, 1);
+			ClassicAssertTypeAndSeqNum(helper.GetMessages()[0], "A", 1);
+			ClassicAssertUnexpectedDuplicateTag(helper.GetMessages()[0], Tags.ResetSeqNumFlag, 1);
 
 			helper.SendMessage(GetLogoutMessage(2));
 			helper.WaitTransportDown();
@@ -638,15 +639,15 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 		private void ValidateReject(IList<FixMessage> messages)
 		{
-			Assert.AreEqual(1, messages.Count, "Invalid message count: " + messages);
+			ClassicAssert.AreEqual(1, messages.Count, "Invalid message count: " + messages);
 			var response = messages[0];
-			Assert.AreEqual("5", response.GetTagValueAsString(35), "Respond Logout");
-			Assert.AreEqual(RejectReason, response.GetTagValueAsString(58), "Logout reason");
+			ClassicAssert.AreEqual("5", response.GetTagValueAsString(35), "Respond Logout");
+			ClassicAssert.AreEqual(RejectReason, response.GetTagValueAsString(58), "Logout reason");
 		}
 
-		private void AssertUnexpectedDuplicateTag(FixMessage msg, int tagId, int allowableCount)
+		private void ClassicAssertUnexpectedDuplicateTag(FixMessage msg, int tagId, int allowableCount)
 		{
-			Assert.AreEqual(FixMessage.NotFound, msg.GetTagIndex(tagId, ++allowableCount), string.Format("Unexpected duplicate tag: '{0}' in message: {1}", tagId, msg));
+			ClassicAssert.AreEqual(FixMessage.NotFound, msg.GetTagIndex(tagId, ++allowableCount), string.Format("Unexpected duplicate tag: '{0}' in message: {1}", tagId, msg));
 		}
 
 		private class EchoServer : IFixServerListener

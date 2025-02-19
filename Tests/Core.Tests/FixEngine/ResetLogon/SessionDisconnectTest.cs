@@ -23,7 +23,8 @@ using Epam.FixAntenna.NetCore.FixEngine;
 using Epam.FixAntenna.NetCore.FixEngine.Manager;
 using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 {
@@ -112,7 +113,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			_server.Start();
 			_initiatorHelper.Open();
 			_initiatorHelper.SendLogon();
-			Assert.IsTrue(_acceptorSessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
+			ClassicAssert.IsTrue(_acceptorSessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
 			_initiatorHelper.ReceiveLogon();
 
 			_initiatorHelper.SendNewsMessage();
@@ -125,7 +126,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			_initiatorHelper.Open();
 			_initiatorHelper.SendLogon();
 
-			Assert.Throws<IOException>(() =>
+			ClassicAssert.Throws<IOException>(() =>
 			{
 				while (true)
 				{
@@ -142,14 +143,14 @@ namespace Epam.FixAntenna.NetCore.FixEngine.ResetLogon
 			_initiatorHelper.Open();
 			_initiatorHelper.SendLogon();
 
-			Assert.IsTrue(_acceptorSessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
+			ClassicAssert.IsTrue(_acceptorSessionConnectedEvent.IsEventRaised(), "Acceptor wasn't started");
 			_initiatorHelper.ReceiveLogon();
 
 			_initiatorHelper.SendNewsMessage();
 
 			_acceptorSessionDisconnectedEvent.ResetEvent();
 			_initiatorHelper.SendLogout("close");
-			Assert.IsTrue(_acceptorSessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
+			ClassicAssert.IsTrue(_acceptorSessionDisconnectedEvent.IsEventRaised(), "Acceptor wasn't stopped");
 		}
 
 		private class FixSessionAdapter : IFixSessionListener

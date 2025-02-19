@@ -15,7 +15,8 @@
 using System.Collections.Generic;
 using Epam.FixAntenna.NetCore.Common.Pool;
 using Epam.FixAntenna.NetCore.Common.Pool.Provider;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Common.Pool
 {
@@ -65,7 +66,7 @@ namespace Epam.FixAntenna.Common.Pool
 				}
 			}
 
-			Assert.AreEqual(maxSize, hashesOfExistentObjects.Count);
+			ClassicAssert.AreEqual(maxSize, hashesOfExistentObjects.Count);
 		}
 	}
 }

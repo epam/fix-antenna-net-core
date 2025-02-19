@@ -15,7 +15,8 @@
 using System;
 using System.Collections.Generic;
 using Epam.FixAntenna.Tester.Task;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Tester.SelfTest
 {
@@ -37,7 +38,7 @@ namespace Epam.FixAntenna.Tester.SelfTest
 			}
 			catch (Exception)
 			{
-				Assert.Fail();
+				ClassicAssert.Fail();
 			}
 		}
 	}

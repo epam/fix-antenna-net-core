@@ -16,7 +16,8 @@ using System;
 using Epam.FixAntenna.NetCore.Configuration;
 using Epam.FixAntenna.NetCore.FixEngine.Session.Util;
 using Epam.FixAntenna.TestUtils;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Configuration.Tests
 {
@@ -44,7 +45,7 @@ namespace Epam.FixAntenna.Configuration.Tests
 			var cfg = Config.GlobalConfiguration;
 			cfg.SetProperty(Config.SslProtocol, "Tls42");
 			var adapter = new ConfigurationAdapter(cfg);
-			Assert.Throws<ArgumentException>(() => adapter.SslProtocol.ToString());
+			ClassicAssert.Throws<ArgumentException>(() => adapter.SslProtocol.ToString());
 		}
 
 		/// <summary>

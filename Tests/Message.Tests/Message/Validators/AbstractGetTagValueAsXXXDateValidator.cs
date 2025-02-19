@@ -14,15 +14,16 @@
 
 using System;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
 	internal abstract class AbstractGetTagValueAsXxxDateValidator : AbstractFixMessageGetAddSetValidator
 	{
-		public virtual void AssertCalendarsEquals(DateTimeOffset expected, DateTimeOffset actual, string format)
+		public virtual void ClassicAssertCalendarsEquals(DateTimeOffset expected, DateTimeOffset actual, string format)
 		{
-			Assert.AreEqual(expected.ToString(format), actual.ToString(format), GetValidatorName());
+			ClassicAssert.AreEqual(expected.ToString(format), actual.ToString(format), GetValidatorName());
 		}
 
 		public override FixMessage AddTag(FixMessage msg, int tagId, int occurrence)

@@ -19,7 +19,8 @@ using Epam.FixAntenna.NetCore.FixEngine.Session;
 using Epam.FixAntenna.NetCore.FixEngine.Session.MessageHandler.Global;
 using Epam.FixAntenna.NetCore.Message;
 using Moq;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.NetCore.FixEngine.Session
 {
@@ -88,7 +89,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 
 			public override void CheckThrottling(FixMessage message)
 			{
-				Assert.Fail("method should not be called with disabled throttling");
+				ClassicAssert.Fail("method should not be called with disabled throttling");
 			}
 		}
 
@@ -99,7 +100,7 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			_handler = new ThrottleCheckingHandlerAnonymousInnerClass3(latch);
 			_handler.Session = null;
 			_handler.OnNewMessage(new FixMessage());
-			Assert.AreEqual(0L, latch.CurrentCount);
+			ClassicAssert.AreEqual(0L, latch.CurrentCount);
 		}
 
 		internal class ThrottleCheckingHandlerAnonymousInnerClass3 : ThrottleCheckingHandler

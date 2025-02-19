@@ -15,7 +15,8 @@
 using System;
 using System.Text;
 using Epam.FixAntenna.NetCore.Message;
-using NUnit.Framework;
+using NUnit.Framework; 
+using NUnit.Framework.Legacy;
 
 namespace Epam.FixAntenna.Message.Tests.Validators
 {
@@ -38,7 +39,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			var actual = new StringBuilder();
 			ffl.GetTagValueAsStringBuff(tagId, actual);
-			Assert.AreEqual(Values[0], actual.ToString(),
+			ClassicAssert.AreEqual(Values[0], actual.ToString(),
 				GetValidatorName() + "invalid value for getTagValueAsStringBuff(" + tagId + ")");
 		}
 
@@ -47,7 +48,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			var actual = new StringBuilder();
 			ffl.GetTagValueAsStringBuff(tagId, actual, occurrence);
-			Assert.AreEqual(Values[occurrence - 1], actual.ToString(),
+			ClassicAssert.AreEqual(Values[occurrence - 1], actual.ToString(),
 				GetValidatorName() + "invalid value for getTagValueAsStringBuff(" + tagId + ", " + occurrence + ")");
 		}
 
@@ -56,7 +57,7 @@ namespace Epam.FixAntenna.Message.Tests.Validators
 		{
 			var actual = new StringBuilder();
 			ffl.GetTagValueAsStringBuffAtIndex(firstTagIndex, actual);
-			Assert.AreEqual(Values[occurrence - 1], actual.ToString(),
+			ClassicAssert.AreEqual(Values[occurrence - 1], actual.ToString(),
 				GetValidatorName() + "invalid value for getTagValueAsStringBuffAtIndex(" + firstTagIndex + ")");
 		}
 
