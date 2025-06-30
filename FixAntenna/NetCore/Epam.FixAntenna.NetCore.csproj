@@ -45,10 +45,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="NLog" Version="5.4.0" />
-		<PackageReference Include="Quartz" Version="3.13.1" />
-		<PackageReference Include="System.Collections.Immutable" Version="9.0.1" />
-		<PackageReference Include="System.Text.Json" Version="9.0.1" />
+		<PackageReference Include="NLog" Version="6.0.1" />
+		<PackageReference Include="Quartz" Version="3.14.0" />
+		<PackageReference Include="System.Collections.Immutable" Version="9.0.6" />
+		<PackageReference Include="System.Text.Json" Version="9.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
