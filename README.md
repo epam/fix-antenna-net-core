@@ -98,15 +98,15 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 6. Create a new Pull Request
 
 ## Development team
-- [Aleksey Shuvalov](https://github.com/ashuvalov) - Developer
-- [Ivan Ponomarev](https://github.com/houtengeki) - QA Engineer
-- [Sergey Matveev](https://github.com/epm-sergem) - Developer
-- [Vladimir Gusev](https://github.com/portowine1982) - Analyst
-- [Viktar Tserashchuk](https://github.com/Viktar-Tserashchuk) - Developer
-- [Oleh Vasyliev](https://github.com/olehvasyliev01) - Developer
-- [Vasili Yakauleu](https://github.com/VasiliYakauleu) - QA Engineer
-- [Aliaksandra Khrutskaya](https://github.com/AliaksandraKhrutskaya) - QA Engineer
-- [Mariia Golubeva](https://github.com/Mary-Golubeva) - Analyst
+- [Aleksey Shuvalov] - Developer
+- [Ivan Ponomarev] - QA Engineer
+- [Sergey Matveev] - Developer
+- [Vladimir Gusev] - Analyst
+- [Viktar Tserashchuk] - Developer
+- [Oleh Vasyliev] - Developer
+- [Vasili Yakauleu] - QA Engineer
+- [Aliaksandra Khrutskaya] - QA Engineer
+- [Mariia Golubeva] - Analyst
 
 ## License
 ![b2bits.com](Docs/b2bits.png)
