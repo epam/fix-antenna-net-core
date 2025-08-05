@@ -103,7 +103,7 @@ Recommended version is [Visual Studio 2022](https://visualstudio.microsoft.com/v
 - [Sergey Matveev](https://github.com/epm-sergem) - Developer
 - [Vladimir Gusev](https://github.com/portowine1982) - Analyst
 - [Viktar Tserashchuk](https://github.com/Viktar-Tserashchuk) - Developer
-- [Oleh Vasyliev](https://github.com/OlehVasylievEPAM) - Developer
+- [Oleh Vasyliev](https://github.com/olehvasyliev01) - Developer
 - [Vasili Yakauleu](https://github.com/VasiliYakauleu) - QA Engineer
 - [Aliaksandra Khrutskaya](https://github.com/AliaksandraKhrutskaya) - QA Engineer
 - [Mariia Golubeva](https://github.com/Mary-Golubeva) - Analyst
