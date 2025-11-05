@@ -1015,6 +1015,16 @@ namespace Epam.FixAntenna.NetCore.Configuration
 		/// Signature matches SslStream's RemoteCertificateValidationCallback.
 		/// </summary>
 		public RemoteCertificateValidationCallback CustomRemoteCertificateValidationCallback { get; set; }
+
+		/// <summary>
+		/// Enable SO_REUSEPORT socket option to allow multiple acceptors to bind to the same address and port.
+		/// This enables load balancing across multiple FIX acceptor instances on the same address:port.
+		/// Note: On Windows, this requires Windows 10 version 1803 or later. On Linux, kernel 3.9+ is required.
+		/// 
+		/// Default value is false.
+		/// </summary>
+		[DefaultValue("false")]
+		public const string EnableSocketReusePort = "enableSocketReusePort";
 		#endregion
 
 		/// <summary>

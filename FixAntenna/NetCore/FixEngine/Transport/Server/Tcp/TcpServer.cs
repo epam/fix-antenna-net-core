@@ -17,6 +17,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Epam.FixAntenna.NetCore.Common.Logging;
@@ -201,18 +202,66 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Transport.Server.Tcp
 				_listener.OnConnect(acceptorTransport);
 			}
 		}
+	
+		[DllImport("libc", SetLastError = true)]
+		private static extern int setsockopt(int socket, int level, int optname, ref int optval, int optlen);
+
+		private static void ConfigureSocketOptions(Socket socket)
+		{
+			const int solSocket = 1;
+			const int soReuseaddr = 2;
+			const int soReuseport = 15;
+			var optval = 1;
+
+			var endpoint = socket.LocalEndPoint?.ToString() ?? "unknown";
+
+			// Set SO_REUSEADDR
+			var result = setsockopt(socket.Handle.ToInt32(), solSocket, soReuseaddr, ref optval, sizeof(int));
+
+			if (result != 0)
+			{
+				var errno = Marshal.GetLastWin32Error(); 
+				_log.Error($"Failed to set SO_REUSEADDR on {endpoint}: errno={errno}.");
+				throw new IOException($"SO_REUSEADDR configuration failed with errno {errno}.");
+			}
+
+			_log.Info($"SO_REUSEADDR enabled successfully on {endpoint}.");
+
+			// Set SO_REUSEPORT
+			result = setsockopt(socket.Handle.ToInt32(), solSocket, soReuseport, ref optval, sizeof(int));
+    
+			if (result == 0)
+			{
+				_log.Info($"SO_REUSEPORT enabled successfully on {endpoint}.");
+			}
+			else
+			{
+				var errno = Marshal.GetLastWin32Error();
+				_log.Error($"Failed to set SO_REUSEPORT on {endpoint}: errno={errno}.");
+				throw new IOException($"SO_REUSEPORT configuration failed with errno {errno}.");
+			}
+		}
 
 		private TcpListener CreateServerSocket(string address, int port)
 		{
 			try
 			{
+				TcpListener listener;
+
 				if (string.IsNullOrEmpty(address))
 				{
-					return TcpListener.Create(port);
+					listener = TcpListener.Create(port);
+				}
+				else
+				{
+					var ip = IPAddress.Parse(address);
+					listener = new TcpListener(ip, port);
 				}
 
-				var ip = IPAddress.Parse(address);
-				return new TcpListener(ip, port);
+				if (_confAdapter.EnableSocketReusePort)
+					ConfigureSocketOptions(listener.Server);
+
+				return listener;
 			}
 			catch (SocketException ex)
 			{

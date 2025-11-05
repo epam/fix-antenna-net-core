@@ -179,6 +179,8 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 
 		public bool IsValidationEnabled => Configuration.GetPropertyAsBoolean(Config.Validation, false);
 
+		public bool EnableSocketReusePort => Configuration.GetPropertyAsBoolean(Config.EnableSocketReusePort, false);
+
 		#region Reset SeqNum sheduled
 		public bool IsResetSeqNumTimeEnabled => Configuration.GetPropertyAsBoolean(Config.PerformResetSeqNumTime, false);
 
