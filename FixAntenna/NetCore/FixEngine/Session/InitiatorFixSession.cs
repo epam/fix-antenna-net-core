@@ -304,6 +304,13 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 				{
 					_session.Log.Warn($"Logon response waiter was interrupted. Session {GetSessionName()}");
 				}
+				catch (Exception e)
+				{
+					// an exception escaping this thread would be unhandled and would terminate the host process
+					// (e.g. MessageNotSentException when the transport was closed by the reader thread
+					// just before the logon timeout expired)
+					_session.ErrorHandler.OnError($"Failed to disconnect session {GetSessionName()} after logon response timeout.", e);
+				}
 			}
 
 			public string GetSessionName()

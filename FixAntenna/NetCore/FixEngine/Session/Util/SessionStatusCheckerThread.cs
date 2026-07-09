@@ -96,14 +96,23 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session.Util
 					Log.Info("Session state is still " + _state + ". Session will be disconnected");
 				}
 
-				if (_session.SessionState == SessionState.Connected)
+				try
 				{
-					_session.Disconnect(null, _reason);
+					if (_session.SessionState == SessionState.Connected)
+					{
+						_session.Disconnect(null, _reason);
+					}
+					else
+					{
+						//session.markShutdownAsGraceful();
+						_session.Shutdown(null, false);
+					}
 				}
-				else
+				catch (Exception e)
 				{
-					//session.markShutdownAsGraceful();
-					_session.Shutdown(null, false);
+					// an exception escaping this thread would be unhandled and would terminate the host process
+					// (e.g. MessageNotSentException when the logout message cannot be written to a closed transport)
+					_session.ErrorHandler.OnError("Failed to disconnect session " + _session + ": " + _reason, e);
 				}
 
 				if (_deliverError)
