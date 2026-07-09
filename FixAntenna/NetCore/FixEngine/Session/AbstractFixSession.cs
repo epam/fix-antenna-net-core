@@ -1098,7 +1098,24 @@ namespace Epam.FixAntenna.NetCore.FixEngine.Session
 			}
 
 			SetPreLogoffSessionState(forced, continueReading);
-			SendMessageOutOfTurn("5", list);
+			try
+			{
+				SendMessageOutOfTurn("5", list);
+			}
+			catch (MessageNotSentException e)
+			{
+				// the transport is already closed (e.g. by the reader thread after a broken connection);
+				// the pumper has already reported the error and initiated the session shutdown,
+				// so the failure to deliver the logout message must not propagate to the Disconnect caller
+				if (Log.IsDebugEnabled)
+				{
+					Log.Warn("Logout message wasn't sent. Cause: " + e.Message, e);
+				}
+				else
+				{
+					Log.Warn("Logout message wasn't sent. Cause: " + e.Message);
+				}
+			}
 		}
 
 		public virtual void SetPreLogoffSessionState(bool forced, bool continueReading)
